@@ -73,11 +73,6 @@ export class UserService {
       ),
     ];
 
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: { refreshToken: await bcrypt.hash(refreshToken, 10) },
-    });
-
     delete user.password;
     return {
       user,
@@ -102,19 +97,6 @@ export class UserService {
 
     if (!user) {
       throw HttpError({ code: 'User not found' });
-    }
-
-    // Validate refresh token against database
-    if (!user.refreshToken) {
-      throw HttpError({ code: 'REFRESH_TOKEN_NOT_FOUND' });
-    }
-
-    const isRefreshTokenValid = await bcrypt.compare(
-      dto.refreshToken,
-      user.refreshToken,
-    );
-    if (!isRefreshTokenValid) {
-      throw HttpError({ code: 'INVALID_REFRESH_TOKEN' });
     }
 
     const currentRefreshVersion = getRefreshTokenVersion(user.id.toString());
@@ -145,12 +127,6 @@ export class UserService {
     }
     incrementTokenVersion(user.id.toString());
     incrementRefreshTokenVersion(user.id.toString());
-
-    // Clear refresh token from database
-    await this.prisma.user.update({
-      where: { id },
-      data: { refreshToken: null },
-    });
 
     return { message: 'Logged out successfully' };
   }

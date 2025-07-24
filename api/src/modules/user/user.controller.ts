@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   Query,
   Req,
   ParseIntPipe,
@@ -55,18 +54,17 @@ export class UserController {
 
   @Get(':id')
   @DecoratorWrapper('Get User by ID', true, [Role.User])
-  findOne(@Param('id',ParseIntPipe) id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.userService.findOne(+id);
   }
 
   @Patch(':id')
   @DecoratorWrapper('Update User', true, [Role.User])
   update(
-    @Param('id',ParseIntPipe) id: string,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
-    @Req() req: any,
   ) {
-    return this.userService.update(+id, updateUserDto, req.user.id);
+    return this.userService.update(+id, updateUserDto);
   }
 
   // @Delete(':id')
