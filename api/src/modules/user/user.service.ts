@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
-import { FindAllAdminQueryDto } from './dto/findAll-admin.dto';
+import { FindAllUserQueryDto } from './dto/findAll-user.dto';
 import { sign, verify } from 'jsonwebtoken';
 import {
   getTokenVersion,
@@ -13,59 +13,59 @@ import {
   incrementRefreshTokenVersion,
 } from 'src/common/auth/refresh-token-version.store';
 import { env } from 'src/common/config';
-import { LoginAdminDto } from './dto/login-admin.dto';
-import { RefreshAdminDto } from './dto/refresh-admin.dto';
-import { CreateAdminDto } from './dto/create-admin.dto';
-import { UpdateAdminDto } from './dto/update-admin.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import { RefreshUserDto } from './dto/refresh-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from 'src/common/auth/roles/role.enum';
 
 @Injectable()
-export class AdminService {
+export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createAdminDto: CreateAdminDto) {
-    const existingAdmin = await this.prisma.admin.findFirst({
-      where: { name: createAdminDto.name },
+  async create(createUserDto: CreateUserDto) {
+    const existingUser = await this.prisma.user.findFirst({
+      where: { name: createUserDto.name },
     });
-    if (existingAdmin) {
-      throw HttpError({ code: 'Admin with this name already exists' });
+    if (existingUser) {
+      throw HttpError({ code: 'User with this name already exists' });
     }
-    const hashedPassword = await bcrypt.hash(createAdminDto.password, 10);
-    createAdminDto.password = hashedPassword;
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    createUserDto.password = hashedPassword;
 
-    const admin = await this.prisma.admin.create({ data: createAdminDto });
-    delete admin.password;
-    return admin;
+    const user = await this.prisma.user.create({ data: createUserDto });
+    delete user.password;
+    return user;
   }
 
-  async login(dto: LoginAdminDto) {
+  async login(dto: LoginUserDto) {
     const { name, password } = dto;
-    const admin = await this.prisma.admin.findFirst({
+    const user = await this.prisma.user.findFirst({
       where: { name: name },
     });
-    if (!admin) {
-      throw HttpError({ code: 'Admin not found' });
+    if (!user) {
+      throw HttpError({ code: 'User not found' });
     }
-    const match = await bcrypt.compare(password, admin.password);
+    const match = await bcrypt.compare(password, user.password);
     if (!match) {
       throw HttpError({ code: 'Invalid credentials' });
     }
-    incrementTokenVersion(admin.id.toString());
-    incrementRefreshTokenVersion(admin.id.toString());
+    incrementTokenVersion(user.id.toString());
+    incrementRefreshTokenVersion(user.id.toString());
 
-    const tokenVersion = getTokenVersion(admin.id.toString());
-    const refreshTokenVersion = getRefreshTokenVersion(admin.id.toString());
+    const tokenVersion = getTokenVersion(user.id.toString());
+    const refreshTokenVersion = getRefreshTokenVersion(user.id.toString());
 
     const [accessToken, refreshToken] = [
       sign(
-        { id: admin.id, role: Role.Admin, tokenVersion },
+        { id: user.id, role: Role.User, tokenVersion },
         env.ACCESS_TOKEN_SECRET,
         {
           expiresIn: '2h',
         },
       ),
       sign(
-        { id: admin.id, role: Role.Admin, refreshTokenVersion },
+        { id: user.id, role: Role.User, refreshTokenVersion },
         env.REFRESH_TOKEN_SECRET,
         {
           expiresIn: '1d',
@@ -73,63 +73,63 @@ export class AdminService {
       ),
     ];
 
-    await this.prisma.admin.update({
-      where: { id: admin.id },
+    await this.prisma.user.update({
+      where: { id: user.id },
       data: { refreshToken: await bcrypt.hash(refreshToken, 10) },
     });
 
-    delete admin.password;
+    delete user.password;
     return {
-      admin,
+      user,
       accessToken,
       refreshToken,
     };
   }
 
-  async refresh(dto: RefreshAdminDto) {
+  async refresh(dto: RefreshUserDto) {
     const token = dto.refreshToken;
 
-    const adminData = verify(token, env.REFRESH_TOKEN_SECRET) as {
+    const userData = verify(token, env.REFRESH_TOKEN_SECRET) as {
       id: number;
       refreshTokenVersion: string;
     };
 
-    if (!adminData) throw HttpError({ code: 'LOGIN_FAILED' });
+    if (!userData) throw HttpError({ code: 'LOGIN_FAILED' });
 
-    const admin = await this.prisma.admin.findUnique({
-      where: { id: adminData.id },
+    const user = await this.prisma.user.findUnique({
+      where: { id: userData.id },
     });
 
-    if (!admin) {
-      throw HttpError({ code: 'Admin not found' });
+    if (!user) {
+      throw HttpError({ code: 'User not found' });
     }
 
     // Validate refresh token against database
-    if (!admin.refreshToken) {
+    if (!user.refreshToken) {
       throw HttpError({ code: 'REFRESH_TOKEN_NOT_FOUND' });
     }
 
     const isRefreshTokenValid = await bcrypt.compare(
       dto.refreshToken,
-      admin.refreshToken,
+      user.refreshToken,
     );
     if (!isRefreshTokenValid) {
       throw HttpError({ code: 'INVALID_REFRESH_TOKEN' });
     }
 
-    const currentRefreshVersion = getRefreshTokenVersion(admin.id.toString());
-    if (adminData.refreshTokenVersion !== currentRefreshVersion) {
+    const currentRefreshVersion = getRefreshTokenVersion(user.id.toString());
+    if (userData.refreshTokenVersion !== currentRefreshVersion) {
       throw HttpError({ code: 'TOKEN_INVALIDATED' });
     }
 
-    incrementTokenVersion(admin.id.toString());
-    const currentTokenVersion = getTokenVersion(admin.id.toString());
+    incrementTokenVersion(user.id.toString());
+    const currentTokenVersion = getTokenVersion(user.id.toString());
 
     const accessToken = sign(
       {
-        id: admin.id,
+        id: user.id,
         tokenVersion: currentTokenVersion,
-        role: Role.Admin,
+        role: Role.User,
       },
       env.ACCESS_TOKEN_SECRET,
       { expiresIn: '2h' },
@@ -139,15 +139,15 @@ export class AdminService {
   }
 
   async logout(id: number) {
-    const admin = await this.prisma.admin.findUnique({ where: { id } });
-    if (!admin) {
-      throw HttpError({ code: 'Admin not found' });
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      throw HttpError({ code: 'User not found' });
     }
-    incrementTokenVersion(admin.id.toString());
-    incrementRefreshTokenVersion(admin.id.toString());
+    incrementTokenVersion(user.id.toString());
+    incrementRefreshTokenVersion(user.id.toString());
 
     // Clear refresh token from database
-    await this.prisma.admin.update({
+    await this.prisma.user.update({
       where: { id },
       data: { refreshToken: null },
     });
@@ -155,11 +155,11 @@ export class AdminService {
     return { message: 'Logged out successfully' };
   }
 
-  async findAll(dto: FindAllAdminQueryDto) {
+  async findAll(dto: FindAllUserQueryDto) {
     const { limit = 10, page = 1, name } = dto;
 
     const [data, total] = await this.prisma.$transaction([
-      this.prisma.admin.findMany({
+      this.prisma.user.findMany({
         where: {
           name: {
             contains: name?.trim() || '',
@@ -176,7 +176,7 @@ export class AdminService {
           updatedAt: true,
         },
       }),
-      this.prisma.admin.count({
+      this.prisma.user.count({
         where: {
           name: {
             contains: name?.trim() || '',
@@ -195,7 +195,7 @@ export class AdminService {
   }
 
   async findOne(id: number) {
-    const admin = await this.prisma.admin.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id },
       select: {
         id: true,
@@ -204,31 +204,31 @@ export class AdminService {
         updatedAt: true,
       },
     });
-    if (!admin) {
-      throw HttpError({ code: 'Admin not found' });
+    if (!user) {
+      throw HttpError({ code: 'User not found' });
     }
-    return admin;
+    return user;
   }
 
-  async update(id: number, dto: UpdateAdminDto, adminId: number) {
-    const admin = await this.prisma.admin.findUnique({ where: { id } });
-    if (!admin) throw HttpError({ code: 'Admin not found' });
+  async update(id: number, dto: UpdateUserDto) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) throw HttpError({ code: 'User not found' });
 
     const updateData: any = {
-      name: dto.name || admin.name,
+      name: dto.name || user.name,
     };
 
     if (dto.newPassword) {
       if (!dto.oldPassword)
         throw HttpError({ code: 'The previous password is required' });
 
-      const match = await bcrypt.compare(dto.oldPassword, admin.password);
+      const match = await bcrypt.compare(dto.oldPassword, user.password);
       if (!match) throw HttpError({ code: 'Wrong password' });
 
       updateData.password = await bcrypt.hash(dto.newPassword, 10);
     }
 
-    const updatedAdmin = await this.prisma.admin.update({
+    const updatedUser = await this.prisma.user.update({
       where: { id },
       data: updateData,
       select: {
@@ -239,17 +239,17 @@ export class AdminService {
       },
     });
 
-    return updatedAdmin;
+    return updatedUser;
   }
 
   async remove(id: number) {
-    const admin = await this.prisma.admin.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: id },
     });
-    if (!admin) {
-      throw HttpError({ code: 'Admin not found' });
+    if (!user) {
+      throw HttpError({ code: 'User not found' });
     }
-    return await this.prisma.admin.delete({
+    return await this.prisma.user.delete({
       where: { id: id },
     });
   }

@@ -19,9 +19,9 @@ model Client {
   description            String?    @db.Text
   registerId             Int
   modifyId               Int
-  status                 Int?
-  created                DateTime   @default(now()) 
-  updated                DateTime   @default(now()) @updatedAt 
+  isDeleted              Boolean?
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @default(now()) @updatedAt
   phone                  String?    @db.VarChar(255)
   District               District?  @relation(fields: [districtId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   User_Client_modifyId   User       @relation("Client_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -39,18 +39,18 @@ model Client {
 
 model ClientType {
   id                         Int      @id @default(autoincrement())
-  name                       String   
-  registerId                 Int
+  name                       String
+  creatorId                  Int
   modifyId                   Int
-  status                     Int?     @default(1)
-  created                    DateTime @default(now()) 
-  updated                    DateTime @default(now()) @updatedAt 
+  isDeleted                  Boolean? @default(false)
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @default(now()) @updatedAt
   Client                     Client[]
   User_ClientType_modifyId   User     @relation("ClientType_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_ClientType_registerId User     @relation("ClientType_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_ClientType_registerId User     @relation("ClientType_registerId", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([modifyId], map: "FK_client_type_modify_id")
-  @@index([registerId], map: "FK_client_type_register_id")
+  @@index([creatorId], map: "FK_client_type_register_id")
   @@map("client_type")
 }
 
@@ -77,54 +77,54 @@ model Product {
   countReminder           Float        @default(0)
   countArrived            Float        @default(0)
   countSale               Float        @default(0)
-  status                  Int?         @default(1)
-  created                 DateTime     @default(now())
-  updated                 DateTime     @default(now())
-  registerId              Int?
+  isDeleted               Boolean?     @default(false)
+  createdAt                 DateTime     @default(now())
+  updatedAt                 DateTime     @default(now())
+  creatorId              Int?
   modifyId                Int?
   ProductGroup            ProductGroup @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   User_Product_modifyId   User?        @relation("Product_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Product_registerId User?        @relation("Product_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Product_creatorId User?        @relation("Product_creatorId", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ProductUnit             ProductUnit? @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([groupId], map: "FK_product_group_id")
   @@index([modifyId], map: "FK_product_modify_id")
-  @@index([registerId], map: "FK_product_register_id")
+  @@index([creatorId], map: "FK_product_creator_id")
   @@index([unitId], map: "FK_product_unit_id")
   @@map("product")
 }
 
 model ProductGroup {
   id                           Int       @id @default(autoincrement())
-  name                         String    
-  status                       Int?      @default(1)
-  created                      DateTime  @default(now())  
-  updated                      DateTime  @default(now()) @updatedAt   
-  registerId                   Int
+  name                         String
+  isDeleted                    Boolean?  @default(false)
+  createdAt                      DateTime  @default(now())
+  updatedAt                      DateTime  @default(now()) @updatedAt
+  creatorId                   Int
   modifyId                     Int
   Product                      Product[]
   User_ProductGroup_modifyId   User      @relation("ProductGroup_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_ProductGroup_registerId User      @relation("ProductGroup_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_ProductGroup_creatorId User      @relation("ProductGroup_creatorId", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([modifyId], map: "FK_product_type_modify_id")
-  @@index([registerId], map: "FK_product_type_register_id")
+  @@index([creatorId], map: "FK_product_type_creator_id")
   @@map("product_group")
 }
 
 model ProductUnit {
-  id      Int       @id @default(autoincrement())
-  name    String    @db.VarChar(255)
-  status  Int?      @default(1)
-  created DateTime  @default(now()) 
-  updated DateTime  @default(now()) @updatedAt  
-  Product Product[]
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  isDeleted Boolean?  @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+  Product   Product[]
 
   @@map("product_unit")
 }
 
 model Region {
   id     Int      @id @default(autoincrement())
-  name   String?  
+  name   String?
   Client Client[]
 
   @@map("region")
@@ -142,22 +142,21 @@ model User {
   id                                   Int            @id @default(autoincrement())
   name                                 String         @db.VarChar(255)
   username                             String         @db.VarChar(255)
-  password                             String?        @db.VarChar(500)
+  password                             String         @db.VarChar(500)
   phone                                String?        @db.VarChar(255)
-  refreshToken                         String?        @db.VarChar(255)
   roleId                               Int?
-  status                               Int?           @default(1)
-  createdAt                            DateTime       @default(now()) 
-  updatedAt                            DateTime       @default(now()) @updatedAt 
+  isDeleted                            Boolean?       @default(false)
+  createdAt                            DateTime       @default(now())
+  updatedAt                            DateTime       @default(now()) @updatedAt
   chatId                               String?        @db.VarChar(255)
   Client_Client_modifyId               Client[]       @relation("Client_modifyId")
   Client_Client_registerId             Client[]       @relation("Client_registerId")
   ClientType_ClientType_modifyId       ClientType[]   @relation("ClientType_modifyId")
   ClientType_ClientType_registerId     ClientType[]   @relation("ClientType_registerId")
   Product_Product_modifyId             Product[]      @relation("Product_modifyId")
-  Product_Product_registerId           Product[]      @relation("Product_registerId")
+  Product_Product_creatorId           Product[]      @relation("Product_creatorId")
   ProductGroup_ProductGroup_modifyId   ProductGroup[] @relation("ProductGroup_modifyId")
-  ProductGroup_ProductGroup_registerId ProductGroup[] @relation("ProductGroup_registerId")
+  ProductGroup_ProductGroup_creatorId ProductGroup[] @relation("ProductGroup_creatorId")
   UserRole                             UserRole?      @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([roleId], map: "FK_user_role_id")
@@ -167,9 +166,9 @@ model User {
 model UserRole {
   id        Int      @id @default(autoincrement())
   name      String   @db.VarChar(255)
-  status    Int?     @default(1)
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @default(now()) @updatedAt 
+  isDeleted Boolean? @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   User      User[]
 
   @@map("user_role")
