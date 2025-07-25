@@ -58,14 +58,14 @@ export class UserService {
 
     const [accessToken, refreshToken] = [
       sign(
-        { id: user.id, role: Role.User, tokenVersion },
+        { id: user.id, role: Role.Admin, tokenVersion },
         env.ACCESS_TOKEN_SECRET,
         {
           expiresIn: '2h',
         },
       ),
       sign(
-        { id: user.id, role: Role.User, refreshTokenVersion },
+        { id: user.id, role: Role.Admin, refreshTokenVersion },
         env.REFRESH_TOKEN_SECRET,
         {
           expiresIn: '1d',
@@ -111,7 +111,7 @@ export class UserService {
       {
         id: user.id,
         tokenVersion: currentTokenVersion,
-        role: Role.User,
+        role: Role.Admin,
       },
       env.ACCESS_TOKEN_SECRET,
       { expiresIn: '2h' },

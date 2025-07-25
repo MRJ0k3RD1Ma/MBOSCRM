@@ -64,28 +64,28 @@ model District {
 }
 
 model Product {
-  id                      Int          @id @default(autoincrement())
-  name                    String       @db.VarChar(255)
-  barcode                 String?      @db.VarChar(255)
-  barcodeId               Int?
-  groupId                 Int
-  unitId                  Int?
-  priceIncome             Float        @default(0)
-  reminderFirst           Float        @default(0)
-  price                   Float        @default(0)
-  type                    ProductType
-  countReminder           Float        @default(0)
-  countArrived            Float        @default(0)
-  countSale               Float        @default(0)
-  isDeleted               Boolean?     @default(false)
-  createdAt                 DateTime     @default(now())
-  updatedAt                 DateTime     @default(now())
+  id                     Int          @id @default(autoincrement())
+  name                   String       @db.VarChar(255)
+  barcode                String?      @db.VarChar(255)
+  barcodeId              Int?
+  groupId                Int
+  unitId                 Int?
+  priceIncome            Float        @default(0)
+  reminderFirst          Float        @default(0)
+  price                  Float        @default(0)
+  type                   ProductType
+  countReminder          Float        @default(0)
+  countArrived           Float        @default(0)
+  countSale              Float        @default(0)
+  isDeleted              Boolean?     @default(false)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @default(now())
   creatorId              Int?
-  modifyId                Int?
-  ProductGroup            ProductGroup @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Product_modifyId   User?        @relation("Product_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  modifyId               Int?
+  ProductGroup           ProductGroup @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Product_modifyId  User?        @relation("Product_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   User_Product_creatorId User?        @relation("Product_creatorId", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  ProductUnit             ProductUnit? @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ProductUnit            ProductUnit? @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([groupId], map: "FK_product_group_id")
   @@index([modifyId], map: "FK_product_modify_id")
@@ -95,15 +95,15 @@ model Product {
 }
 
 model ProductGroup {
-  id                           Int       @id @default(autoincrement())
-  name                         String
-  isDeleted                    Boolean?  @default(false)
-  createdAt                      DateTime  @default(now())
-  updatedAt                      DateTime  @default(now()) @updatedAt
+  id                          Int       @id @default(autoincrement())
+  name                        String
+  isDeleted                   Boolean?  @default(false)
+  createdAt                   DateTime  @default(now())
+  updatedAt                   DateTime  @default(now()) @updatedAt
   creatorId                   Int
-  modifyId                     Int
-  Product                      Product[]
-  User_ProductGroup_modifyId   User      @relation("ProductGroup_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  modifyId                    Int
+  Product                     Product[]
+  User_ProductGroup_modifyId  User      @relation("ProductGroup_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   User_ProductGroup_creatorId User      @relation("ProductGroup_creatorId", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([modifyId], map: "FK_product_type_modify_id")
@@ -115,8 +115,8 @@ model ProductUnit {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
   isDeleted Boolean?  @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
   Product   Product[]
 
   @@map("product_unit")
@@ -139,25 +139,25 @@ model Setting {
 }
 
 model User {
-  id                                   Int            @id @default(autoincrement())
-  name                                 String         @db.VarChar(255)
-  username                             String         @db.VarChar(255)
-  password                             String         @db.VarChar(500)
-  phone                                String?        @db.VarChar(255)
-  roleId                               Int?
-  isDeleted                            Boolean?       @default(false)
-  createdAt                            DateTime       @default(now())
-  updatedAt                            DateTime       @default(now()) @updatedAt
-  chatId                               String?        @db.VarChar(255)
-  Client_Client_modifyId               Client[]       @relation("Client_modifyId")
-  Client_Client_registerId             Client[]       @relation("Client_registerId")
-  ClientType_ClientType_modifyId       ClientType[]   @relation("ClientType_modifyId")
-  ClientType_ClientType_registerId     ClientType[]   @relation("ClientType_registerId")
-  Product_Product_modifyId             Product[]      @relation("Product_modifyId")
+  id                                  Int            @id @default(autoincrement())
+  name                                String         @db.VarChar(255)
+  username                            String         @db.VarChar(255)
+  password                            String         @db.VarChar(500)
+  phone                               String?        @db.VarChar(255)
+  roleId                              Int?
+  isDeleted                           Boolean?       @default(false)
+  createdAt                           DateTime       @default(now())
+  updatedAt                           DateTime       @default(now()) @updatedAt
+  chatId                              String?        @db.VarChar(255)
+  Client_Client_modifyId              Client[]       @relation("Client_modifyId")
+  Client_Client_registerId            Client[]       @relation("Client_registerId")
+  ClientType_ClientType_modifyId      ClientType[]   @relation("ClientType_modifyId")
+  ClientType_ClientType_registerId    ClientType[]   @relation("ClientType_registerId")
+  Product_Product_modifyId            Product[]      @relation("Product_modifyId")
   Product_Product_creatorId           Product[]      @relation("Product_creatorId")
-  ProductGroup_ProductGroup_modifyId   ProductGroup[] @relation("ProductGroup_modifyId")
+  ProductGroup_ProductGroup_modifyId  ProductGroup[] @relation("ProductGroup_modifyId")
   ProductGroup_ProductGroup_creatorId ProductGroup[] @relation("ProductGroup_creatorId")
-  UserRole                             UserRole?      @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  UserRole                            UserRole?      @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([roleId], map: "FK_user_role_id")
   @@map("user")
