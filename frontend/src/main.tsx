@@ -1,5 +1,10 @@
-import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
-import "./global.css";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "antd/dist/reset.css";
+import { ThemeProvider } from "./providers/theme-provider";
 
-createRoot(document.getElementById("root")!).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
