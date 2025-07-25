@@ -179,3 +179,8 @@ enum ProductType {
   DEVICE
   SUBSCRIPTION
 }
+
+enum Role {
+  ADMIN
+  USER
+}
