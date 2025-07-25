@@ -23,8 +23,8 @@ import { Request } from 'express';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('register')
-  @DecoratorWrapper('Register User')
+  @Post()
+  @DecoratorWrapper('Create User', true, [Role.Admin])
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -53,10 +53,11 @@ export class UserController {
     return this.userService.findAll(query);
   }
 
-  @Get('me')
+  @Get('check')
   @DecoratorWrapper('Get User by ID', true, [Role.Admin])
-  findMe(@Req() req: Request) {
-    return this.userService.findOne(req.user.id);
+  async findMe(@Req() req: Request) {
+    await this.userService.findOne(req.user.id);
+    return { success: true };
   }
 
   @Get(':id')

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
@@ -21,9 +21,14 @@ import { Role } from 'src/common/auth/roles/role.enum';
 import { User, UserRole } from '@prisma/client';
 
 @Injectable()
-export class UserService {
+export class UserService implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
 
+  async onModuleInit() {
+    if ((await this.prisma.user.count({})) == 0) {
+      this.create({ name: 'admin', password: 'admin', username: 'admin' });
+    }
+  }
   async create(createUserDto: CreateUserDto) {
     const existingUser = await this.prisma.user.findFirst({
       where: { name: createUserDto.name },
