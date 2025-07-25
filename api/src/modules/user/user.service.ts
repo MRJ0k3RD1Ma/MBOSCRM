@@ -18,6 +18,7 @@ import { RefreshUserDto } from './dto/refresh-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from 'src/common/auth/roles/role.enum';
+import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -33,7 +34,22 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     createUserDto.password = hashedPassword;
 
-    const user = await this.prisma.user.create({ data: createUserDto });
+    let role: UserRole;
+    if (createUserDto.roleId) {
+      role = await this.prisma.userRole.findUnique({
+        where: { id: createUserDto.roleId },
+      });
+      if (!role) {
+        throw HttpError({ code: 'Role Not Found' });
+      }
+    }
+
+    const user = await this.prisma.user.create({
+      data: {
+        ...createUserDto,
+        roleId: role.id,
+      },
+    });
     delete user.password;
     return user;
   }
@@ -194,14 +210,19 @@ export class UserService {
       name: dto.name || user.name,
     };
 
-    if (dto.newPassword) {
-      if (!dto.oldPassword)
-        throw HttpError({ code: 'The previous password is required' });
+    if (dto.password) {
+      updateData.password = await bcrypt.hash(dto.password, 10);
+    }
 
-      const match = await bcrypt.compare(dto.oldPassword, user.password);
-      if (!match) throw HttpError({ code: 'Wrong password' });
-
-      updateData.password = await bcrypt.hash(dto.newPassword, 10);
+    let role: UserRole;
+    if (updateData.roleId) {
+      role = await this.prisma.userRole.findUnique({
+        where: { id: updateData.roleId },
+      });
+      if (!role) {
+        throw HttpError({ code: 'Role Not Found' });
+      }
+      updateData.roleId = role.id;
     }
 
     const updatedUser = await this.prisma.user.update({
