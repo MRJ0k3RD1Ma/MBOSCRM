@@ -8,10 +8,14 @@ import { FindAllProductGroupQueryDto } from './dto/findAll-product-group.dto,';
 @Injectable()
 export class ProductGroupService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createProductGroupDto: CreateProductGroupDto) {
+  async create(
+    createProductGroupDto: CreateProductGroupDto,
+    creatorId: number,
+    modifyId: number,
+  ) {
     const creator = await this.prisma.user.findUnique({
       where: {
-        id: createProductGroupDto.creatorId,
+        id: creatorId,
       },
     });
     if (!creator) {
@@ -20,8 +24,8 @@ export class ProductGroupService {
     const productGroup = await this.prisma.productGroup.create({
       data: {
         name: createProductGroupDto.name,
-        creatorId: createProductGroupDto.creatorId,
-        modifyId: createProductGroupDto.modifyId,
+        creatorId: creatorId,
+        modifyId: modifyId,
       },
     });
     return productGroup;
@@ -40,12 +44,6 @@ export class ProductGroupService {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          name: true,
-          createdAt: true,
-          updatedAt: true,
-        },
       }),
       this.prisma.productGroup.count({
         where: {
@@ -103,7 +101,6 @@ export class ProductGroupService {
       data: {
         name: updateProductGroupDto.name ?? existingGroup.name,
         modifyId: userId,
-        isDeleted: updateProductGroupDto.isDeleted ?? existingGroup.isDeleted,
       },
     });
   }
@@ -113,8 +110,8 @@ export class ProductGroupService {
       where: { id },
       data: {
         isDeleted: true,
+        modifyId: modifierId,
       },
     });
   }
-  
 }
