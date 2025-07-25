@@ -1,15 +1,17 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { api } from ".";
+import { TokenManager } from "./token-manager";
 
 const baseURL = import.meta.env.VITE_API_URL;
+
 const axiosPrivate = axios.create({
   baseURL,
-  withCredentials: true,
+  withCredentials: false,
 });
 
 axiosPrivate.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("accessToken");
+    const token = TokenManager.getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -20,41 +22,39 @@ axiosPrivate.interceptors.request.use(
 
 axiosPrivate.interceptors.response.use(
   (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as any;
 
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (
+    const jwtExpired =
       error.response?.status === 401 &&
-      error.response?.data?.message === "Token has expired" &&
-      error.response?.data?.error === "Unauthorized" &&
-      !originalRequest._retry
-    ) {
+      (error.response?.data as any)?.message === "JWT_EXPIRED";
+
+    const unauthorized =
+      error.response?.status === 401 &&
+      (error.response?.data as any)?.error === "Unauthorized";
+
+    if ((jwtExpired || unauthorized) && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        const refreshResponse = await api.get("/user/auth/refresh");
-        console.log("refreshResponse:", refreshResponse);
+        const res = await api.get("/user/auth/refresh");
+        const newAccessToken = res.data.accessToken;
 
-        if (refreshResponse?.data?.accessToken) {
-          const newAccessToken = refreshResponse.data.accessToken;
-          localStorage.setItem("accessToken", newAccessToken);
+        if (newAccessToken) {
+          TokenManager.setAccessToken(newAccessToken);
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return axiosPrivate(originalRequest);
         }
-      } catch (err) {
-        console.error("Error refreshing token:", err);
-        localStorage.removeItem("accessToken");
+      } catch (refreshError) {
+        TokenManager.clearTokens();
         window.location.href = "/login";
-        return Promise.reject(err);
+        return Promise.reject(refreshError);
       }
     }
 
-    if (
-      error.response?.status === 405 &&
-      error.response?.data?.message === "Password Change Requierd" &&
-      error.response?.data?.error === "Method Not Allowed"
-    ) {
+    if ((jwtExpired || unauthorized) && originalRequest._retry) {
+      TokenManager.clearTokens();
+      window.location.href = "/login";
       return Promise.reject(error);
     }
 

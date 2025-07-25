@@ -3,6 +3,7 @@ import { notification } from "antd";
 import { authEndpoints } from "../../endpoint";
 import { api } from "../..";
 import axiosPrivate from "../../api";
+import { TokenManager } from "../../token-manager";
 
 type LoginInput = {
   name: string;
@@ -30,12 +31,11 @@ export const useAdminLogin = () => {
           authEndpoints.login,
           credentials
         );
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
+        TokenManager.setTokens(data.accessToken, data.refreshToken);
         return data;
       } catch (error: any) {
         const errorResponse = error?.response?.data as ErrorResponse;
-        throw new Error(errorResponse?.error || "Authentication failed");
+        throw new Error(errorResponse?.error || "Tizimga kirishda xatolik");
       }
     },
     onSuccess: () => {
@@ -59,18 +59,17 @@ export const useAdminRefresh = () => {
     mutationFn: async () => {
       try {
         const refreshToken = localStorage.getItem("refreshToken");
-        if (!refreshToken) {
-          throw new Error("BEARER_TOKEN_NOT_PROVIDED");
-        }
+        if (!refreshToken) throw new Error("Refresh token topilmadi");
+
         const { data } = await api.post<TokenResponse>(authEndpoints.refresh, {
           refreshToken,
         });
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
+
+        TokenManager.setTokens(data.accessToken, data.refreshToken);
         return data;
       } catch (error: any) {
         const errorResponse = error?.response?.data as ErrorResponse;
-        throw new Error(errorResponse?.error || "Token refresh failed");
+        throw new Error(errorResponse?.error || "Token yangilashda xatolik");
       }
     },
   });
@@ -83,16 +82,9 @@ export const useAdminLogout = () => {
     mutationFn: async () => {
       try {
         await axiosPrivate.post(authEndpoints.logout);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+      } finally {
+        TokenManager.clearTokens();
         window.location.href = "/login";
-      } catch (error: any) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        window.location.href = "/login";
-
-        const errorResponse = error?.response?.data as ErrorResponse;
-        throw new Error(errorResponse?.error || "Logout failed");
       }
     },
     onSuccess: () => {
@@ -105,7 +97,7 @@ export const useAdminLogout = () => {
     onError: (error: Error) => {
       queryClient.clear();
       notification.error({
-        message: `Logout jarayonida xatolik: ${error.message}`,
+        message: `Logout xatoligi: ${error.message}`,
         placement: "bottomRight",
       });
     },
