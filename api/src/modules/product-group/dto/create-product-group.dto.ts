@@ -8,18 +8,4 @@ export class CreateProductGroupDto {
   })
   @IsString()
   name: string;
-
-  @ApiProperty({
-    example: 1,
-    description: 'Yaratgan userning ID si',
-  })
-  @IsInt()
-  creatorId: number;
-
-  @ApiProperty({
-    example: 1,
-    description: 'Oxirgi o‘zgartirgan userning ID si',
-  })
-  @IsInt()
-  modifyId: number;
 }
