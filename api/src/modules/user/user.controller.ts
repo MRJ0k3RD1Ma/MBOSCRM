@@ -17,6 +17,7 @@ import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from 'src/common/auth/roles/role.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Request } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -41,25 +42,31 @@ export class UserController {
   }
 
   @Post('logout')
-  @DecoratorWrapper('User Logout', true, [Role.User])
+  @DecoratorWrapper('User Logout', true, [Role.Admin])
   logout(@Req() req: any) {
     return this.userService.logout(req.user.id);
   }
 
   @Get()
-  @DecoratorWrapper('Get All Users', true, [Role.User])
+  @DecoratorWrapper('Get All Users', true, [Role.Admin])
   findAll(@Query() query: FindAllUserQueryDto) {
     return this.userService.findAll(query);
   }
 
+  @Get('me')
+  @DecoratorWrapper('Get User by ID', true, [Role.Admin])
+  findMe(@Req() req: Request) {
+    return this.userService.findOne(req.user.id);
+  }
+
   @Get(':id')
-  @DecoratorWrapper('Get User by ID', true, [Role.User])
+  @DecoratorWrapper('Get User by ID', true, [Role.Admin])
   findOne(@Param('id', ParseIntPipe) id: string) {
     return this.userService.findOne(+id);
   }
 
   @Patch(':id')
-  @DecoratorWrapper('Update User', true, [Role.User])
+  @DecoratorWrapper('Update User', true, [Role.Admin])
   update(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
