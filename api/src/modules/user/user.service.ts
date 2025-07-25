@@ -39,20 +39,20 @@ export class UserService implements OnModuleInit {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     createUserDto.password = hashedPassword;
 
-    let role: UserRole;
-    if (createUserDto.roleId) {
-      role = await this.prisma.userRole.findUnique({
-        where: { id: createUserDto.roleId },
-      });
-      if (!role) {
-        throw HttpError({ code: 'Role Not Found' });
-      }
-    }
+    //let role: UserRole;
+    //if (createUserDto.roleId) {
+    //  role = await this.prisma.userRole.findUnique({
+    //    where: { id: createUserDto.roleId },
+    //  });
+    //  if (!role) {
+    //    throw HttpError({ code: 'Role Not Found' });
+    //  }
+    //}
 
     const user = await this.prisma.user.create({
       data: {
         ...createUserDto,
-        roleId: role.id,
+        //roleId: role.id,
       },
     });
     delete user.password;
