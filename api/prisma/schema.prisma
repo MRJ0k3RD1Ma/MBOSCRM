@@ -40,14 +40,14 @@ model Client {
 model ClientType {
   id                         Int      @id @default(autoincrement())
   name                       String
-  creatorId                  Int
-  modifyId                   Int
-  isDeleted                  Boolean? @default(false)
+  creatorId                  Int?
+  modifyId                   Int?
+  isDeleted                  Boolean  @default(false)
   createdAt                  DateTime @default(now())
   updatedAt                  DateTime @default(now()) @updatedAt
   Client                     Client[]
-  User_ClientType_modifyId   User     @relation("ClientType_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_ClientType_registerId User     @relation("ClientType_registerId", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_ClientType_modifyId   User?    @relation("ClientType_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_ClientType_registerId User?    @relation("ClientType_registerId", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([modifyId], map: "FK_client_type_modify_id")
   @@index([creatorId], map: "FK_client_type_register_id")
