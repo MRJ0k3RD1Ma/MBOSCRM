@@ -21,7 +21,7 @@ export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
   @Post()
-  @DecoratorWrapper('create Client')
+  @DecoratorWrapper('create Client', true, [Role.Admin])
   create(@Body() createClientDto: CreateClientDto) {
     return this.clientService.create(createClientDto);
   }

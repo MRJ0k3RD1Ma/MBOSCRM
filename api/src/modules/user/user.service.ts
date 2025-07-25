@@ -60,9 +60,9 @@ export class UserService implements OnModuleInit {
   }
 
   async login(dto: LoginUserDto) {
-    const { name, password } = dto;
+    const { username, password } = dto;
     const user = await this.prisma.user.findFirst({
-      where: { name: name, isDeleted: false },
+      where: { username: username, isDeleted: false },
     });
     if (!user) {
       throw HttpError({ code: 'User not found' });

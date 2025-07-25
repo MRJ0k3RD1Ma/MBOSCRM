@@ -54,7 +54,7 @@ export class UserController {
   }
 
   @Get('check')
-  @DecoratorWrapper('Get User by ID', true, [Role.Admin])
+  @DecoratorWrapper('Check Auth', true, [Role.Admin])
   async findMe(@Req() req: Request) {
     await this.userService.findOne(req.user.id);
     return { success: true };
