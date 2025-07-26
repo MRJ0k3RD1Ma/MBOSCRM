@@ -56,10 +56,10 @@ export class ClientService {
       name: { contains: name?.trim() || '' },
       districtId: { equals: districtId },
       regionId: { equals: regionId },
-      address: { contains: address.trim() || '' },
-      description: { contains: description.trim() || '' },
-      inn: { contains: inn.trim() || '' },
-      phone: { contains: phone.trim() || '' },
+      address: { contains: address?.trim() || '' },
+      description: { contains: description?.trim() || '' },
+      inn: { contains: inn?.trim() || '' },
+      phone: { contains: phone?.trim() || '' },
       isDeleted: false,
     };
 
