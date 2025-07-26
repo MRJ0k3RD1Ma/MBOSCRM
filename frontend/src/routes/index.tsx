@@ -4,11 +4,16 @@ import LoginPage from "../pages/auth/login";
 import Dashboard from "../pages/dashboard/dashboard";
 import ProtectedRoute from "./protected-route";
 import AppLayout from "../layout/app-layout";
+import RestrictedRoute from "./restricted-route";
 
 export const router = createBrowserRouter([
   {
     path: "/login",
-    element: <LoginPage />,
+    element: (
+      <RestrictedRoute>
+        <LoginPage />
+      </RestrictedRoute>
+    ),
   },
   {
     path: "/",
@@ -20,6 +25,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
+            path: "/",
             element: <Dashboard />,
           },
         ],

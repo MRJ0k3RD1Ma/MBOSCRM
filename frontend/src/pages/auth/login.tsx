@@ -1,20 +1,21 @@
-import { Button, Card, Form, Input, Typography, message } from "antd";
+import { Button, Card, Form, Input, message, Typography } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useAdminLogin } from "../../config/queries/auth/login-querys";
 
 const { Title } = Typography;
 
 export default function LoginPage() {
+  const [form] = Form.useForm();
   const navigate = useNavigate();
+  const { mutateAsync, isPending } = useAdminLogin();
 
-  const onFinish = (values: { username: string; password: string }) => {
-    const { username, password } = values;
-
-    if (username === "admin" && password === "123456") {
-      message.success("Muvaffaqiyatli kirdingiz!");
-      navigate("/dashboard");
-    } else {
-      message.error("Login yoki parol noto‘g‘ri!");
+  const onFinish = async (values: { name: string; password: string }) => {
+    try {
+      await mutateAsync(values);
+      navigate("/");
+    } catch (err) {
+      message.error("Login muvaffaqiyatsiz tugadi");
     }
   };
 
@@ -32,8 +33,10 @@ export default function LoginPage() {
       <Card
         title={<Title level={3}>Tizimga kirish</Title>}
         style={{ width: 360 }}
+        loading={isPending}
       >
         <Form
+          form={form}
           name="login"
           initialValues={{ remember: true }}
           onFinish={onFinish}
@@ -56,7 +59,7 @@ export default function LoginPage() {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
+            <Button type="primary" htmlType="submit" block loading={isPending}>
               Kirish
             </Button>
           </Form.Item>
