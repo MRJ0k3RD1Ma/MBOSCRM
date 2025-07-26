@@ -8,7 +8,6 @@ export class SettingsService implements OnModuleInit {
 
   async onModuleInit() {
     let settings = await this.prisma.setting.findFirst({ where: { id: 1 } });
-    console.log(settings);
     if (!settings) {
       settings = await this.prisma.setting.create({
         data: { id: 1, name: 'default' },
