@@ -1,0 +1,104 @@
+import { Drawer, Form, Input, Select, Button } from "antd";
+import { useEffect } from "react";
+import type {
+  ClientType,
+  CreateClientInput,
+} from "../../../config/queries/clients/clients-querys";
+
+interface Props {
+  open: boolean;
+  onClose: () => void;
+  onSubmit: (values: CreateClientInput) => void;
+  initialValues?: Partial<CreateClientInput> | null;
+  types: ClientType[];
+}
+
+export default function ClientModal({
+  open,
+  onClose,
+  onSubmit,
+  initialValues,
+  types,
+}: Props) {
+  const [form] = Form.useForm<CreateClientInput>();
+
+  useEffect(() => {
+    if (initialValues) {
+      form.setFieldsValue(initialValues);
+    } else {
+      form.resetFields();
+    }
+  }, [initialValues, form]);
+
+  const handleFinish = async () => {
+    try {
+      const values = await form.validateFields();
+      onSubmit(values);
+    } catch {}
+  };
+
+  return (
+    <Drawer
+      title={initialValues ? "Clientni tahrirlash" : "Yangi Client"}
+      onClose={() => {
+        form.resetFields();
+        onClose();
+      }}
+      open={open}
+      destroyOnClose
+      width={400}
+    >
+      <Form layout="vertical" form={form} onFinish={handleFinish}>
+        <Form.Item
+          name="name"
+          label="Ismi"
+          rules={[{ required: true, message: "Iltimos ismni kiriting" }]}
+        >
+          <Input placeholder="Client ismi" />
+        </Form.Item>
+
+        <Form.Item
+          name="inn"
+          label="INN"
+          rules={[{ required: true, message: "INN kiriting" }]}
+        >
+          <Input placeholder="123456789" />
+        </Form.Item>
+
+        <Form.Item name="address" label="Manzil">
+          <Input placeholder="Client manzili" />
+        </Form.Item>
+
+        <Form.Item
+          name="phone"
+          label="Telefon"
+          rules={[{ required: true, message: "Telefon raqam kiriting" }]}
+        >
+          <Input placeholder="+998901234567" />
+        </Form.Item>
+
+        <Form.Item
+          name="typeId"
+          label="Client turi"
+          rules={[{ required: true, message: "Client turini tanlang" }]}
+        >
+          <Select
+            placeholder="Client turini tanlang"
+            options={(types ?? []).map((t) => ({
+              value: t.id,
+              label: t.name,
+            }))}
+          />
+        </Form.Item>
+
+        <Form.Item name="description" label="Izoh">
+          <Input.TextArea rows={3} placeholder="Qo‘shimcha izoh..." />
+        </Form.Item>
+
+        <Button type="primary" htmlType="submit" block>
+          {initialValues ? "Saqlash" : "Qo‘shish"}
+        </Button>
+      </Form>
+    </Drawer>
+  );
+}
