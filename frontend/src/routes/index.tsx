@@ -7,6 +7,7 @@ import { TokenManager } from "../config/token-manager";
 import { ErrorPage } from "../pages/error/error";
 import Clients from "../pages/clients/clients";
 import ClientType from "../pages/clients/client-type";
+import ClientPage from "../pages/clients/client";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
           {
             path: "client-type",
             element: <ClientType />,
+          },
+          {
+            path: "client/:id",
+            element: <ClientPage />,
           },
         ],
       },

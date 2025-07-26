@@ -11,6 +11,7 @@ import {
 import { PlusOutlined } from "@ant-design/icons";
 import ClientModal from "./ui/clients-form-modal";
 import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
+import { useNavigate } from "react-router-dom";
 
 export default function ClientsPage() {
   const [form] = Form.useForm();
@@ -19,7 +20,7 @@ export default function ClientsPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-
+  const navigate = useNavigate();
   const { data, isLoading } = useGetAllClients({
     page,
     limit,
@@ -109,6 +110,9 @@ export default function ClientsPage() {
         dataSource={data?.data || []}
         loading={isLoading}
         rowKey="id"
+        onRow={(record) => ({
+          onClick: () => navigate(`/client/${record.id}`),
+        })}
         pagination={{
           current: page,
           pageSize: limit,
