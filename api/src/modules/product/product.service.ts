@@ -145,6 +145,21 @@ export class ProductService {
       }
     }
 
+    if (dto.barcode !== undefined) {
+      const existingWithBarcode = await this.prisma.product.findFirst({
+        where: {
+          barcode: dto.barcode,
+          NOT: { id }, 
+        },
+      });
+      if (existingWithBarcode) {
+        throw new HttpError({
+          message: `Barcode "${dto.barcode}" is already used by another product`,
+        });
+      }
+    }
+  
+
     const updateData: Record<string, any> = {};
     const fields: (keyof UpdateProductDto)[] = [
       'name',
