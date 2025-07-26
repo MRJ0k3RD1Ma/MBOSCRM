@@ -17,13 +17,14 @@ import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from 'src/common/auth/roles/role.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Request } from 'express';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('register')
-  @DecoratorWrapper('Register User')
+  @Post()
+  @DecoratorWrapper('Create User', true, [Role.Admin])
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -41,25 +42,32 @@ export class UserController {
   }
 
   @Post('logout')
-  @DecoratorWrapper('User Logout', true, [Role.User])
+  @DecoratorWrapper('User Logout', true, [Role.Admin])
   logout(@Req() req: any) {
     return this.userService.logout(req.user.id);
   }
 
   @Get()
-  @DecoratorWrapper('Get All Users', true, [Role.User])
+  @DecoratorWrapper('Get All Users', true, [Role.Admin])
   findAll(@Query() query: FindAllUserQueryDto) {
     return this.userService.findAll(query);
   }
 
+  @Get('check')
+  @DecoratorWrapper('Check Auth', true, [Role.Admin])
+  async findMe(@Req() req: Request) {
+    await this.userService.findOne(req.user.id);
+    return { success: true };
+  }
+
   @Get(':id')
-  @DecoratorWrapper('Get User by ID', true, [Role.User])
+  @DecoratorWrapper('Get User by ID', true, [Role.Admin])
   findOne(@Param('id', ParseIntPipe) id: string) {
     return this.userService.findOne(+id);
   }
 
   @Patch(':id')
-  @DecoratorWrapper('Update User', true, [Role.User])
+  @DecoratorWrapper('Update User', true, [Role.Admin])
   update(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,

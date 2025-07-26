@@ -18,7 +18,6 @@ export class ClientTypeService {
 
   async findAll(dto: FindAllClientTypeQueryDto) {
     const { limit = 10, page = 1, name } = dto;
-
     const [data, total] = await this.prisma.$transaction([
       this.prisma.clientType.findMany({
         where: {

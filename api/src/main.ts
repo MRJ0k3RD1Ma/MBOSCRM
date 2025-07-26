@@ -7,8 +7,8 @@ import { ApiSwaggerOptions } from './common/swagger/config.swagger';
 import { HttpExceptionFilter } from './common/filter/httpException.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: { origin: '*' } });
-
+  const app = await NestFactory.create(AppModule);
+  app.enableCors();
   app.setGlobalPrefix('/api');
 
   app.useGlobalFilters(new HttpExceptionFilter());

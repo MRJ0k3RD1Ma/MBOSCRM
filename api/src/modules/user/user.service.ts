@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
@@ -18,12 +18,17 @@ import { RefreshUserDto } from './dto/refresh-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from 'src/common/auth/roles/role.enum';
-import { UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 
 @Injectable()
-export class UserService {
+export class UserService implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
 
+  async onModuleInit() {
+    if ((await this.prisma.user.count({})) == 0) {
+      this.create({ name: 'admin', password: 'admin', username: 'admin' });
+    }
+  }
   async create(createUserDto: CreateUserDto) {
     const existingUser = await this.prisma.user.findFirst({
       where: { name: createUserDto.name },
@@ -34,20 +39,20 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     createUserDto.password = hashedPassword;
 
-    let role: UserRole;
-    if (createUserDto.roleId) {
-      role = await this.prisma.userRole.findUnique({
-        where: { id: createUserDto.roleId },
-      });
-      if (!role) {
-        throw HttpError({ code: 'Role Not Found' });
-      }
-    }
+    //let role: UserRole;
+    //if (createUserDto.roleId) {
+    //  role = await this.prisma.userRole.findUnique({
+    //    where: { id: createUserDto.roleId },
+    //  });
+    //  if (!role) {
+    //    throw HttpError({ code: 'Role Not Found' });
+    //  }
+    //}
 
     const user = await this.prisma.user.create({
       data: {
         ...createUserDto,
-        roleId: role.id,
+        //roleId: role.id,
       },
     });
     delete user.password;
@@ -55,9 +60,9 @@ export class UserService {
   }
 
   async login(dto: LoginUserDto) {
-    const { name, password } = dto;
+    const { username, password } = dto;
     const user = await this.prisma.user.findFirst({
-      where: { name: name },
+      where: { username: username, isDeleted: false },
     });
     if (!user) {
       throw HttpError({ code: 'User not found' });
@@ -157,16 +162,11 @@ export class UserService {
             contains: name?.trim() || '',
             mode: 'insensitive',
           },
+          isDeleted: false,
         },
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          name: true,
-          createdAt: true,
-          updatedAt: true,
-        },
       }),
       this.prisma.user.count({
         where: {
@@ -188,13 +188,7 @@ export class UserService {
 
   async findOne(id: number) {
     const user = await this.prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      where: { id, isDeleted: false },
     });
     if (!user) {
       throw HttpError({ code: 'User not found' });
@@ -203,11 +197,17 @@ export class UserService {
   }
 
   async update(id: number, dto: UpdateUserDto) {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id, isDeleted: false },
+    });
     if (!user) throw HttpError({ code: 'User not found' });
 
-    const updateData: any = {
+    const updateData: Partial<User> = {
       name: dto.name || user.name,
+      chatId: dto.chatId || user.chatId,
+      phone: dto.phone || user.phone,
+      roleId: dto.roleId || user.roleId,
+      username: dto.username || user.username,
     };
 
     if (dto.password) {
@@ -228,12 +228,6 @@ export class UserService {
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: updateData,
-      select: {
-        id: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
 
     return updatedUser;
@@ -241,13 +235,14 @@ export class UserService {
 
   async remove(id: number) {
     const user = await this.prisma.user.findUnique({
-      where: { id: id },
+      where: { id: id, isDeleted: false },
     });
     if (!user) {
       throw HttpError({ code: 'User not found' });
     }
-    return await this.prisma.user.delete({
+    return await this.prisma.user.update({
       where: { id: id },
+      data: { isDeleted: true },
     });
   }
 }
