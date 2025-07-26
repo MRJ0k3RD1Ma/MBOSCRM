@@ -6,6 +6,8 @@ import { UserRoleModule } from './modules/userRole/userRole.module';
 import { ClientModule } from './modules/client/client.module';
 import { ProductGroupModule } from './modules/product-group/product-group.module';
 import { ClientTypeModule } from './modules/clientType/clientType.module';
+import { ProductModule } from './modules/product/product.module';
+import { ProductUnitModule } from './modules/product-unit/product-unit.module';
 
 @Module({
   controllers: [],
@@ -21,6 +23,8 @@ import { ClientTypeModule } from './modules/clientType/clientType.module';
     PrismaModule,
     ClientModule,
     ClientTypeModule,
+    ProductModule,
+    ProductUnitModule,
   ],
 })
 export class AppModule {}

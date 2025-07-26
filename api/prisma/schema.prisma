@@ -67,7 +67,7 @@ model Product {
   id                     Int          @id @default(autoincrement())
   name                   String       @db.VarChar(255)
   barcode                String?      @db.VarChar(255)
-  barcodeId              Int?
+  barcodeId              Int?         @unique()
   groupId                Int
   unitId                 Int?
   priceIncome            Float        @default(0)

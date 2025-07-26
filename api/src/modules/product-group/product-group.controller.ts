@@ -24,7 +24,7 @@ export class ProductGroupController {
   constructor(private readonly productGroupService: ProductGroupService) {}
 
   @Post()
-  @DecoratorWrapper('Create product group', true, [Role.User])
+  @DecoratorWrapper('Create product group', true, [Role.Admin])
   create(
     @Body() createProductGroupDto: CreateProductGroupDto,
     @Req() req: Request,
@@ -51,7 +51,7 @@ export class ProductGroupController {
   }
 
   @Patch(':id')
-  @DecoratorWrapper('Update product group', true, [Role.User])
+  @DecoratorWrapper('Update product group', true, [Role.Admin])
   update(
     @Param('id') id: string,
     @Body() updateProductGroupDto: UpdateProductGroupDto,
@@ -62,7 +62,7 @@ export class ProductGroupController {
   }
 
   @Delete(':id')
-  @DecoratorWrapper('Delete product group', true, [Role.User])
+  @DecoratorWrapper('Delete product group', true, [Role.Admin])
   async remove(@Param('id') id: string, @Req() req: Request) {
     const userId = req.user.id;
     return this.productGroupService.remove(+id, userId);
