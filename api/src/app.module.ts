@@ -14,13 +14,12 @@ import { ClientTypeModule } from './modules/clientType/clientType.module';
     UserModule,
     SettingsModule,
     PrismaModule,
+    ClientTypeModule,
     ClientModule,
     ProductGroupModule,
     UserRoleModule,
     SettingsModule,
     PrismaModule,
-    ClientModule,
-    ClientTypeModule,
   ],
 })
 export class AppModule {}
