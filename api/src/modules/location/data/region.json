@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1703,
+    "title": "Andijon viloyati",
+    "status": "active"
+  },
+  {
+    "id": 1706,
+    "title": "Buxoro viloyati",
+    "status": "active"
+  },
+  {
+    "id": 1708,
+    "title": "Jizzax viloyati",
+    "status": "active"
+  },
+  {
+    "id": 1710,
+    "title": "Qashqadaryo viloyati",
+    "status": "active"
+  },
+  {
+    "id": 1712,
+    "title": "Navoiy viloyati",
+    "status": "active"
+  },
+  {
+    "id": 1714,
+    "title": "Namangan viloyati",
+    "status": "active"
+  },
+  {
+    "id": 1718,
+    "title": "Samarqand viloyati",
+    "status": "active"
+  },
+  {
+    "id": 1722,
+    "title": "Surxondaryo viloyati",
+    "status": "active"
+  },
+  {
+    "id": 1724,
+    "title": "Sirdaryo viloyati",
+    "status": "active"
+  },
+  {
+    "id": 1726,
+    "title": "Toshkent shahri",
+    "status": "active"
+  },
+  {
+    "id": 1727,
+    "title": "Toshkent viloyati",
+    "status": "active"
+  },
+  {
+    "id": 1730,
+    "title": "Farg`ona viloyati",
+    "status": "deleted"
+  },
+  {
+    "id": 1733,
+    "title": "Xorazm viloyati",
+    "status": "disabled"
+  },
+  {
+    "id": 1735,
+    "title": "Qoraqalpog`iston Respublikasi",
+    "status": "disabled"
+  },
+  {
+    "id": 9999,
+    "title": "Chet el",
+    "status": "deleted"
+  }
+]

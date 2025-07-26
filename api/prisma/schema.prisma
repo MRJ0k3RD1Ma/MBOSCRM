@@ -231,9 +231,9 @@ model Supplier {
   phoneTwo    String?  @map("phone_two") @db.VarChar(255)
   description String?  @db.Text
   balance     Float    @default(0)
-  status      Int?     @default(1)
-  created     DateTime @default(now())
-  updated     DateTime @default(now()) @updatedAt
+  isDeleted   Boolean? @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
   registerId  Int?
   modifyId    Int?
   // If `register_id` and `modify_id` refer to the `User` table, uncomment and adjust these relations:

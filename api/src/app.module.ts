@@ -8,11 +8,14 @@ import { ProductGroupModule } from './modules/product-group/product-group.module
 import { ClientTypeModule } from './modules/clientType/clientType.module';
 import { ProductModule } from './modules/product/product.module';
 import { ProductUnitModule } from './modules/product-unit/product-unit.module';
+import { LocationModule } from './modules/location/location.module';
+import { SupplierModule } from './modules/supplier/supplier.module';
 
 @Module({
   controllers: [],
   providers: [],
   imports: [
+    LocationModule,
     UserModule,
     SettingsModule,
     PrismaModule,
@@ -24,6 +27,7 @@ import { ProductUnitModule } from './modules/product-unit/product-unit.module';
     PrismaModule,
     ProductModule,
     ProductUnitModule,
+    SupplierModule,
   ],
 })
 export class AppModule {}

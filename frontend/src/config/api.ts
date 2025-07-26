@@ -24,16 +24,15 @@ axiosPrivate.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as any;
+    const status = error.response?.status;
+    const errorData = error.response?.data as any;
+    const errorMessage = errorData?.message || errorData?.error;
 
-    const jwtExpired =
-      error.response?.status === 401 &&
-      (error.response?.data as any)?.message === "JWT_EXPIRED";
+    const tokenErrors = ["JWT_EXPIRED", "Unauthorized", "TOKEN_INVALIDATED"];
 
-    const unauthorized =
-      error.response?.status === 401 &&
-      (error.response?.data as any)?.error === "Unauthorized";
+    const isTokenError = status === 401 && tokenErrors.includes(errorMessage);
 
-    if ((jwtExpired || unauthorized) && !originalRequest._retry) {
+    if (isTokenError && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
@@ -52,10 +51,9 @@ axiosPrivate.interceptors.response.use(
       }
     }
 
-    if ((jwtExpired || unauthorized) && originalRequest._retry) {
+    if (isTokenError && originalRequest._retry) {
       TokenManager.clearTokens();
       window.location.href = "/login";
-      return Promise.reject(error);
     }
 
     return Promise.reject(error);
