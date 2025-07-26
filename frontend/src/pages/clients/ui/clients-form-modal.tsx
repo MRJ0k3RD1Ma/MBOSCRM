@@ -1,13 +1,16 @@
 import { Drawer, Form, Input, Select, Button } from "antd";
 import { useEffect } from "react";
-import type { CreateClientInput } from "../../../config/queries/clients/clients-querys";
+import type {
+  ClientType,
+  CreateClientInput,
+} from "../../../config/queries/clients/clients-querys";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onSubmit: (values: CreateClientInput) => void;
   initialValues?: Partial<CreateClientInput> | null;
-  types: { id: number; name: string }[] | null | undefined;
+  types: ClientType[];
 }
 
 export default function ClientModal({
@@ -31,9 +34,7 @@ export default function ClientModal({
     try {
       const values = await form.validateFields();
       onSubmit(values);
-    } catch (error) {
-      // Validatsiya xatolari bo'lsa, hech narsa qilinmaydi
-    }
+    } catch {}
   };
 
   return (
@@ -45,6 +46,7 @@ export default function ClientModal({
       }}
       open={open}
       destroyOnClose
+      width={400}
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item

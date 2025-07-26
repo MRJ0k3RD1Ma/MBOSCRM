@@ -1,4 +1,4 @@
-import { Layout, Menu, Avatar, Dropdown, Space, Button } from "antd";
+import { Layout, Menu, Avatar, Dropdown, Space, Button, message } from "antd";
 import {
   HomeOutlined,
   UsergroupAddOutlined,
@@ -14,6 +14,7 @@ import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../public/LogoMbos.svg";
 import { useTheme } from "../hooks/use-theme";
 import { useState, useMemo } from "react";
+import { TokenManager } from "../config/token-manager";
 
 const { Sider, Content, Header } = Layout;
 
@@ -48,10 +49,8 @@ export default function AppLayout() {
   const { theme } = useTheme();
   const [collapsed, setCollapsed] = useState(false);
 
-  // 🔑 selected menu item
   const selectedKey = location.pathname;
 
-  // 🔓 openKeys (submenu ochiq bo‘lishi uchun)
   const openKey = useMemo(() => {
     const match = pages.find((page) =>
       page.children?.some((child) => child.key === location.pathname)
@@ -61,7 +60,9 @@ export default function AppLayout() {
 
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === "logout") {
-      localStorage.removeItem("access_token");
+      TokenManager.clearTokens();
+      message.success("Siz tizimdan chiqdingiz");
+
       navigate("/login");
     } else if (key === "profile") {
       navigate("/profile");

@@ -11,7 +11,6 @@ export interface Client {
   phone?: string;
   typeId?: number;
   description?: string;
-  regionId?: number | null;
   districtId?: number | null;
 }
 
@@ -22,7 +21,6 @@ export interface CreateClientDto {
   phone?: string;
   typeId?: number;
   description?: string;
-  regionId?: number | null;
   districtId?: number | null;
 }
 
@@ -45,8 +43,6 @@ export interface CreateClientInput {
   phone: string;
   typeId: number;
   description?: string;
-  regionId?: number;
-  districtId?: number;
 }
 
 export interface UpdateClientInput extends CreateClientInput {
@@ -61,7 +57,6 @@ export const useGetAllClients = (params?: {
   description?: string;
   phone?: string;
   inn?: string;
-  regionId?: number;
   districtId?: number;
 }) => {
   return useQuery<ClientResponse>({

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Button, Card, Input, Modal, Space, Table, Form } from "antd";
+import { useState } from "react";
+import { Button, Card, Input, Space, Table, Form } from "antd";
 import {
   useCreateClient,
   useDeleteClient,
@@ -8,6 +8,9 @@ import {
   type Client,
   type CreateClientInput,
 } from "../../config/queries/clients/clients-querys";
+import { PlusOutlined } from "@ant-design/icons";
+import ClientModal from "./ui/clients-form-modal";
+import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
 
 export default function ClientsPage() {
   const [form] = Form.useForm();
@@ -15,26 +18,25 @@ export default function ClientsPage() {
   const [editing, setEditing] = useState<Client | null>(null);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit] = useState(10);
 
   const { data, isLoading } = useGetAllClients({
     page,
     limit,
     ...(search ? { name: search } : {}),
   });
-
+  const { data: types } = useGetAllClientTypes();
   const createClient = useCreateClient();
   const updateClient = useUpdateClient();
   const deleteClient = useDeleteClient();
 
-  const onFinish = (values: CreateClientInput) => {
+  const onSubmit = (values: CreateClientInput) => {
     if (editing) {
       updateClient.mutate({ id: editing.id, ...values });
     } else {
       createClient.mutate(values);
     }
     setOpen(false);
-    form.resetFields();
     setEditing(null);
   };
 
@@ -78,13 +80,14 @@ export default function ClientsPage() {
       extra={
         <Button
           type="primary"
+          icon={<PlusOutlined />}
           onClick={() => {
             setEditing(null);
             form.resetFields();
             setOpen(true);
           }}
         >
-          Add Client
+          Yangi mijoz qo'shish
         </Button>
       }
     >
@@ -93,7 +96,10 @@ export default function ClientsPage() {
           placeholder="Search by name"
           allowClear
           enterButton
-          onSearch={(val) => setSearch(val)}
+          onSearch={(val) => {
+            setSearch(val);
+            setPage(1);
+          }}
           style={{ maxWidth: 300 }}
         />
       </Space>
@@ -111,43 +117,16 @@ export default function ClientsPage() {
         }}
       />
 
-      <Modal
+      <ClientModal
         open={open}
-        title={editing ? "Edit Client" : "Add Client"}
-        onCancel={() => {
+        onClose={() => {
           setOpen(false);
-          form.resetFields();
           setEditing(null);
         }}
-        onOk={() => form.submit()}
-        okText={editing ? "Update" : "Create"}
-        destroyOnClose
-      >
-        <Form layout="vertical" form={form} onFinish={onFinish}>
-          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-            <Input placeholder="Enter client name" />
-          </Form.Item>
-          <Form.Item name="inn" label="INN" rules={[{ required: true }]}>
-            <Input placeholder="Enter INN" />
-          </Form.Item>
-          <Form.Item name="phone" label="Phone" rules={[{ required: true }]}>
-            <Input placeholder="Enter phone number" />
-          </Form.Item>
-          <Form.Item
-            name="address"
-            label="Address"
-            rules={[{ required: true }]}
-          >
-            <Input placeholder="Enter address" />
-          </Form.Item>
-          <Form.Item name="typeId" label="Type ID" rules={[{ required: true }]}>
-            <Input type="number" placeholder="Enter type ID" />
-          </Form.Item>
-          <Form.Item name="description" label="Description">
-            <Input placeholder="Enter description (optional)" />
-          </Form.Item>
-        </Form>
-      </Modal>
+        onSubmit={onSubmit}
+        initialValues={editing || undefined}
+        types={types?.data || []}
+      />
     </Card>
   );
 }
