@@ -9,6 +9,7 @@ import { ClientTypeModule } from './modules/clientType/clientType.module';
 import { ProductModule } from './modules/product/product.module';
 import { ProductUnitModule } from './modules/product-unit/product-unit.module';
 import { LocationModule } from './modules/location/location.module';
+import { SupplierModule } from './modules/supplier/supplier.module';
 
 @Module({
   controllers: [],
@@ -26,6 +27,7 @@ import { LocationModule } from './modules/location/location.module';
     PrismaModule,
     ProductModule,
     ProductUnitModule,
+    SupplierModule,
   ],
 })
 export class AppModule {}

@@ -64,10 +64,10 @@ model District {
 }
 
 model Product {
-  id                     Int          @id @default(autoincrement())
-  name                   String       @db.VarChar(255)
-  barcode                String?      @db.VarChar(255)
-  barcodeId              Int?         @unique()
+  id                     Int              @id @default(autoincrement())
+  name                   String           @db.VarChar(255)
+  barcode                String?          @db.VarChar(255)
+  barcodeId              Int?             @unique()
   groupId                Int
   unitId                 Int?
   priceIncome            Float            @default(0)
@@ -194,8 +194,8 @@ model ArrivedProduct {
   price      Float?
   priceCount Float?   @map("price_count")
   status     Int?     @default(1)
-  created    DateTime @default(now()) 
-  updated    DateTime @default(now()) @updatedAt 
+  created    DateTime @default(now())
+  updated    DateTime @default(now()) @updatedAt
   Arrived    Arrived? @relation(fields: [arrivedId], references: [id])
   Product    Product? @relation(fields: [productId], references: [id])
 
@@ -231,9 +231,9 @@ model Supplier {
   phoneTwo    String?  @map("phone_two") @db.VarChar(255)
   description String?  @db.Text
   balance     Float    @default(0)
-  status      Int?     @default(1)
-  created     DateTime @default(now())
-  updated     DateTime @default(now()) @updatedAt
+  isDeleted   Boolean? @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
   registerId  Int?
   modifyId    Int?
   // If `register_id` and `modify_id` refer to the `User` table, uncomment and adjust these relations:
