@@ -1,14 +1,106 @@
-import { Layout, Menu } from "antd";
-import { HomeOutlined, UserOutlined } from "@ant-design/icons";
+import { Layout, Menu, Avatar, Dropdown, Space, Button } from "antd";
+import {
+  HomeOutlined,
+  UsergroupAddOutlined,
+  FolderOpenOutlined,
+  LogoutOutlined,
+  UserOutlined,
+  DownOutlined,
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+} from "@ant-design/icons";
 import ThemeToggle from "../components/theme/theme-toggle";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import Logo from "../../public/LogoMbos.svg";
+import { useTheme } from "../hooks/use-theme";
+import { useState, useMemo } from "react";
 
-const { Sider, Content } = Layout;
+const { Sider, Content, Header } = Layout;
+
+const pages = [
+  {
+    key: "/dashboard",
+    label: "Bosh sahifa",
+    icon: <HomeOutlined />,
+  },
+  {
+    key: "clients-group",
+    label: "Mijozlar",
+    icon: <UsergroupAddOutlined />,
+    children: [
+      {
+        key: "/clients",
+        label: "Mijozlar ma'lumotlari",
+        icon: <UsergroupAddOutlined />,
+      },
+      {
+        key: "/client-type",
+        label: "Mijozlar turlari",
+        icon: <FolderOpenOutlined />,
+      },
+    ],
+  },
+];
 
 export default function AppLayout() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { theme } = useTheme();
+  const [collapsed, setCollapsed] = useState(false);
+
+  // 🔑 selected menu item
+  const selectedKey = location.pathname;
+
+  // 🔓 openKeys (submenu ochiq bo‘lishi uchun)
+  const openKey = useMemo(() => {
+    const match = pages.find((page) =>
+      page.children?.some((child) => child.key === location.pathname)
+    );
+    return match ? [match.key] : [];
+  }, [location.pathname]);
+
+  const handleMenuClick = ({ key }: { key: string }) => {
+    if (key === "logout") {
+      localStorage.removeItem("access_token");
+      navigate("/login");
+    } else if (key === "profile") {
+      navigate("/profile");
+    } else {
+      navigate(key);
+    }
+  };
+
+  const profileMenu = {
+    items: [
+      {
+        key: "profile",
+        icon: <UserOutlined />,
+        label: "Profil",
+      },
+      {
+        key: "logout",
+        icon: <LogoutOutlined />,
+        label: "Chiqish",
+      },
+    ],
+    onClick: handleMenuClick,
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider theme="dark" width={220}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={setCollapsed}
+        theme={theme}
+        width={280}
+        style={{
+          position: "fixed",
+          height: "100vh",
+          left: 0,
+          zIndex: 100,
+        }}
+      >
         <div
           style={{
             padding: 16,
@@ -17,30 +109,43 @@ export default function AppLayout() {
             fontWeight: "bold",
           }}
         >
-          LOGO
+          {!collapsed && (
+            <img src={Logo} alt="Logo" style={{ maxWidth: "100%" }} />
+          )}
         </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          <Menu.Item key="1" icon={<HomeOutlined />}>
-            Bosh sahifa
-          </Menu.Item>
-          <Menu.Item key="2" icon={<UserOutlined />}>
-            Foydalanuvchilar
-          </Menu.Item>
-        </Menu>
-        <div
-          style={{
-            position: "absolute",
-            bottom: 24,
-            width: "100%",
-            textAlign: "center",
-          }}
-        >
-          <ThemeToggle />
-        </div>
+        <Menu
+          theme={theme}
+          mode="inline"
+          selectedKeys={[selectedKey]}
+          defaultOpenKeys={openKey}
+          onClick={handleMenuClick}
+          items={pages}
+        />
       </Sider>
 
-      <Layout>
-        <Content style={{ margin: "16px" }}>
+      <Layout style={{ marginLeft: collapsed ? 80 : 280, transition: "0.2s" }}>
+        <Header
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "0 24px",
+            background: theme === "dark" ? "#001529" : "#fff",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <div />
+          <Space size="large">
+            <ThemeToggle />
+            <Dropdown menu={profileMenu} placement="bottomRight">
+              <Space style={{ cursor: "pointer" }}>
+                <Avatar icon={<UserOutlined />} />
+                <DownOutlined style={{ fontSize: 12 }} />
+              </Space>
+            </Dropdown>
+          </Space>
+        </Header>
+        <Content style={{ margin: "24px 24px 0", minHeight: "100%" }}>
           <Outlet />
         </Content>
       </Layout>

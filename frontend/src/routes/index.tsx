@@ -1,19 +1,22 @@
-import { createBrowserRouter } from "react-router-dom";
-import { ErrorPage } from "../pages/error/error";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import LoginPage from "../pages/auth/login";
 import Dashboard from "../pages/dashboard/dashboard";
 import ProtectedRoute from "./protected-route";
 import AppLayout from "../layout/app-layout";
-import RestrictedRoute from "./restricted-route";
+import { TokenManager } from "../config/token-manager";
+import { ErrorPage } from "../pages/error/error";
+import Clients from "../pages/clients/clients";
+import ClientType from "../pages/clients/client-type";
+
+const RedirectIfAuthenticated = () => {
+  const token = TokenManager.getAccessToken();
+  return token ? <Navigate to="/dashboard" replace /> : <LoginPage />;
+};
 
 export const router = createBrowserRouter([
   {
     path: "/login",
-    element: (
-      <RestrictedRoute>
-        <LoginPage />
-      </RestrictedRoute>
-    ),
+    element: <RedirectIfAuthenticated />,
   },
   {
     path: "/",
@@ -25,11 +28,26 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            path: "/",
+            element: <Navigate to="/dashboard" replace />,
+          },
+          {
+            path: "dashboard",
             element: <Dashboard />,
+          },
+          {
+            path: "clients",
+            element: <Clients />,
+          },
+          {
+            path: "client-type",
+            element: <ClientType />,
           },
         ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <Navigate to="/dashboard" replace />,
   },
 ]);
