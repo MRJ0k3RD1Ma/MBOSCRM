@@ -34,7 +34,9 @@ export class ClientService {
         typeId: type.id,
         regionId: createClientDto.regionId,
         districtId: createClientDto.districtId,
-      } as any,
+        modifyId: 1,
+        registerId: 1,
+      },
     });
     return client;
   }
@@ -86,6 +88,7 @@ export class ClientService {
   async findOne(id: number) {
     const client = await this.prisma.client.findUnique({
       where: { id, isDeleted: false },
+      include: { ClientType: true, District: true, Region: true },
     });
     if (!client) {
       throw HttpError({ code: 'Client not found' });

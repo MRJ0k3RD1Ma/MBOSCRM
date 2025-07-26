@@ -17,16 +17,16 @@ model Client {
   address                String?     @db.VarChar(255)
   balance                Float       @default(0)
   description            String?     @db.Text
-  registerId             Int
-  modifyId               Int
+  registerId             Int?
+  modifyId               Int?
   isDeleted              Boolean?
   createdAt              DateTime    @default(now())
   updatedAt              DateTime    @default(now()) @updatedAt
   phone                  String?     @db.VarChar(255)
   District               District?   @relation(fields: [districtId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Client_modifyId   User        @relation("Client_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Client_modifyId   User?       @relation("Client_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Region                 Region?     @relation(fields: [regionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Client_registerId User        @relation("Client_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Client_registerId User?       @relation("Client_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ClientType             ClientType? @relation(fields: [typeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([districtId], map: "FK_client_district_id")
