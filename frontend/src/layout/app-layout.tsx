@@ -90,8 +90,12 @@ export default function AppLayout() {
     clients: "Mijozlar",
     "client-type": "Mijozlar turlari",
     client: "Mijoz tafsilotlari",
+    products: "Mahsulotlar",
+    "product-group": "Mahsulot guruhlari",
+    "product-unit": "Mahsulot o'lchov birligi",
+    profile: "Profil",
+    product: "Mahsulat tafsilotlari",
   };
-
   const breadcrumbItems = [
     <Breadcrumb.Item key="dashboard">
       <Link to="/dashboard">Bosh sahifa</Link>
