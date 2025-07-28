@@ -98,7 +98,7 @@ export default function ClientPage() {
             </Title>
           </div>
 
-          <Descriptions column={1} className="mt-4 !h-full" size="small">
+          <Descriptions column={1} className="!mt-6 !h-full" size="small">
             <Descriptions.Item label="Telefon">
               <Space>
                 <PhoneOutlined />
