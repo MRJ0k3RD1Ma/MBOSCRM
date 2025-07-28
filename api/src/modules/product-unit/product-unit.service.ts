@@ -39,6 +39,7 @@ export class ProductUnitService {
             contains: name?.trim() || '',
             mode: 'insensitive',
           },
+          isDeleted: false,
         },
         skip: (page - 1) * limit,
         take: limit,
