@@ -210,9 +210,9 @@ model PaidSupplier {
   paidDate   DateTime? @map("paid_date")
   price      Float?
   paymentId  Int?      @map("payment_id")
-  status     Int?      @default(1)
-  created    DateTime  @default(now())
-  updated    DateTime  @default(now()) @updatedAt
+  isDeleted  Boolean?  @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
   registerId Int?
   modifyId   Int?
   Payment    Payment?  @relation(fields: [paymentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
