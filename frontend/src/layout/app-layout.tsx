@@ -88,12 +88,12 @@ export default function AppLayout() {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh" }} className="app-layout">
       <Sider
         collapsible
         collapsed={collapsed}
         onCollapse={setCollapsed}
-        theme={theme}
+        theme="dark"
         width={280}
         style={{
           position: "fixed",
@@ -115,7 +115,7 @@ export default function AppLayout() {
           )}
         </div>
         <Menu
-          theme={theme}
+          theme="dark"
           mode="inline"
           selectedKeys={[selectedKey]}
           defaultOpenKeys={openKey}
