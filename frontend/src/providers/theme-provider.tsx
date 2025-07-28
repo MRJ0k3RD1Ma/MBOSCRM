@@ -35,6 +35,44 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const config: ThemeConfig = {
     algorithm:
       theme === "dark" ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
+    token:
+      theme === "dark"
+        ? {
+            colorPrimary: "#1677ff",
+            colorBgContainer: "#001529",
+            colorBgLayout: "#0a0f1e",
+            colorText: "#e2e8f0",
+          }
+        : {
+            colorPrimary: "#1677ff",
+            colorBgContainer: "#ffffff",
+            colorBgLayout: "#f0f2f5",
+            colorText: "#000000",
+          },
+    components:
+      theme === "dark"
+        ? {
+            Layout: {
+              siderBg: "#001529",
+              headerBg: "#0a0f1e",
+              bodyBg: "#000000",
+              footerBg: "#0f172a",
+            },
+            Table: {
+              headerBg: "#1e293b",
+              bodyBg: "#0f172a",
+              headerColor: "#e2e8f0",
+            },
+          }
+        : {
+            Layout: {
+            },
+            Table: {
+              headerBg: "#f1f5f9",
+              bodyBg: "#ffffff",
+              headerColor: "#000000",
+            },
+          },
   };
 
   return (
