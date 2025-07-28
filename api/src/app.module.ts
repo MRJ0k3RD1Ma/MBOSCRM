@@ -10,6 +10,7 @@ import { ProductModule } from './modules/product/product.module';
 import { ProductUnitModule } from './modules/product-unit/product-unit.module';
 import { LocationModule } from './modules/location/location.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
+import { PaidSupplierModule } from './modules/paid-supplier/paid-supplier.module';
 
 @Module({
   controllers: [],
@@ -28,6 +29,7 @@ import { SupplierModule } from './modules/supplier/supplier.module';
     ProductModule,
     ProductUnitModule,
     SupplierModule,
+    PaidSupplierModule,
   ],
 })
 export class AppModule {}
