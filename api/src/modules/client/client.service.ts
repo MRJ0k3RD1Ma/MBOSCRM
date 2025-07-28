@@ -14,7 +14,33 @@ export class ClientService {
     if (!creatorId) {
       throw HttpError({ message: 'Creator not found' });
     }
-    //agarda unique narsa garak bolsa
+    const existingPhone = await this.prisma.client.findFirst({
+      where: { phone: createClientDto.phone },
+    });
+    if (existingPhone) {
+      throw HttpError({ code: 'Phone already exists' });
+    }
+
+    if (createClientDto.districtId) {
+      const district = await this.prisma.district.findUnique({
+        where: { id: createClientDto.districtId },
+      });
+      if (!district) {
+        throw HttpError({ code: 'District not found' });
+      }
+    }
+
+    if (createClientDto.regionId) {
+      const region = await this.prisma.region.findUnique({
+        where: { id: createClientDto.regionId },
+      });
+      if (!region) {
+        throw HttpError({ code: 'Region not found' });
+      }
+    }
+    
+    
+
     let type: ClientType;
     if (createClientDto.typeId) {
       type = await this.prisma.clientType.findUnique({
@@ -24,6 +50,8 @@ export class ClientService {
         throw HttpError({ code: 'type Not Found' });
       }
     }
+
+
 
     const client = await this.prisma.client.create({
       data: {

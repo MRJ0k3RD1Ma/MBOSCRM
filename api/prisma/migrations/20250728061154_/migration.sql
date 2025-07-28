@@ -17,7 +17,7 @@ CREATE TABLE "client" (
     "description" TEXT,
     "registerId" INTEGER,
     "modifyId" INTEGER,
-    "isDeleted" BOOLEAN,
+    "isDeleted" BOOLEAN DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "phone" VARCHAR(255),
@@ -186,15 +186,9 @@ CREATE TABLE "suppler" (
     "phone_two" VARCHAR(255),
     "description" TEXT,
     "balance" DOUBLE PRECISION NOT NULL DEFAULT 0,
-<<<<<<<< HEAD:api/prisma/migrations/20250726103716_/migration.sql
-    "status" INTEGER DEFAULT 1,
-    "created" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-========
     "isDeleted" BOOLEAN DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
->>>>>>>> c0707b0dce5f474e7f40cdba3e04ca8a54e6c37b:api/prisma/migrations/20250726113810_/migration.sql
     "registerId" INTEGER,
     "modifyId" INTEGER,
 
@@ -223,6 +217,9 @@ CREATE TABLE "user_role" (
 
     CONSTRAINT "user_role_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "client_phone_key" ON "client"("phone");
 
 -- CreateIndex
 CREATE INDEX "FK_client_district_id" ON "client"("districtId");
