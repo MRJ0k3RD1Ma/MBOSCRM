@@ -50,12 +50,30 @@ export class ProductService {
       });
       console.log(createProductDto);
       barcodeId = (max[0]?.barcodeId || 1_000_000) + 1;
+
+      const product = await this.prisma.product.create({
+        data: {
+          name,
+          barcodeId,
+          groupId,
+          unitId,
+          priceIncome,
+          reminderFirst,
+          price,
+          type,
+          countReminder,
+          countArrived,
+          countSale,
+          creatorId: creatorId,
+          modifyId: creatorId,
+        },
+      });
+      return product;
     }
     const product = await this.prisma.product.create({
       data: {
         name,
         barcode,
-        barcodeId: barcodeId,
         groupId,
         unitId,
         priceIncome,
