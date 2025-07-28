@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Button, Card, Input, Space, Table, Form } from "antd";
+import {
+  Button,
+  Card,
+  Dropdown,
+  Form,
+  Input,
+  Space,
+  Table,
+  Tooltip,
+  type MenuProps,
+} from "antd";
 import {
   useCreateClient,
   useDeleteClient,
@@ -8,7 +18,7 @@ import {
   type Client,
   type CreateClientInput,
 } from "../../config/queries/clients/clients-querys";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, MoreOutlined } from "@ant-design/icons";
 import ClientModal from "./ui/clients-form-modal";
 import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +31,7 @@ export default function ClientsPage() {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const navigate = useNavigate();
+
   const { data, isLoading } = useGetAllClients({
     page,
     limit,
@@ -41,6 +52,16 @@ export default function ClientsPage() {
     setEditing(null);
   };
 
+  const handleEdit = (client: Client) => {
+    setEditing(client);
+    form.setFieldsValue(client);
+    setOpen(true);
+  };
+
+  const handleDelete = (id: number) => {
+    deleteClient.mutate(id);
+  };
+
   const columns = [
     { title: "Name", dataIndex: "name" },
     { title: "INN", dataIndex: "inn" },
@@ -49,36 +70,60 @@ export default function ClientsPage() {
     { title: "Description", dataIndex: "description" },
     {
       title: "Actions",
-      render: (_: any, row: Client) => (
-        <Space>
-          <Button
-            type="primary"
-            size="small"
-            onClick={() => {
-              setEditing(row);
-              form.setFieldsValue(row);
-              setOpen(true);
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            type="primary"
-            danger
-            size="small"
-            onClick={() => deleteClient.mutate(row.id)}
-          >
-            Delete
-          </Button>
-        </Space>
-      ),
+      key: "actions",
+      render: (_: any, row: Client) => {
+        const items: MenuProps["items"] = [
+          {
+            key: "edit",
+            label: "Tahrirlash",
+            onClick: () => handleEdit(row),
+          },
+          {
+            key: "delete",
+            label: "O‘chirish",
+            danger: true,
+            onClick: () => handleDelete(row.id),
+          },
+          {
+            key: "view",
+            label: "Profilga o‘tish",
+            onClick: () => navigate(`/client/${row.id}`),
+          },
+        ];
+
+        return (
+          <Dropdown menu={{ items }} trigger={["click"]}>
+            <Tooltip title="Boshqarish">
+              <Button icon={<MoreOutlined />} />
+            </Tooltip>
+          </Dropdown>
+        );
+      },
     },
   ];
 
   return (
-    <Card
-      title="Clients"
-      extra={
+    <Card>
+      <Space
+        direction="horizontal"
+        style={{
+          width: "100%",
+          marginBottom: 16,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Input.Search
+          placeholder="Mijoz nomi bo‘yicha qidirish"
+          allowClear
+          enterButton
+          onSearch={(val) => {
+            setSearch(val);
+            setPage(1);
+          }}
+          style={{ maxWidth: 300 }}
+        />
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -88,21 +133,8 @@ export default function ClientsPage() {
             setOpen(true);
           }}
         >
-          Yangi mijoz qo'shish
+          Yangi mijoz qo‘shish
         </Button>
-      }
-    >
-      <Space direction="vertical" style={{ width: "100%", marginBottom: 16 }}>
-        <Input.Search
-          placeholder="Search by name"
-          allowClear
-          enterButton
-          onSearch={(val) => {
-            setSearch(val);
-            setPage(1);
-          }}
-          style={{ maxWidth: 300 }}
-        />
       </Space>
 
       <Table
@@ -111,7 +143,15 @@ export default function ClientsPage() {
         loading={isLoading}
         rowKey="id"
         onRow={(record) => ({
-          onClick: () => navigate(`/client/${record.id}`),
+          onClick: (e) => {
+            if (
+              (e.target as HTMLElement).closest("button") ||
+              (e.target as HTMLElement).closest("svg")
+            ) {
+              return;
+            }
+            navigate(`/client/${record.id}`);
+          },
         })}
         pagination={{
           current: page,

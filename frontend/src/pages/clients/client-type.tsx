@@ -1,18 +1,19 @@
 import {
   Button,
   Card,
+  Dropdown,
   Input,
-  Popconfirm,
   Space,
   Table,
-  Typography,
   message,
+  type MenuProps,
 } from "antd";
 import {
   PlusOutlined,
   EditOutlined,
   DeleteOutlined,
   SearchOutlined,
+  MoreOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import {
@@ -34,12 +35,9 @@ export default function ClientType() {
   );
 
   const handleDelete = async (record: any) => {
-    if (!record.isDeleted) {
-      message.warning("Bu turni o‘chirib bo‘lmaydi");
-      return;
-    }
     try {
       await deleteClientType.mutateAsync(record.id);
+      message.success("Muvaffaqiyatli o‘chirildi");
     } catch {
       message.error("O‘chirishda xatolik");
     }
@@ -62,36 +60,61 @@ export default function ClientType() {
     {
       title: "Amallar",
       key: "actions",
-      render: (_: any, record: any) => (
-        <Space>
-          <Button
-            icon={<EditOutlined />}
-            onClick={() => {
+      align: "right" as const,
+      render: (_: any, record: any) => {
+        const items: MenuProps["items"] = [
+          {
+            key: "edit",
+            icon: <EditOutlined />,
+            label: "Tahrirlash",
+            onClick: () => {
               setSelected({ id: record.id, name: record.name });
               setModalOpen(true);
-            }}
-          />
-          <Popconfirm
-            title="O‘chirishni istaysizmi?"
-            onConfirm={() => handleDelete(record)}
-            okText="Ha"
-            cancelText="Yo‘q"
-          >
-            <Button
-              danger
-              icon={<DeleteOutlined />}
-              disabled={!record.isDeleted}
-            />
-          </Popconfirm>
-        </Space>
-      ),
+            },
+          },
+          {
+            key: "delete",
+            icon: <DeleteOutlined />,
+            label: "O‘chirish",
+            danger: true,
+            onClick: () => handleDelete(record),
+          },
+        ];
+
+        return (
+          <Dropdown menu={{ items }} trigger={["click"]}>
+            <Button icon={<MoreOutlined />} />
+          </Dropdown>
+        );
+      },
     },
   ];
 
   return (
-    <Card
-      title={<Typography.Title level={4}>Mijozlar turlari</Typography.Title>}
-      extra={
+    <Card>
+      <Space
+        style={{
+          width: "100%",
+          marginBottom: 16,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Space.Compact style={{ maxWidth: 400 }}>
+          <Input
+            placeholder="Tur nomi bo‘yicha qidirish"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onPressEnter={handleSearch}
+            allowClear
+          />
+          <Button
+            type="default"
+            icon={<SearchOutlined />}
+            onClick={handleSearch}
+          />
+        </Space.Compact>
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -101,18 +124,6 @@ export default function ClientType() {
           }}
         >
           Yangi qo‘shish
-        </Button>
-      }
-    >
-      <Space style={{ marginBottom: 16 }}>
-        <Input
-          placeholder="Tur nomi bo‘yicha qidirish"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onPressEnter={handleSearch}
-        />
-        <Button icon={<SearchOutlined />} onClick={handleSearch}>
-          Qidirish
         </Button>
       </Space>
 
@@ -125,9 +136,8 @@ export default function ClientType() {
           current: filters.page,
           pageSize: filters.limit,
           total: data?.total || 0,
-          onChange: (page, pageSize) => {
-            setFilters((prev) => ({ ...prev, page, limit: pageSize }));
-          },
+          onChange: (page, pageSize) =>
+            setFilters((prev) => ({ ...prev, page, limit: pageSize })),
         }}
       />
 

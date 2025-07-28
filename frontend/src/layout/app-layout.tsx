@@ -1,4 +1,13 @@
-import { Layout, Menu, Avatar, Dropdown, Space, Button, message } from "antd";
+import {
+  Layout,
+  Menu,
+  Avatar,
+  Dropdown,
+  Space,
+  message,
+  Breadcrumb,
+  Typography,
+} from "antd";
 import {
   HomeOutlined,
   UsergroupAddOutlined,
@@ -6,17 +15,16 @@ import {
   LogoutOutlined,
   UserOutlined,
   DownOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
 } from "@ant-design/icons";
 import ThemeToggle from "../components/theme/theme-toggle";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
 import Logo from "../../public/LogoMbos.svg";
 import { useTheme } from "../hooks/use-theme";
 import { useState, useMemo } from "react";
 import { TokenManager } from "../config/token-manager";
 
 const { Sider, Content, Header } = Layout;
+const { Title } = Typography;
 
 const pages = [
   {
@@ -51,6 +59,33 @@ export default function AppLayout() {
 
   const selectedKey = location.pathname;
 
+  const pathSnippets = location.pathname.split("/").filter((i) => i);
+
+  const nameMap: Record<string, string> = {
+    dashboard: "Bosh sahifa",
+    clients: "Mijozlar",
+    "client-type": "Mijozlar turlari",
+    client: "Mijoz tafsilotlari",
+  };
+
+  const breadcrumbItems = [
+    <Breadcrumb.Item key="dashboard">
+      <Link to="/dashboard">Bosh sahifa</Link>
+    </Breadcrumb.Item>,
+    ...pathSnippets.map((path, index) => {
+      const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
+      const name = nameMap[path] || path;
+      return (
+        <Breadcrumb.Item key={url}>
+          <Link to={url}>{name}</Link>
+        </Breadcrumb.Item>
+      );
+    }),
+  ];
+
+  const pageTitle =
+    nameMap[pathSnippets[pathSnippets.length - 1]] || "Dashboard";
+
   const openKey = useMemo(() => {
     const match = pages.find((page) =>
       page.children?.some((child) => child.key === location.pathname)
@@ -62,7 +97,6 @@ export default function AppLayout() {
     if (key === "logout") {
       TokenManager.clearTokens();
       message.success("Siz tizimdan chiqdingiz");
-
       navigate("/login");
     } else if (key === "profile") {
       navigate("/profile");
@@ -133,9 +167,12 @@ export default function AppLayout() {
             padding: "0 24px",
             background: theme === "dark" ? "#001529" : "#fff",
             boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            zIndex: 1,
           }}
         >
-          <div />
+          <Title level={3} style={{ margin: 0 }}>
+            {pageTitle}
+          </Title>
           <Space size="large">
             <ThemeToggle />
             <Dropdown menu={profileMenu} placement="bottomRight">
@@ -146,7 +183,12 @@ export default function AppLayout() {
             </Dropdown>
           </Space>
         </Header>
-        <Content style={{ margin: "24px 24px 0", minHeight: "100%" }}>
+
+        <Breadcrumb style={{ margin: "16px 24px 0" }}>
+          {breadcrumbItems}
+        </Breadcrumb>
+
+        <Content style={{ margin: "16px 24px 24px", minHeight: "100%" }}>
           <Outlet />
         </Content>
       </Layout>
