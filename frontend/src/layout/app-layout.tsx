@@ -122,7 +122,7 @@ export default function AppLayout() {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh" }} className="app-layout">
+    <Layout style={{ height: "100vh" }} className="app-layout">
       <Sider
         collapsible
         collapsed={collapsed}
@@ -188,7 +188,7 @@ export default function AppLayout() {
           {breadcrumbItems}
         </Breadcrumb>
 
-        <Content style={{ margin: "16px 24px 24px", minHeight: "100%" }}>
+        <Content style={{ margin: "16px 24px 24px" }}>
           <Outlet />
         </Content>
       </Layout>

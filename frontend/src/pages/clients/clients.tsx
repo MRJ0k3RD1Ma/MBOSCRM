@@ -18,25 +18,30 @@ import {
   type Client,
   type CreateClientInput,
 } from "../../config/queries/clients/clients-querys";
-import { PlusOutlined, MoreOutlined } from "@ant-design/icons";
+import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
 import ClientModal from "./ui/clients-form-modal";
 import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
 import { useNavigate } from "react-router-dom";
+import ClientsFilterModal from "./ui/clients-filter-modal";
 
 export default function ClientsPage() {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Client | null>(null);
   const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<Record<string, string>>({});
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const navigate = useNavigate();
 
   const { data, isLoading } = useGetAllClients({
     page,
     limit,
     ...(search ? { name: search } : {}),
+    ...filters,
   });
+
   const { data: types } = useGetAllClientTypes();
   const createClient = useCreateClient();
   const updateClient = useUpdateClient();
@@ -92,11 +97,13 @@ export default function ClientsPage() {
         ];
 
         return (
-          <Dropdown menu={{ items }} trigger={["click"]}>
-            <Tooltip title="Boshqarish">
-              <Button icon={<MoreOutlined />} />
-            </Tooltip>
-          </Dropdown>
+          <div onClick={(e) => e.stopPropagation()}>
+            <Dropdown menu={{ items }} trigger={["click"]}>
+              <Tooltip title="Boshqarish">
+                <Button icon={<MoreOutlined />} />
+              </Tooltip>
+            </Dropdown>
+          </div>
         );
       },
     },
@@ -114,16 +121,25 @@ export default function ClientsPage() {
           alignItems: "center",
         }}
       >
-        <Input.Search
-          placeholder="Mijoz nomi bo‘yicha qidirish"
-          allowClear
-          enterButton
-          onSearch={(val) => {
-            setSearch(val);
-            setPage(1);
-          }}
-          style={{ maxWidth: 300 }}
-        />
+        <Space>
+          <Input.Search
+            placeholder="Mijoz nomi bo‘yicha qidirish"
+            allowClear
+            enterButton
+            onSearch={(val) => {
+              setSearch(val);
+              setPage(1);
+            }}
+            style={{ maxWidth: 300 }}
+          />
+          <Button
+            icon={<FilterOutlined />}
+            onClick={() => setFilterModalOpen(true)}
+          >
+            Filter
+          </Button>
+        </Space>
+
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -170,6 +186,15 @@ export default function ClientsPage() {
         onSubmit={onSubmit}
         initialValues={editing || undefined}
         types={types?.data || []}
+      />
+      <ClientsFilterModal
+        open={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+        initialValues={filters}
       />
     </Card>
   );

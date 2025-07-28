@@ -1,18 +1,72 @@
 import { useParams } from "react-router-dom";
-import { useGetClientById } from "../../config/queries/clients/clients-querys";
-import { Card, Input, Spin, Typography, Button } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  useGetClientById,
+  useUpdateClient,
+  useDeleteClient,
+} from "../../config/queries/clients/clients-querys";
+import {
+  Button,
+  Input,
+  Spin,
+  Typography,
+  Tabs,
+  Card,
+  Space,
+  Descriptions,
+  Modal,
+  Popconfirm,
+  message,
+  Form,
+} from "antd";
+import {
+  PhoneOutlined,
+  EnvironmentOutlined,
+  ApartmentOutlined,
+  UserOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { useState } from "react";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export default function ClientPage() {
   const { id } = useParams<{ id: string }>();
   const clientId = Number(id);
-  const { data, isLoading } = useGetClientById(clientId);
+  const { data, isLoading, refetch } = useGetClientById(clientId);
+  const updateClient = useUpdateClient();
+  const deleteClient = useDeleteClient();
+
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [form] = Form.useForm();
+
+  const handleDelete = async () => {
+    try {
+      await deleteClient.mutateAsync(clientId);
+      message.success("Client muvaffaqiyatli o‘chirildi");
+      // optional: navigate to clients list page
+      window.location.href = "/clients";
+    } catch (error) {
+      message.error("O‘chirishda xatolik yuz berdi");
+    }
+  };
+
+  const handleEdit = () => {
+    form.validateFields().then(async (values) => {
+      try {
+        await updateClient.mutateAsync({ id: clientId, ...values });
+        message.success("Client yangilandi");
+        setIsEditOpen(false);
+        refetch();
+      } catch (error) {
+        message.error("Yangilashda xatolik yuz berdi");
+      }
+    });
+  };
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-screen bg-gray-50">
         <Spin size="large" />
       </div>
     );
@@ -20,57 +74,150 @@ export default function ClientPage() {
 
   if (!data) {
     return (
-      <div className="text-center mt-10">
-        <Title level={3}>Client topilmadi</Title>
+      <div className="text-center mt-20">
+        <Title level={3}>Foydalanuvchi topilmadi</Title>
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <Card className="grid grid-cols-1 md:grid-cols-3 gap-6 rounded-xl">
-        <div className="flex flex-col items-center gap-4">
-          <div className="bg-gray-200 rounded-xl w-40 h-40 flex items-center justify-center text-5xl">
-            👤
-          </div>
-          <div className="w-full text-left">
-            <Title level={4}>Foydalanuvchi ma’lumotlari</Title>
-            <Button type="primary" icon={<PlusOutlined />}>
-              Add contact
-            </Button>
-            <div className="mt-4 flex flex-col gap-3">
-              <label>Name</label>
-              <Input disabled value={data.name} />
-
-              <label>Contact</label>
-              <Input disabled value={data.phone || "—"} />
-
-              <label>INN</label>
-              <Input disabled value={data.inn || "—"} />
-
-              <label>Address</label>
-              <Input disabled value={data.address || "—"} />
-
-              <label>Description</label>
-              <Input disabled value={data.description || "—"} />
+    <div className="h-full">
+      <div className="flex justify-between items-start gap-3 h-full">
+        <Card
+          bordered
+          className="flex flex-col justify-between text-center shadow-md w-[40%] !h-full"
+        >
+          <div className="">
+            <div className="flex justify-center">
+              <div className="bg-gray-100 w-24 h-24 rounded-full flex items-center justify-center border">
+                <UserOutlined style={{ fontSize: 30, color: "#aaa" }} />
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div className="md:col-span-2">
-          <div className="flex gap-2 mb-4">
-            <Button type="primary">Lorem</Button>
-            <Button> Lorem </Button>
-            <Button> Lorem </Button>
-            <Button> Lorem </Button>
-            <Button> Lorem </Button>
+            <Title level={4} className="!mb-0">
+              {data.name}
+            </Title>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm h-full">
-            <p>Bu yerda boshqa kontentlar yoki tablar joylashadi...</p>
-          </div>
-        </div>
-      </Card>
+          <Descriptions column={1} className="mt-4 !h-full" size="small">
+            <Descriptions.Item label="Telefon">
+              <Space>
+                <PhoneOutlined />
+                {data.phone || "—"}
+              </Space>
+            </Descriptions.Item>
+            <Descriptions.Item label="INN">
+              <Space>
+                <ApartmentOutlined />
+                {data.inn || "—"}
+              </Space>
+            </Descriptions.Item>
+            <Descriptions.Item label="Manzil">
+              <Space>
+                <EnvironmentOutlined />
+                {data.address || "—"}
+              </Space>
+            </Descriptions.Item>
+            <Descriptions.Item label="Izoh">
+              {data.description || "—"}
+            </Descriptions.Item>
+          </Descriptions>
+
+          <Space direction="vertical" className="w-full pt-4">
+            <Button
+              icon={<EditOutlined />}
+              block
+              onClick={() => {
+                form.setFieldsValue(data);
+                setIsEditOpen(true);
+              }}
+            >
+              Tahrirlash
+            </Button>
+            <Popconfirm
+              title="Haqiqatan ham o‘chirmoqchimisiz?"
+              okText="Ha"
+              cancelText="Yo‘q"
+              onConfirm={handleDelete}
+            >
+              <Button icon={<DeleteOutlined />} danger block>
+                O‘chirish
+              </Button>
+            </Popconfirm>
+          </Space>
+        </Card>
+
+        <Card bordered className="w-[60%] h-full">
+          <Tabs defaultActiveKey="overview" size="large">
+            <Tabs.TabPane tab="Overview" key="overview">
+              <div className="flex flex-wrap gap-4 mt-4">
+                <Card size="small" className="flex-1 min-w-[200px]">
+                  <Text>Total Orders</Text>
+                  <Title level={4} className="!mt-1">
+                    24
+                  </Title>
+                </Card>
+                <Card size="small" className="flex-1 min-w-[200px]">
+                  <Text>Total Spent</Text>
+                  <Title level={4} className="!mt-1">
+                    $12,450
+                  </Title>
+                </Card>
+                <Card size="small" className="flex-1 min-w-[200px]">
+                  <Text>Last Activity</Text>
+                  <Title level={4} className="!mt-1">
+                    2 days ago
+                  </Title>
+                </Card>
+              </div>
+            </Tabs.TabPane>
+
+            <Tabs.TabPane tab="Orders" key="orders">
+              <p>Buyurtmalar ro‘yxati bu yerda...</p>
+            </Tabs.TabPane>
+
+            <Tabs.TabPane tab="Payments" key="payments">
+              <p>To‘lovlar bo‘limi...</p>
+            </Tabs.TabPane>
+
+            <Tabs.TabPane tab="Activity" key="activity">
+              <p>Faollik loglari...</p>
+            </Tabs.TabPane>
+
+            <Tabs.TabPane tab="Settings" key="settings">
+              <p>Sozlamalar bu yerda bo‘ladi...</p>
+            </Tabs.TabPane>
+          </Tabs>
+        </Card>
+      </div>
+
+      <Modal
+        title="Client ma'lumotlarini tahrirlash"
+        open={isEditOpen}
+        onCancel={() => setIsEditOpen(false)}
+        onOk={handleEdit}
+        okText="Saqlash"
+        cancelText="Bekor qilish"
+        confirmLoading={updateClient.isPending}
+      >
+        {updateClient.isPending && <Spin />}
+        <Form form={form} layout="vertical">
+          <Form.Item label="Name" name="name" rules={[{ required: true }]}>
+            <Input placeholder="Client name" />
+          </Form.Item>
+          <Form.Item label="Phone" name="phone">
+            <Input />
+          </Form.Item>
+          <Form.Item label="INN" name="inn">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Address" name="address">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Description" name="description">
+            <Input.TextArea />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }
