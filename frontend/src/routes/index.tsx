@@ -8,6 +8,10 @@ import { ErrorPage } from "../pages/error/error";
 import Clients from "../pages/clients/clients";
 import ClientType from "../pages/clients/client-type";
 import ClientPage from "../pages/clients/client";
+import Products from "../pages/products/products";
+import Product from "../pages/products/product";
+import ProductGroup from "../pages/products/product-group";
+import ProductUnit from "../pages/products/product-unit";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -46,6 +50,22 @@ export const router = createBrowserRouter([
           {
             path: "client-type",
             element: <ClientType />,
+          },
+          {
+            path: "products",
+            element: <Products />,
+          },
+          {
+            path: "product/:id",
+            element: <Product />,
+          },
+          {
+            path: "product-group",
+            element: <ProductGroup />,
+          },
+          {
+            path: "product-unit",
+            element: <ProductUnit />,
           },
           {
             path: "*",

@@ -15,6 +15,8 @@ import {
   LogoutOutlined,
   UserOutlined,
   DownOutlined,
+  ProductFilled,
+  UnderlineOutlined,
 } from "@ant-design/icons";
 import ThemeToggle from "../components/theme/theme-toggle";
 import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
@@ -46,6 +48,28 @@ const pages = [
         key: "/client-type",
         label: "Mijozlar turlari",
         icon: <FolderOpenOutlined />,
+      },
+    ],
+  },
+  {
+    key: "products",
+    label: "Mahsulotlar",
+    icon: <ProductFilled />,
+    children: [
+      {
+        key: "/products",
+        label: "Mahsulotlar",
+        icon: <ProductFilled />,
+      },
+      {
+        key: "/product-group",
+        label: "Mahsulot guruhlari",
+        icon: <FolderOpenOutlined />,
+      },
+      {
+        key: "/product-unit",
+        label: "Mahsulot o'lchov birligi",
+        icon: <UnderlineOutlined />,
       },
     ],
   },
