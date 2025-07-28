@@ -22,10 +22,10 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <ProtectedRoute />,
-    errorElement: <ErrorPage />,
     children: [
       {
         element: <AppLayout />,
+        errorElement: <ErrorPage />,
         children: [
           {
             index: true,
@@ -40,19 +40,19 @@ export const router = createBrowserRouter([
             element: <Clients />,
           },
           {
+            path: "client/:id",
+            element: <ClientPage />,
+          },
+          {
             path: "client-type",
             element: <ClientType />,
           },
           {
-            path: "client/:id",
-            element: <ClientPage />,
+            path: "*",
+            element: <ErrorPage />,
           },
         ],
       },
     ],
-  },
-  {
-    path: "*",
-    element: <Navigate to="/dashboard" replace />,
   },
 ]);

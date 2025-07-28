@@ -66,6 +66,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
           }
         : {
             Layout: {
+              bodyBg: "#ffffff",
             },
             Table: {
               headerBg: "#f1f5f9",
