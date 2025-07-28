@@ -29,6 +29,13 @@ export const settingsEndpoints = {
   update: "settings",
 };
 
+// ===================== LOCATION ENDPOINTS =====================
+export const locationEndpoints = {
+  region: "location/region",
+  districtByRegion: (regionId: string | number) =>
+    `location/district/${regionId}`,
+};
+
 // ===================== CLIENT ENDPOINTS =====================
 export const clientEndpoints = {
   create: "client",
@@ -54,4 +61,40 @@ export const productGroupEndpoints = {
   one: (id: string) => `product-group/${id}`,
   update: (id: string) => `product-group/${id}`,
   delete: (id: string) => `product-group/${id}`,
+};
+
+// ===================== PRODUCT ENDPOINTS =====================
+export const productEndpoints = {
+  create: "product",
+  all: "product",
+  one: (id: string) => `product/${id}`,
+  update: (id: string) => `product/${id}`,
+  delete: (id: string) => `product/${id}`,
+};
+
+// ===================== PRODUCT UNIT ENDPOINTS =====================
+export const productUnitEndpoints = {
+  create: "product-unit",
+  all: "product-unit",
+  one: (id: string) => `product-unit/${id}`,
+  update: (id: string) => `product-unit/${id}`,
+  delete: (id: string) => `product-unit/${id}`,
+};
+
+// ===================== SUPPLIER ENDPOINTS =====================
+export const supplierEndpoints = {
+  create: "supplier",
+  all: "supplier",
+  one: (id: string) => `supplier/${id}`,
+  update: (id: string) => `supplier/${id}`,
+  delete: (id: string) => `supplier/${id}`,
+};
+
+// ===================== PAID SUPPLIER ENDPOINTS =====================
+export const paidSupplierEndpoints = {
+  create: "paidsupplier",
+  all: "paidsupplier",
+  one: (id: string) => `paidsupplier/${id}`,
+  update: (id: string) => `paidsupplier/${id}`,
+  delete: (id: string) => `paidsupplier/${id}`,
 };

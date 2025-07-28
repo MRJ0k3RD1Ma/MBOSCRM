@@ -17,17 +17,17 @@ import {
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import {
-  useDeleteClientType,
-  useGetAllClientTypes,
-} from "../../config/queries/clients/client-type-querys";
-import ClientTypeFormModal from "./ui/client-type-form-modal";
+  useDeleteProductUnit,
+  useGetAllProductUnits,
+} from "../../config/queries/products/product-unit-querys";
+import ProductUnitFormModal from "./ui/product-unit-form-modal";
 
-export default function ClientType() {
+export default function ProductUnit() {
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({ name: "", page: 1, limit: 10 });
 
-  const { data, isLoading, refetch } = useGetAllClientTypes(filters);
-  const deleteClientType = useDeleteClientType();
+  const { data, isLoading, refetch } = useGetAllProductUnits(filters);
+  const deleteProductUnit = useDeleteProductUnit();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selected, setSelected] = useState<{ id: number; name: string } | null>(
@@ -36,7 +36,7 @@ export default function ClientType() {
 
   const handleDelete = async (record: any) => {
     try {
-      await deleteClientType.mutateAsync(record.id);
+      await deleteProductUnit.mutateAsync(record.id);
       message.success("Muvaffaqiyatli o‘chirildi");
     } catch {
       message.error("O‘chirishda xatolik");
@@ -58,7 +58,7 @@ export default function ClientType() {
       key: "id",
     },
     {
-      title: "Turi nomi",
+      title: "Birlik nomi",
       dataIndex: "name",
       key: "name",
     },
@@ -108,7 +108,7 @@ export default function ClientType() {
       >
         <Space.Compact style={{ maxWidth: 400 }}>
           <Input
-            placeholder="Tur nomi bo‘yicha qidirish"
+            placeholder="Birlik nomi bo‘yicha qidirish"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onPressEnter={handleSearch}
@@ -146,7 +146,7 @@ export default function ClientType() {
         }}
       />
 
-      <ClientTypeFormModal
+      <ProductUnitFormModal
         open={modalOpen}
         onClose={() => {
           setModalOpen(false);
