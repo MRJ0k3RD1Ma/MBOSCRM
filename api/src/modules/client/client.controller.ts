@@ -8,6 +8,7 @@ import {
   Query,
   Delete,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { FindAllClientQueryDto } from './dto/findAll-client.dto';
@@ -15,6 +16,7 @@ import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from 'src/common/auth/roles/role.enum';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { Request } from 'express';
 
 @Controller('client')
 export class ClientController {
@@ -22,8 +24,9 @@ export class ClientController {
 
   @Post()
   @DecoratorWrapper('create Client', true, [Role.Admin])
-  create(@Body() createClientDto: CreateClientDto) {
-    return this.clientService.create(createClientDto);
+  create(@Body() createClientDto: CreateClientDto,@Req() req: Request) {
+    const creatorId = req.user.id;
+    return this.clientService.create(createClientDto,creatorId);
   }
 
   @Get()
@@ -43,8 +46,10 @@ export class ClientController {
   update(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateClientDto: UpdateClientDto,
+    @Req() req: Request
   ) {
-    return this.clientService.update(+id, updateClientDto);
+    const creatorId = req.user.id;
+    return this.clientService.update(+id, updateClientDto,creatorId);
   }
 
   @Delete(':id')

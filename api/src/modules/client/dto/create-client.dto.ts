@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsPhoneNumber } from 'class-validator';
 import { IsId } from 'src/common/dtos/id.dto';
 import { IsName } from 'src/common/dtos/name.dto';
 
@@ -22,8 +22,9 @@ export class CreateClientDto {
   @IsId(false)
   districtId: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ example: '+998901234567' })
   @IsOptional()
+  @IsPhoneNumber('UZ')
   phone?: string;
 
   @IsId(false)

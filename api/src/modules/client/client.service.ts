@@ -10,13 +10,36 @@ import { UpdateClientDto } from './dto/update-client.dto';
 export class ClientService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createClientDto: CreateClientDto) {
-    const existingClient = await this.prisma.client.findFirst({
-      where: { name: createClientDto.name },
-    });
-    if (existingClient) {
-      throw HttpError({ code: 'Client with this name already exists' });
+  async create(createClientDto: CreateClientDto, creatorId: number) {
+    if (!creatorId) {
+      throw HttpError({ message: 'Creator not found' });
     }
+    const existingPhone = await this.prisma.client.findFirst({
+      where: { phone: createClientDto.phone },
+    });
+    if (existingPhone) {
+      throw HttpError({ code: 'Phone already exists' });
+    }
+
+    if (createClientDto.districtId) {
+      const district = await this.prisma.district.findUnique({
+        where: { id: createClientDto.districtId },
+      });
+      if (!district) {
+        throw HttpError({ code: 'District not found' });
+      }
+    }
+
+    if (createClientDto.regionId) {
+      const region = await this.prisma.region.findUnique({
+        where: { id: createClientDto.regionId },
+      });
+      if (!region) {
+        throw HttpError({ code: 'Region not found' });
+      }
+    }
+    
+    
 
     let type: ClientType;
     if (createClientDto.typeId) {
@@ -28,14 +51,20 @@ export class ClientService {
       }
     }
 
+
+
     const client = await this.prisma.client.create({
       data: {
-        ...createClientDto,
-        typeId: type.id,
-        regionId: createClientDto.regionId,
-        districtId: createClientDto.districtId,
-        modifyId: 1,
-        registerId: 1,
+        name: createClientDto.name,
+        address: createClientDto.address,
+        description: createClientDto.description,
+        inn: createClientDto.inn,
+        typeId: type?.id,
+        phone: createClientDto.phone,
+        regionId: createClientDto?.regionId,
+        districtId: createClientDto?.districtId,
+        modifyId: creatorId,
+        registerId: creatorId,
       },
     });
     return client;
@@ -55,15 +84,36 @@ export class ClientService {
     } = dto;
 
     const where: Prisma.ClientWhereInput = {
-      name: { contains: name?.trim() || '' },
-      districtId: { equals: districtId },
-      regionId: { equals: regionId },
-      address: { contains: address?.trim() || '' },
-      description: { contains: description?.trim() || '' },
-      inn: { contains: inn?.trim() || '' },
-      phone: { contains: phone?.trim() || '' },
       isDeleted: false,
     };
+
+    if (name?.trim()) {
+      where.name = { contains: name.trim(), mode: 'insensitive' };
+    }
+
+    if (districtId) {
+      where.districtId = { equals: districtId };
+    }
+
+    if (regionId) {
+      where.regionId = { equals: regionId };
+    }
+
+    if (address?.trim()) {
+      where.address = { contains: address.trim(), mode: 'insensitive' };
+    }
+
+    if (description?.trim()) {
+      where.description = { contains: description.trim(), mode: 'insensitive' };
+    }
+
+    if (inn?.trim()) {
+      where.inn = { contains: inn.trim() };
+    }
+
+    if (phone?.trim()) {
+      where.phone = { contains: phone.trim() };
+    }
 
     const [data, total] = await this.prisma.$transaction([
       this.prisma.client.findMany({
@@ -72,11 +122,8 @@ export class ClientService {
         take: limit,
         orderBy: { createdAt: 'desc' },
       }),
-      this.prisma.client.count({
-        where,
-      }),
+      this.prisma.client.count({ where }),
     ]);
-
     return {
       total,
       page,
@@ -86,7 +133,7 @@ export class ClientService {
   }
 
   async findOne(id: number) {
-    const client = await this.prisma.client.findUnique({
+    const client = await this.prisma.client.findFirst({
       where: { id, isDeleted: false },
       include: { ClientType: true, District: true, Region: true },
     });
@@ -96,22 +143,23 @@ export class ClientService {
     return client;
   }
 
-  async update(id: number, dto: UpdateClientDto) {
-    const client = await this.prisma.client.findUnique({
+  async update(id: number, dto: UpdateClientDto, creatorId: number) {
+    const client = await this.prisma.client.findFirst({
       where: { id, isDeleted: false },
     });
     if (!client) throw HttpError({ code: 'Client not found' });
 
     const updateData: Partial<Client> = {
-      name: dto.name || client.name,
-      address: dto.address || client.address,
-      balance: dto.balance || client.balance,
-      description: dto.description || client.description,
-      districtId: dto.districtId || client.districtId,
-      inn: dto.inn || client.inn,
-      phone: dto.phone || client.phone,
-      regionId: dto.regionId || client.regionId,
-      typeId: dto.typeId || client.typeId,
+      name: dto.name ?? client.name,
+      address: dto.address ?? client.address,
+      balance: dto.balance ?? client.balance,
+      description: dto.description ?? client.description,
+      districtId: dto.districtId ?? client.districtId,
+      inn: dto.inn ?? client.inn,
+      phone: dto.phone ?? client.phone,
+      regionId: dto.regionId ?? client.regionId,
+      typeId: dto.typeId ?? client.typeId,
+      modifyId: creatorId,
     };
 
     let type: ClientType;
@@ -134,8 +182,8 @@ export class ClientService {
   }
 
   async remove(id: number) {
-    const client = await this.prisma.client.findUnique({
-      where: { id: id },
+    const client = await this.prisma.client.findFirst({
+      where: { id: id, isDeleted: false },
     });
     if (!client) {
       throw HttpError({ code: 'Client not found' });

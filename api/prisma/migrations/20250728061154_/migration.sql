@@ -17,7 +17,7 @@ CREATE TABLE "client" (
     "description" TEXT,
     "registerId" INTEGER,
     "modifyId" INTEGER,
-    "isDeleted" BOOLEAN,
+    "isDeleted" BOOLEAN DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "phone" VARCHAR(255),
@@ -217,6 +217,9 @@ CREATE TABLE "user_role" (
 
     CONSTRAINT "user_role_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "client_phone_key" ON "client"("phone");
 
 -- CreateIndex
 CREATE INDEX "FK_client_district_id" ON "client"("districtId");
