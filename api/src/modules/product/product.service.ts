@@ -40,33 +40,36 @@ export class ProductService {
         throw HttpError({ message: 'ProductUnit not found' });
       }
     }
+    let barcodeId = 0;
+
     if (!barcode) {
       const max = await this.prisma.product.findMany({
         where: { barcodeId: { not: null } },
         take: 1,
         orderBy: { barcodeId: 'desc' },
       });
-      const barcodeId = (max[0]?.barcodeId || 1_000_000) + 1;
-      const product = await this.prisma.product.create({
-        data: {
-          name,
-          barcode,
-          barcodeId,
-          groupId,
-          unitId,
-          priceIncome,
-          reminderFirst,
-          price,
-          type,
-          countReminder,
-          countArrived,
-          countSale,
-          creatorId: creatorId,
-          modifyId: creatorId,
-        },
-      });
-      return product;
+      console.log(createProductDto);
+      barcodeId = (max[0]?.barcodeId || 1_000_000) + 1;
     }
+    const product = await this.prisma.product.create({
+      data: {
+        name,
+        barcode,
+        barcodeId: barcodeId,
+        groupId,
+        unitId,
+        priceIncome,
+        reminderFirst,
+        price,
+        type,
+        countReminder,
+        countArrived,
+        countSale,
+        creatorId: creatorId,
+        modifyId: creatorId,
+      },
+    });
+    return product;
   }
 
   async findAll(dto: FindAllProductQueryDto) {
@@ -149,7 +152,7 @@ export class ProductService {
       const existingWithBarcode = await this.prisma.product.findFirst({
         where: {
           barcode: dto.barcode,
-          NOT: { id }, 
+          NOT: { id },
         },
       });
       if (existingWithBarcode) {
@@ -158,7 +161,6 @@ export class ProductService {
         });
       }
     }
-  
 
     const updateData: Record<string, any> = {};
     const fields: (keyof UpdateProductDto)[] = [
