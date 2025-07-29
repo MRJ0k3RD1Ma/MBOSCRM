@@ -10,7 +10,7 @@ import {
   type MenuProps,
 } from "antd";
 import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
-
+import dayjs from "dayjs";
 import PaidSupplierFormModal from "./ui/paid-supplier-form-modal";
 import PaidSupplierFilterModal from "./ui/paid-supplier-filter-modal";
 import {
@@ -93,7 +93,7 @@ export default function PaidSuppliers() {
     {
       title: "To‘langan sana",
       dataIndex: "paidDate",
-      render: (text: string) => new Date(text).toLocaleDateString(),
+      render: (text: string) => dayjs(text).format("YYYY-MM-DD"),
     },
     {
       title: "To‘lov turi",
