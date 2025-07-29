@@ -1,17 +1,7 @@
-import {
-  Modal,
-  Form,
-  Input,
-  Select,
-  InputNumber,
-  DatePicker,
-  Row,
-  Col,
-} from "antd";
+import { Modal, Form, Input, Select, InputNumber, Row, Col } from "antd";
 import dayjs from "dayjs";
 
 const { Option } = Select;
-const { RangePicker } = DatePicker;
 
 type Props = {
   open: boolean;
@@ -34,15 +24,20 @@ export default function ProductsFilterModal({
       onClose();
     });
   };
+  const handleClear = () => {
+    form.resetFields();
+    onApply({});
+    onClose();
+  };
 
   return (
     <Modal
       title="Maxsulotlar bo‘yicha filter"
       open={open}
       onOk={handleOk}
-      onCancel={onClose}
+      onCancel={handleClear}
       okText="Qo‘llash"
-      cancelText="Bekor qilish"
+      cancelText="Tozalash"
       width={800}
     >
       <Form

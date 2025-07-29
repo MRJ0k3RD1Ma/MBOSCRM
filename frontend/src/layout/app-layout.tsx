@@ -73,6 +73,11 @@ const pages = [
       },
     ],
   },
+  {
+    key: "/suppliers",
+    label: "Yetkazib beruvchilar",
+    icon: <FolderOpenOutlined />,
+  },
 ];
 
 export default function AppLayout() {
@@ -95,6 +100,8 @@ export default function AppLayout() {
     "product-unit": "Mahsulot o'lchov birligi",
     profile: "Profil",
     product: "Mahsulat tafsilotlari",
+    suppliers: "Yetkazib beruvchilar",
+    supplier: "Yetkazib beruvchi tafsilotlari",
   };
   const breadcrumbItems = [
     <Breadcrumb.Item key="dashboard">
