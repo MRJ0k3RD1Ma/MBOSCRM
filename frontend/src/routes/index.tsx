@@ -13,7 +13,9 @@ import Product from "../pages/products/product";
 import ProductGroup from "../pages/products/product-group";
 import ProductUnit from "../pages/products/product-unit";
 import Suppliers from "../pages/suppler/suppliers";
-import Supplier from "../pages/suppler/suppler";
+import Supplier from "../pages/suppler/supplier";
+import PaidSuppliers from "../pages/suppler/paid-supplier";
+import Payments from "../pages/payment/payment";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -76,6 +78,14 @@ export const router = createBrowserRouter([
           {
             path: "supplier/:id",
             element: <Supplier />,
+          },
+          {
+            path: "paid-suppliers",
+            element: <PaidSuppliers />,
+          },
+          {
+            path: "payment",
+            element: <Payments />,
           },
           {
             path: "*",

@@ -98,3 +98,12 @@ export const paidSupplierEndpoints = {
   update: (id: string) => `paidsupplier/${id}`,
   delete: (id: string) => `paidsupplier/${id}`,
 };
+
+// ===================== PAYMENT ENDPOINTS =====================
+export const paymentEndpoints = {
+  create: "payment",
+  all: "payment",
+  one: (id: string) => `payment/${id}`,
+  update: (id: string) => `payment/${id}`,
+  delete: (id: string) => `payment/${id}`,
+};

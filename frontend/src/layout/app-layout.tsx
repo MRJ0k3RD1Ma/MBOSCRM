@@ -15,8 +15,10 @@ import {
   LogoutOutlined,
   UserOutlined,
   DownOutlined,
-  ProductFilled,
-  UnderlineOutlined,
+  ShoppingOutlined,
+  DollarCircleOutlined,
+  TagsOutlined,
+  NumberOutlined,
 } from "@ant-design/icons";
 import ThemeToggle from "../components/theme/theme-toggle";
 import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
@@ -54,29 +56,46 @@ const pages = [
   {
     key: "products",
     label: "Mahsulotlar",
-    icon: <ProductFilled />,
+    icon: <ShoppingOutlined />,
     children: [
       {
         key: "/products",
         label: "Mahsulotlar",
-        icon: <ProductFilled />,
+        icon: <ShoppingOutlined />,
       },
       {
         key: "/product-group",
         label: "Mahsulot guruhlari",
-        icon: <FolderOpenOutlined />,
+        icon: <TagsOutlined />,
       },
       {
         key: "/product-unit",
         label: "Mahsulot o'lchov birligi",
-        icon: <UnderlineOutlined />,
+        icon: <NumberOutlined />,
       },
     ],
   },
   {
-    key: "/suppliers",
+    key: "suppliers",
     label: "Yetkazib beruvchilar",
-    icon: <FolderOpenOutlined />,
+    icon: <UsergroupAddOutlined />,
+    children: [
+      {
+        key: "/suppliers",
+        label: "Yetkazib beruvchilar",
+        icon: <UsergroupAddOutlined />,
+      },
+      {
+        key: "/paid-suppliers",
+        label: "To'langan yetkazib beruvchilar",
+        icon: <DollarCircleOutlined />,
+      },
+    ],
+  },
+  {
+    key: "/payment",
+    label: "To'lov Turi",
+    icon: <DollarCircleOutlined />,
   },
 ];
 
@@ -102,6 +121,8 @@ export default function AppLayout() {
     product: "Mahsulat tafsilotlari",
     suppliers: "Yetkazib beruvchilar",
     supplier: "Yetkazib beruvchi tafsilotlari",
+    "paid-suppliers": "To'langan yetkazib beruvchilar",
+    payment: "To'lov Turi",
   };
   const breadcrumbItems = [
     <Breadcrumb.Item key="dashboard">
