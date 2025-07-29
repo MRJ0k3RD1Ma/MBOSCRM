@@ -1,12 +1,14 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDateString, IsNumber, IsOptional } from 'class-validator';
+import { IsDate, IsDateString, IsNumber, IsOptional } from 'class-validator';
 
 export class UpdatePaidSupplierDto {
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsDateString()
+  @IsDate()
   @Type(() => Date)
+  @ApiPropertyOptional({
+    example: '2025-07-29T12:12:44.882Z',
+    description: 'ISO 8601 formatda vaqt',
+  })
   paidDate: Date;
 
   @ApiPropertyOptional()

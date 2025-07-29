@@ -8,6 +8,7 @@ import {
   Query,
   Delete,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { PaidSupplierService } from './paid-supplier.service';
 import { FindAllPaidSupplierQueryDto } from './dto/findAll-paid-supplier.dto';
@@ -15,6 +16,7 @@ import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from 'src/common/auth/roles/role.enum';
 import { CreatePaidSupplierDto } from './dto/create-paid-supplier.dto';
 import { UpdatePaidSupplierDto } from './dto/update-paid-supplier.dto';
+import { Request } from 'express';
 
 @Controller('paidsupplier')
 export class PaidSupplierController {
@@ -22,8 +24,12 @@ export class PaidSupplierController {
 
   @Post()
   @DecoratorWrapper('create PaidSupplier', true, [Role.Admin])
-  create(@Body() createPaidSupplierDto: CreatePaidSupplierDto) {
-    return this.paidsupplierService.create(createPaidSupplierDto);
+  create(
+    @Body() createPaidSupplierDto: CreatePaidSupplierDto,
+    @Req() req: Request,
+  ) {
+    const creatorId = req.user.id;
+    return this.paidsupplierService.create(createPaidSupplierDto, creatorId);
   }
 
   @Get()
@@ -49,7 +55,8 @@ export class PaidSupplierController {
 
   @Delete(':id')
   @DecoratorWrapper('Delete PaidSupplier', true, [Role.Admin])
-  remove(@Param('id', ParseIntPipe) id: string) {
-    return this.paidsupplierService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: string, @Req() req: Request) {
+    const modifierId = req.user.id;
+    return this.paidsupplierService.remove(+id, modifierId);
   }
 }
