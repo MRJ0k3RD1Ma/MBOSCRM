@@ -8,6 +8,7 @@ import {
   Query,
   Delete,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { SupplierService } from './supplier.service';
 import { FindAllSupplierQueryDto } from './dto/findAll-supplier.dto';
@@ -15,6 +16,7 @@ import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from 'src/common/auth/roles/role.enum';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
+import { Request } from 'express';
 
 @Controller('supplier')
 export class SupplierController {
@@ -22,8 +24,9 @@ export class SupplierController {
 
   @Post()
   @DecoratorWrapper('create Supplier', true, [Role.Admin])
-  create(@Body() createSupplierDto: CreateSupplierDto) {
-    return this.supplierService.create(createSupplierDto);
+  create(@Body() createSupplierDto: CreateSupplierDto, @Req() req: Request) {
+    const creatorId = req.user.id;
+    return this.supplierService.create(createSupplierDto, creatorId);
   }
 
   @Get()
@@ -43,8 +46,10 @@ export class SupplierController {
   update(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateSupplierDto: UpdateSupplierDto,
+    @Req() req: Request,
   ) {
-    return this.supplierService.update(+id, updateSupplierDto);
+    const creatorId = req.user.id;
+    return this.supplierService.update(+id, updateSupplierDto, creatorId);
   }
 
   @Delete(':id')

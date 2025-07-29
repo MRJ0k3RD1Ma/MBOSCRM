@@ -11,6 +11,7 @@ import { ProductUnitModule } from './modules/product-unit/product-unit.module';
 import { LocationModule } from './modules/location/location.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { PaidSupplierModule } from './modules/paid-supplier/paid-supplier.module';
+import { PaymentModule } from './modules/payment/payment.module';
 
 @Module({
   controllers: [],
@@ -30,6 +31,7 @@ import { PaidSupplierModule } from './modules/paid-supplier/paid-supplier.module
     ProductUnitModule,
     SupplierModule,
     PaidSupplierModule,
+    PaymentModule,
   ],
 })
 export class AppModule {}

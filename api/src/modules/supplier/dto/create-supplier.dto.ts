@@ -1,22 +1,37 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 import { IsName } from 'src/common/dtos/name.dto';
 
 export class CreateSupplierDto {
-  @IsName()
+  @ApiProperty({ example: 'Alibek Jumaniyazov' })
+  @IsNotEmpty()
+  @IsString()
   name: string;
 
-  @IsName()
+  @ApiProperty({ example: '+998901234567' })
+  @IsNotEmpty()
+  @IsString()
+  @IsPhoneNumber('UZ')
   phone: string;
 
   @IsName(false)
   description: string;
 
-  @IsName(false)
+  @ApiPropertyOptional({ example: '+998901234567' })
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  @IsPhoneNumber('UZ')
   phoneTwo?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
+  @ApiProperty({ example: '1000000' })
   @IsNumber()
+  @IsNotEmpty()
   balance: number;
 }
