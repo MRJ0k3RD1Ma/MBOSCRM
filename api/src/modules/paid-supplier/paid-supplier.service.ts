@@ -42,7 +42,14 @@ export class PaidSupplierService {
   }
 
   async findAll(dto: FindAllPaidSupplierQueryDto) {
-    const { limit = 10, page = 1, maxPaidDate, minPaidDate, supplierId } = dto;
+    const {
+      limit = 10,
+      page = 1,
+      maxPaidDate,
+      minPaidDate,
+      supplierId,
+      paymentId,
+    } = dto;
 
     const where: Prisma.PaidSupplierWhereInput = {
       isDeleted: false,
@@ -56,6 +63,9 @@ export class PaidSupplierService {
         ...(minPaidDate && { gt: minPaidDate }),
         ...(maxPaidDate && { lt: maxPaidDate }),
       };
+    }
+    if (paymentId) {
+      where.paymentId = paymentId;
     }
 
     const [data, total] = await this.prisma.$transaction([

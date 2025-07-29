@@ -8,6 +8,9 @@ export class FindAllPaidSupplierQueryDto extends PaginationDto {
   @IsId(false)
   supplierId: number;
 
+  @IsId(false)
+  paymentId: number;
+
   @ApiPropertyOptional({
     example: '2022-01-01',
   })
