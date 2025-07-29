@@ -7,7 +7,7 @@ type Props = {
   initialValues: Record<string, string>;
 };
 
-export default function ClientsFilterModal({
+export default function SuppliersFilterModal({
   open,
   onClose,
   onApply,
@@ -21,6 +21,7 @@ export default function ClientsFilterModal({
       onClose();
     });
   };
+
   const handleClear = () => {
     form.resetFields();
     onApply({});
@@ -29,7 +30,7 @@ export default function ClientsFilterModal({
 
   return (
     <Modal
-      title="Filterlar"
+      title="Yetkazib beruvchi filteri"
       open={open}
       onOk={handleOk}
       onCancel={handleClear}
@@ -38,19 +39,13 @@ export default function ClientsFilterModal({
     >
       <Form form={form} layout="vertical" initialValues={initialValues}>
         <Form.Item label="Nomi" name="name">
-          <Input placeholder="Nomi" />
-        </Form.Item>
-        <Form.Item label="Manzil" name="address">
-          <Input placeholder="Manzil" />
+          <Input placeholder="Yetkazib beruvchi nomi" allowClear />
         </Form.Item>
         <Form.Item label="Izoh" name="description">
-          <Input placeholder="Izoh" />
+          <Input placeholder="Izoh" allowClear />
         </Form.Item>
         <Form.Item label="Telefon" name="phone">
-          <Input placeholder="Telefon" />
-        </Form.Item>
-        <Form.Item label="INN" name="inn">
-          <Input placeholder="INN" />
+          <Input placeholder="Telefon raqami" allowClear />
         </Form.Item>
       </Form>
     </Modal>
