@@ -17,8 +17,4 @@ export class CreateArrivedProductDto {
   @ApiProperty()
   @IsNumber()
   price: number;
-
-  @ApiProperty()
-  @IsNumber()
-  priceCount: number;
 }

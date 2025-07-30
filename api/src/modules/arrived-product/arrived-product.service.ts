@@ -10,8 +10,7 @@ import { UpdateArrivedProductDto } from './dto/update-arrived-product.dto';
 export class ArrivedProductService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createArrivedProductDto: CreateArrivedProductDto) {
-    const { arrivedId, count, priceCount, productId, price } =
-      createArrivedProductDto;
+    const { arrivedId, count, productId, price } = createArrivedProductDto;
 
     if (!arrivedId) {
       throw new HttpError({
@@ -40,7 +39,7 @@ export class ArrivedProductService {
     const arrivedproduct = await this.prisma.arrivedProduct.create({
       data: {
         count,
-        priceCount,
+        priceCount: price * count,
         price,
         arrivedId,
         productId,
@@ -128,7 +127,9 @@ export class ArrivedProductService {
         price: updateArrivedProductDto.price || arrivedproduct.price,
         count: updateArrivedProductDto.count || arrivedproduct.count,
         priceCount:
-          updateArrivedProductDto.priceCount || arrivedproduct.priceCount,
+          (updateArrivedProductDto.price || arrivedproduct.price) *
+            (updateArrivedProductDto.count || arrivedproduct.count) ||
+          arrivedproduct.priceCount,
       },
     });
   }

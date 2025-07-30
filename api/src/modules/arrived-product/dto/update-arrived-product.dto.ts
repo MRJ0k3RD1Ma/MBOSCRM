@@ -12,9 +12,4 @@ export class UpdateArrivedProductDto {
   @IsOptional()
   @IsNumber()
   price: number;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber()
-  priceCount: number;
 }
