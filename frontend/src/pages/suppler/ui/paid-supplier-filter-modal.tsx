@@ -31,7 +31,6 @@ export default function PaidSupplierFilterModal({
           ? dayjs(values.maxPaidDate).format("YYYY-MM-DD")
           : undefined,
       };
-
       onApply(filters);
       onClose();
     });

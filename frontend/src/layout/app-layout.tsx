@@ -97,6 +97,11 @@ const pages = [
     label: "To'lov Turi",
     icon: <DollarCircleOutlined />,
   },
+  {
+    key: "/arriveds",
+    label: "Kelib tushgan mahsulotlar",
+    icon: <HomeOutlined />,
+  },
 ];
 
 export default function AppLayout() {
