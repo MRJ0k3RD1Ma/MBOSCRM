@@ -170,15 +170,17 @@ model Arrived {
   code           String?          @db.VarChar(255)
   codeId         Int?             @default(1)
   waybillNumber  String?          @map("waybill_number") @db.VarChar(255)
-  supplierId     Int              @map("suppler_id")
+  supplier       Supplier         @relation(fields: [supplierId], references: [id])
+  supplierId     Int              @map("supplier_id") @default(1)
   description    String?          @db.Text
   price          Float            @default(0)
-  status         Int?             @default(1)
+  isDeleted      Boolean?         @default(false)
   created        DateTime         @default(now())
   updated        DateTime         @default(now()) @updatedAt
   registerId     Int?
   modifyId       Int?
   ArrivedProduct ArrivedProduct[]
+
   // You might want to add relations to User table for registerId and modifyId
   // User_Arrived_registerId User? @relation("Arrived_registerId", fields: [registerId], references: [id])
   // User_Arrived_modifyId User? @relation("Arrived_modifyId", fields: [modifyId], references: [id])
@@ -225,17 +227,18 @@ model PaidSupplier {
 }
 
 model Supplier {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(255)
-  phone       String   @db.VarChar(255)
-  phoneTwo    String?  @map("phone_two") @db.VarChar(255)
-  description String?  @db.Text
-  balance     Float    @default(0)
-  isDeleted   Boolean? @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  phone       String    @db.VarChar(255)
+  phoneTwo    String?   @map("phone_two") @db.VarChar(255)
+  description String?   @db.Text
+  balance     Float     @default(0)
+  isDeleted   Boolean?  @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
   registerId  Int?
   modifyId    Int?
+  arrived     Arrived[] // 1:N bog'lanish
   // If `register_id` and `modify_id` refer to the `User` table, uncomment and adjust these relations:
   // User_Supplier_registerId User? @relation("Supplier_registerId", fields: [registerId], references: [id])
   // User_Supplier_modifyId   User? @relation("Supplier_modifyId", fields: [modifyId], references: [id])
@@ -248,8 +251,8 @@ model Payment {
   name         String?        @db.VarChar(255)
   icon         String?        @db.VarChar(255)
   isDeleted    Boolean?       @default(false)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now()) @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now()) @updatedAt
   PaidSupplier PaidSupplier[]
 
   @@map("payment")

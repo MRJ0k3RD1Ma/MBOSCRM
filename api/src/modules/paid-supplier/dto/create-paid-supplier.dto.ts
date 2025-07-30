@@ -11,7 +11,7 @@ export class CreatePaidSupplierDto {
   @IsOptional()
   @IsDate()
   @Type(() => Date)
-  @ApiPropertyOptional({ example: '2025-07-29T12:12:44.882Z', description: 'ISO 8601 formatda vaqt' })
+  @ApiPropertyOptional({ example: '2025-07-29T12:12:44.882Z',})
   paidDate?: Date;
 
   @IsNumber()
