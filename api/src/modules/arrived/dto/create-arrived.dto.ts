@@ -46,7 +46,6 @@ export class CreateArrivedDto {
         productId: 1,
         count: 1,
         price: 1,
-        priceCount: 1,
       },
     ],
   })
