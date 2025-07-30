@@ -107,3 +107,21 @@ export const paymentEndpoints = {
   update: (id: string) => `payment/${id}`,
   delete: (id: string) => `payment/${id}`,
 };
+
+// ===================== ARRIVED ENDPOINTS =====================
+export const arrivedEndpoints = {
+  create: "arrived",
+  all: "arrived",
+  one: (id: string) => `arrived/${id}`,
+  update: (id: string) => `arrived/${id}`,
+  delete: (id: string) => `arrived/${id}`,
+};
+
+// ===================== ARRIVED PRODUCT ENDPOINTS =====================
+export const arrivedProductEndpoints = {
+  create: "arrived-product",
+  all: "arrived-product",
+  one: (id: string) => `arrived-product/${id}`,
+  update: (id: string) => `arrived-product/${id}`,
+  delete: (id: string) => `arrived-product/${id}`,
+};
