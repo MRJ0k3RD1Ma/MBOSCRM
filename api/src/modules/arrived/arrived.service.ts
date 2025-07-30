@@ -5,10 +5,15 @@ import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllArrivedQueryDto } from './dto/findAll-arrived-query.dto';
 import { Prisma } from '@prisma/client';
+import { ArrivedProductService } from '../arrived-product/arrived-product.service';
 
 @Injectable()
 export class ArrivedService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly arrivedProductService: ArrivedProductService,
+  ) {}
+
   async create(createArrivedDto: CreateArrivedDto, creatorId: number) {
     const {
       date,
@@ -17,7 +22,7 @@ export class ArrivedService {
       waybillNumber,
       supplierId,
       description,
-      price,
+      products,
     } = createArrivedDto;
 
     const existingSupplier = await this.prisma.supplier.findUnique({
@@ -30,7 +35,7 @@ export class ArrivedService {
       });
     }
 
-    const arrived = await this.prisma.arrived.create({
+    let arrived = await this.prisma.arrived.create({
       data: {
         date,
         code,
@@ -38,10 +43,27 @@ export class ArrivedService {
         waybillNumber,
         supplierId,
         description,
-        price,
         registerId: creatorId,
         modifyId: creatorId,
       },
+    });
+
+    let totalPrice = 0;
+    for (const product of products) {
+      await this.arrivedProductService.create({
+        arrivedId: arrived.id,
+        count: product.count,
+        price: product.price,
+        priceCount: product.priceCount,
+        productId: product.productId,
+      });
+      totalPrice += product.priceCount;
+    }
+
+    arrived = await this.prisma.arrived.update({
+      where: { id: arrived.id },
+      data: { price: totalPrice },
+      include: { ArrivedProduct: { include: { Product: true } } },
     });
 
     return arrived;

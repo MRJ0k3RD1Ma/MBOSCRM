@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ProductUnitService } from './product-unit.service';
 import { CreateProductUnitDto } from './dto/create-product-unit.dto';
 import { UpdateProductUnitDto } from './dto/update-product-unit.dto';
@@ -18,7 +27,7 @@ export class ProductUnitController {
 
   @Get()
   @DecoratorWrapper('Get all product units')
-  findAll(@Query() dto:FindAllProductUnitQueryDto) {
+  findAll(@Query() dto: FindAllProductUnitQueryDto) {
     return this.productUnitService.findAll(dto);
   }
 
@@ -30,7 +39,10 @@ export class ProductUnitController {
 
   @Patch(':id')
   @DecoratorWrapper('Update product unit', true, [Role.Admin])
-  update(@Param('id') id: string, @Body() updateProductUnitDto: UpdateProductUnitDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateProductUnitDto: UpdateProductUnitDto,
+  ) {
     return this.productUnitService.update(+id, updateProductUnitDto);
   }
 

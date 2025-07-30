@@ -171,7 +171,7 @@ model Arrived {
   codeId         Int?             @default(1)
   waybillNumber  String?          @map("waybill_number") @db.VarChar(255)
   supplier       Supplier         @relation(fields: [supplierId], references: [id])
-  supplierId     Int              @map("supplier_id") @default(1)
+  supplierId     Int              @default(1) @map("supplier_id")
   description    String?          @db.Text
   price          Float            @default(0)
   isDeleted      Boolean?         @default(false)
@@ -195,9 +195,9 @@ model ArrivedProduct {
   count      Float    @default(0)
   price      Float?
   priceCount Float?   @map("price_count")
-  status     Int?     @default(1)
-  created    DateTime @default(now())
-  updated    DateTime @default(now()) @updatedAt
+  isDeleted  Boolean? @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
   Arrived    Arrived? @relation(fields: [arrivedId], references: [id])
   Product    Product? @relation(fields: [productId], references: [id])
 
