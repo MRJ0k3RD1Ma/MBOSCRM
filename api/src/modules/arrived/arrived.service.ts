@@ -50,14 +50,13 @@ export class ArrivedService {
 
     let totalPrice = 0;
     for (const product of products) {
-      await this.arrivedProductService.create({
+      const arrivedProduct = await this.arrivedProductService.create({
         arrivedId: arrived.id,
         count: product.count,
         price: product.price,
-        priceCount: product.priceCount,
         productId: product.productId,
       });
-      totalPrice += product.priceCount;
+      totalPrice += arrivedProduct.priceCount;
     }
 
     arrived = await this.prisma.arrived.update({
