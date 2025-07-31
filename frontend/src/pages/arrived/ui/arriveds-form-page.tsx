@@ -148,60 +148,80 @@ export default function ArrivedFormPage() {
           </Col>
 
           <Col span={12}>
-            <Form.List name="products">
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }) => (
-                    <Space
-                      key={key}
-                      style={{ display: "flex", marginBottom: 8 }}
-                      align="baseline"
-                    >
-                      <Form.Item
-                        {...restField}
-                        name={[name, "productId"]}
-                        rules={[
-                          { required: true, message: "Mahsulot tanlang" },
-                        ]}
+            <Form.Item
+              label="Mahsulotlar"
+              name={"products"}
+              required
+              rules={[
+                {
+                  validator: async (_, products) => {
+                    if (!products || products.length === 0) {
+                      return Promise.reject(
+                        new Error("Kamida 1 ta mahsulot kiriting")
+                      );
+                    }
+                  },
+                },
+              ]}
+            >
+              <Form.List name="products">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8 }}
+                        align="baseline"
                       >
-                        <Select placeholder="Mahsulot">
-                          {products?.data.map((product: Product) => (
-                            <Select.Option key={product.id} value={product.id}>
-                              {product.name}
-                            </Select.Option>
-                          ))}
-                        </Select>
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "count"]}
-                        rules={[{ required: true, message: "Soni kerak" }]}
+                        <Form.Item
+                          {...restField}
+                          name={[name, "productId"]}
+                          rules={[
+                            { required: true, message: "Mahsulot tanlang" },
+                          ]}
+                        >
+                          <Select placeholder="Mahsulot">
+                            {products?.data.map((product: Product) => (
+                              <Select.Option
+                                key={product.id}
+                                value={product.id}
+                              >
+                                {product.name}
+                              </Select.Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, "count"]}
+                          rules={[{ required: true, message: "Soni kerak" }]}
+                        >
+                          <InputNumber placeholder="Soni" min={1} />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, "price"]}
+                          rules={[{ required: true, message: "Narxi kerak" }]}
+                        >
+                          <InputNumber placeholder="Narxi" min={0} />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        icon={<PlusOutlined />}
+                        block
                       >
-                        <InputNumber placeholder="Soni" min={1} />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "price"]}
-                        rules={[{ required: true, message: "Narxi kerak" }]}
-                      >
-                        <InputNumber placeholder="Narxi" min={0} />
-                      </Form.Item>
-                      <MinusCircleOutlined onClick={() => remove(name)} />
-                    </Space>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      icon={<PlusOutlined />}
-                      block
-                    >
-                      Mahsulot qo‘shish
-                    </Button>
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
+                        Mahsulot qo‘shish
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </Form.Item>
           </Col>
         </Row>
         <Divider />
