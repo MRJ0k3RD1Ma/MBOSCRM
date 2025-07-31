@@ -15,15 +15,8 @@ export class ArrivedService {
   ) {}
 
   async create(createArrivedDto: CreateArrivedDto, creatorId: number) {
-    const {
-      date,
-      code,
-      codeId,
-      waybillNumber,
-      supplierId,
-      description,
-      products,
-    } = createArrivedDto;
+    const { date, waybillNumber, supplierId, description, products } =
+      createArrivedDto;
 
     const existingSupplier = await this.prisma.supplier.findUnique({
       where: { id: supplierId },
@@ -35,10 +28,22 @@ export class ArrivedService {
       });
     }
 
+    const maxCode = await this.prisma.arrived.findFirst({
+      where: {
+        created: {
+          lt: new Date(new Date().getFullYear(), 11),
+          gt: new Date(new Date().getFullYear(), 0),
+        },
+      },
+      orderBy: { codeId: 'desc' },
+    });
+
+    const codeId = (maxCode.codeId || 0) + 1;
+
     let arrived = await this.prisma.arrived.create({
       data: {
         date,
-        code,
+        code: `${new Date().getFullYear()}-${codeId}`,
         codeId,
         waybillNumber,
         supplierId,
