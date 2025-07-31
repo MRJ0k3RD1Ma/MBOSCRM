@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import {
   Button,
   Card,
@@ -70,24 +70,13 @@ export default function PaidSuppliers() {
     deletePaidSupplier.mutate(id);
   };
 
-  const supplierMap = useMemo(() => {
-    return Object.fromEntries(
-      (suppliersData?.data || []).map((s) => [s.id, s.name])
-    );
-  }, [suppliersData]);
-
-  const paymentMap = useMemo(() => {
-    return Object.fromEntries(
-      (paymentsData?.data || []).map((p) => [p.id, `${p.icon} ${p.name}`])
-    );
-  }, [paymentsData]);
-
   const columns = [
     { title: "ID", dataIndex: "id" },
     {
       title: "Ta'minotchi",
       dataIndex: "supplierId",
-      render: (id: number) => supplierMap[id] || `ID: ${id}`,
+      render: (supplierId: number) =>
+        suppliersData?.data.find((u) => u.id === supplierId)?.name || "–",
     },
     { title: "To‘lov miqdori", dataIndex: "price" },
     {
@@ -98,7 +87,8 @@ export default function PaidSuppliers() {
     {
       title: "To‘lov turi",
       dataIndex: "paymentId",
-      render: (id: number) => paymentMap[id] || `ID: ${id}`,
+      render: (paymentId: number) =>
+        paymentsData?.data.find((u) => u.id === paymentId)?.name || "–",
     },
     {
       title: "Amallar",

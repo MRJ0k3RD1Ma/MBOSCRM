@@ -200,6 +200,9 @@ export default function AppLayout() {
         <div
           style={{
             padding: 16,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
             textAlign: "center",
             color: "#fff",
             fontWeight: "bold",
