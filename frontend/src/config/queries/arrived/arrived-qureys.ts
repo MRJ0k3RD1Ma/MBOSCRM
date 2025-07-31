@@ -74,10 +74,10 @@ export const useGetAllArrived = (params?: {
   });
 };
 
-export const useGetArrivedById = (id?: number) => {
+export const useGetArrivedById = (id?: number, enabled = true) => {
   return useQuery<Arrived>({
     queryKey: ["arrived", id],
-    enabled: !!id,
+    enabled: enabled && !!id,
     queryFn: async () => {
       const { data } = await axiosPrivate.get(arrivedEndpoints.one(String(id)));
       return data;

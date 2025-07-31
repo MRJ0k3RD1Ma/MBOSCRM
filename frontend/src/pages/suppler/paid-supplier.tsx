@@ -21,7 +21,6 @@ import {
   type CreatePaidSupplierInput,
   type PaidSupplier,
 } from "../../config/queries/supplier/paid-supplier-querys";
-
 import { useGetAllSuppliers } from "../../config/queries/supplier/supplier-querys";
 import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
 

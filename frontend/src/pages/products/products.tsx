@@ -88,7 +88,6 @@ export default function ProductsPage() {
         return `${row.reminderFirst} , ${unitName}`;
       },
     },
-
     { title: "Sotuv narxi", dataIndex: "price", key: "price" },
     { title: "Turi", dataIndex: "type", key: "type" },
     {
