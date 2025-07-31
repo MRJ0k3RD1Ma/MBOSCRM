@@ -22,7 +22,7 @@ import {
 } from "../../config/queries/arrived/arrived-qureys";
 import ArrivedFormModal from "./ui/arriveds-form-modal";
 import ArrivedProductFormModal from "./ui/arriveds-product-form-modal";
-
+import dayjs from "dayjs";
 export default function Arriveds() {
   const navigate = useNavigate();
   const [openArrivedModal, setOpenArrivedModal] = useState(false);
@@ -76,7 +76,12 @@ export default function Arriveds() {
   };
 
   const columns = [
-    { title: "Sana", dataIndex: "date" },
+    {
+      title: "Sana",
+      dataIndex: "date",
+      render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
+    },
+
     { title: "Kod", dataIndex: "code" },
     { title: "Tovar hujjati", dataIndex: "waybillNumber" },
     { title: "Izoh", dataIndex: "description" },

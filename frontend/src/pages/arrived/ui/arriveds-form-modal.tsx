@@ -15,6 +15,10 @@ import {
   useGetAllSuppliers,
   type Supplier,
 } from "../../../config/queries/supplier/supplier-querys";
+import {
+  useGetAllProducts,
+  type Product,
+} from "../../../config/queries/products/products-querys";
 
 interface ArrivedFormModalProps {
   open: boolean;
@@ -31,6 +35,7 @@ const ArrivedFormModal = ({
 }: ArrivedFormModalProps) => {
   const [form] = Form.useForm();
   const { data } = useGetAllSuppliers();
+  const { data: productId } = useGetAllProducts();
 
   useEffect(() => {
     if (open && initialValues) {
@@ -67,7 +72,25 @@ const ArrivedFormModal = ({
           name="date"
           rules={[{ required: true, message: "Iltimos, sanani tanlang" }]}
         >
-          <DatePicker style={{ width: "100%" }} />
+          <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
+        </Form.Item>
+
+        <Form.Item
+          label="Kod"
+          name="code"
+          rules={[{ required: true, message: "Iltimos, Kodni kiriting" }]}
+        >
+          <Input placeholder="Masalan: ARR-001" disabled={!!initialValues} />
+        </Form.Item>
+
+        <Form.Item
+          label="Tovar hujjati"
+          name="waybillNumber"
+          rules={[
+            { required: true, message: "Iltimos, Tovar hujjatini kiriting" },
+          ]}
+        >
+          <Input placeholder="Masalan: WB123456" />
         </Form.Item>
 
         <Form.Item
@@ -83,7 +106,7 @@ const ArrivedFormModal = ({
             ))}
           </Select>
         </Form.Item>
-
+        {}
         <Form.List name="products">
           {(fields, { add, remove }) => (
             <>
@@ -96,9 +119,20 @@ const ArrivedFormModal = ({
                   <Form.Item
                     {...restField}
                     name={[name, "productId"]}
-                    rules={[{ required: true, message: "Mahsulot ID kerak" }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Yetkazilgan mahsulotni tanlang",
+                      },
+                    ]}
                   >
-                    <InputNumber placeholder="Mahsulot ID" min={1} />
+                    <Select placeholder="Yetkazilgan mahsulot">
+                      {productId?.data.map((product: Product) => (
+                        <Select.Option key={product.id} value={product.id}>
+                          {product.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
                   </Form.Item>
                   <Form.Item
                     {...restField}
@@ -113,13 +147,6 @@ const ArrivedFormModal = ({
                     rules={[{ required: true, message: "Narxi kerak" }]}
                   >
                     <InputNumber placeholder="Narxi" min={0} />
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, "priceCount"]}
-                    rules={[{ required: true, message: "Jami narx kerak" }]}
-                  >
-                    <InputNumber placeholder="Narx * soni" min={0} />
                   </Form.Item>
                   <MinusCircleOutlined onClick={() => remove(name)} />
                 </Space>

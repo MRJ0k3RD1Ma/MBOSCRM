@@ -2,15 +2,20 @@ import {
   Drawer,
   Form,
   InputNumber,
-  Input,
   Space,
   Button,
   Divider,
   Select,
+  message,
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import type { Arrived } from "../../../config/queries/arrived/arrived-qureys";
+import {
+  useGetAllProducts,
+  type Product,
+} from "../../../config/queries/products/products-querys";
+import { useCreateArrivedProduct } from "../../../config/queries/arrived/arrived-product-querys";
 
 type Props = {
   dataSource: Arrived[];
@@ -25,18 +30,37 @@ export default function ArrivedProductFormModal({
 }: Props) {
   const [form] = Form.useForm();
   const [arrivedList, setArrivedList] = useState<Arrived[]>([]);
+  const createArrived = useCreateArrivedProduct();
+  const { data: productId } = useGetAllProducts();
 
   useEffect(() => {
-    if (!open) {
+    if (open) {
       form.resetFields();
-    } else {
       setArrivedList(dataSource);
     }
-  }, [open]);
+  }, [open, dataSource]);
 
-  const onFinish = (values: any) => {
-    console.log("Yuborilgan qiymatlar:", values);
-    onClose();
+  const onFinish = async () => {
+    try {
+      const values = await form.validateFields();
+
+      const { arrivedId, products } = values;
+
+      const payload = products.map((product: any) => ({
+        ...product,
+        arrivedId,
+      }));
+
+      payload.forEach((item: any) => {
+        createArrived.mutate(item);
+      });
+
+      message.success("Mahsulotlar muvaffaqiyatli qo‘shildi");
+      onClose();
+      form.resetFields();
+    } catch (error) {
+      message.error("Iltimos, barcha maydonlarni to‘ldiring");
+    }
   };
 
   return (
@@ -66,7 +90,6 @@ export default function ArrivedProductFormModal({
             ))}
           </Select>
         </Form.Item>
-
         <Form.List name="products">
           {(fields, { add, remove }) => (
             <>
@@ -78,14 +101,25 @@ export default function ArrivedProductFormModal({
                 >
                   <Form.Item
                     {...restField}
-                    name={[name, "productName"]}
-                    rules={[{ required: true, message: "Mahsulot nomi kerak" }]}
+                    name={[name, "productId"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Yetkazilgan mahsulotni tanlang",
+                      },
+                    ]}
                   >
-                    <Input placeholder="Mahsulot nomi" />
+                    <Select placeholder="Yetkazilgan mahsulot">
+                      {productId?.data.map((product: Product) => (
+                        <Select.Option key={product.id} value={product.id}>
+                          {product.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
                   </Form.Item>
                   <Form.Item
                     {...restField}
-                    name={[name, "quantity"]}
+                    name={[name, "count"]}
                     rules={[{ required: true, message: "Soni kerak" }]}
                   >
                     <InputNumber placeholder="Soni" min={1} />
