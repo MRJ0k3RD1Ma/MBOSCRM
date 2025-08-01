@@ -27,14 +27,12 @@ export interface CreateArrivedProductInput {
   productId: number;
   count: number;
   price: number;
-  priceCount: number;
 }
 
 export interface UpdateArrivedProductInput {
   id: number;
   count: number;
   price: number;
-  priceCount: number;
 }
 
 export const useGetAllArrivedProduct = (params?: {
@@ -42,6 +40,7 @@ export const useGetAllArrivedProduct = (params?: {
   limit?: number;
   minPrice?: number;
   maxPrice?: number;
+  arrivedId?: number;
   supplierId?: number;
   productId?: number;
 }) => {

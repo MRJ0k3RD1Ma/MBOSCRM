@@ -37,6 +37,7 @@ import { SaleModule } from './modules/sale/sale.module';
     PaidSupplierModule,
     PaymentModule,
     ArrivedModule,
+    SaleModule,
     SaleProductModule,
     SaleModule,
     ArrivedProductModule,
