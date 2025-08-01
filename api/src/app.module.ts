@@ -13,6 +13,7 @@ import { SupplierModule } from './modules/supplier/supplier.module';
 import { PaidSupplierModule } from './modules/paid-supplier/paid-supplier.module';
 import { PaymentModule } from './modules/payment/payment.module';
 import { ArrivedModule } from './modules/arrived/arrived.module';
+import { SaleProductModule } from './modules/sale-product/sale-product.module';
 import { ArrivedProductModule } from './modules/arrived-product/arrived-product.module';
 
 @Module({
@@ -35,6 +36,7 @@ import { ArrivedProductModule } from './modules/arrived-product/arrived-product.
     PaidSupplierModule,
     PaymentModule,
     ArrivedModule,
+    SaleProductModule,
     ArrivedProductModule,
   ],
 })
