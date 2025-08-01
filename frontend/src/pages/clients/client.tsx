@@ -1,15 +1,14 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
-  useGetProductById,
-  useUpdateProduct,
-  useDeleteProduct,
-} from "../../config/queries/products/products-querys";
+  useGetClientById,
+  useUpdateClient,
+  useDeleteClient,
+} from "../../config/queries/clients/clients-querys";
 import {
   Button,
   Input,
   Spin,
   Typography,
-  Tabs,
   Card,
   Space,
   Descriptions,
@@ -17,36 +16,40 @@ import {
   Popconfirm,
   message,
   Form,
-  InputNumber,
   Select,
 } from "antd";
 import {
-  BarcodeOutlined,
-  DollarOutlined,
-  DatabaseOutlined,
   EditOutlined,
   DeleteOutlined,
-  TagsOutlined,
+  UserOutlined,
+  PhoneOutlined,
+  EnvironmentOutlined,
+  InfoCircleOutlined,
+  NumberOutlined,
+  ApartmentOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
+import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
-export default function ProductPage() {
+export default function ClientPage() {
   const { id } = useParams<{ id: string }>();
-  const productId = Number(id);
-  const { data, isLoading, refetch } = useGetProductById(productId);
-  const updateProduct = useUpdateProduct();
-  const deleteProduct = useDeleteProduct();
+  const clientId = Number(id);
+  const { data, isLoading, refetch } = useGetClientById(clientId);
+  const updateClient = useUpdateClient();
+  const deleteClient = useDeleteClient();
+  const { data: types } = useGetAllClientTypes();
+  const navigate = useNavigate();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [form] = Form.useForm();
 
   const handleDelete = async () => {
     try {
-      await deleteProduct.mutateAsync(productId);
-      message.success("Mahsulot muvaffaqiyatli o‘chirildi");
-      window.location.href = "/products";
+      await deleteClient.mutateAsync(clientId);
+      message.success("Mijoz muvaffaqiyatli o‘chirildi");
+      navigate("/clients");
     } catch (error) {
       message.error("O‘chirishda xatolik yuz berdi");
     }
@@ -55,8 +58,8 @@ export default function ProductPage() {
   const handleEdit = () => {
     form.validateFields().then(async (values) => {
       try {
-        await updateProduct.mutateAsync({ id: productId, ...values });
-        message.success("Mahsulot yangilandi");
+        await updateClient.mutateAsync({ id: clientId, ...values });
+        message.success("Mijoz yangilandi");
         setIsEditOpen(false);
         refetch();
       } catch (error) {
@@ -76,7 +79,7 @@ export default function ProductPage() {
   if (!data) {
     return (
       <div className="text-center mt-20">
-        <Title level={3}>Mahsulot topilmadi</Title>
+        <Title level={3}>Mijoz topilmadi</Title>
       </div>
     );
   }
@@ -91,7 +94,7 @@ export default function ProductPage() {
           <div>
             <div className="flex justify-center">
               <div className="bg-gray-100 w-24 h-24 rounded-full flex items-center justify-center border">
-                <TagsOutlined style={{ fontSize: 30, color: "#aaa" }} />
+                <UserOutlined style={{ fontSize: 30, color: "#aaa" }} />
               </div>
             </div>
             <Title level={4} className="!mb-0">
@@ -100,28 +103,34 @@ export default function ProductPage() {
           </div>
 
           <Descriptions column={1} className="!mt-6 !h-full" size="small">
-            <Descriptions.Item label="Shtrix-kod">
+            <Descriptions.Item label="INN">
               <Space>
-                <BarcodeOutlined />
-                {data.barcode || "—"}
+                <NumberOutlined />
+                {data.inn || "—"}
               </Space>
             </Descriptions.Item>
-            <Descriptions.Item label="Narx (kelgan)">
+            <Descriptions.Item label="Telefon">
               <Space>
-                <DollarOutlined />
-                {data.priceIncome || "—"}
+                <PhoneOutlined />
+                {data.phone || "—"}
               </Space>
             </Descriptions.Item>
-            <Descriptions.Item label="Narx (sotuv)">
+            <Descriptions.Item label="Manzil">
               <Space>
-                <DollarOutlined />
-                {data.price || "—"}
+                <EnvironmentOutlined />
+                {data.address || "—"}
               </Space>
             </Descriptions.Item>
-            <Descriptions.Item label="Qolgan miqdor">
+            <Descriptions.Item label="Tavsif">
               <Space>
-                <DatabaseOutlined />
-                {data.countReminder || "—"}
+                <InfoCircleOutlined />
+                {data.description || "—"}
+              </Space>
+            </Descriptions.Item>
+            <Descriptions.Item label="Mijoz turi">
+              <Space>
+                <ApartmentOutlined />
+                {types?.data.find((t) => t.id === data.typeId)?.name || "—"}
               </Space>
             </Descriptions.Item>
           </Descriptions>
@@ -151,61 +160,43 @@ export default function ProductPage() {
         </Card>
 
         <Card bordered className="w-[60%] h-full">
-          <Tabs defaultActiveKey="overview" size="large">
-            <Tabs.TabPane tab="Overview" key="overview">
-              <div className="flex flex-wrap gap-4 mt-4">
-                <Card size="small" className="flex-1 min-w-[200px]">
-                  <Text>Kelgan</Text>
-                  <Title level={4}>{data.countArrived}</Title>
-                </Card>
-                <Card size="small" className="flex-1 min-w-[200px]">
-                  <Text>Sotilgan</Text>
-                  <Title level={4}>{data.countSale}</Title>
-                </Card>
-              </div>
-            </Tabs.TabPane>
-          </Tabs>
+          <Title level={5}>Qo‘shimcha ma'lumotlar hozircha yo‘q</Title>
         </Card>
       </div>
 
       <Modal
-        title="Mahsulot ma'lumotlarini tahrirlash"
+        title="Mijoz ma'lumotlarini tahrirlash"
         open={isEditOpen}
         onCancel={() => setIsEditOpen(false)}
         onOk={handleEdit}
         okText="Saqlash"
         cancelText="Bekor qilish"
-        confirmLoading={updateProduct.isPending}
+        confirmLoading={updateClient.isPending}
       >
         <Form form={form} layout="vertical">
           <Form.Item label="Nomi" name="name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Shtrix-kod" name="barcode">
+          <Form.Item label="INN" name="inn">
             <Input />
           </Form.Item>
-          <Form.Item label="Narx (kelgan)" name="priceIncome">
-            <InputNumber className="w-full" />
+          <Form.Item label="Telefon" name="phone">
+            <Input />
           </Form.Item>
-          <Form.Item label="Narx (sotuv)" name="price">
-            <InputNumber className="w-full" />
+          <Form.Item label="Manzil" name="address">
+            <Input />
           </Form.Item>
-          <Form.Item label="Qolgan miqdor" name="countReminder">
-            <InputNumber className="w-full" />
+          <Form.Item label="Tavsif" name="description">
+            <Input.TextArea rows={3} />
           </Form.Item>
-          <Form.Item label="Kelgan soni" name="countArrived">
-            <InputNumber className="w-full" />
-          </Form.Item>
-          <Form.Item label="Sotilgan soni" name="countSale">
-            <InputNumber className="w-full" />
-          </Form.Item>
-          <Form.Item label="Turi" name="type">
-            <Select
-              options={[
-                { label: "DEVICE", value: "DEVICE" },
-                { label: "SERVICE", value: "SERVICE" },
-              ]}
-            />
+          <Form.Item label="Turi" name="typeId">
+            <Select showSearch optionFilterProp="label">
+              {types?.data.map((type) => (
+                <Select.Option key={type.id} value={type.id} label={type.name}>
+                  {type.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Form>
       </Modal>

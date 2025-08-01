@@ -81,15 +81,6 @@ export default function ProductsModal({
 
           <Col span={12}>
             <Form.Item
-              name="barcodeId"
-              label="Shtrix ID"
-              rules={[{ required: true, message: "Shtrix ID kiriting" }]}
-            >
-              <InputNumber className="!w-full" placeholder="1000001" min={1} />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
               name="groupId"
               label="Guruh"
               rules={[{ required: true, message: "Guruh tanlang" }]}
@@ -97,6 +88,8 @@ export default function ProductsModal({
               <Select
                 className="!w-full"
                 placeholder="Guruh tanlang"
+                showSearch
+                optionFilterProp="label"
                 options={group.map((g) => ({
                   value: g.id,
                   label: g.name,
@@ -114,6 +107,8 @@ export default function ProductsModal({
               <Select
                 className="!w-full"
                 placeholder="Birlik tanlang"
+                showSearch
+                optionFilterProp="label"
                 options={units.map((u) => ({
                   value: u.id,
                   label: u.name,
@@ -158,10 +153,12 @@ export default function ProductsModal({
               label="Turi"
               rules={[{ required: true, message: "Turi tanlang" }]}
             >
-              <Select placeholder="Mahsulot turi">
+              <Select
+                placeholder="Mahsulot turi"
+                defaultValue={"DEVICE"}
+                disabled
+              >
                 <Select.Option value="DEVICE">DEVICE</Select.Option>
-                <Select.Option value="SERVICE">SERVICE</Select.Option>
-                <Select.Option value="OTHER">OTHER</Select.Option>
               </Select>
             </Form.Item>
           </Col>

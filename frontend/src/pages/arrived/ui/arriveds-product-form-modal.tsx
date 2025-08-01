@@ -82,9 +82,17 @@ export default function ArrivedProductFormModal({
           label="Qaysi keltirilganga mahsulot qo‘shiladi?"
           rules={[{ required: true, message: "Arrived tanlang" }]}
         >
-          <Select placeholder="Arrived tanlang">
+          <Select
+            placeholder="Arrived tanlang"
+            showSearch
+            optionFilterProp="label"
+          >
             {arrivedList.map((arrived) => (
-              <Select.Option key={arrived.id} value={arrived.id}>
+              <Select.Option
+                key={arrived.id}
+                value={arrived.id}
+                label={arrived.description}
+              >
                 {arrived.description}
               </Select.Option>
             ))}
@@ -109,9 +117,17 @@ export default function ArrivedProductFormModal({
                       },
                     ]}
                   >
-                    <Select placeholder="Yetkazilgan mahsulot">
+                    <Select
+                      placeholder="Yetkazilgan mahsulot"
+                      showSearch
+                      optionFilterProp="label"
+                    >
                       {productId?.data.map((product: Product) => (
-                        <Select.Option key={product.id} value={product.id}>
+                        <Select.Option
+                          key={product.id}
+                          value={product.id}
+                          label={product.name}
+                        >
                           {product.name}
                         </Select.Option>
                       ))}

@@ -54,7 +54,7 @@ export default function PaidSupplierFormModal({
       title={initialValues ? "To‘lovni tahrirlash" : "Yangi to‘lov qo‘shish"}
       open={open}
       onClose={onClose}
-      width={600}
+      width={400}
       footer={
         <div
           style={{
@@ -71,66 +71,62 @@ export default function PaidSupplierFormModal({
       }
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
-        <div
-          style={{
-            display: "flex",
-            gap: "16px",
-            flexWrap: "wrap",
-          }}
+        <Form.Item
+          label="Yetkazib beruvchi"
+          name="supplierId"
+          style={{ flex: 1, minWidth: 200 }}
+          rules={[{ required: true, message: "Yetkazib beruvchini tanlang" }]}
         >
-          <Form.Item
-            label="Yetkazib beruvchi"
-            name="supplierId"
-            style={{ flex: 1, minWidth: 200 }}
-            rules={[{ required: true, message: "Yetkazib beruvchini tanlang" }]}
-          >
-            <Select
-              placeholder="Tanlang"
-              options={suppliers.map((s) => ({
-                label: s.name,
-                value: s.id,
-              }))}
-            />
-          </Form.Item>
+          <Select
+            placeholder="Tanlang"
+            showSearch
+            optionFilterProp="label"
+            options={suppliers.map((s) => ({
+              label: s.name,
+              value: s.id,
+            }))}
+          />
+        </Form.Item>
 
-          <Form.Item
-            label="To‘lov turi"
-            name="paymentId"
-            style={{ flex: 1, minWidth: 200 }}
-            rules={[{ required: true, message: "To‘lov turini tanlang" }]}
-          >
-            <Select
-              placeholder="To‘lov usuli"
-              options={payments.map((p) => ({
-                label: p.name,
-                value: p.id,
-              }))}
-            />
-          </Form.Item>
+        <Form.Item
+          label="To‘lov turi"
+          name="paymentId"
+          style={{ flex: 1, minWidth: 200 }}
+          rules={[{ required: true, message: "To‘lov turini tanlang" }]}
+        >
+          <Select
+            placeholder="To‘lov usuli"
+            showSearch
+            optionFilterProp="label"
+            options={payments.map((p) => ({
+              label: p.name,
+              value: p.id,
+            }))}
+          />
+        </Form.Item>
 
-          <Form.Item
-            label="To‘langan summa"
-            name="price"
-            style={{ flex: 1, minWidth: 200 }}
-            rules={[{ required: true, message: "To‘lov summasini kiriting" }]}
-          >
-            <InputNumber
-              placeholder="0"
-              style={{ width: "100%" }}
-              min={0}
-              step={1000}
-            />
-          </Form.Item>
+        <Form.Item
+          label="To‘langan summa"
+          name="price"
+          style={{ flex: 1, minWidth: 200 }}
+          rules={[{ required: true, message: "To‘lov summasini kiriting" }]}
+        >
+          <InputNumber
+            placeholder="0"
+            style={{ width: "100%" }}
+            min={0}
+            step={1000}
+          />
+        </Form.Item>
 
-          <Form.Item
-            label="To‘lov sanasi"
-            name="paidDate"
-            style={{ flex: 1, minWidth: 200 }}
-            rules={[{ required: true, message: "Sanani tanlang" }]}
-          >
-            <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
-          </Form.Item>
-        </div>
+        <Form.Item
+          label="To‘lov sanasi"
+          name="paidDate"
+          style={{ flex: 1, minWidth: 200 }}
+          rules={[{ required: true, message: "Sanani tanlang" }]}
+        >
+          <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
+        </Form.Item>
       </Form>
     </Drawer>
   );

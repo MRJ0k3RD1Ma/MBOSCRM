@@ -11,20 +11,20 @@ export class SaleProductService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createSaleProductDto: CreateSaleProductDto, creatorId: number) {
     const sale = await this.prisma.sale.findFirst({
-      where: { id: createSaleProductDto.sale_id },
+      where: { id: createSaleProductDto.saleId },
     });
     if (!sale) {
       throw new HttpError({
-        message: `Sale with ID ${createSaleProductDto.sale_id} not found`,
+        message: `Sale with ID ${createSaleProductDto.saleId} not found`,
       });
     }
     let productType = false;
     const product = await this.prisma.product.findFirst({
-      where: { id: createSaleProductDto.product_id },
+      where: { id: createSaleProductDto.productId },
     });
     if (!product) {
       throw new HttpError({
-        message: `Product with ID ${createSaleProductDto.product_id} not found`,
+        message: `Product with ID ${createSaleProductDto.productId} not found`,
       });
     }
     if (product.type === 'SUBSCRIPTION' || product.type === 'SERVICE') {
@@ -33,8 +33,8 @@ export class SaleProductService {
     const priceCount = createSaleProductDto.price * createSaleProductDto.count;
     const saleProduct = await this.prisma.saleProduct.create({
       data: {
-        saleId: createSaleProductDto.sale_id,
-        productId: createSaleProductDto.product_id,
+        saleId: createSaleProductDto.saleId,
+        productId: createSaleProductDto.productId,
         count: createSaleProductDto.count,
         price: createSaleProductDto.price,
         priceCount: priceCount,
@@ -103,25 +103,25 @@ export class SaleProductService {
       throw new HttpError({ message: `SaleProduct with ID ${id} not found` });
     }
 
-    if (updateSaleProductDto.sale_id) {
+    if (updateSaleProductDto.saleId) {
       const sale = await this.prisma.sale.findFirst({
-        where: { id: updateSaleProductDto.sale_id },
+        where: { id: updateSaleProductDto.saleId },
       });
       if (!sale) {
         throw new HttpError({
-          message: `Sale with ID ${updateSaleProductDto.sale_id} not found`,
+          message: `Sale with ID ${updateSaleProductDto.saleId} not found`,
         });
       }
     }
 
     let product = null;
-    if (updateSaleProductDto.product_id) {
+    if (updateSaleProductDto.productId) {
       product = await this.prisma.product.findFirst({
-        where: { id: updateSaleProductDto.product_id },
+        where: { id: updateSaleProductDto.productId },
       });
       if (!product) {
         throw new HttpError({
-          message: `Product with ID ${updateSaleProductDto.product_id} not found`,
+          message: `Product with ID ${updateSaleProductDto.productId} not found`,
         });
       }
     }
@@ -137,8 +137,8 @@ export class SaleProductService {
     return this.prisma.saleProduct.update({
       where: { id },
       data: {
-        saleId: updateSaleProductDto.sale_id ?? saleProduct.saleId,
-        productId: updateSaleProductDto.product_id ?? saleProduct.productId,
+        saleId: updateSaleProductDto.saleId ?? saleProduct.saleId,
+        productId: updateSaleProductDto.productId ?? saleProduct.productId,
         count: finalCount,
         price: finalPrice,
         priceCount: totalPriceCount,
