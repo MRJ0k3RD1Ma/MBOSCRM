@@ -18,7 +18,7 @@ export class SaleProductService {
         message: `Sale with ID ${createSaleProductDto.saleId} not found`,
       });
     }
-    let productType = false;
+
     const product = await this.prisma.product.findFirst({
       where: { id: createSaleProductDto.productId },
     });
@@ -27,22 +27,40 @@ export class SaleProductService {
         message: `Product with ID ${createSaleProductDto.productId} not found`,
       });
     }
-    if (product.type === 'SUBSCRIPTION' || product.type === 'SERVICE') {
-      productType = true;
+
+    if (product.countReminder < createSaleProductDto.count) {
+      throw new HttpError({
+        message: `Maxsulot soni yetarli emas`,
+      });
     }
+
+    const isSubscription =
+      product.type === 'SUBSCRIPTION' || product.type === 'SERVICE';
     const priceCount = createSaleProductDto.price * createSaleProductDto.count;
+
     const saleProduct = await this.prisma.saleProduct.create({
       data: {
         saleId: createSaleProductDto.saleId,
         productId: createSaleProductDto.productId,
         count: createSaleProductDto.count,
         price: createSaleProductDto.price,
-        priceCount: priceCount,
-        is_subscribe: productType,
+        priceCount,
+        is_subscribe: isSubscription,
         registerId: creatorId,
         modifyId: creatorId,
       },
     });
+
+    await this.prisma.product.update({
+      where: { id: product.id },
+      data: {
+        countReminder: {
+          decrement: createSaleProductDto.count,
+        },
+        modifyId: creatorId,
+      },
+    });
+
     return saleProduct;
   }
 
