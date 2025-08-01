@@ -70,12 +70,6 @@ export default function ProductsFilterModal({
               <Input placeholder="Masalan: 1234567890123" />
             </Form.Item>
           </Col>
-
-          <Col span={12}>
-            <Form.Item label="Shtrix ID" name="barcodeId">
-              <Input placeholder="Masalan: 1000001" />
-            </Form.Item>
-          </Col>
           <Col span={12}>
             <Form.Item label="Guruh ID" name="groupId">
               <Input placeholder="Masalan: 1" />

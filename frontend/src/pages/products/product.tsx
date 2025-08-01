@@ -8,6 +8,11 @@ import {
   type UpdateProductInput,
 } from "../../config/queries/products/products-querys";
 import ProductFormModal from "./ui/product-form-modal";
+import { useGetAllProductUnits } from "../../config/queries/products/product-unit-querys";
+import { useGetAllProductGroups } from "../../config/queries/products/product-gorup-querys";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 export default function Product() {
   const { id } = useParams();
@@ -15,6 +20,9 @@ export default function Product() {
   const productId = Number(id);
 
   const { data: product, isLoading } = useGetProductById(productId);
+  const { data: productUnitId } = useGetAllProductUnits();
+  const { data: productGroupId } = useGetAllProductGroups();
+
   const deleteProduct = useDeleteProduct();
   const updateProduct = useUpdateProduct();
 
@@ -30,7 +38,6 @@ export default function Product() {
   };
 
   const handleUpdate = (values: Omit<UpdateProductInput, "id">) => {
-    // id ni alohida pass qilamiz va values ichida yana bo'lishiga yo‘l qo‘ymaymiz
     updateProduct.mutate({ ...values, id: productId });
     setEditOpen(false);
   };
@@ -38,6 +45,8 @@ export default function Product() {
   if (isLoading || !product) {
     return <Spin size="large" />;
   }
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
 
   return (
     <Card
@@ -61,14 +70,13 @@ export default function Product() {
         <Descriptions.Item label="Shtrix kod">
           {product.barcode}
         </Descriptions.Item>
-        <Descriptions.Item label="Barcode ID">
-          {product.barcodeId}
+        <Descriptions.Item label="Product guruh">
+          {productGroupId?.data.find((p) => p.id === product.groupId)?.name ||
+            "-"}
         </Descriptions.Item>
-        <Descriptions.Item label="Guruh ID">
-          {product.groupId}
-        </Descriptions.Item>
-        <Descriptions.Item label="O‘lchov ID">
-          {product.unitId}
+        <Descriptions.Item label="Product birligi">
+          {productUnitId?.data.find((p) => p.id === product.unitId)?.name ||
+            "-"}
         </Descriptions.Item>
         <Descriptions.Item label="Kirim narxi">
           {product.priceIncome}
@@ -89,7 +97,9 @@ export default function Product() {
         </Descriptions.Item>
         <Descriptions.Item label="Yaratilgan sana">
           {product.createdAt
-            ? new Date(product.createdAt).toLocaleString()
+            ? dayjs(product.createdAt)
+                .tz("Asia/Tashkent")
+                .format("YYYY-MM-DD HH:mm:ss")
             : "Noma'lum"}
         </Descriptions.Item>
       </Descriptions>
