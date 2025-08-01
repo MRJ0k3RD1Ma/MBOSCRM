@@ -113,7 +113,6 @@ export default function ArrivedFormPage() {
       }
 
       drawerForm.resetFields();
-      setDrawerOpen(false);
     } catch (err) {
       message.error("Mahsulot kiritishda xatolik yuz berdi");
     }
@@ -177,53 +176,128 @@ export default function ArrivedFormPage() {
         <Title level={4}>
           {isEdit ? "Kirimni tahrirlash" : "Yangi kirim qo‘shish"}
         </Title>
-        <div className="flex justify-end items-center gap-2 ">
-          <Space>
-            <Button type="primary" htmlType="submit">
-              {isEdit ? "Yangilash" : "Saqlash"}
-            </Button>
-            {!isEdit && (
-              <Button
-                type="dashed"
-                onClick={() => setDrawerOpen(true)}
-                disabled={false}
-              >
-                Mahsulot qo‘shish
-              </Button>
-            )}
-          </Space>
+        <div>
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={() => form.submit()}
+          >
+            {isEdit ? "Yangilash" : "Saqlash"}
+          </Button>
         </div>
       </div>
+
       <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Form.Item name="date" label="Sana" rules={[{ required: true }]}>
-          <DatePicker format="YYYY-MM-DD" className="w-full" />
-        </Form.Item>
+        <div className="flex flex-wrap gap-4 w-full">
+          <Form.Item
+            name="date"
+            label="Sana"
+            rules={[{ required: true }]}
+            style={{ flex: 1 }}
+            className="min-w-[200px] grow !w-full"
+          >
+            <DatePicker
+              className="w-full"
+              placeholder="Sanani tanlang"
+              format="YYYY-MM-DD"
+            />
+          </Form.Item>
 
-        <Form.Item
-          name="waybillNumber"
-          label="Waybill raqami"
-          rules={[{ required: true }]}
+          <Form.Item
+            name="waybillNumber"
+            label="Waybill raqami"
+            rules={[{ required: true }]}
+            style={{ flex: 1 }}
+            className="min-w-[200px] grow !w-full"
+          >
+            <Input placeholder="Waybill raqamini yozing" className="w-full" />
+          </Form.Item>
+
+          <Form.Item
+            name="supplierId"
+            label="Ta'minotchi"
+            rules={[{ required: true }]}
+            style={{ flex: 1 }}
+            className="min-w-[200px] grow !w-full"
+          >
+            <Select
+              placeholder="Ta'minotchini tanlang"
+              showSearch
+              optionFilterProp="label"
+              className="w-full"
+            >
+              {suppliers?.data.map((s) => (
+                <Select.Option key={s.id} value={s.id} label={s.name}>
+                  {s.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="description"
+            label="Izoh"
+            style={{ flex: 2 }}
+            className="min-w-[200px] grow !w-full"
+          >
+            <Input.TextArea
+              rows={1}
+              placeholder="Izoh yozing"
+              className="w-full"
+              autoSize={{ minRows: 1, maxRows: 1 }}
+            />
+          </Form.Item>
+        </div>
+      </Form>
+
+      <Form form={drawerForm} layout="inline" onFinish={onDrawerFinish}>
+        <Space
+          style={{ display: "flex", width: "100%" }}
+          size="middle"
+          className="mb-4"
+          wrap
         >
-          <Input placeholder="Waybill raqamini yozing" />
-        </Form.Item>
+          <Form.Item
+            name="productId"
+            rules={[{ required: true, message: "Mahsulotni tanlang" }]}
+            style={{ flex: 2 }}
+          >
+            <Select
+              placeholder="Mahsulot"
+              showSearch
+              optionFilterProp="label"
+              className="w-full"
+            >
+              {productsList?.data.map((p) => (
+                <Select.Option key={p.id} value={p.id} label={p.name}>
+                  {p.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-        <Form.Item
-          name="supplierId"
-          label="Ta'minotchi"
-          rules={[{ required: true }]}
-        >
-          <Select placeholder="Tanlang" showSearch optionFilterProp="label">
-            {suppliers?.data.map((s) => (
-              <Select.Option key={s.id} value={s.id} label={s.name}>
-                {s.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+          <Form.Item
+            name="count"
+            rules={[{ required: true, message: "Soni kerak" }]}
+            style={{ flex: 1 }}
+          >
+            <InputNumber min={1} className="w-full" placeholder="Soni" />
+          </Form.Item>
 
-        <Form.Item name="description" label="Izoh">
-          <Input.TextArea rows={3} placeholder="Kirim haqidagi izohni yozing" />
-        </Form.Item>
+          <Form.Item
+            name="price"
+            rules={[{ required: true, message: "Narxi kerak" }]}
+            style={{ flex: 1 }}
+          >
+            <InputNumber min={0} className="w-full" placeholder="Narxi" />
+          </Form.Item>
+
+          <Form.Item style={{ flexShrink: 0 }}>
+            <Button htmlType="submit" type="primary">
+              +
+            </Button>
+          </Form.Item>
+        </Space>
       </Form>
 
       <Table
@@ -236,66 +310,6 @@ export default function ArrivedFormPage() {
         columns={columns}
         pagination={false}
       />
-
-      <Drawer
-        open={drawerOpen}
-        title="Mahsulot qo‘shish"
-        onClose={() => setDrawerOpen(false)}
-        width={400}
-        destroyOnClose
-      >
-        <Form layout="vertical" form={drawerForm} onFinish={onDrawerFinish}>
-          <Form.Item name="id" hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="productId"
-            label="Mahsulot"
-            rules={[{ required: true, message: "Mahsulotni tanlang" }]}
-          >
-            <Select
-              placeholder="Mahsulot tanlang"
-              showSearch
-              optionFilterProp="label"
-            >
-              {productsList?.data.map((p) => (
-                <Select.Option key={p.id} value={p.id} label={p.name}>
-                  {p.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="count"
-            label="Soni"
-            rules={[{ required: true, message: "Soni kerak" }]}
-          >
-            <InputNumber
-              min={1}
-              className="!w-full"
-              placeholder="Mahsulot sonini kiriting"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="price"
-            label="Narxi"
-            rules={[{ required: true, message: "Narxi kerak" }]}
-          >
-            <InputNumber
-              min={0}
-              className="!w-full"
-              placeholder="Mahsulot narxini kiriting"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Qo‘shish
-            </Button>
-          </Form.Item>
-        </Form>
-      </Drawer>
     </Card>
   );
 }
