@@ -1,49 +1,46 @@
 import {
+  Button,
+  Card,
+  DatePicker,
+  Drawer,
   Form,
   Input,
-  Select,
-  DatePicker,
-  Space,
-  Button,
   InputNumber,
-  Divider,
-  Row,
-  Col,
+  Select,
+  Space,
+  Table,
+  Typography,
   message,
-  Card,
 } from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { useGetAllSuppliers } from "../../../config/queries/supplier/supplier-querys";
+import { useGetAllProducts } from "../../../config/queries/products/products-querys";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  useGetAllSuppliers,
-  type Supplier,
-} from "../../../config/queries/supplier/supplier-querys";
-import {
-  useGetAllProducts,
-  type Product,
-} from "../../../config/queries/products/products-querys";
-import { useCreateArrivedProduct } from "../../../config/queries/arrived/arrived-product-querys";
 import {
   useCreateArrived,
   useGetArrivedById,
   useUpdateArrived,
+  type ArrivedProductInput,
 } from "../../../config/queries/arrived/arrived-qureys";
+
+const { Title } = Typography;
 
 export default function ArrivedFormPage() {
   const [form] = Form.useForm();
+  const [drawerForm] = Form.useForm();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
 
-  const { data: suppliers } = useGetAllSuppliers();
-  const { data: products } = useGetAllProducts();
+  const [products, setProducts] = useState<ArrivedProductInput[]>([]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const createArrived = useCreateArrived();
   const updateArrived = useUpdateArrived();
-  const createArrivedProduct = useCreateArrivedProduct();
   const { data: arrivedData } = useGetArrivedById(Number(id), isEdit);
+  const { data: suppliers } = useGetAllSuppliers();
+  const { data: productsList } = useGetAllProducts();
 
   useEffect(() => {
     if (arrivedData) {
@@ -55,185 +52,178 @@ export default function ArrivedFormPage() {
     }
   }, [arrivedData]);
 
-  const handleSubmit = async () => {
-    try {
-      const values = await form.validateFields();
-      const { products, ...rest } = values;
+  const onFinish = async (values: any) => {
+    const payload = {
+      ...values,
+      date: values.date.toISOString(),
+      products,
+    };
 
-      if (isEdit) {
-        updateArrived.mutate(
-          { id: Number(id), ...rest },
-          {
-            onSuccess: () => {
-              message.success("Kirim yangilandi");
-              navigate("/arriveds");
-            },
-          }
-        );
-      } else {
-        createArrived.mutate(rest, {
-          onSuccess: (res) => {
-            if (products?.length && res?.id) {
-              const payload = products.map((p: any) => ({
-                ...p,
-                arrivedId: res.id,
-              }));
-              payload.forEach((item: any) => createArrivedProduct.mutate(item));
-            }
-            message.success("Yangi kirim qo‘shildi");
-            navigate("/arrived");
+    if (isEdit) {
+      updateArrived.mutate(
+        { id: Number(id), ...payload },
+        {
+          onSuccess: () => {
+            message.success("Kirim yangilandi");
+            navigate("/arriveds");
           },
-        });
-      }
-    } catch (err) {
-      message.error("Iltimos, barcha maydonlarni to‘ldiring");
+        }
+      );
+    } else {
+      createArrived.mutate(payload, {
+        onSuccess: () => {
+          message.success("Yangi kirim qo‘shildi");
+          navigate("/arriveds");
+        },
+      });
     }
   };
 
+  const onDrawerFinish = async () => {
+    try {
+      const values = await drawerForm.validateFields();
+
+      setProducts((prev) => [
+        ...prev,
+        {
+          ...values,
+        },
+      ]);
+      drawerForm.resetFields();
+      setDrawerOpen(false);
+    } catch (err) {
+      message.error("Mahsulot kiritishda xatolik yuz berdi");
+    }
+  };
+
+  const columns = [
+    {
+      title: "Mahsulot",
+      dataIndex: "productId",
+      render: (id: number) =>
+        productsList?.data.find((p) => p.id === id)?.name || "Noma'lum",
+    },
+    {
+      title: "Soni",
+      dataIndex: "count",
+    },
+    {
+      title: "Narxi",
+      dataIndex: "price",
+    },
+    {
+      title: "Umumiy narxi",
+      dataIndex: "priceCount",
+    },
+  ];
+
   return (
     <Card>
-      <Form
-        layout="vertical"
-        form={form}
-        onFinish={handleSubmit}
-        style={{ padding: 24 }}
-      >
-        <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item
-              label="Ta'rif"
-              name="description"
-              rules={[{ required: true, message: "Ta'rif kiriting" }]}
-            >
-              <Input placeholder="Masalan: Avgust oyidagi kirim" />
-            </Form.Item>
+      <Title level={4}>
+        {isEdit ? "Kirimni tahrirlash" : "Yangi kirim qo‘shish"}
+      </Title>
 
-            <Form.Item
-              label="Sana"
-              name="date"
-              rules={[{ required: true, message: "Sanani tanlang" }]}
-            >
-              <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
-            </Form.Item>
+      <Form form={form} layout="vertical" onFinish={onFinish}>
+        <Form.Item name="date" label="Sana" rules={[{ required: true }]}>
+          <DatePicker format="YYYY-MM-DD" className="w-full" />
+        </Form.Item>
 
-            <Form.Item
-              label="Kod"
-              name="code"
-              rules={[{ required: true, message: "Kod kiriting" }]}
-            >
-              <Input placeholder="Masalan: ARR-001" disabled={isEdit} />
-            </Form.Item>
+        <Form.Item
+          name="waybillNumber"
+          label="Waybill raqami"
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
 
-            <Form.Item
-              label="Tovar hujjati"
-              name="waybillNumber"
-              rules={[{ required: true, message: "Tovar hujjatini kiriting" }]}
-            >
-              <Input placeholder="Masalan: WB123456" />
-            </Form.Item>
+        <Form.Item
+          name="supplierId"
+          label="Ta'minotchi"
+          rules={[{ required: true }]}
+        >
+          <Select placeholder="Tanlang">
+            {suppliers?.data.map((s) => (
+              <Select.Option key={s.id} value={s.id}>
+                {s.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
 
-            <Form.Item
-              label="Yetkazib beruvchi"
-              name="supplierId"
-              rules={[{ required: true, message: "Yetkazib beruvchi tanlang" }]}
-            >
-              <Select placeholder="Yetkazib beruvchi tanlang">
-                {suppliers?.data.map((s: Supplier) => (
-                  <Select.Option key={s.id} value={s.id}>
-                    {s.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
+        <Form.Item name="description" label="Izoh">
+          <Input.TextArea rows={3} />
+        </Form.Item>
 
-          <Col span={12}>
-            <Form.Item
-              label="Mahsulotlar"
-              name={"products"}
-              required
-              rules={[
-                {
-                  validator: async (_, products) => {
-                    if (!products || products.length === 0) {
-                      return Promise.reject(
-                        new Error("Kamida 1 ta mahsulot kiriting")
-                      );
-                    }
-                  },
-                },
-              ]}
-            >
-              <Form.List name="products">
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Space
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
-                      >
-                        <Form.Item
-                          {...restField}
-                          name={[name, "productId"]}
-                          rules={[
-                            { required: true, message: "Mahsulot tanlang" },
-                          ]}
-                        >
-                          <Select placeholder="Mahsulot">
-                            {products?.data.map((product: Product) => (
-                              <Select.Option
-                                key={product.id}
-                                value={product.id}
-                              >
-                                {product.name}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Form.Item>
-                        <Form.Item
-                          {...restField}
-                          name={[name, "count"]}
-                          rules={[{ required: true, message: "Soni kerak" }]}
-                        >
-                          <InputNumber placeholder="Soni" min={1} />
-                        </Form.Item>
-                        <Form.Item
-                          {...restField}
-                          name={[name, "price"]}
-                          rules={[{ required: true, message: "Narxi kerak" }]}
-                        >
-                          <InputNumber placeholder="Narxi" min={0} />
-                        </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
-                    ))}
-                    <Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        icon={<PlusOutlined />}
-                        block
-                      >
-                        Mahsulot qo‘shish
-                      </Button>
-                    </Form.Item>
-                  </>
-                )}
-              </Form.List>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Divider />
         <Form.Item>
           <Space>
             <Button type="primary" htmlType="submit">
-              Saqlash
+              {isEdit ? "Yangilash" : "Saqlash"}
             </Button>
-            <Button onClick={() => navigate("/arriveds")}>Bekor qilish</Button>
+            <Button
+              type="dashed"
+              onClick={() => setDrawerOpen(true)}
+              disabled={false}
+            >
+              Mahsulot qo‘shish
+            </Button>
           </Space>
         </Form.Item>
       </Form>
+
+      <Table
+        rowKey={(record) =>
+          `${record.productId}-${record.price}-${record.count}`
+        }
+        dataSource={products}
+        columns={columns}
+        pagination={false}
+      />
+
+      <Drawer
+        open={drawerOpen}
+        title="Mahsulot qo‘shish"
+        onClose={() => setDrawerOpen(false)}
+        width={400}
+        destroyOnClose
+      >
+        <Form layout="vertical" form={drawerForm} onFinish={onDrawerFinish}>
+          <Form.Item
+            name="productId"
+            label="Mahsulot"
+            rules={[{ required: true, message: "Mahsulotni tanlang" }]}
+          >
+            <Select placeholder="Mahsulot tanlang">
+              {productsList?.data.map((p) => (
+                <Select.Option key={p.id} value={p.id}>
+                  {p.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="count"
+            label="Soni"
+            rules={[{ required: true, message: "Soni kerak" }]}
+          >
+            <InputNumber min={1} className="w-full" />
+          </Form.Item>
+
+          <Form.Item
+            name="price"
+            label="Narxi"
+            rules={[{ required: true, message: "Narxi kerak" }]}
+          >
+            <InputNumber min={0} className="w-full" />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Qo‘shish
+            </Button>
+          </Form.Item>
+        </Form>
+      </Drawer>
     </Card>
   );
 }
