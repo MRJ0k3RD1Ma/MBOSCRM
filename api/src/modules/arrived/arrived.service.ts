@@ -38,7 +38,7 @@ export class ArrivedService {
       orderBy: { codeId: 'desc' },
     });
 
-    const codeId = (maxCode.codeId || 0) + 1;
+    const codeId = (maxCode?.codeId || 0) + 1;
 
     let arrived = await this.prisma.arrived.create({
       data: {
