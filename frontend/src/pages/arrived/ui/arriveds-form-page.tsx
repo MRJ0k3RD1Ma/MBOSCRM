@@ -23,6 +23,12 @@ import {
   useUpdateArrived,
   type ArrivedProductInput,
 } from "../../../config/queries/arrived/arrived-qureys";
+import {
+  useCreateArrivedProduct,
+  useDeleteArrivedProduct,
+  useGetAllArrivedProduct,
+  useUpdateArrivedProduct,
+} from "../../../config/queries/arrived/arrived-product-querys";
 
 const { Title } = Typography;
 
@@ -38,9 +44,17 @@ export default function ArrivedFormPage() {
 
   const createArrived = useCreateArrived();
   const updateArrived = useUpdateArrived();
+  const createArrivedProduct = useCreateArrivedProduct();
+  const updateArrivedProduct = useUpdateArrivedProduct();
+  const deleteArrivedProduct = useDeleteArrivedProduct();
   const { data: arrivedData } = useGetArrivedById(Number(id), isEdit);
   const { data: suppliers } = useGetAllSuppliers();
   const { data: productsList } = useGetAllProducts();
+  const { data: arrivedProductsData } = useGetAllArrivedProduct({
+    arrivedId: isEdit ? Number(id) : undefined,
+  });
+
+  const productDataSource = isEdit ? arrivedProductsData?.data || [] : products;
 
   useEffect(() => {
     if (arrivedData) {
@@ -81,14 +95,23 @@ export default function ArrivedFormPage() {
 
   const onDrawerFinish = async () => {
     try {
-      const values = await drawerForm.validateFields();
+      const values: any = await drawerForm.validateFields();
 
-      setProducts((prev) => [
-        ...prev,
-        {
+      if (isEdit && values.id) {
+        updateArrivedProduct.mutate({
+          id: values.id,
+          price: values.price,
+          count: values.count,
+        });
+      } else if (isEdit && id) {
+        createArrivedProduct.mutate({
           ...values,
-        },
-      ]);
+          arrivedId: Number(id),
+        });
+      } else {
+        setProducts((prev) => [...prev, { ...values }]);
+      }
+
       drawerForm.resetFields();
       setDrawerOpen(false);
     } catch (err) {
@@ -115,6 +138,37 @@ export default function ArrivedFormPage() {
       title: "Umumiy narxi",
       dataIndex: "priceCount",
     },
+    {
+      title: "Amallar",
+      render: (_: any, record: any) => (
+        <Space>
+          <Button
+            size="small"
+            onClick={() => {
+              drawerForm.setFieldsValue(record);
+              setDrawerOpen(true);
+            }}
+          >
+            Tahrirlash
+          </Button>
+          <Button
+            danger
+            size="small"
+            onClick={() => {
+              if (isEdit) {
+                deleteArrivedProduct.mutate(record.id);
+              } else {
+                setProducts((prev) =>
+                  prev.filter((item) => item.productId !== record.productId)
+                );
+              }
+            }}
+          >
+            O‘chirish
+          </Button>
+        </Space>
+      ),
+    },
   ];
 
   return (
@@ -133,7 +187,7 @@ export default function ArrivedFormPage() {
           label="Waybill raqami"
           rules={[{ required: true }]}
         >
-          <Input />
+          <Input placeholder="Waybill raqamini yozing" />
         </Form.Item>
 
         <Form.Item
@@ -151,7 +205,7 @@ export default function ArrivedFormPage() {
         </Form.Item>
 
         <Form.Item name="description" label="Izoh">
-          <Input.TextArea rows={3} />
+          <Input.TextArea rows={3} placeholder="Kirim haqidagi izohni yozing" />
         </Form.Item>
 
         <Form.Item>
@@ -171,10 +225,12 @@ export default function ArrivedFormPage() {
       </Form>
 
       <Table
-        rowKey={(record) =>
-          `${record.productId}-${record.price}-${record.count}`
+        rowKey={(record: any) =>
+          isEdit
+            ? record.id
+            : `${record.productId}-${record.price}-${record.count}`
         }
-        dataSource={products}
+        dataSource={productDataSource}
         columns={columns}
         pagination={false}
       />
@@ -187,6 +243,9 @@ export default function ArrivedFormPage() {
         destroyOnClose
       >
         <Form layout="vertical" form={drawerForm} onFinish={onDrawerFinish}>
+          <Form.Item name="id" hidden>
+            <Input />
+          </Form.Item>
           <Form.Item
             name="productId"
             label="Mahsulot"
@@ -206,7 +265,11 @@ export default function ArrivedFormPage() {
             label="Soni"
             rules={[{ required: true, message: "Soni kerak" }]}
           >
-            <InputNumber min={1} className="w-full" />
+            <InputNumber
+              min={1}
+              className="!w-full"
+              placeholder="Mahsulot sonini kiriting"
+            />
           </Form.Item>
 
           <Form.Item
@@ -214,9 +277,12 @@ export default function ArrivedFormPage() {
             label="Narxi"
             rules={[{ required: true, message: "Narxi kerak" }]}
           >
-            <InputNumber min={0} className="w-full" />
+            <InputNumber
+              min={0}
+              className="!w-full"
+              placeholder="Mahsulot narxini kiriting"
+            />
           </Form.Item>
-
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
               Qo‘shish
