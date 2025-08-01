@@ -38,8 +38,6 @@ export class ClientService {
         throw HttpError({ code: 'Region not found' });
       }
     }
-    
-    
 
     let type: ClientType;
     if (createClientDto.typeId) {
@@ -50,8 +48,6 @@ export class ClientService {
         throw HttpError({ code: 'type Not Found' });
       }
     }
-
-
 
     const client = await this.prisma.client.create({
       data: {

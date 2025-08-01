@@ -5,20 +5,18 @@ import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllArrivedQueryDto } from './dto/findAll-arrived-query.dto';
 import { Prisma } from '@prisma/client';
+import { ArrivedProductService } from '../arrived-product/arrived-product.service';
 
 @Injectable()
 export class ArrivedService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly arrivedProductService: ArrivedProductService,
+  ) {}
+
   async create(createArrivedDto: CreateArrivedDto, creatorId: number) {
-    const {
-      date,
-      code,
-      codeId,
-      waybillNumber,
-      supplierId,
-      description,
-      price,
-    } = createArrivedDto;
+    const { date, waybillNumber, supplierId, description, products } =
+      createArrivedDto;
 
     const existingSupplier = await this.prisma.supplier.findUnique({
       where: { id: supplierId },
@@ -30,18 +28,46 @@ export class ArrivedService {
       });
     }
 
-    const arrived = await this.prisma.arrived.create({
+    const maxCode = await this.prisma.arrived.findFirst({
+      where: {
+        created: {
+          lt: new Date(new Date().getFullYear(), 11),
+          gt: new Date(new Date().getFullYear(), 0),
+        },
+      },
+      orderBy: { codeId: 'desc' },
+    });
+
+    const codeId = (maxCode.codeId || 0) + 1;
+
+    let arrived = await this.prisma.arrived.create({
       data: {
         date,
-        code,
+        code: `${new Date().getFullYear()}-${codeId}`,
         codeId,
         waybillNumber,
         supplierId,
         description,
-        price,
         registerId: creatorId,
         modifyId: creatorId,
       },
+    });
+
+    let totalPrice = 0;
+    for (const product of products) {
+      const arrivedProduct = await this.arrivedProductService.create({
+        arrivedId: arrived.id,
+        count: product.count,
+        price: product.price,
+        productId: product.productId,
+      });
+      totalPrice += arrivedProduct.priceCount;
+    }
+
+    arrived = await this.prisma.arrived.update({
+      where: { id: arrived.id },
+      data: { price: totalPrice },
+      include: { ArrivedProduct: { include: { Product: true } } },
     });
 
     return arrived;
@@ -88,6 +114,7 @@ export class ArrivedService {
         where,
         skip: (page - 1) * limit,
         take: limit,
+        include: { ArrivedProduct: true },
         orderBy: {
           date: 'desc',
         },
@@ -109,6 +136,7 @@ export class ArrivedService {
         id,
         isDeleted: false,
       },
+      include: { ArrivedProduct: true },
     });
     if (!arrived) {
       throw new HttpError({

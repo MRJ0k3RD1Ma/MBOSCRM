@@ -11,7 +11,6 @@ import {
 } from "antd";
 
 import { PlusOutlined, MoreOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
 import PaymentFormModal from "./ui/payment-form-modal";
 import {
   useCreatePayment,
@@ -22,7 +21,6 @@ import {
 } from "../../config/queries/payment/payment-querys";
 
 export default function Payments() {
-  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [editing, setEditing] = useState<Payment | null>(null);
   const [open, setOpen] = useState(false);

@@ -97,6 +97,11 @@ const pages = [
     label: "To'lov Turi",
     icon: <DollarCircleOutlined />,
   },
+  {
+    key: "/arriveds",
+    label: "Kelib tushgan mahsulotlar",
+    icon: <HomeOutlined />,
+  },
 ];
 
 export default function AppLayout() {
@@ -195,6 +200,9 @@ export default function AppLayout() {
         <div
           style={{
             padding: 16,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
             textAlign: "center",
             color: "#fff",
             fontWeight: "bold",

@@ -104,7 +104,6 @@ export class SupplierService {
     return updatedSupplier;
   }
 
-
   async remove(id: number) {
     const supplier = await this.prisma.supplier.findFirst({
       where: { id: id },

@@ -24,9 +24,9 @@ export class ClientController {
 
   @Post()
   @DecoratorWrapper('create Client', true, [Role.Admin])
-  create(@Body() createClientDto: CreateClientDto,@Req() req: Request) {
+  create(@Body() createClientDto: CreateClientDto, @Req() req: Request) {
     const creatorId = req.user.id;
-    return this.clientService.create(createClientDto,creatorId);
+    return this.clientService.create(createClientDto, creatorId);
   }
 
   @Get()
@@ -46,10 +46,10 @@ export class ClientController {
   update(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateClientDto: UpdateClientDto,
-    @Req() req: Request
+    @Req() req: Request,
   ) {
     const creatorId = req.user.id;
-    return this.clientService.update(+id, updateClientDto,creatorId);
+    return this.clientService.update(+id, updateClientDto, creatorId);
   }
 
   @Delete(':id')

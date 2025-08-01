@@ -27,7 +27,7 @@ export class ProductController {
   @DecoratorWrapper('Create product', true, [Role.Admin])
   create(@Body() createProductDto: CreateProductDto, @Req() req: Request) {
     const creatorId = req.user.id;
-    return this.productService.create(createProductDto,creatorId);
+    return this.productService.create(createProductDto, creatorId);
   }
 
   @Get()

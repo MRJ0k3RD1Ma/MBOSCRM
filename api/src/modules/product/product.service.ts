@@ -167,7 +167,7 @@ export class ProductService {
       }
     }
 
-    if (dto.barcode !== undefined) {
+    if (dto.barcode !== undefined && dto.barcode !== existingProduct.barcode) {
       const existingWithBarcode = await this.prisma.product.findFirst({
         where: {
           barcode: dto.barcode,

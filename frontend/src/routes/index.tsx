@@ -16,6 +16,9 @@ import Suppliers from "../pages/suppler/suppliers";
 import Supplier from "../pages/suppler/supplier";
 import PaidSuppliers from "../pages/suppler/paid-supplier";
 import Payments from "../pages/payment/payment";
+import Arriveds from "../pages/arrived/arriveds";
+import Arrived from "../pages/arrived/arrived";
+import ArrivedFormPage from "../pages/arrived/ui/arriveds-form-page";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -86,6 +89,22 @@ export const router = createBrowserRouter([
           {
             path: "payment",
             element: <Payments />,
+          },
+          {
+            path: "arriveds",
+            element: <Arriveds />,
+          },
+          {
+            path: "arrived/create",
+            element: <ArrivedFormPage />,
+          },
+          {
+            path: "arrived/edit/:id",
+            element: <ArrivedFormPage />,
+          },
+          {
+            path: "arrived/:id",
+            element: <Arrived />,
           },
           {
             path: "*",

@@ -72,20 +72,24 @@ export default function ProductsPage() {
   const columns = [
     { title: "Nomi", dataIndex: "name", key: "name" },
     { title: "Shtrix kodi", dataIndex: "barcode", key: "barcode" },
-    { title: "Shtrix ID", dataIndex: "barcodeId", key: "barcodeId" },
-    { title: "Guruh ID", dataIndex: "groupId", key: "groupId" },
-    { title: "Birlik ID", dataIndex: "unitId", key: "unitId" },
-    { title: "Kelgan narx", dataIndex: "priceIncome", key: "priceIncome" },
     {
-      title: "Dastlabki qoldiq",
-      dataIndex: "reminderFirst",
-      key: "reminderFirst",
+      title: "Guruh ID",
+      dataIndex: "groupId",
+      key: "groupId",
+      render: (groupId: number) =>
+        groupData?.data.find((g) => g.id === groupId)?.name || "–",
+    },
+    {
+      title: "Qoldiq",
+      key: "reminder",
+      render: (_: any, row: Product) => {
+        const unitName =
+          unitsData?.data.find((u) => u.id === row.unitId)?.name || "";
+        return `${row.reminderFirst} , ${unitName}`;
+      },
     },
     { title: "Sotuv narxi", dataIndex: "price", key: "price" },
     { title: "Turi", dataIndex: "type", key: "type" },
-    { title: "Qoldiq", dataIndex: "countReminder", key: "countReminder" },
-    { title: "Kelgan soni", dataIndex: "countArrived", key: "countArrived" },
-    { title: "Sotilgan soni", dataIndex: "countSale", key: "countSale" },
     {
       title: "Amallar",
       key: "actions",
