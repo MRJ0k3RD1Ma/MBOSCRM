@@ -5,13 +5,17 @@ import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
 import { Prisma } from '@prisma/client';
+import { SaleProductService } from '../sale-product/sale-product.service';
 
 @Injectable()
 export class SaleService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly saleProductService: SaleProductService,
+  ) {}
 
   async create(createSaleDto: CreateSaleDto, creatorId: number) {
-    const { date, clientId, credit } = createSaleDto;
+    const { date, clientId, credit, products } = createSaleDto;
 
     const client = await this.prisma.supplier.findUnique({
       where: { id: clientId },
@@ -47,23 +51,25 @@ export class SaleService {
       },
     });
 
-    //TO-DO integration with sale product
-    //let totalPrice = 0;
-    //for (const product of products) {
-    //  const saleProduct = await this.saleProductService.create({
-    //    saleId: sale.id,
-    //    count: product.count,
-    //    price: product.price,
-    //    productId: product.productId,
-    //  });
-    //  totalPrice += saleProduct.priceCount;
-    //}
-    //
-    //sale = await this.prisma.sale.update({
-    //  where: { id: sale.id },
-    //  data: { price: totalPrice },
-    //  include: { SaleProduct: { include: { Product: true } } },
-    //});
+    let totalPrice = 0;
+    for (const product of products) {
+      const saleProduct = await this.saleProductService.create(
+        {
+          saleId: sale.id,
+          count: product.count,
+          price: product.price,
+          productId: product.productId,
+        },
+        creatorId,
+      );
+      totalPrice += saleProduct.priceCount;
+    }
+
+    sale = await this.prisma.sale.update({
+      where: { id: sale.id },
+      data: { price: totalPrice, dept: totalPrice - sale.credit },
+      include: { SaleProduct: { include: { product: true } } },
+    });
 
     return sale;
   }
@@ -105,12 +111,14 @@ export class SaleService {
       };
     }
 
-    //TO-DO don't forget include
     const [data, total] = await this.prisma.$transaction([
       this.prisma.sale.findMany({
         where,
         skip: (page - 1) * limit,
         take: limit,
+        include: {
+          SaleProduct: true,
+        },
         orderBy: {
           date: 'desc',
         },
@@ -132,6 +140,7 @@ export class SaleService {
         id,
         isDeleted: false,
       },
+      include: { SaleProduct: true },
     });
     if (!sale) {
       throw new HttpError({
@@ -157,6 +166,8 @@ export class SaleService {
       where: { id },
       data: {
         date: updateSaleDto.date ?? sale.date,
+        credit: updateSaleDto.credit ?? sale.credit,
+        dept: sale.price - (updateSaleDto.credit || sale.credit),
       },
     });
   }
