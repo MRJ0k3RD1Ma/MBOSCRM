@@ -17,7 +17,7 @@ export class SaleService {
   async create(createSaleDto: CreateSaleDto, creatorId: number) {
     const { date, clientId, credit, products } = createSaleDto;
 
-    const client = await this.prisma.supplier.findUnique({
+    const client = await this.prisma.client.findUnique({
       where: { id: clientId },
     });
 
@@ -44,7 +44,7 @@ export class SaleService {
         date,
         code: `${new Date().getFullYear()}-${codeId}`,
         codeId,
-        clientId,
+        client: { connect: client },
         credit,
         registerId: creatorId,
         modifyId: creatorId,
