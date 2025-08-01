@@ -15,6 +15,7 @@ import { PaymentModule } from './modules/payment/payment.module';
 import { ArrivedModule } from './modules/arrived/arrived.module';
 import { SaleProductModule } from './modules/sale-product/sale-product.module';
 import { ArrivedProductModule } from './modules/arrived-product/arrived-product.module';
+import { SaleModule } from './modules/sale/sale.module';
 
 @Module({
   controllers: [],
@@ -36,6 +37,7 @@ import { ArrivedProductModule } from './modules/arrived-product/arrived-product.
     PaidSupplierModule,
     PaymentModule,
     ArrivedModule,
+    SaleModule,
     SaleProductModule,
     ArrivedProductModule,
   ],
