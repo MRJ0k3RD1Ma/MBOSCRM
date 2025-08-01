@@ -125,3 +125,21 @@ export const arrivedProductEndpoints = {
   update: (id: string) => `arrived-product/${id}`,
   delete: (id: string) => `arrived-product/${id}`,
 };
+
+// ===================== SALE ENDPOINTS =====================
+export const saleEndpoints = {
+  create: "sale",
+  all: "sale",
+  one: (id: string) => `sale/${id}`,
+  update: (id: string) => `sale/${id}`,
+  delete: (id: string) => `sale/${id}`,
+};
+
+// ===================== SALE PRODUCT ENDPOINTS =====================
+export const saleProductEndpoints = {
+  create: "sale-product",
+  all: "sale-product",
+  one: (id: string) => `sale-product/${id}`,
+  update: (id: string) => `sale-product/${id}`,
+  delete: (id: string) => `sale-product/${id}`,
+};
