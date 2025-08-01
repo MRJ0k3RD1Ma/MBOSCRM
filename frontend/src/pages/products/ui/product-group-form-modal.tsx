@@ -38,7 +38,6 @@ export default function ProductGroupFormModal({
       onClose();
       form.resetFields();
     } catch {
-      // Error handled in query
     }
   };
 

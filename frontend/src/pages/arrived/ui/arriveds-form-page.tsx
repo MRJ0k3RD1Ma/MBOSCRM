@@ -173,10 +173,27 @@ export default function ArrivedFormPage() {
 
   return (
     <Card>
-      <Title level={4}>
-        {isEdit ? "Kirimni tahrirlash" : "Yangi kirim qo‘shish"}
-      </Title>
-
+      <div className="w-full flex justify-between items-center mb-4">
+        <Title level={4}>
+          {isEdit ? "Kirimni tahrirlash" : "Yangi kirim qo‘shish"}
+        </Title>
+        <div className="flex justify-end items-center gap-2 ">
+          <Space>
+            <Button type="primary" htmlType="submit">
+              {isEdit ? "Yangilash" : "Saqlash"}
+            </Button>
+            {!isEdit && (
+              <Button
+                type="dashed"
+                onClick={() => setDrawerOpen(true)}
+                disabled={false}
+              >
+                Mahsulot qo‘shish
+              </Button>
+            )}
+          </Space>
+        </div>
+      </div>
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item name="date" label="Sana" rules={[{ required: true }]}>
           <DatePicker format="YYYY-MM-DD" className="w-full" />
@@ -195,9 +212,9 @@ export default function ArrivedFormPage() {
           label="Ta'minotchi"
           rules={[{ required: true }]}
         >
-          <Select placeholder="Tanlang">
+          <Select placeholder="Tanlang" showSearch optionFilterProp="label">
             {suppliers?.data.map((s) => (
-              <Select.Option key={s.id} value={s.id}>
+              <Select.Option key={s.id} value={s.id} label={s.name}>
                 {s.name}
               </Select.Option>
             ))}
@@ -206,21 +223,6 @@ export default function ArrivedFormPage() {
 
         <Form.Item name="description" label="Izoh">
           <Input.TextArea rows={3} placeholder="Kirim haqidagi izohni yozing" />
-        </Form.Item>
-
-        <Form.Item>
-          <Space>
-            <Button type="primary" htmlType="submit">
-              {isEdit ? "Yangilash" : "Saqlash"}
-            </Button>
-            <Button
-              type="dashed"
-              onClick={() => setDrawerOpen(true)}
-              disabled={false}
-            >
-              Mahsulot qo‘shish
-            </Button>
-          </Space>
         </Form.Item>
       </Form>
 
@@ -251,9 +253,13 @@ export default function ArrivedFormPage() {
             label="Mahsulot"
             rules={[{ required: true, message: "Mahsulotni tanlang" }]}
           >
-            <Select placeholder="Mahsulot tanlang">
+            <Select
+              placeholder="Mahsulot tanlang"
+              showSearch
+              optionFilterProp="label"
+            >
               {productsList?.data.map((p) => (
-                <Select.Option key={p.id} value={p.id}>
+                <Select.Option key={p.id} value={p.id} label={p.name}>
                   {p.name}
                 </Select.Option>
               ))}

@@ -84,11 +84,15 @@ export default function ClientModal({
         >
           <Select
             placeholder="Client turini tanlang"
-            options={(types ?? []).map((t) => ({
-              value: t.id,
-              label: t.name,
-            }))}
-          />
+            showSearch
+            optionFilterProp="label"
+          >
+            {(types ?? []).map((type) => (
+              <Select.Option key={type.id} value={type.id} label={type.name}>
+                {type.name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item name="description" label="Izoh">

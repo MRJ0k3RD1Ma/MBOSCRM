@@ -49,11 +49,7 @@ export default function BreadcrumbNav() {
     </Breadcrumb.Item>,
     ...pathSnippets.map((_, index) => {
       const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
-      const name =
-        nameMap[pathSnippets[index]] ||
-        (!isNaN(Number(pathSnippets[index]))
-          ? "Tafsilot"
-          : pathSnippets[index]);
+      const name = nameMap[pathSnippets[index]] || pathSnippets[index];
       return (
         <Breadcrumb.Item key={url}>
           <Link to={url}>{name}</Link>
