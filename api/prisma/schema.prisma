@@ -88,6 +88,7 @@ model Product {
   User_Product_creatorId User?            @relation("Product_creatorId", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ProductUnit            ProductUnit?     @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ArrivedProduct         ArrivedProduct[]
+  SaleProduct            SaleProduct[]
 
   @@index([groupId], map: "FK_product_group_id")
   @@index([modifyId], map: "FK_product_modify_id")
@@ -248,21 +249,44 @@ model Supplier {
 }
 
 model Sale {
-  id         Int       @id @default(autoincrement())
-  date       DateTime? @db.Date
-  code       String?   @db.VarChar(255)
-  codeId     Int?      @default(1)
-  client     Client    @relation(fields: [clientId], references: [id])
-  clientId   Int       @default(1) @map("client_id")
-  price      Float     @default(0)
-  dept       Float     @default(0)
-  credit     Float     @default(0)
-  state      SaleState @default(CLOSED)
-  isDeleted  Boolean?  @default(false)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now()) @updatedAt
-  registerId Int?
-  modifyId   Int?
+  id          Int           @id @default(autoincrement())
+  date        DateTime?     @db.Date
+  code        String?       @db.VarChar(255)
+  codeId      Int?          @default(1)
+  client      Client        @relation(fields: [clientId], references: [id])
+  clientId    Int           @default(1) @map("client_id")
+  price       Float         @default(0)
+  dept        Float         @default(0)
+  credit      Float         @default(0)
+  state       SaleState     @default(CLOSED)
+  isDeleted   Boolean?      @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+  registerId  Int?
+  modifyId    Int?
+  SaleProduct SaleProduct[]
+}
+
+model SaleProduct {
+  id           Int       @id @default(autoincrement())
+  saleId       Int?
+  sale         Sale?     @relation(fields: [saleId], references: [id])
+  productId    Int?
+  product      Product?  @relation(fields: [productId], references: [id])
+  price        Float?
+  count        Float?
+  priceCount   Float?
+  is_subscribe Boolean?  @default(false)
+  registerId   Int?
+  modifyId     Int?
+  isDeleted    Boolean?  @default(false)
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @updatedAt
+
+  @@index([saleId])
+  @@index([productId])
+  @@index([registerId])
+  @@index([modifyId])
 }
 
 model Payment {

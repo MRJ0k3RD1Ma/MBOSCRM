@@ -1,34 +1,63 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+  Query,
+} from '@nestjs/common';
 import { SaleProductService } from './sale-product.service';
 import { CreateSaleProductDto } from './dto/create-sale-product.dto';
 import { UpdateSaleProductDto } from './dto/update-sale-product.dto';
+import { Request } from 'express';
+import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
+import { Role } from 'src/common/auth/roles/role.enum';
+import { FindAllSaleProductQueryDto } from './dto/findAll-sale-product-query.dto';
 
 @Controller('sale-product')
 export class SaleProductController {
   constructor(private readonly saleProductService: SaleProductService) {}
 
   @Post()
-  create(@Body() createSaleProductDto: CreateSaleProductDto) {
-    return this.saleProductService.create(createSaleProductDto);
+  @DecoratorWrapper('create SaleProduct', true, [Role.Admin])
+  create(
+    @Body() createSaleProductDto: CreateSaleProductDto,
+    @Req() req: Request,
+  ) {
+    const creatorId = req.user.id;
+    return this.saleProductService.create(createSaleProductDto, creatorId);
   }
 
   @Get()
-  findAll() {
-    return this.saleProductService.findAll();
+  @DecoratorWrapper('findAll SaleProduct', true, [Role.Admin])
+  findAll(@Query() dto: FindAllSaleProductQueryDto) {
+    return this.saleProductService.findAll(dto);
   }
 
   @Get(':id')
+  @DecoratorWrapper('findOne SaleProduct', true, [Role.Admin])
   findOne(@Param('id') id: string) {
     return this.saleProductService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSaleProductDto: UpdateSaleProductDto) {
-    return this.saleProductService.update(+id, updateSaleProductDto);
+  @DecoratorWrapper('update SaleProduct', true, [Role.Admin])
+  update(
+    @Param('id') id: string,
+    @Body() updateSaleProductDto: UpdateSaleProductDto,
+    @Req() req: Request,
+  ) {
+    const modifyId = req.user.id;
+    return this.saleProductService.update(+id, updateSaleProductDto, modifyId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.saleProductService.remove(+id);
+  @DecoratorWrapper('remove SaleProduct', true, [Role.Admin])
+  remove(@Param('id') id: string, @Req() req: Request) {
+    const modifyId = req.user.id;
+    return this.saleProductService.remove(+id, modifyId);
   }
 }
