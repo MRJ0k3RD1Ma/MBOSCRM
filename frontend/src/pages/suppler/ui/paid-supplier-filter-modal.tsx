@@ -1,5 +1,7 @@
-import { Modal, Form, DatePicker, Select } from "antd";
+import { Button, Col, DatePicker, Form, Row, Select } from "antd";
 import dayjs from "dayjs";
+import { useEffect } from "react";
+import useToken from "antd/es/theme/useToken";
 
 type Props = {
   open: boolean;
@@ -10,7 +12,7 @@ type Props = {
   payments: { id: number; name: string }[];
 };
 
-export default function PaidSupplierFilterModal({
+export default function PaidSupplierFilterUI({
   open,
   onClose,
   onApply,
@@ -19,8 +21,21 @@ export default function PaidSupplierFilterModal({
   payments,
 }: Props) {
   const [form] = Form.useForm();
+  const [, token] = useToken();
 
-  const handleOk = () => {
+  useEffect(() => {
+    form.setFieldsValue({
+      ...initialValues,
+      minPaidDate: initialValues.minPaidDate
+        ? dayjs(initialValues.minPaidDate)
+        : null,
+      maxPaidDate: initialValues.maxPaidDate
+        ? dayjs(initialValues.maxPaidDate)
+        : null,
+    });
+  }, [initialValues]);
+
+  const handleApply = () => {
     form.validateFields().then((values) => {
       const filters = {
         ...values,
@@ -42,58 +57,73 @@ export default function PaidSupplierFilterModal({
     onClose();
   };
 
+  if (!open) return null;
+
   return (
-    <Modal
-      title="To‘lovlar uchun filter"
-      open={open}
-      onOk={handleOk}
-      onCancel={handleClear}
-      okText="Qo‘llash"
-      cancelText="Tozalash"
+    <div
+      style={{
+        backgroundColor: token.colorBgContainer,
+        color: token.colorText,
+        padding: 16,
+        borderRadius: 8,
+        marginBottom: 16,
+        boxShadow: token.boxShadowSecondary,
+        border: `1px solid ${token.colorBorderSecondary}`,
+      }}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        initialValues={{
-          ...initialValues,
-          minPaidDate: initialValues.minPaidDate
-            ? dayjs(initialValues.minPaidDate)
-            : null,
-          maxPaidDate: initialValues.maxPaidDate
-            ? dayjs(initialValues.maxPaidDate)
-            : null,
-        }}
-      >
-        <Form.Item label="Yetkazib beruvchi" name="supplierId">
-          <Select
-            placeholder="Tanlang"
-            allowClear
-            options={suppliers.map((s) => ({
-              label: s.name,
-              value: s.id,
-            }))}
-          />
-        </Form.Item>
+      <Form form={form} layout="vertical">
+        <Row gutter={16}>
+          <Col span={6}>
+            <Form.Item label="Yetkazib beruvchi" name="supplierId">
+              <Select
+                placeholder="Tanlang"
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                options={suppliers.map((s) => ({
+                  label: s.name,
+                  value: s.id,
+                }))}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item label="To‘lov turi" name="paymentId">
+              <Select
+                placeholder="Tanlang"
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                options={payments.map((p) => ({
+                  label: p.name,
+                  value: p.id,
+                }))}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item label="Minimal to‘lov sanasi" name="minPaidDate">
+              <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item label="Maksimal to‘lov sanasi" name="maxPaidDate">
+              <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Form.Item label="To‘lov turi" name="paymentId">
-          <Select
-            placeholder="Tanlang"
-            allowClear
-            options={payments.map((p) => ({
-              label: p.name,
-              value: p.id,
-            }))}
-          />
-        </Form.Item>
-
-        <Form.Item label="Minimal to‘lov sanasi" name="minPaidDate">
-          <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
-        </Form.Item>
-
-        <Form.Item label="Maksimal to‘lov sanasi" name="maxPaidDate">
-          <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
-        </Form.Item>
+        <Row justify="end" gutter={12}>
+          <Col>
+            <Button onClick={handleClear}>Tozalash</Button>
+          </Col>
+          <Col>
+            <Button type="primary" onClick={handleApply}>
+              Qo‘llash
+            </Button>
+          </Col>
+        </Row>
       </Form>
-    </Modal>
+    </div>
   );
 }

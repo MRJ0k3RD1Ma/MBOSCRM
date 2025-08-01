@@ -1,4 +1,6 @@
-import { Modal, Form, Input } from "antd";
+import { Form, Input, Button,  Row, Col } from "antd";
+import { useToken } from "antd/es/theme/internal";
+import { useEffect } from "react";
 
 type Props = {
   open: boolean;
@@ -14,6 +16,13 @@ export default function SuppliersFilterModal({
   initialValues,
 }: Props) {
   const [form] = Form.useForm();
+  const [, token] = useToken();
+
+  useEffect(() => {
+    if (open) {
+      form.setFieldsValue(initialValues);
+    }
+  }, [open]);
 
   const handleOk = () => {
     form.validateFields().then((values) => {
@@ -28,14 +37,19 @@ export default function SuppliersFilterModal({
     onClose();
   };
 
+  if (!open) return null;
+
   return (
-    <Modal
-      title="Yetkazib beruvchi filteri"
-      open={open}
-      onOk={handleOk}
-      onCancel={handleClear}
-      okText="Qo‘llash"
-      cancelText="Tozalash"
+    <div
+      style={{
+        backgroundColor: token.colorBgContainer,
+        color: token.colorText,
+        padding: 16,
+        borderRadius: 8,
+        marginBottom: 16,
+        boxShadow: token.boxShadowSecondary,
+        border: `1px solid ${token.colorBorderSecondary}`,
+      }}
     >
       <Form form={form} layout="vertical" initialValues={initialValues}>
         <Form.Item label="Nomi" name="name">
@@ -47,7 +61,18 @@ export default function SuppliersFilterModal({
         <Form.Item label="Telefon" name="phone">
           <Input placeholder="Telefon raqami" allowClear />
         </Form.Item>
+
+        <Row justify="end" gutter={12}>
+          <Col>
+            <Button onClick={handleClear}>Tozalash</Button>
+          </Col>
+          <Col>
+            <Button type="primary" onClick={handleOk}>
+              Qo‘llash
+            </Button>
+          </Col>
+        </Row>
       </Form>
-    </Modal>
+    </div>
   );
 }

@@ -151,7 +151,7 @@ export default function ProductsPage() {
           />
           <Button
             icon={<FilterOutlined />}
-            onClick={() => setFilterModalOpen(true)}
+            onClick={() => setFilterModalOpen(!filterModalOpen)}
           >
             Filter
           </Button>
@@ -169,7 +169,15 @@ export default function ProductsPage() {
           Yangi mahsulot qo‘shish
         </Button>
       </Space>
-
+      <ProductsFilterModal
+        open={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+        initialValues={filters}
+      />
       <Table
         columns={columns}
         dataSource={data?.data || []}
@@ -204,16 +212,6 @@ export default function ProductsPage() {
         initialValues={editing || undefined}
         units={unitsData?.data || []}
         group={groupData?.data || []}
-      />
-
-      <ProductsFilterModal
-        open={filterModalOpen}
-        onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
-        initialValues={filters}
       />
     </Card>
   );

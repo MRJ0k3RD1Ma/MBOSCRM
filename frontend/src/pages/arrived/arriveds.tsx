@@ -18,16 +18,20 @@ import {
   type Arrived,
 } from "../../config/queries/arrived/arrived-qureys";
 import dayjs from "dayjs";
+import ArrivedsFilterModal from "./ui/arriveds-filter-modal";
 
 export default function Arriveds() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState<Record<string, string>>({});
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   const { data, isLoading } = useGetAllArrived({
     page,
     limit: 10,
-    ...(search ? { code: search } : {}),
+    ...(search ? { name: search } : {}),
+    ...filters,
   });
 
   const deleteArrived = useDeleteArrived();
@@ -105,7 +109,12 @@ export default function Arriveds() {
             }}
             style={{ maxWidth: 300 }}
           />
-          <Button icon={<FilterOutlined />}>Filter</Button>
+          <Button
+            icon={<FilterOutlined />}
+            onClick={() => setFilterModalOpen(!filterModalOpen)}
+          >
+            Filter
+          </Button>
         </Space>
 
         <Button
@@ -118,7 +127,15 @@ export default function Arriveds() {
           Yangi kirim
         </Button>
       </Space>
-
+      <ArrivedsFilterModal
+        open={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+        initialValues={filters}
+      />
       <Table
         columns={columns}
         dataSource={data?.data || []}
@@ -144,10 +161,3 @@ export default function Arriveds() {
     </Card>
   );
 }
-
-
-
-
-
-
-

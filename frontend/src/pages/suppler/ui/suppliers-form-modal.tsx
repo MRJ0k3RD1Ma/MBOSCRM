@@ -1,5 +1,6 @@
 import { Drawer, Form, Input, Button, InputNumber } from "antd";
 import { useEffect } from "react";
+import { useThemeContext } from "../../../providers/theme-provider";
 
 export interface CreateSupplierInput {
   name: string;
@@ -36,10 +37,10 @@ export default function SuppliersFormModal({
     try {
       const values = await form.validateFields();
       onSubmit(values);
-    } catch {
-      // Validation error, do nothing
-    }
+    } catch {}
   };
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   return (
     <Drawer
@@ -55,6 +56,9 @@ export default function SuppliersFormModal({
       open={open}
       destroyOnClose
       width={400}
+      bodyStyle={{
+        background: isDark ? "#001529" : "#ffffff",
+      }}
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item

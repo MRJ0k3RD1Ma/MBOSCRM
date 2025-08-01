@@ -4,6 +4,7 @@ import type {
   ClientType,
   CreateClientInput,
 } from "../../../config/queries/clients/clients-querys";
+import { useThemeContext } from "../../../providers/theme-provider";
 
 interface Props {
   open: boolean;
@@ -36,6 +37,8 @@ export default function ClientModal({
       onSubmit(values);
     } catch {}
   };
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   return (
     <Drawer
@@ -47,6 +50,9 @@ export default function ClientModal({
       open={open}
       destroyOnClose
       width={400}
+      bodyStyle={{
+        background: isDark ? "#001529" : "#ffffff",
+      }}
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item
