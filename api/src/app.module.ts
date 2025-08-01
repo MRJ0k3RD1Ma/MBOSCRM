@@ -39,6 +39,7 @@ import { SaleModule } from './modules/sale/sale.module';
     ArrivedModule,
     SaleModule,
     SaleProductModule,
+    SaleModule,
     ArrivedProductModule,
   ],
 })

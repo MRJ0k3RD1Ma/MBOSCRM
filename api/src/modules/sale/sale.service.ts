@@ -33,7 +33,7 @@ export class SaleService {
       orderBy: { codeId: 'desc' },
     });
 
-    const codeId = (maxCode.codeId || 0) + 1;
+    const codeId = (maxCode?.codeId || 0) + 1;
 
     let sale = await this.prisma.sale.create({
       data: {
