@@ -151,8 +151,8 @@ export default function ProductFormDrawer({
               <Select
                 options={PRODUCT_TYPES}
                 placeholder="Turini tanlang"
-                defaultValue={"DEVICE"}
-                disabled
+                showSearch
+                optionFilterProp="label"
               />
             </Form.Item>
           </Col>

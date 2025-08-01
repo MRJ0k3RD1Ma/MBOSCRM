@@ -249,24 +249,23 @@ export default function ArrivedFormPage() {
           </Form.Item>
         </div>
       </Form>
-
-      <Form form={drawerForm} layout="inline" onFinish={onDrawerFinish}>
-        <Space
-          style={{ display: "flex", width: "100%" }}
-          size="middle"
-          className="mb-4"
-          wrap
-        >
+      <Title level={4} className="!mb-6 !w-full">
+        Mahsulotlar
+      </Title>
+      <Form form={drawerForm} onFinish={onDrawerFinish}>
+        <div className="flex flex-wrap gap-4 w-full">
           <Form.Item
             name="productId"
             rules={[{ required: true, message: "Mahsulotni tanlang" }]}
-            style={{ flex: 2 }}
+            style={{ flex: 1 }}
+            className="min-w-[200px] grow !w-full"
           >
             <Select
               placeholder="Mahsulot"
               showSearch
               optionFilterProp="label"
               className="w-full"
+              allowClear
             >
               {productsList?.data.map((p) => (
                 <Select.Option key={p.id} value={p.id} label={p.name}>
@@ -280,16 +279,18 @@ export default function ArrivedFormPage() {
             name="count"
             rules={[{ required: true, message: "Soni kerak" }]}
             style={{ flex: 1 }}
+            className="min-w-[200px] grow !w-full"
           >
-            <InputNumber min={1} className="w-full" placeholder="Soni" />
+            <InputNumber min={1} className="!w-full" placeholder="Soni" />
           </Form.Item>
 
           <Form.Item
             name="price"
             rules={[{ required: true, message: "Narxi kerak" }]}
             style={{ flex: 1 }}
+            className="min-w-[200px] grow !w-full"
           >
-            <InputNumber min={0} className="w-full" placeholder="Narxi" />
+            <InputNumber min={0} className="!w-full" placeholder="Narxi" />
           </Form.Item>
 
           <Form.Item style={{ flexShrink: 0 }}>
@@ -297,7 +298,7 @@ export default function ArrivedFormPage() {
               +
             </Button>
           </Form.Item>
-        </Space>
+        </div>
       </Form>
 
       <Table
@@ -310,6 +311,70 @@ export default function ArrivedFormPage() {
         columns={columns}
         pagination={false}
       />
+      <Drawer
+        open={drawerOpen}
+        title="Mahsulot tahrirlash"
+        onClose={() => {
+          drawerForm.resetFields();
+          setDrawerOpen(false);
+        }}
+        width={400}
+        destroyOnClose
+      >
+        <Form layout="vertical" form={drawerForm} onFinish={onDrawerFinish}>
+          <Form.Item name="id" hidden>
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="productId"
+            label="Mahsulot"
+            rules={[{ required: true, message: "Mahsulotni tanlang" }]}
+          >
+            <Select
+              placeholder="Mahsulot tanlang"
+              showSearch
+              optionFilterProp="label"
+            >
+              {productsList?.data.map((p) => (
+                <Select.Option key={p.id} value={p.id} label={p.name}>
+                  {p.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="count"
+            label="Soni"
+            rules={[{ required: true, message: "Soni kerak" }]}
+          >
+            <InputNumber
+              min={1}
+              className="!w-full"
+              placeholder="Mahsulot sonini kiriting"
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="price"
+            label="Narxi"
+            rules={[{ required: true, message: "Narxi kerak" }]}
+          >
+            <InputNumber
+              min={0}
+              className="!w-full"
+              placeholder="Mahsulot narxini kiriting"
+            />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Saqlash
+            </Button>
+          </Form.Item>
+        </Form>
+      </Drawer>
     </Card>
   );
 }

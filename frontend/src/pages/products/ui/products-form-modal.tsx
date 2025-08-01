@@ -70,11 +70,7 @@ export default function ProductsModal({
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item
-              name="barcode"
-              label="Shtrix kod"
-              rules={[{ required: true, message: "Shtrix kod kiriting" }]}
-            >
+            <Form.Item name="barcode" label="Shtrix kod">
               <Input placeholder="1234567890123" className="!w-full" />
             </Form.Item>
           </Col>
@@ -148,16 +144,8 @@ export default function ProductsModal({
           </Col>
 
           <Col span={12}>
-            <Form.Item
-              name="type"
-              label="Turi"
-              rules={[{ required: true, message: "Turi tanlang" }]}
-            >
-              <Select
-                placeholder="Mahsulot turi"
-                defaultValue={"DEVICE"}
-                disabled
-              >
+            <Form.Item name="type" label="Turi">
+              <Select placeholder="Mahsulot turi">
                 <Select.Option value="DEVICE">DEVICE</Select.Option>
               </Select>
             </Form.Item>
