@@ -28,7 +28,12 @@ axiosPrivate.interceptors.response.use(
     const errorData = error.response?.data as any;
     const errorMessage = errorData?.message || errorData?.error;
 
-    const tokenErrors = ["JWT_EXPIRED", "Unauthorized", "TOKEN_INVALIDATED"];
+    const tokenErrors = [
+      "JWT_EXPIRED",
+      "Unauthorized",
+      "TOKEN_INVALIDATED",
+      "BEARER_TOKEN_NOT_PROVIDED",
+    ];
 
     const isTokenError = status === 401 && tokenErrors.includes(errorMessage);
 

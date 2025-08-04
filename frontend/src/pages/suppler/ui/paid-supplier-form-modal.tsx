@@ -1,6 +1,7 @@
 import { Form, InputNumber, Drawer, DatePicker, Select, Button } from "antd";
 import { useEffect } from "react";
 import dayjs from "dayjs";
+import { useThemeContext } from "../../../providers/theme-provider";
 
 type PaidSupplierFormValues = {
   supplierId: number;
@@ -48,6 +49,8 @@ export default function PaidSupplierFormModal({
     form.resetFields();
     onClose();
   };
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   return (
     <Drawer
@@ -55,6 +58,9 @@ export default function PaidSupplierFormModal({
       open={open}
       onClose={onClose}
       width={400}
+      bodyStyle={{
+        background: isDark ? "#001529" : "#ffffff",
+      }}
       footer={
         <div
           style={{

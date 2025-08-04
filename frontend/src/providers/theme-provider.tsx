@@ -58,9 +58,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
               bodyBg: "#000000",
               footerBg: "#0f172a",
             },
+            Drawer: {
+              colorText: "#e2e8f0",
+              colorBgContainer: "#001529",
+            },
             Table: {
               headerBg: "#1e293b",
-              bodyBg: "#0f172a",
               headerColor: "#e2e8f0",
             },
           }
@@ -70,7 +73,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
             },
             Table: {
               headerBg: "#f1f5f9",
-              bodyBg: "#ffffff",
               headerColor: "#000000",
             },
           },

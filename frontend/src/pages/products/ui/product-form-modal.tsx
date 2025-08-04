@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import type { Product } from "../../../config/queries/products/products-querys";
 import { useGetAllProductUnits } from "../../../config/queries/products/product-unit-querys";
 import { useGetAllProductGroups } from "../../../config/queries/products/product-gorup-querys";
+import { useThemeContext } from "../../../providers/theme-provider";
 
 type Props = {
   open: boolean;
@@ -52,6 +53,8 @@ export default function ProductFormDrawer({
       onClose();
     });
   };
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   return (
     <Drawer
@@ -59,6 +62,9 @@ export default function ProductFormDrawer({
       title={initialValues ? "Mahsulotni tahrirlash" : "Yangi mahsulot"}
       onClose={onClose}
       width={720}
+      bodyStyle={{
+        background: isDark ? "#001529" : "#ffffff",
+      }}
       extra={
         <Space>
           <Button onClick={onClose}>Bekor qilish</Button>
@@ -151,8 +157,8 @@ export default function ProductFormDrawer({
               <Select
                 options={PRODUCT_TYPES}
                 placeholder="Turini tanlang"
-                defaultValue={"DEVICE"}
-                disabled
+                showSearch
+                optionFilterProp="label"
               />
             </Form.Item>
           </Col>

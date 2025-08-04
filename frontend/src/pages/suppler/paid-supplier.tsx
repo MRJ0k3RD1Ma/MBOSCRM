@@ -134,7 +134,7 @@ export default function PaidSuppliers() {
       >
         <Button
           icon={<FilterOutlined />}
-          onClick={() => setFilterModalOpen(true)}
+          onClick={() => setFilterModalOpen(!filterModalOpen)}
         >
           Filter
         </Button>
@@ -151,6 +151,18 @@ export default function PaidSuppliers() {
           Yangi to‘lov
         </Button>
       </Space>
+
+      <PaidSupplierFilterModal
+        open={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+        initialValues={filters}
+        suppliers={suppliersData?.data || []}
+        payments={paymentsData?.data || []}
+      />
 
       <Table
         columns={columns}
@@ -173,18 +185,6 @@ export default function PaidSuppliers() {
         }}
         onSubmit={onSubmit}
         initialValues={editing || undefined}
-        suppliers={suppliersData?.data || []}
-        payments={paymentsData?.data || []}
-      />
-
-      <PaidSupplierFilterModal
-        open={filterModalOpen}
-        onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
-        initialValues={filters}
         suppliers={suppliersData?.data || []}
         payments={paymentsData?.data || []}
       />

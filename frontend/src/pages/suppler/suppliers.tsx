@@ -133,7 +133,7 @@ export default function Suppliers() {
           />
           <Button
             icon={<FilterOutlined />}
-            onClick={() => setFilterModalOpen(true)}
+            onClick={() => setFilterModalOpen(!filterModalOpen)}
           >
             Filter
           </Button>
@@ -151,7 +151,15 @@ export default function Suppliers() {
           Yangi yetkazib beruvchi
         </Button>
       </Space>
-
+      <SuppliersFilterModal
+        open={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+        initialValues={filters}
+      />
       <Table
         columns={columns}
         dataSource={data?.data || []}
@@ -184,16 +192,6 @@ export default function Suppliers() {
         }}
         onSubmit={onSubmit}
         initialValues={editing || undefined}
-      />
-
-      <SuppliersFilterModal
-        open={filterModalOpen}
-        onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
-        initialValues={filters}
       />
     </Card>
   );

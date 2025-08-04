@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  Col,
   Descriptions,
   Row,
   Space,

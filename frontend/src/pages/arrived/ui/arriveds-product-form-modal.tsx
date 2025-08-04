@@ -16,6 +16,7 @@ import {
   type Product,
 } from "../../../config/queries/products/products-querys";
 import { useCreateArrivedProduct } from "../../../config/queries/arrived/arrived-product-querys";
+import { useThemeContext } from "../../../providers/theme-provider";
 
 type Props = {
   dataSource: Arrived[];
@@ -62,6 +63,8 @@ export default function ArrivedProductFormModal({
       message.error("Iltimos, barcha maydonlarni to‘ldiring");
     }
   };
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   return (
     <Drawer
@@ -70,6 +73,9 @@ export default function ArrivedProductFormModal({
       onClose={onClose}
       width={480}
       destroyOnClose
+      bodyStyle={{
+        background: isDark ? "#001529" : "#ffffff",
+      }}
     >
       <Form
         form={form}
