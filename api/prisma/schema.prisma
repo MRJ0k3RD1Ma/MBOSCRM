@@ -29,6 +29,7 @@ model Client {
   User_Client_registerId User?       @relation("Client_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ClientType             ClientType? @relation(fields: [typeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Sale                   Sale[]
+  Subscribe              Subscribe[]
 
   @@index([districtId], map: "FK_client_district_id")
   @@index([modifyId], map: "FK_client_modify_id")
@@ -249,22 +250,25 @@ model Supplier {
 }
 
 model Sale {
-  id          Int           @id @default(autoincrement())
-  date        DateTime?     @db.Date
-  code        String?       @db.VarChar(255)
-  codeId      Int?          @default(1)
-  client      Client        @relation(fields: [clientId], references: [id])
-  clientId    Int           @default(1) @map("client_id")
-  price       Float         @default(0)
-  dept        Float         @default(0)
-  credit      Float         @default(0)
-  state       SaleState     @default(CLOSED)
-  isDeleted   Boolean?      @default(false)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
-  registerId  Int?
-  modifyId    Int?
-  SaleProduct SaleProduct[]
+  id                     Int           @id @default(autoincrement())
+  date                   DateTime?     @db.Date
+  code                   String?       @db.VarChar(255)
+  codeId                 Int?          @default(1)
+  client                 Client        @relation(fields: [clientId], references: [id])
+  clientId               Int           @default(1) @map("client_id")
+  price                  Float         @default(0)
+  dept                   Float         @default(0)
+  credit                 Float         @default(0)
+  state                  SaleState     @default(CLOSED)
+  isDeleted              Boolean?      @default(false)
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @default(now()) @updatedAt
+  registerId             Int?
+  modifyId               Int?
+  SaleProduct            SaleProduct[]
+  subscribe_begin_date   DateTime?
+  subscribe_generate_day Int?
+  Subscribe              Subscribe[]
 }
 
 model SaleProduct {
@@ -287,6 +291,21 @@ model SaleProduct {
   @@index([productId])
   @@index([registerId])
   @@index([modifyId])
+}
+
+model Subscribe {
+  id          Int            @id @default(autoincrement())
+  saleId      Int?
+  sale        Sale?          @relation(fields: [saleId], references: [id])
+  clientId    Int
+  client      Client         @relation(fields: [clientId], references: [id])
+  paying_date DateTime
+  price       Float
+  paid        Float
+  state       SubscribeState @default(NOTPAYING)
+  isDeleted   Boolean        @default(false)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt
 }
 
 model Payment {
@@ -316,6 +335,11 @@ enum ProductType {
   SERVICE
   DEVICE
   SUBSCRIPTION
+}
+
+enum SubscribeState {
+  NOTPAYING
+  PAID
 }
 
 enum SaleState {

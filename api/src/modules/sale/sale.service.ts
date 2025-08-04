@@ -15,7 +15,14 @@ export class SaleService {
   ) {}
 
   async create(createSaleDto: CreateSaleDto, creatorId: number) {
-    const { date, clientId, credit, products } = createSaleDto;
+    const {
+      date,
+      clientId,
+      credit,
+      products,
+      subscribe_begin_date,
+      subscribe_generate_day,
+    } = createSaleDto;
 
     const client = await this.prisma.client.findUnique({
       where: { id: clientId },
@@ -42,6 +49,8 @@ export class SaleService {
     let sale = await this.prisma.sale.create({
       data: {
         date,
+        subscribe_begin_date,
+        subscribe_generate_day,
         code: `${new Date().getFullYear()}-${codeId}`,
         codeId,
         client: { connect: client },
@@ -165,6 +174,10 @@ export class SaleService {
     return this.prisma.sale.update({
       where: { id },
       data: {
+        subscribe_begin_date:
+          updateSaleDto.subscribe_begin_date ?? sale.subscribe_begin_date,
+        subscribe_generate_day:
+          updateSaleDto.subscribe_generate_day ?? sale.subscribe_generate_day,
         date: updateSaleDto.date ?? sale.date,
         credit: updateSaleDto.credit ?? sale.credit,
         dept: sale.price - (updateSaleDto.credit || sale.credit),

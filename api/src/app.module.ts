@@ -16,6 +16,7 @@ import { ArrivedModule } from './modules/arrived/arrived.module';
 import { SaleProductModule } from './modules/sale-product/sale-product.module';
 import { ArrivedProductModule } from './modules/arrived-product/arrived-product.module';
 import { SaleModule } from './modules/sale/sale.module';
+import { SubscribeModule } from './modules/subscribe/subscribe.module';
 
 @Module({
   controllers: [],
@@ -40,6 +41,7 @@ import { SaleModule } from './modules/sale/sale.module';
     SaleModule,
     SaleProductModule,
     SaleModule,
+    SubscribeModule,
     ArrivedProductModule,
   ],
 })
