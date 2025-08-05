@@ -89,6 +89,11 @@ const pages = [
     label: "Kirimlar (ombor)",
     icon: <InboxOutlined />,
   },
+  {
+    key: "/sales",
+    label: "Chiqimlar",
+    icon: <InboxOutlined />,
+  },
 ];
 
 interface Props {

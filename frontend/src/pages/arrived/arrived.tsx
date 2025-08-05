@@ -79,7 +79,6 @@ export default function Arrived() {
         </Space>
       </Row>
 
-      {/* Asosiy ma'lumotlar */}
       <Card
         title="Asosiy ma'lumotlar"
         bordered={false}
