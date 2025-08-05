@@ -25,7 +25,7 @@ export class ArrivedService {
             {
               supplierId: 1,
               date: new Date(),
-              description: 'descripton asdfghj',
+              description: 'description asdfghj',
               products: [{ count: 1, price: 100, productId: 1 }],
             },
             1,

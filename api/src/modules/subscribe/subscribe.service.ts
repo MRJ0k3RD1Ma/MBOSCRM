@@ -76,7 +76,7 @@ export class SubscribeService {
     });
 
     if (state == 'PAID') {
-      await this.paidSubscripton(subscribe.id);
+      await this.paidSubscription(subscribe.id);
     }
 
     return subscribe;
@@ -157,7 +157,7 @@ export class SubscribeService {
     return subscribe;
   }
 
-  async paidSubscripton(id: number) {
+  async paidSubscription(id: number) {
     const subscribe = await this.prisma.subscribe.findUnique({
       where: { id },
       include: { sale: true },
@@ -194,7 +194,7 @@ export class SubscribeService {
     });
 
     if (subscribe.state == 'PAID') {
-      await this.paidSubscripton(subscribe.id);
+      await this.paidSubscription(subscribe.id);
     }
 
     return subscribe;

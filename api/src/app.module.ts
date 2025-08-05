@@ -19,6 +19,8 @@ import { SaleModule } from './modules/sale/sale.module';
 import { PaidClientModule } from './modules/paid-client/paid-client.module';
 import { SubscribeModule } from './modules/subscribe/subscribe.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { PaidOtherGroupModule } from './modules/paid-other-group/paid-other-group.module';
+import { PaidOtherModule } from './modules/paid-other/paid-other.module';
 
 @Module({
   controllers: [],
@@ -46,6 +48,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     SubscribeModule,
     ArrivedProductModule,
     PaidClientModule,
+    PaidOtherGroupModule,
+    PaidOtherModule,
     ScheduleModule.forRoot(),
   ],
 })

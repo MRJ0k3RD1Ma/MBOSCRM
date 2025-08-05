@@ -345,6 +345,36 @@ model Payment {
   @@map("payment")
 }
 
+model PaidOther {
+  id          Int            @id @default(autoincrement())
+  type        PaidOtherType
+  groupId     Int
+  price       Int
+  description String?
+  paidDate    DateTime       @default(now())
+  isDeleted   Boolean        @default(false)
+  group       PaidOtherGroup @relation(references: [id], fields: [groupId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  registerId Int?
+  modifyId   Int?
+}
+
+model PaidOtherGroup {
+  id        Int     @id @default(autoincrement())
+  name      String
+  isDeleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  registerId Int?
+  modifyId   Int?
+  PaidOther  PaidOther[]
+}
+
 model UserRole {
   id        Int      @id @default(autoincrement())
   name      String   @db.VarChar(255)
@@ -354,6 +384,11 @@ model UserRole {
   User      User[]
 
   @@map("user_role")
+}
+
+enum PaidOtherType {
+  INCOME
+  OUTCOME
 }
 
 enum ProductType {

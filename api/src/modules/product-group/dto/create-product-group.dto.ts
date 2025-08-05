@@ -1,5 +1,5 @@
-import { IsString, IsOptional, IsBoolean, IsInt } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 
 export class CreateProductGroupDto {
   @ApiProperty({
