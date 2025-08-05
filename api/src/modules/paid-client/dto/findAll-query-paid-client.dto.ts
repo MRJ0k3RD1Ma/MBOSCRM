@@ -1,10 +1,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsOptional } from 'class-validator';
+import { IsDate, IsOptional } from 'class-validator';
 import { IsId } from 'src/common/dtos/id.dto';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
-export class FindAllArrivedProdcutQueryDto extends PaginationDto {
+export class FindAllQueryPaidClientDto extends PaginationDto {
   @ApiPropertyOptional({ example: 100000 })
   @IsOptional()
   @Type(() => Number)
@@ -15,12 +15,24 @@ export class FindAllArrivedProdcutQueryDto extends PaginationDto {
   @Type(() => Number)
   maxPrice?: number;
 
-  @IsId(false)
-  supplierId?: number;
+  @ApiPropertyOptional({ example: '2025-07-01' })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  fromDate?: Date;
+
+  @ApiPropertyOptional({ example: '2025-07-30' })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  toDate?: Date;
 
   @IsId(false)
-  productId?: number;
+  clientId?: number;
 
   @IsId(false)
-  arrivedId?: number;
+  saleId?: number;
+
+  @IsId(false)
+  paymentId?: number;
 }

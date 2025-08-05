@@ -16,6 +16,7 @@ import { ArrivedModule } from './modules/arrived/arrived.module';
 import { SaleProductModule } from './modules/sale-product/sale-product.module';
 import { ArrivedProductModule } from './modules/arrived-product/arrived-product.module';
 import { SaleModule } from './modules/sale/sale.module';
+import { PaidClientModule } from './modules/paid-client/paid-client.module';
 
 @Module({
   controllers: [],
@@ -41,6 +42,7 @@ import { SaleModule } from './modules/sale/sale.module';
     SaleProductModule,
     SaleModule,
     ArrivedProductModule,
+    PaidClientModule,
   ],
 })
 export class AppModule {}

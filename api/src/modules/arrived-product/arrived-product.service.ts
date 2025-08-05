@@ -32,7 +32,7 @@ export class ArrivedProductService {
     });
     if (!product) {
       throw new HttpError({
-        message: `Product with ID ${product} not found`,
+        message: `Product with ID ${productId} not found`,
       });
     }
 
@@ -57,6 +57,7 @@ export class ArrivedProductService {
       maxPrice,
       productId,
       supplierId,
+      arrivedId,
     } = dto;
 
     const where: Prisma.ArrivedProductWhereInput = {
@@ -64,6 +65,10 @@ export class ArrivedProductService {
     };
     if (supplierId) {
       where.Arrived = { supplierId };
+    }
+
+    if (arrivedId) {
+      where.arrivedId = arrivedId;
     }
 
     if (productId) {

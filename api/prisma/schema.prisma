@@ -8,27 +8,28 @@ datasource db {
 }
 
 model Client {
-  id                     Int         @id @default(autoincrement())
+  id                     Int          @id @default(autoincrement())
   typeId                 Int?
-  name                   String      @db.VarChar(255)
-  inn                    String      @db.VarChar(255)
+  name                   String       @db.VarChar(255)
+  inn                    String       @db.VarChar(255)
   regionId               Int?
   districtId             Int?
-  address                String?     @db.VarChar(255)
-  balance                Float       @default(0)
-  description            String?     @db.Text
+  address                String?      @db.VarChar(255)
+  balance                Float        @default(0)
+  description            String?      @db.Text
   registerId             Int?
   modifyId               Int?
-  isDeleted              Boolean?    @default(false)
-  createdAt              DateTime    @default(now())
-  updatedAt              DateTime    @default(now()) @updatedAt
-  phone                  String?     @unique() @db.VarChar(255)
-  District               District?   @relation(fields: [districtId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Client_modifyId   User?       @relation("Client_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Region                 Region?     @relation(fields: [regionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Client_registerId User?       @relation("Client_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  ClientType             ClientType? @relation(fields: [typeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  isDeleted              Boolean?     @default(false)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @default(now()) @updatedAt
+  phone                  String?      @unique() @db.VarChar(255)
+  District               District?    @relation(fields: [districtId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Client_modifyId   User?        @relation("Client_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Region                 Region?      @relation(fields: [regionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Client_registerId User?        @relation("Client_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ClientType             ClientType?  @relation(fields: [typeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Sale                   Sale[]
+  PaidClient             PaidClient[]
 
   @@index([districtId], map: "FK_client_district_id")
   @@index([modifyId], map: "FK_client_modify_id")
@@ -265,6 +266,7 @@ model Sale {
   registerId  Int?
   modifyId    Int?
   SaleProduct SaleProduct[]
+  PaidClient  PaidClient[]
 }
 
 model SaleProduct {
@@ -289,6 +291,29 @@ model SaleProduct {
   @@index([modifyId])
 }
 
+model PaidClient {
+  id         Int       @id @default(autoincrement())
+  clientId   Int?      @map("client_id")
+  saleId     Int?      @map("sale_id")
+  paymentId  Int?      @map("payment_id")
+  paidDate   DateTime? @map("paid_date") @db.Date
+  price      Float?
+  isDeleted  Boolean?  @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+  registerId Int?
+  modifyId   Int?
+  Client     Client?   @relation(fields: [clientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Sale       Sale?     @relation(fields: [saleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Payment    Payment?  @relation(fields: [paymentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  // Uncomment if you have User relations for registerId and modifyId
+  // User_PaidClient_registerId User? @relation("PaidClient_registerId", fields: [registerId], references: [id])
+  // User_PaidClient_modifyId   User? @relation("PaidClient_modifyId", fields: [modifyId], references: [id])
+
+  @@index([clientId], map: "FK_paid_client_client_id")
+}
+
 model Payment {
   id           Int            @id @default(autoincrement())
   name         String?        @db.VarChar(255)
@@ -297,6 +322,7 @@ model Payment {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now()) @updatedAt
   PaidSupplier PaidSupplier[]
+  PaidClient   PaidClient[]
 
   @@map("payment")
 }

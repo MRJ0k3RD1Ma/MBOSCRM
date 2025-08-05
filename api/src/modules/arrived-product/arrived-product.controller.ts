@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -33,7 +34,7 @@ export class ArrivedProductController {
 
   @Get(':id')
   @DecoratorWrapper('find ArrivedProduct', true, [Role.Admin])
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.arrivedproductService.findOne(+id);
   }
 
