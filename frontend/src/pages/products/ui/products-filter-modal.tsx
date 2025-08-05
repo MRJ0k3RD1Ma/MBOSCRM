@@ -112,9 +112,9 @@ export default function ProductsFilterModal({
           <Col span={6}>
             <Form.Item label="Turi" name="type">
               <Select placeholder="Tanlang" allowClear>
-                <Option value="DEVICE">DEVICE</Option>
-                <Option value="SERVICE">SERVICE</Option>
-                <Option value="OTHER">OTHER</Option>
+                <Option value="DEVICE">Qurilma</Option>
+                <Option value="SERVICE">Xizmat</Option>
+                <Option value="SUBSCRIPTION">Obuna</Option>
               </Select>
             </Form.Item>
           </Col>

@@ -152,7 +152,9 @@ export default function ProductsModal({
           <Col span={12}>
             <Form.Item name="type" label="Turi">
               <Select placeholder="Mahsulot turi">
-                <Select.Option value="DEVICE">DEVICE</Select.Option>
+                <Select.Option value="DEVICE">Qurilma</Select.Option>
+                <Select.Option value="SERVICE">Xizmat</Select.Option>
+                <Select.Option value="SUBSCRIPTION">Obuna</Select.Option>
               </Select>
             </Form.Item>
           </Col>

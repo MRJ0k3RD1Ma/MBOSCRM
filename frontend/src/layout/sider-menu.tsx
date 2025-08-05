@@ -1,9 +1,6 @@
-import { Menu, Layout } from "antd";
+import { Menu, Layout, message } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMemo } from "react";
-import Logo from "../../public/LogoMbos.svg";
-import { message } from "antd";
-import { TokenManager } from "../config/token-manager";
 import {
   HomeOutlined,
   UsergroupAddOutlined,
@@ -15,9 +12,12 @@ import {
   NumberOutlined,
   InboxOutlined,
 } from "@ant-design/icons";
+import Logo from "../../public/LogoMbos.svg";
+import { TokenManager } from "../config/token-manager";
+
 const { Sider } = Layout;
 
-const pages = [
+const menuItems = [
   {
     key: "/dashboard",
     label: "Bosh sahifa",
@@ -25,12 +25,12 @@ const pages = [
   },
   {
     key: "clients-group",
-    label: "Mijozlar bo‘limi",
+    label: "Mijozlar",
     icon: <UsergroupAddOutlined />,
     children: [
       {
         key: "/clients",
-        label: "Barcha mijozlar",
+        label: "Mijozlar ro‘yxati",
         icon: <UserOutlined />,
       },
       {
@@ -41,8 +41,8 @@ const pages = [
     ],
   },
   {
-    key: "products",
-    label: "Mahsulotlar bo‘limi",
+    key: "products-group",
+    label: "Mahsulotlar",
     icon: <ShoppingOutlined />,
     children: [
       {
@@ -63,7 +63,7 @@ const pages = [
     ],
   },
   {
-    key: "suppliers",
+    key: "suppliers-group",
     label: "Ta'minotchilar",
     icon: <UsergroupAddOutlined />,
     children: [
@@ -86,18 +86,23 @@ const pages = [
   },
   {
     key: "/arriveds",
-    label: "Kirimlar (ombor)",
+    label: "Kirimlar",
     icon: <InboxOutlined />,
   },
   {
     key: "/sales",
-    label: "sales",
-    icon: <InboxOutlined />,
+    label: "Sotuvlar",
+    icon: <DollarCircleOutlined />,
   },
   {
-    key: "/subscribe",
-    label: "subscribe",
-    icon: <InboxOutlined />,
+    key: "/subscribes",
+    label: "Obunalar",
+    icon: <TagsOutlined />,
+  },
+  {
+    key: "/paid-clients",
+    label: "To'langan mijozlar",
+    icon: <DollarCircleOutlined />,
   },
 ];
 
@@ -110,11 +115,18 @@ export default function SiderMenu({ collapsed, setCollapsed }: Props) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const selectedKey = location.pathname;
+  const selectedKey = useMemo(() => {
+    const currentPath = location.pathname;
+    const flatKeys = menuItems.flatMap((item) =>
+      item.children ? item.children.map((child) => child.key) : item.key
+    );
+    const matchedKey = flatKeys.find((key) => currentPath.startsWith(key));
+    return [matchedKey || currentPath];
+  }, [location.pathname]);
 
-  const openKey = useMemo(() => {
-    const match = pages.find((page) =>
-      page.children?.some((child) => child.key === location.pathname)
+  const openKeys = useMemo(() => {
+    const match = menuItems.find((item) =>
+      item.children?.some((child) => child.key === location.pathname)
     );
     return match ? [match.key] : [];
   }, [location.pathname]);
@@ -122,7 +134,7 @@ export default function SiderMenu({ collapsed, setCollapsed }: Props) {
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === "logout") {
       TokenManager.clearTokens();
-      message.success("Siz tizimdan chiqdingiz");
+      message.success("Tizimdan chiqdingiz");
       navigate("/login");
     } else {
       navigate(key);
@@ -143,28 +155,16 @@ export default function SiderMenu({ collapsed, setCollapsed }: Props) {
         zIndex: 100,
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 16,
-          color: "#fff",
-          fontWeight: "bold",
-          width: "100%",
-        }}
-      >
-        {!collapsed && (
-          <img src={Logo} alt="Logo" style={{ maxWidth: "100%" }} />
-        )}
+      <div className="flex items-center justify-center py-4 px-3">
+        {!collapsed && <img src={Logo} alt="Logo" className="max-w-full" />}
       </div>
       <Menu
         theme="dark"
         mode="inline"
-        selectedKeys={[selectedKey]}
-        defaultOpenKeys={openKey}
+        selectedKeys={selectedKey}
+        defaultOpenKeys={openKeys}
         onClick={handleMenuClick}
-        items={pages}
+        items={menuItems}
       />
     </Sider>
   );
