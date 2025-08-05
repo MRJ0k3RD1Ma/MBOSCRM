@@ -21,6 +21,7 @@ import { SubscribeModule } from './modules/subscribe/subscribe.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PaidOtherGroupModule } from './modules/paid-other-group/paid-other-group.module';
 import { PaidOtherModule } from './modules/paid-other/paid-other.module';
+import { StatisticsModule } from './modules/statistics/statistics.module';
 
 @Module({
   controllers: [],
@@ -29,6 +30,7 @@ import { PaidOtherModule } from './modules/paid-other/paid-other.module';
     LocationModule,
     UserRoleModule,
     UserModule,
+    StatisticsModule,
     SettingsModule,
     PrismaModule,
     ClientTypeModule,
