@@ -21,7 +21,7 @@ import { useGetAllClients } from "../../config/queries/clients/clients-querys";
 
 const { Title } = Typography;
 
-export default function SaleDetailPage() {
+export default function Sale() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [currentId, setCurrentId] = useState<number | null>(null);

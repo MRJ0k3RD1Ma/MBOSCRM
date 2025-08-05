@@ -21,6 +21,7 @@ import Arrived from "../pages/arrived/arrived";
 import ArrivedFormPage from "../pages/arrived/ui/arriveds-form-page";
 import Sales from "../pages/sale/sales";
 import SalesFormPage from "../pages/sale/ui/sales-form-page";
+import Sale from "../pages/sale/sale";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -111,6 +112,10 @@ export const router = createBrowserRouter([
           {
             path: "sales",
             element: <Sales />,
+          },
+          {
+            path: "sale/:id",
+            element: <Sale />,
           },
           {
             path: "sale/create",
