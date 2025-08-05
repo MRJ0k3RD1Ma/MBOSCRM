@@ -4,11 +4,41 @@ import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllSubscribeQueryDto } from './dto/findAll-subscribe-query.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, SubscribeState } from '@prisma/client';
+import { Cron } from '@nestjs/schedule';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class SubscribeService {
   constructor(private readonly prisma: PrismaService) {}
+
+  @Cron('* * 0 * * *')
+  async cron() {
+    const subscribeSales = await this.prisma.saleProduct.findMany({
+      where: {
+        is_subscribe: true,
+      },
+      include: { sale: true, product: true },
+    });
+    for (const subscribeSale of subscribeSales) {
+      const subscribe = await this.prisma.subscribe.findFirst({
+        where: {
+          saleId: subscribeSale.saleId,
+          paying_date: { gt: new Date() },
+        },
+      });
+      if (!subscribe) {
+        this.create({
+          clientId: subscribeSale.sale.clientId,
+          paid: subscribeSale.product.price,
+          price: subscribeSale.product.price,
+          saleId: subscribeSale.saleId,
+          state: SubscribeState.NOTPAYING,
+          payingDate: dayjs(new Date()).add(1, 'month').toDate(),
+        });
+      }
+    }
+  }
 
   async create(createSubscribeDto: CreateSubscribeDto) {
     const { clientId, paid, price, saleId, state, payingDate } =

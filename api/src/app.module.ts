@@ -18,6 +18,7 @@ import { ArrivedProductModule } from './modules/arrived-product/arrived-product.
 import { SaleModule } from './modules/sale/sale.module';
 import { PaidClientModule } from './modules/paid-client/paid-client.module';
 import { SubscribeModule } from './modules/subscribe/subscribe.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   controllers: [],
@@ -45,6 +46,7 @@ import { SubscribeModule } from './modules/subscribe/subscribe.module';
     SubscribeModule,
     ArrivedProductModule,
     PaidClientModule,
+    ScheduleModule.forRoot(),
   ],
 })
 export class AppModule {}
