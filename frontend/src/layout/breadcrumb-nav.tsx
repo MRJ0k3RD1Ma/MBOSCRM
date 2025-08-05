@@ -5,34 +5,40 @@ const nameMap: Record<string, string> = {
   dashboard: "Bosh sahifa",
   clients: "Mijozlar",
   "client-type": "Mijoz turlari",
+  "paid-clients": "To'langan mijozlar",
   client: "Mijoz tafsiloti",
   products: "Mahsulotlar",
   "product-group": "Mahsulot guruhlari",
   "product-unit": "O‘lchov birliklari",
   product: "Mahsulot tafsiloti",
   suppliers: "Ta'minotchilar",
+  "paid-suppliers": "To‘langan ta'minotchilar",
   supplier: "Ta'minotchi tafsiloti",
-  "paid-suppliers": "To‘lov qilingan ta'minotchilar",
   payment: "To‘lov turlari",
-  arriveds: "Kirimlar",
+  arriveds: "Kirimlar (ombor)",
   arrived: "Kirim tafsiloti",
-  "arrived/create": "Yangi kirim",
+  "arrived/create": "Kirim qo‘shish",
   "arrived/edit": "Kirimni tahrirlash",
+  sales: "Sotuvlar",
+  sale: "Sotuv tafsiloti",
+  subscribes: "Obunalar",
+  subscribe: "Obuna tafsiloti",
   profile: "Profil",
 };
 
 export function usePageTitle() {
   const location = useLocation();
   const pathSnippets = location.pathname.split("/").filter(Boolean);
-  const lastKey = pathSnippets.slice(0).join("/");
-  const lastSegment = pathSnippets[pathSnippets.length - 1];
-  return nameMap[lastKey] || nameMap[lastSegment] || "Bosh sahifa";
+
+  const fullPath = pathSnippets.join("/");
+  const lastKey = pathSnippets[pathSnippets.length - 1];
+
+  return nameMap[fullPath] || nameMap[lastKey] || "Sahifa";
 }
 
 export default function BreadcrumbNav() {
   const location = useLocation();
   const pathSnippets = location.pathname.split("/").filter(Boolean);
-
   if (pathSnippets.length === 1 && pathSnippets[0] === "dashboard") {
     return (
       <Breadcrumb style={{ margin: "16px 24px 0" }}>
@@ -43,13 +49,18 @@ export default function BreadcrumbNav() {
     );
   }
 
-  const items = [
+  const breadcrumbItems = [
     <Breadcrumb.Item key="dashboard">
       <Link to="/dashboard">Bosh sahifa</Link>
     </Breadcrumb.Item>,
     ...pathSnippets.map((_, index) => {
       const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
-      const name = nameMap[pathSnippets[index]] || pathSnippets[index];
+      const segmentKey = pathSnippets[index];
+      const name =
+        nameMap[url.slice(1)] ||
+        nameMap[segmentKey] ||
+        (Number(segmentKey) ? "Tafsilot" : segmentKey);
+
       return (
         <Breadcrumb.Item key={url}>
           <Link to={url}>{name}</Link>
@@ -58,5 +69,7 @@ export default function BreadcrumbNav() {
     }),
   ];
 
-  return <Breadcrumb style={{ margin: "16px 24px 0" }}>{items}</Breadcrumb>;
+  return (
+    <Breadcrumb style={{ margin: "16px 24px 0" }}>{breadcrumbItems}</Breadcrumb>
+  );
 }
