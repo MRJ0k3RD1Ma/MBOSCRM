@@ -27,7 +27,11 @@ type Props = {
   initialValues?: Product | null;
 };
 
-const PRODUCT_TYPES = [{ label: "Qurilma", value: "DEVICE" }];
+const PRODUCT_TYPES = [
+  { label: "Qurilma", value: "DEVICE" },
+  { label: "Xizmat", value: "SERVICE" },
+  { label: "Obuna", value: "SUBSCRIPTION" },
+];
 
 export default function ProductFormDrawer({
   open,

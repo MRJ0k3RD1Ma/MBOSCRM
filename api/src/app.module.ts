@@ -18,6 +18,10 @@ import { ArrivedProductModule } from './modules/arrived-product/arrived-product.
 import { SaleModule } from './modules/sale/sale.module';
 import { PaidClientModule } from './modules/paid-client/paid-client.module';
 import { SubscribeModule } from './modules/subscribe/subscribe.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { PaidOtherGroupModule } from './modules/paid-other-group/paid-other-group.module';
+import { PaidOtherModule } from './modules/paid-other/paid-other.module';
+import { StatisticsModule } from './modules/statistics/statistics.module';
 
 @Module({
   controllers: [],
@@ -26,6 +30,7 @@ import { SubscribeModule } from './modules/subscribe/subscribe.module';
     LocationModule,
     UserRoleModule,
     UserModule,
+    StatisticsModule,
     SettingsModule,
     PrismaModule,
     ClientTypeModule,
@@ -45,6 +50,9 @@ import { SubscribeModule } from './modules/subscribe/subscribe.module';
     SubscribeModule,
     ArrivedProductModule,
     PaidClientModule,
+    PaidOtherGroupModule,
+    PaidOtherModule,
+    ScheduleModule.forRoot(),
   ],
 })
 export class AppModule {}

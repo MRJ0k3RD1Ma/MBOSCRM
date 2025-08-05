@@ -12,7 +12,6 @@ export default function AppLayout() {
   return (
     <Layout style={{ height: "100vh" }} className="app-layout">
       <SiderMenu collapsed={collapsed} setCollapsed={setCollapsed} />
-
       <Layout style={{ marginLeft: collapsed ? 80 : 280, transition: "0.2s" }}>
         <HeaderBar pageTitle={pageTitle} />
         <BreadcrumbNav />

@@ -23,6 +23,8 @@ import Sales from "../pages/sale/sales";
 import SalesFormPage from "../pages/sale/ui/sales-form-page";
 import Sale from "../pages/sale/sale";
 import Subscribes from "../pages/subscribe/subscribes";
+import Subscribe from "../pages/subscribe/subscribe";
+import ClientsPaid from "../pages/clients/clients-paid";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -53,6 +55,10 @@ export const router = createBrowserRouter([
           {
             path: "clients",
             element: <Clients />,
+          },
+          {
+            path: "paid-clients",
+            element: <ClientsPaid />,
           },
           {
             path: "client/:id",
@@ -127,8 +133,12 @@ export const router = createBrowserRouter([
             element: <SalesFormPage />,
           },
           {
-            path: "subscribe",
+            path: "subscribes",
             element: <Subscribes />,
+          },
+          {
+            path: "subscribe/:id",
+            element: <Subscribe />,
           },
           {
             path: "*",

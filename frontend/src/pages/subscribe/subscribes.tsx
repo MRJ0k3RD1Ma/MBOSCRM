@@ -1,12 +1,17 @@
 import { useState } from "react";
-import { Button, Card, Input, Space, Table, Tag, Tooltip } from "antd";
+import { Button, Card, Input, Space, Table, Tag } from "antd";
 import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-
 import {
   useGetAllSubscribes,
   type Subscribe,
 } from "../../config/queries/subscribe/subscribe-querys";
+import SubscribesFilterModal from "./ui/subscribe-filter-modal";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export default function Subscribes() {
   const navigate = useNavigate();
@@ -24,7 +29,12 @@ export default function Subscribes() {
   });
 
   const columns = [
-    { title: "To‘lov sanasi", dataIndex: "paying_date" },
+    {
+      title: "To‘lov sanasi",
+      dataIndex: "paying_date",
+      render: (date: string) =>
+        dayjs.utc(date).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm"),
+    },
     {
       title: "Mijoz",
       dataIndex: "client",
@@ -78,7 +88,7 @@ export default function Subscribes() {
         </Space>
       </Space>
 
-      {/* <SubscribesFilterModal
+      <SubscribesFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
         onApply={(values) => {
@@ -86,7 +96,7 @@ export default function Subscribes() {
           setPage(1);
         }}
         initialValues={filters}
-      /> */}
+      />
 
       <Table
         columns={columns}

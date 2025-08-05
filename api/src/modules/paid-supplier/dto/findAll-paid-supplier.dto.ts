@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDateString, IsOptional } from 'class-validator';
+import { IsOptional } from 'class-validator';
 import { IsId } from 'src/common/dtos/id.dto';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 

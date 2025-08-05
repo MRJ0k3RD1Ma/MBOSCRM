@@ -1,10 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { PaidOtherType } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsDate, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
 import { IsId } from 'src/common/dtos/id.dto';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
-export class FindAllArrivedQueryDto extends PaginationDto {
+export class FindAllQueryPaidOtherDto extends PaginationDto {
   @ApiPropertyOptional({ example: 100000 })
   @IsOptional()
   @Type(() => Number)
@@ -14,6 +15,11 @@ export class FindAllArrivedQueryDto extends PaginationDto {
   @IsOptional()
   @Type(() => Number)
   maxPrice?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  description: string;
 
   @ApiPropertyOptional({ example: '2025-07-01' })
   @IsOptional()
@@ -28,10 +34,10 @@ export class FindAllArrivedQueryDto extends PaginationDto {
   toDate?: Date;
 
   @IsId(false)
-  supplierId?: number;
+  groupId?: number;
 
-  @ApiPropertyOptional({ example: 'ARR-001' })
+  @ApiPropertyOptional({ enum: PaidOtherType })
   @IsOptional()
-  @IsString()
-  code?: string;
+  @IsEnum(PaidOtherType)
+  type: PaidOtherType;
 }
