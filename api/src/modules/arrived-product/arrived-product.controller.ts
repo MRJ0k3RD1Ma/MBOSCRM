@@ -13,7 +13,7 @@ import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from 'src/common/auth/roles/role.enum';
 import { ArrivedProductService } from './arrived-product.service';
 import { CreateArrivedProductDto } from './dto/create-arrived-product.dto';
-import { FindAllArrivedProdcutQueryDto } from './dto/findAll-arrived-product-query.dto';
+import { FindAllArrivedProductQueryDto } from './dto/findAll-arrived-product-query.dto';
 import { UpdateArrivedProductDto } from './dto/update-arrived-product.dto';
 
 @Controller('arrived-product')
@@ -28,7 +28,7 @@ export class ArrivedProductController {
 
   @Get()
   @DecoratorWrapper('find ArrivedProduct', true, [Role.Admin])
-  findAll(@Query() dto: FindAllArrivedProdcutQueryDto) {
+  findAll(@Query() dto: FindAllArrivedProductQueryDto) {
     return this.arrivedproductService.findAll(dto);
   }
 
