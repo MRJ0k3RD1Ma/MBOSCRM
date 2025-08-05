@@ -1,6 +1,7 @@
 import { Drawer, Form, Input, Button } from "antd";
 import { useEffect } from "react";
 import type { CreatePaymentInput } from "../../../config/queries/payment/payment-querys";
+import { useThemeContext } from "../../../providers/theme-provider";
 
 type Props = {
   open: boolean;
@@ -31,6 +32,8 @@ export default function PaymentFormModal({
       onSubmit(values);
     } catch {}
   };
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   return (
     <Drawer
@@ -42,6 +45,9 @@ export default function PaymentFormModal({
       open={open}
       destroyOnClose
       width={400}
+      bodyStyle={{
+        background: isDark ? "#001529" : "#ffffff",
+      }}
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item

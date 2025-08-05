@@ -6,6 +6,7 @@ import { HttpError } from 'src/common/exception/http.error';
 import { FindAllArrivedQueryDto } from './dto/findAll-arrived-query.dto';
 import { Prisma } from '@prisma/client';
 import { ArrivedProductService } from '../arrived-product/arrived-product.service';
+import { env } from 'src/common/config';
 
 @Injectable()
 export class ArrivedService {
@@ -13,6 +14,26 @@ export class ArrivedService {
     private readonly prisma: PrismaService,
     private readonly arrivedProductService: ArrivedProductService,
   ) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.arrived.count();
+      const requiredCount = 5;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create(
+            {
+              supplierId: 1,
+              date: new Date(),
+              description: 'descripton asdfghj',
+              products: [{ count: 1, price: 100, productId: 1 }],
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
 
   async create(createArrivedDto: CreateArrivedDto, creatorId: number) {
     const { date, waybillNumber, supplierId, description, products } =

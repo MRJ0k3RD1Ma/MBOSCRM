@@ -134,12 +134,11 @@ export default function ClientsPage() {
           />
           <Button
             icon={<FilterOutlined />}
-            onClick={() => setFilterModalOpen(true)}
+            onClick={() => setFilterModalOpen(!filterModalOpen)}
           >
             Filter
           </Button>
         </Space>
-
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -152,7 +151,15 @@ export default function ClientsPage() {
           Yangi mijoz qo‘shish
         </Button>
       </Space>
-
+      <ClientsFilterModal
+        open={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+        initialValues={filters}
+      />
       <Table
         columns={columns}
         dataSource={data?.data || []}
@@ -186,15 +193,6 @@ export default function ClientsPage() {
         onSubmit={onSubmit}
         initialValues={editing || undefined}
         types={types?.data || []}
-      />
-      <ClientsFilterModal
-        open={filterModalOpen}
-        onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
-        initialValues={filters}
       />
     </Card>
   );

@@ -30,12 +30,7 @@ export class ProductGroupController {
     @Req() req: Request,
   ) {
     const creatorId = req.user.id;
-    const modifyId = req.user.id;
-    return this.productGroupService.create(
-      createProductGroupDto,
-      creatorId,
-      modifyId,
-    );
+    return this.productGroupService.create(createProductGroupDto, creatorId);
   }
 
   @Get()

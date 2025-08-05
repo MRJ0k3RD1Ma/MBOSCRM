@@ -12,32 +12,33 @@ import {
 } from "antd";
 import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import {
-  useDeleteArrived,
-  useGetAllArrived,
-  type Arrived,
-} from "../../config/queries/arrived/arrived-qureys";
-import dayjs from "dayjs";
-import ArrivedsFilterModal from "./ui/arriveds-filter-modal";
 
-export default function Arriveds() {
+import dayjs from "dayjs";
+import {
+  useDeleteSale,
+  useGetAllSale,
+  type Sale,
+} from "../../config/queries/sale/sale-querys";
+import SalesFilterModal from "./ui/sales-filter-modal";
+
+export default function Sales() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
 
-  const { data, isLoading } = useGetAllArrived({
+  const { data, isLoading } = useGetAllSale({
     page,
     limit: 10,
-    ...(search ? { name: search } : {}),
+    ...(search ? { code: search } : {}),
     ...filters,
   });
 
-  const deleteArrived = useDeleteArrived();
+  const deleteSale = useDeleteSale();
   const handleDelete = (id: number) => {
-    deleteArrived.mutate(id, {
-      onSuccess: () => message.success("Kirim o‘chirildi"),
+    deleteSale.mutate(id, {
+      onSuccess: () => message.success("Savdo o‘chirildi"),
     });
   };
 
@@ -48,18 +49,18 @@ export default function Arriveds() {
       render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
     },
     { title: "Kod", dataIndex: "code" },
-    { title: "Tovar hujjati", dataIndex: "waybillNumber" },
-    { title: "Izoh", dataIndex: "description" },
-    { title: "Narxi", dataIndex: "price" },
+    { title: "Mijoz", dataIndex: "clientId" },
+    { title: "Narx", dataIndex: "price" },
+    { title: "Qarz", dataIndex: "credit" },
     {
       title: "Amallar",
       key: "actions",
-      render: (_: any, row: Arrived) => {
+      render: (_: any, row: Sale) => {
         const items: MenuProps["items"] = [
           {
             key: "edit",
             label: "Tahrirlash",
-            onClick: () => navigate(`/arrived/edit/${row.id}`),
+            onClick: () => navigate(`/sale/edit/${row.id}`),
           },
           {
             key: "delete",
@@ -70,7 +71,7 @@ export default function Arriveds() {
           {
             key: "view",
             label: "Tafsilotlar",
-            onClick: () => navigate(`/arrived/${row.id}`),
+            onClick: () => navigate(`/sale/${row.id}`),
           },
         ];
 
@@ -121,13 +122,14 @@ export default function Arriveds() {
           type="primary"
           icon={<PlusOutlined />}
           onClick={() => {
-            navigate("/arrived/create");
+            navigate("/sale/create");
           }}
         >
-          Yangi kirim
+          Yangi savdo
         </Button>
       </Space>
-      <ArrivedsFilterModal
+
+      <SalesFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
         onApply={(values) => {
@@ -136,6 +138,7 @@ export default function Arriveds() {
         }}
         initialValues={filters}
       />
+
       <Table
         columns={columns}
         dataSource={data?.data || []}
@@ -154,7 +157,7 @@ export default function Arriveds() {
               (e.target as HTMLElement).closest("svg")
             )
               return;
-            navigate(`/arrived/${record.id}`);
+            navigate(`/sale/${record.id}`);
           },
         })}
       />

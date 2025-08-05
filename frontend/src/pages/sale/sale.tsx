@@ -10,18 +10,18 @@ import {
 } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
-import {
-  useDeleteArrived,
-  useGetArrivedById,
-} from "../../config/queries/arrived/arrived-qureys";
-import { useGetAllArrivedProduct } from "../../config/queries/arrived/arrived-product-querys";
 import { useEffect, useState } from "react";
-import { useGetAllSuppliers } from "../../config/queries/supplier/supplier-querys";
 import { useGetAllProducts } from "../../config/queries/products/products-querys";
+import {
+  useDeleteSale,
+  useGetSaleById,
+} from "../../config/queries/sale/sale-querys";
+import { useGetAllSaleProduct } from "../../config/queries/sale/sale-product-querys";
+import { useGetAllClients } from "../../config/queries/clients/clients-querys";
 
 const { Title } = Typography;
 
-export default function Arrived() {
+export default function Sale() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [currentId, setCurrentId] = useState<number | null>(null);
@@ -30,20 +30,20 @@ export default function Arrived() {
     if (id) setCurrentId(Number(id));
   }, [id]);
 
-  const { data: arrived, isLoading } = useGetArrivedById(
-    currentId ?? undefined
-  );
-  const { data: suppliers } = useGetAllSuppliers();
-  const { data: productsList } = useGetAllProducts();
-  const { data: arrivedProducts } = useGetAllArrivedProduct();
+  const { data: sale, isLoading } = useGetSaleById(currentId ?? undefined);
+  const { data: saleProducts } = useGetAllSaleProduct({
+    saleId: currentId ?? undefined,
+  });
+  const { data: clients } = useGetAllClients();
+  const { data: products } = useGetAllProducts();
 
-  const deleteArrived = useDeleteArrived();
+  const deleteSale = useDeleteSale();
   const handleDelete = () => {
     if (!currentId) return;
-    deleteArrived.mutate(currentId, {
+    deleteSale.mutate(currentId, {
       onSuccess: () => {
-        message.success("Kirim o‘chirildi");
-        navigate("/arrived");
+        message.success("Savdo o‘chirildi");
+        navigate("/sale");
       },
     });
   };
@@ -53,7 +53,7 @@ export default function Arrived() {
       title: "Mahsulot nomi",
       dataIndex: "productId",
       render: (id: number) =>
-        productsList?.data?.find((p) => p.id === id)?.name || `ID: ${id}`,
+        products?.data?.find((p) => p.id === id)?.name || `ID: ${id}`,
     },
     { title: "Soni", dataIndex: "count" },
     { title: "Narxi", dataIndex: "price" },
@@ -61,16 +61,11 @@ export default function Arrived() {
   ];
 
   return (
-    <Card
-      style={{
-        maxHeight: "800px",
-        overflow: "auto",
-      }}
-    >
+    <Card style={{ maxHeight: "800px", overflow: "auto" }}>
       <Row justify="space-between" align="middle" style={{ marginBottom: 24 }}>
-        <Title level={4}>Kirim tafsilotlari</Title>
+        <Title level={4}>Savdo tafsilotlari</Title>
         <Space>
-          <Button onClick={() => navigate(`/arrived/edit/${id}`)}>
+          <Button onClick={() => navigate(`/sale/edit/${id}`)}>
             O‘zgartirish
           </Button>
           <Button danger onClick={handleDelete}>
@@ -87,36 +82,32 @@ export default function Arrived() {
       >
         <Descriptions column={1} bordered size="middle" className="w-full">
           <Descriptions.Item label="Sana">
-            {arrived?.date ? dayjs(arrived.date).format("YYYY-MM-DD") : "-"}
+            {sale?.date ? dayjs(sale.date).format("YYYY-MM-DD") : "-"}
           </Descriptions.Item>
-          <Descriptions.Item label="Kod">{arrived?.code}</Descriptions.Item>
-          <Descriptions.Item label="Waybill">
-            {arrived?.waybillNumber}
-          </Descriptions.Item>
-          <Descriptions.Item label="Ta'minotchi">
-            {suppliers?.data?.find((p) => p.id === arrived?.supplierId)?.name ||
-              `ID: ${arrived?.supplierId}`}
-          </Descriptions.Item>
-          <Descriptions.Item label="Izoh">
-            {arrived?.description}
+          <Descriptions.Item label="Kod">{sale?.code}</Descriptions.Item>
+          <Descriptions.Item label="Mijoz">
+            {clients?.data?.find((c) => c.id === sale?.clientId)?.name ||
+              `ID: ${sale?.clientId}`}
           </Descriptions.Item>
           <Descriptions.Item label="Umumiy narx">
-            {arrived?.price}
+            {sale?.price}
           </Descriptions.Item>
+          <Descriptions.Item label="Naqd (To‘langan)">
+            {sale?.credit}
+          </Descriptions.Item>
+          <Descriptions.Item label="Qarz">{sale?.dept}</Descriptions.Item>
+          <Descriptions.Item label="Holati">{sale?.state}</Descriptions.Item>
         </Descriptions>
       </Card>
 
       <Card
-        title="Mahsulotlar ro'yxati"
+        title="Sotilgan mahsulotlar"
         bordered={false}
         className="w-full"
         style={{ paddingBottom: 0 }}
       >
         <Table
-          dataSource={
-            arrivedProducts?.data?.filter((p) => p.arrivedId === currentId) ||
-            []
-          }
+          dataSource={saleProducts?.data || []}
           columns={productColumns}
           rowKey="id"
           pagination={{ pageSize: 5 }}

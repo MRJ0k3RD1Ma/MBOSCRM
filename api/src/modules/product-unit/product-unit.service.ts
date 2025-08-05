@@ -4,10 +4,24 @@ import { UpdateProductUnitDto } from './dto/update-product-unit.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllProductUnitQueryDto } from './dto/findAll-product-unit-query.dto';
+import { env } from 'src/common/config';
 
 @Injectable()
 export class ProductUnitService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.productUnit.count();
+      const requiredCount = 1;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create({ name: 'dona' });
+        }
+      }
+    }
+  }
+
   async create(dto: CreateProductUnitDto) {
     const exists = await this.prisma.productUnit.findFirst({
       where: {

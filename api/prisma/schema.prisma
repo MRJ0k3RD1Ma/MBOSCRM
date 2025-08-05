@@ -30,6 +30,7 @@ model Client {
   ClientType             ClientType?  @relation(fields: [typeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Sale                   Sale[]
   PaidClient             PaidClient[]
+  Subscribe              Subscribe[]
 
   @@index([districtId], map: "FK_client_district_id")
   @@index([modifyId], map: "FK_client_modify_id")
@@ -250,23 +251,26 @@ model Supplier {
 }
 
 model Sale {
-  id          Int           @id @default(autoincrement())
-  date        DateTime?     @db.Date
-  code        String?       @db.VarChar(255)
-  codeId      Int?          @default(1)
-  client      Client        @relation(fields: [clientId], references: [id])
-  clientId    Int           @default(1) @map("client_id")
-  price       Float         @default(0)
-  dept        Float         @default(0)
-  credit      Float         @default(0)
-  state       SaleState     @default(CLOSED)
-  isDeleted   Boolean?      @default(false)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
-  registerId  Int?
-  modifyId    Int?
-  SaleProduct SaleProduct[]
-  PaidClient  PaidClient[]
+  id                     Int           @id @default(autoincrement())
+  date                   DateTime?     @db.Date
+  code                   String?       @db.VarChar(255)
+  codeId                 Int?          @default(1)
+  client                 Client        @relation(fields: [clientId], references: [id])
+  clientId               Int           @default(1) @map("client_id")
+  price                  Float         @default(0)
+  dept                   Float         @default(0)
+  credit                 Float         @default(0)
+  state                  SaleState     @default(CLOSED)
+  isDeleted              Boolean?      @default(false)
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @default(now()) @updatedAt
+  registerId             Int?
+  modifyId               Int?
+  SaleProduct            SaleProduct[]
+  subscribe_begin_date   DateTime?
+  subscribe_generate_day Int?
+  Subscribe              Subscribe[]
+  PaidClient             PaidClient[]
 }
 
 model SaleProduct {
@@ -306,10 +310,24 @@ model PaidClient {
   Client     Client?   @relation(fields: [clientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Sale       Sale?     @relation(fields: [saleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Payment    Payment?  @relation(fields: [paymentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
 
-  // Uncomment if you have User relations for registerId and modifyId
-  // User_PaidClient_registerId User? @relation("PaidClient_registerId", fields: [registerId], references: [id])
-  // User_PaidClient_modifyId   User? @relation("PaidClient_modifyId", fields: [modifyId], references: [id])
+// Uncomment if you have User relations for registerId and modifyId
+// User_PaidClient_registerId User? @relation("PaidClient_registerId", fields: [registerId], references: [id])
+// User_PaidClient_modifyId   User? @relation("PaidClient_modifyId", fields: [modifyId], references: [id])
+model Subscribe {
+  id          Int            @id @default(autoincrement())
+  saleId      Int?
+  sale        Sale?          @relation(fields: [saleId], references: [id])
+  clientId    Int
+  client      Client         @relation(fields: [clientId], references: [id])
+  paying_date DateTime
+  price       Float
+  paid        Float
+  state       SubscribeState @default(NOTPAYING)
+  isDeleted   Boolean        @default(false)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt
 
   @@index([clientId], map: "FK_paid_client_client_id")
 }
@@ -342,6 +360,11 @@ enum ProductType {
   SERVICE
   DEVICE
   SUBSCRIPTION
+}
+
+enum SubscribeState {
+  NOTPAYING
+  PAID
 }
 
 enum SaleState {

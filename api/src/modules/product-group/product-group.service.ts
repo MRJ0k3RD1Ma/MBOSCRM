@@ -4,14 +4,27 @@ import { UpdateProductGroupDto } from './dto/update-product-group.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllProductGroupQueryDto } from './dto/findAll-product-group.dto,';
+import { env } from 'src/common/config';
 
 @Injectable()
 export class ProductGroupService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.productGroup.count();
+      const requiredCount = 1;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create({ name: 'product type' }, 1);
+        }
+      }
+    }
+  }
+
   async create(
     createProductGroupDto: CreateProductGroupDto,
     creatorId: number,
-    modifyId: number,
   ) {
     const creator = await this.prisma.user.findUnique({
       where: {
@@ -25,7 +38,7 @@ export class ProductGroupService {
       data: {
         name: createProductGroupDto.name,
         creatorId: creatorId,
-        modifyId: modifyId,
+        modifyId: creatorId,
       },
     });
     return productGroup;

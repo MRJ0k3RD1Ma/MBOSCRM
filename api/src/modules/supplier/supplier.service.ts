@@ -5,10 +5,32 @@ import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { FindAllSupplierQueryDto } from './dto/findAll-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { Prisma, Supplier } from '@prisma/client';
+import { env } from 'src/common/config';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class SupplierService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.supplier.count();
+      const requiredCount = 5;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create(
+            {
+              balance: 0,
+              description: 'supplier description',
+              name: faker.person.fullName(),
+              phone: faker.phone.number(),
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
 
   async create(createSupplierDto: CreateSupplierDto, creatorId: number) {
     if (!creatorId) {

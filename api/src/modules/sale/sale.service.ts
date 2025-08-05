@@ -6,6 +6,7 @@ import { HttpError } from 'src/common/exception/http.error';
 import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
 import { Prisma } from '@prisma/client';
 import { SaleProductService } from '../sale-product/sale-product.service';
+import { env } from 'src/common/config';
 
 @Injectable()
 export class SaleService {
@@ -14,8 +15,37 @@ export class SaleService {
     private readonly saleProductService: SaleProductService,
   ) {}
 
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.sale.count();
+      const requiredCount = 1;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create(
+            {
+              clientId: 1,
+              credit: 100,
+              products: [{ count: 1, price: 100, productId: 1 }],
+              subscribe_begin_date: new Date(),
+              subscribe_generate_day: 10,
+              date: new Date(),
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
+
   async create(createSaleDto: CreateSaleDto, creatorId: number) {
-    const { date, clientId, credit, products } = createSaleDto;
+    const {
+      date,
+      clientId,
+      credit,
+      products,
+      subscribe_begin_date,
+      subscribe_generate_day,
+    } = createSaleDto;
 
     const client = await this.prisma.client.findUnique({
       where: { id: clientId },
@@ -42,6 +72,8 @@ export class SaleService {
     let sale = await this.prisma.sale.create({
       data: {
         date,
+        subscribe_begin_date,
+        subscribe_generate_day,
         code: `${new Date().getFullYear()}-${codeId}`,
         codeId,
         client: { connect: client },
@@ -165,6 +197,10 @@ export class SaleService {
     return this.prisma.sale.update({
       where: { id },
       data: {
+        subscribe_begin_date:
+          updateSaleDto.subscribe_begin_date ?? sale.subscribe_begin_date,
+        subscribe_generate_day:
+          updateSaleDto.subscribe_generate_day ?? sale.subscribe_generate_day,
         date: updateSaleDto.date ?? sale.date,
         credit: updateSaleDto.credit ?? sale.credit,
         dept: sale.price - (updateSaleDto.credit || sale.credit),

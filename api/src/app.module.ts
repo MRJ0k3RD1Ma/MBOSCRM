@@ -17,30 +17,32 @@ import { SaleProductModule } from './modules/sale-product/sale-product.module';
 import { ArrivedProductModule } from './modules/arrived-product/arrived-product.module';
 import { SaleModule } from './modules/sale/sale.module';
 import { PaidClientModule } from './modules/paid-client/paid-client.module';
+import { SubscribeModule } from './modules/subscribe/subscribe.module';
 
 @Module({
   controllers: [],
   providers: [],
   imports: [
     LocationModule,
+    UserRoleModule,
     UserModule,
     SettingsModule,
     PrismaModule,
     ClientTypeModule,
+    ProductUnitModule,
     ClientModule,
     ProductGroupModule,
-    UserRoleModule,
     SettingsModule,
     PrismaModule,
     ProductModule,
-    ProductUnitModule,
     SupplierModule,
-    PaidSupplierModule,
     PaymentModule,
+    PaidSupplierModule,
     ArrivedModule,
     SaleModule,
     SaleProductModule,
     SaleModule,
+    SubscribeModule,
     ArrivedProductModule,
     PaidClientModule,
   ],
