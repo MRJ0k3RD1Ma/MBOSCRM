@@ -4,11 +4,16 @@ import { UpdateSaleProductDto } from './dto/update-sale-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllSaleProductQueryDto } from './dto/findAll-sale-product-query.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, SubscribeState } from '@prisma/client';
+import { SubscribeService } from '../subscribe/subscribe.service';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class SaleProductService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly subscribeService: SubscribeService,
+  ) {}
   async create(createSaleProductDto: CreateSaleProductDto, creatorId: number) {
     const sale = await this.prisma.sale.findFirst({
       where: { id: createSaleProductDto.saleId },
@@ -50,6 +55,16 @@ export class SaleProductService {
         modifyId: creatorId,
       },
     });
+    if (saleProduct.is_subscribe) {
+      this.subscribeService.create({
+        clientId: sale.clientId,
+        paid: saleProduct.price,
+        price: saleProduct.price,
+        saleId: sale.id,
+        state: SubscribeState.NOTPAYING,
+        payingDate: dayjs(new Date()).add(1, 'month').toDate(),
+      });
+    }
 
     await this.prisma.product.update({
       where: { id: product.id },
