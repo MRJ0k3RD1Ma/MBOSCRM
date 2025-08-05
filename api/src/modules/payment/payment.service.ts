@@ -4,10 +4,28 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllPaymentQueryDto } from './dto/findAll-payment-query.dto';
 import { HttpError } from 'src/common/exception/http.error';
+import { env } from 'src/common/config';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class PaymentService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.payment.count();
+      const requiredCount = 5;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create({
+            name: faker.finance.creditCardIssuer(),
+            icon: faker.internet.emoji(),
+          });
+        }
+      }
+    }
+  }
+
   async create(createPaymentDto: CreatePaymentDto) {
     const payment = await this.prisma.payment.create({
       data: {

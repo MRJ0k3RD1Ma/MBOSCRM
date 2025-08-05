@@ -5,10 +5,31 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreatePaidSupplierDto } from './dto/create-paid-supplier.dto';
 import { FindAllPaidSupplierQueryDto } from './dto/findAll-paid-supplier.dto';
 import { UpdatePaidSupplierDto } from './dto/update-paid-supplier.dto';
+import { env } from 'src/common/config';
 
 @Injectable()
 export class PaidSupplierService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.paidSupplier.count();
+      const requiredCount = 5;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create(
+            {
+              paymentId: 1,
+              price: 100,
+              supplierId: 1,
+              paidDate: new Date(),
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
 
   async create(
     createPaidSupplierDto: CreatePaidSupplierDto,

@@ -1,14 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Client, ClientType, Prisma } from '@prisma/client';
 import { HttpError } from 'src/common/exception/http.error';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { FindAllClientQueryDto } from './dto/findAll-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { env } from 'src/common/config';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
-export class ClientService {
+export class ClientService implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const clientCount = await this.prisma.client.count();
+      const requiredCount = 5;
+      if (clientCount < requiredCount) {
+        for (let i = clientCount; i < requiredCount; i++) {
+          await this.create(
+            {
+              address: faker.location.streetAddress(),
+              description: faker.person.jobTitle(),
+              districtId: 1733223,
+              regionId: 1733,
+              inn: faker.commerce.isbn(),
+              name: faker.person.fullName(),
+              phone: faker.phone.number(),
+              typeId: 1,
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
 
   async create(createClientDto: CreateClientDto, creatorId: number) {
     if (!creatorId) {

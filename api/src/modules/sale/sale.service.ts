@@ -6,6 +6,7 @@ import { HttpError } from 'src/common/exception/http.error';
 import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
 import { Prisma } from '@prisma/client';
 import { SaleProductService } from '../sale-product/sale-product.service';
+import { env } from 'src/common/config';
 
 @Injectable()
 export class SaleService {
@@ -13,6 +14,28 @@ export class SaleService {
     private readonly prisma: PrismaService,
     private readonly saleProductService: SaleProductService,
   ) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.sale.count();
+      const requiredCount = 1;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create(
+            {
+              clientId: 1,
+              credit: 100,
+              products: [{ count: 1, price: 100, productId: 1 }],
+              subscribe_begin_date: new Date(),
+              subscribe_generate_day: 10,
+              date: new Date(),
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
 
   async create(createSaleDto: CreateSaleDto, creatorId: number) {
     const {

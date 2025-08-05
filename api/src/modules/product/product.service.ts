@@ -4,10 +4,40 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllProductQueryDto } from './dto/findAll-product.dto';
+import { env } from 'src/common/config';
+import { faker } from '@faker-js/faker';
+import { ProductType } from '@prisma/client';
 
 @Injectable()
 export class ProductService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.product.count();
+      const requiredCount = 5;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create(
+            {
+              countArrived: 5,
+              countReminder: 5,
+              countSale: 0,
+              groupId: 1,
+              name: faker.commerce.productName(),
+              price: +faker.commerce.price(),
+              priceIncome: +faker.commerce.price(),
+              reminderFirst: 5,
+              type: ProductType.DEVICE,
+              unitId: 1,
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
+
   async create(createProductDto: CreateProductDto, creatorId: number) {
     const {
       name,
