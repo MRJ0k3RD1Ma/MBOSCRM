@@ -24,7 +24,7 @@ export class SaleService {
           await this.create(
             {
               clientId: 1,
-              credit: 100,
+              dept: 100,
               products: [{ count: 1, price: 100, productId: 1 }],
               subscribe_begin_date: new Date(),
               subscribe_generate_day: 10,
@@ -41,7 +41,7 @@ export class SaleService {
     const {
       date,
       clientId,
-      credit,
+      dept,
       products,
       subscribe_begin_date,
       subscribe_generate_day,
@@ -74,10 +74,10 @@ export class SaleService {
         date,
         subscribe_begin_date,
         subscribe_generate_day,
-        code: `${new Date().getFullYear()}-${codeId}`,
+        code: `${new Date().getFullYear() - 2000}-${codeId}`,
         codeId,
         client: { connect: client },
-        credit,
+        dept,
         registerId: creatorId,
         modifyId: creatorId,
       },
@@ -99,7 +99,7 @@ export class SaleService {
 
     sale = await this.prisma.sale.update({
       where: { id: sale.id },
-      data: { price: totalPrice, dept: totalPrice - sale.credit },
+      data: { price: totalPrice, credit: totalPrice - sale.dept },
       include: { SaleProduct: { include: { product: true } } },
     });
 

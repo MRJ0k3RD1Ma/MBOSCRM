@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { Prisma } from '@prisma/client';
 import { CreateArrivedProductDto } from './dto/create-arrived-product.dto';
-import { FindAllArrivedProdcutQueryDto } from './dto/findAll-arrived-product-query.dto';
+import { FindAllArrivedProductQueryDto } from './dto/findAll-arrived-product-query.dto';
 import { UpdateArrivedProductDto } from './dto/update-arrived-product.dto';
 
 @Injectable()
@@ -49,7 +49,7 @@ export class ArrivedProductService {
     return arrivedproduct;
   }
 
-  async findAll(dto: FindAllArrivedProdcutQueryDto) {
+  async findAll(dto: FindAllArrivedProductQueryDto) {
     const {
       limit = 10,
       page = 1,
