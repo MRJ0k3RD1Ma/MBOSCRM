@@ -1,12 +1,4 @@
-import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  Row,
-  Select,
-} from "antd";
+import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
 import { useGetAllSuppliers } from "../../../config/queries/supplier/supplier-querys";

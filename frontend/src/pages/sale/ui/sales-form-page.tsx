@@ -111,10 +111,19 @@ export default function SalesFormPage() {
           saleId: Number(id),
         });
       } else {
-        setProducts((prev) => [...prev, { ...values }]);
+        if (values.id) {
+          setProducts((prev) =>
+            prev.map((p) =>
+              p.productId === values.productId ? { ...p, ...values } : p
+            )
+          );
+        } else {
+          setProducts((prev) => [...prev, { ...values }]);
+        }
       }
 
       drawerForm.resetFields();
+      setDrawerOpen(false);
     } catch (error) {
       message.error("Mahsulot kiritishda xatolik yuz berdi");
     }
@@ -143,15 +152,17 @@ export default function SalesFormPage() {
       title: "Amallar",
       render: (_: any, record: any) => (
         <Space>
-          <Button
-            size="small"
-            onClick={() => {
-              drawerForm.setFieldsValue(record);
-              setDrawerOpen(true);
-            }}
-          >
-            Tahrirlash
-          </Button>
+          {isEdit && (
+            <Button
+              size="small"
+              onClick={() => {
+                drawerForm.setFieldsValue(record);
+                setDrawerOpen(true);
+              }}
+            >
+              Tahrirlash
+            </Button>
+          )}
           <Button
             danger
             size="small"
@@ -213,11 +224,16 @@ export default function SalesFormPage() {
           </Form.Item>
 
           <Form.Item
-            name="description"
-            label="Izoh"
+            name="credit"
+            label="Umumiy to'langan summa"
             className="min-w-[200px] grow"
+            rules={[{ required: true }]}
           >
-            <Input.TextArea rows={1} placeholder="Izoh" autoSize />
+            <InputNumber
+              min={0}
+              placeholder="Umumiy to'langan summani kiriting"
+              className="!w-full"
+            />
           </Form.Item>
         </div>
       </Form>

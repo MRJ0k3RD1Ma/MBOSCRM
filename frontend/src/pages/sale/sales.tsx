@@ -60,7 +60,7 @@ export default function Sales() {
           {
             key: "edit",
             label: "Tahrirlash",
-            onClick: () => navigate(`/sales/edit/${row.id}`),
+            onClick: () => navigate(`/sale/edit/${row.id}`),
           },
           {
             key: "delete",
@@ -71,7 +71,7 @@ export default function Sales() {
           {
             key: "view",
             label: "Tafsilotlar",
-            onClick: () => navigate(`/sales/${row.id}`),
+            onClick: () => navigate(`/sale/${row.id}`),
           },
         ];
 
@@ -157,7 +157,7 @@ export default function Sales() {
               (e.target as HTMLElement).closest("svg")
             )
               return;
-            navigate(`/sales/${record.id}`);
+            navigate(`/sale/${record.id}`);
           },
         })}
       />
