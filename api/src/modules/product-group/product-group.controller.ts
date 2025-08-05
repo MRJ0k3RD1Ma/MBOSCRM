@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProductGroupService } from './product-group.service';
 import { CreateProductGroupDto } from './dto/create-product-group.dto';
@@ -41,14 +42,14 @@ export class ProductGroupController {
 
   @Get(':id')
   @DecoratorWrapper('Get product group by id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.productGroupService.findOne(+id);
   }
 
   @Patch(':id')
   @DecoratorWrapper('Update product group', true, [Role.Admin])
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateProductGroupDto: UpdateProductGroupDto,
     @Req() req: Request,
   ) {
@@ -58,7 +59,7 @@ export class ProductGroupController {
 
   @Delete(':id')
   @DecoratorWrapper('Delete product group', true, [Role.Admin])
-  async remove(@Param('id') id: string, @Req() req: Request) {
+  async remove(@Param('id', ParseIntPipe) id: string, @Req() req: Request) {
     const userId = req.user.id;
     return this.productGroupService.remove(+id, userId);
   }

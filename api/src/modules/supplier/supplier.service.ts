@@ -36,6 +36,14 @@ export class SupplierService {
     if (!creatorId) {
       throw HttpError({ code: 'Creator not found' });
     }
+    if (createSupplierDto.phone) {
+      const existingPhone = await this.prisma.supplier.findFirst({
+        where: { phone: createSupplierDto.phone, isDeleted: false },
+      });
+      if (existingPhone) {
+        throw HttpError({ code: 'Phone already exists' });
+      }
+    }
 
     const supplier = await this.prisma.supplier.create({
       data: {

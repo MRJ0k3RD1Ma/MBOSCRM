@@ -78,9 +78,10 @@ export class ProductGroupService {
   }
 
   async findOne(id: number) {
-    const productGroup = await this.prisma.productGroup.findUnique({
+    const productGroup = await this.prisma.productGroup.findFirst({
       where: {
         id,
+        isDeleted: false,
       },
     });
     if (!productGroup) {
@@ -94,20 +95,20 @@ export class ProductGroupService {
     updateProductGroupDto: UpdateProductGroupDto,
     userId: number,
   ) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
+    const user = await this.prisma.user.findFirst({
+      where: { id: userId, isDeleted: false },
     });
 
     if (!user) {
       throw HttpError({ message: `User with ID ${userId} not found` });
     }
 
-    const existingGroup = await this.prisma.productGroup.findUnique({
-      where: { id },
+    const existingGroup = await this.prisma.productGroup.findFirst({
+      where: { id, isDeleted: false },
     });
 
     if (!existingGroup) {
-      throw HttpError({ message: `Product group with ID ${id} not found` });
+      throw new HttpError({ message: `Product group with ID ${id} not found` });
     }
 
     return this.prisma.productGroup.update({

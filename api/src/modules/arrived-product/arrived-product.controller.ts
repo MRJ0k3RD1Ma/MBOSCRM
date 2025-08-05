@@ -41,7 +41,7 @@ export class ArrivedProductController {
   @Patch(':id')
   @DecoratorWrapper('update ArrivedProduct', true, [Role.Admin])
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateArrivedProductDto: UpdateArrivedProductDto,
   ) {
     return this.arrivedproductService.update(+id, updateArrivedProductDto);
@@ -49,7 +49,7 @@ export class ArrivedProductController {
 
   @Delete(':id')
   @DecoratorWrapper('delete ArrivedProduct', true, [Role.Admin])
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.arrivedproductService.remove(+id);
   }
 }

@@ -98,8 +98,8 @@ export class PaymentService {
   }
 
   async remove(id: number) {
-    const payment = await this.prisma.payment.findUnique({
-      where: { id },
+    const payment = await this.prisma.payment.findFirst({
+      where: { id, isDeleted: false },
     });
     if (!payment) {
       throw new HttpError({ message: `Payment with ID ${id} not found` });

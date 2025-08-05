@@ -35,15 +35,15 @@ export class PaidSupplierService {
     createPaidSupplierDto: CreatePaidSupplierDto,
     creatorId: number,
   ) {
-    const payment = await this.prisma.payment.findUnique({
-      where: { id: createPaidSupplierDto.paymentId },
+    const payment = await this.prisma.payment.findFirst({
+      where: { id: createPaidSupplierDto.paymentId, isDeleted: false },
     });
     if (!payment) {
       throw new HttpError({ message: 'Payment Not Found' });
     }
 
-    const supplier = await this.prisma.supplier.findUnique({
-      where: { id: createPaidSupplierDto.supplierId },
+    const supplier = await this.prisma.supplier.findFirst({
+      where: { id: createPaidSupplierDto.supplierId, isDeleted: false },
     });
     if (!supplier) {
       throw new HttpError({ message: 'Supplier Not Found', code: 404 });
@@ -139,8 +139,8 @@ export class PaidSupplierService {
   }
 
   async remove(id: number, modifierId: number) {
-    const paidsupplier = await this.prisma.paidSupplier.findUnique({
-      where: { id: id },
+    const paidsupplier = await this.prisma.paidSupplier.findFirst({
+      where: { id: id, isDeleted: false },
     });
     if (!paidsupplier) {
       throw HttpError({ code: 'PaidSupplier not found' });

@@ -47,8 +47,8 @@ export class SaleService {
       subscribe_generate_day,
     } = createSaleDto;
 
-    const client = await this.prisma.client.findUnique({
-      where: { id: clientId },
+    const client = await this.prisma.client.findFirst({
+      where: { id: clientId, isDeleted: false },
     });
 
     if (!client) {

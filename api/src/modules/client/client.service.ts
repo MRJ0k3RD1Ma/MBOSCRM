@@ -41,7 +41,7 @@ export class ClientService implements OnModuleInit {
       throw HttpError({ message: 'Creator not found' });
     }
     const existingPhone = await this.prisma.client.findFirst({
-      where: { phone: createClientDto.phone },
+      where: { phone: createClientDto.phone, isDeleted: false },
     });
     if (existingPhone) {
       throw HttpError({ code: 'Phone already exists' });
@@ -67,8 +67,8 @@ export class ClientService implements OnModuleInit {
 
     let type: ClientType;
     if (createClientDto.typeId) {
-      type = await this.prisma.clientType.findUnique({
-        where: { id: createClientDto.typeId },
+      type = await this.prisma.clientType.findFirst({
+        where: { id: createClientDto.typeId, isDeleted: false },
       });
       if (!type) {
         throw HttpError({ code: 'type Not Found' });
@@ -186,8 +186,8 @@ export class ClientService implements OnModuleInit {
 
     let type: ClientType;
     if (updateData.typeId) {
-      type = await this.prisma.clientType.findUnique({
-        where: { id: updateData.typeId },
+      type = await this.prisma.clientType.findFirst({
+        where: { id: updateData.typeId, isDeleted: false},
       });
       if (!type) {
         throw HttpError({ code: 'type Not Found' });

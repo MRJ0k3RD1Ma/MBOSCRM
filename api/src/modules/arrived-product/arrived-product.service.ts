@@ -18,8 +18,8 @@ export class ArrivedProductService {
       });
     }
 
-    const arrived = await this.prisma.arrived.findUnique({
-      where: { id: arrivedId },
+    const arrived = await this.prisma.arrived.findFirst({
+      where: { id: arrivedId, isDeleted: false},
     });
     if (!arrived) {
       throw new HttpError({
@@ -27,8 +27,8 @@ export class ArrivedProductService {
       });
     }
 
-    const product = await this.prisma.product.findUnique({
-      where: { id: productId },
+    const product = await this.prisma.product.findFirst({
+      where: { id: productId, isDeleted: false },
     });
     if (!product) {
       throw new HttpError({

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProductUnitService } from './product-unit.service';
 import { CreateProductUnitDto } from './dto/create-product-unit.dto';
@@ -33,14 +34,14 @@ export class ProductUnitController {
 
   @Get(':id')
   @DecoratorWrapper('Get product unit by id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.productUnitService.findOne(+id);
   }
 
   @Patch(':id')
   @DecoratorWrapper('Update product unit', true, [Role.Admin])
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateProductUnitDto: UpdateProductUnitDto,
   ) {
     return this.productUnitService.update(+id, updateProductUnitDto);
@@ -48,7 +49,7 @@ export class ProductUnitController {
 
   @Delete(':id')
   @DecoratorWrapper('Delete product unit', true, [Role.Admin])
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.productUnitService.remove(+id);
   }
 }

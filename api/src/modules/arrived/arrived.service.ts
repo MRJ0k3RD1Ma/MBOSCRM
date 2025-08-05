@@ -39,8 +39,8 @@ export class ArrivedService {
     const { date, waybillNumber, supplierId, description, products } =
       createArrivedDto;
 
-    const existingSupplier = await this.prisma.supplier.findUnique({
-      where: { id: supplierId },
+    const existingSupplier = await this.prisma.supplier.findFirst({
+      where: { id: supplierId, isDeleted: false },
     });
 
     if (!existingSupplier) {

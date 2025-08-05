@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { SubscribeService } from './subscribe.service';
 import { CreateSubscribeDto } from './dto/create-subscribe.dto';
@@ -33,14 +34,14 @@ export class SubscribeController {
 
   @Get(':id')
   @DecoratorWrapper('find Subscribe', true, [Role.Admin])
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.subscribeService.findOne(+id);
   }
 
   @Patch(':id')
   @DecoratorWrapper('update Subscribe', true, [Role.Admin])
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateSubscribeDto: UpdateSubscribeDto,
   ) {
     return this.subscribeService.update(+id, updateSubscribeDto);
@@ -48,7 +49,7 @@ export class SubscribeController {
 
   @Delete(':id')
   @DecoratorWrapper('delete Subscribe', true, [Role.Admin])
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.subscribeService.remove(+id);
   }
 }

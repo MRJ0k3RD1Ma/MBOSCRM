@@ -22,7 +22,7 @@ model Client {
   isDeleted              Boolean?     @default(false)
   createdAt              DateTime     @default(now())
   updatedAt              DateTime     @default(now()) @updatedAt
-  phone                  String?      @unique() @db.VarChar(255)
+  phone                  String       @db.VarChar(255)
   District               District?    @relation(fields: [districtId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   User_Client_modifyId   User?        @relation("Client_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Region                 Region?      @relation(fields: [regionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -242,7 +242,7 @@ model Supplier {
   updatedAt   DateTime  @default(now()) @updatedAt
   registerId  Int?
   modifyId    Int?
-  arrived     Arrived[] // 1:N bog'lanish
+  arrived     Arrived[]
   // If `register_id` and `modify_id` refer to the `User` table, uncomment and adjust these relations:
   // User_Supplier_registerId User? @relation("Supplier_registerId", fields: [registerId], references: [id])
   // User_Supplier_modifyId   User? @relation("Supplier_modifyId", fields: [modifyId], references: [id])

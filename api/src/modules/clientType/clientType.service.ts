@@ -67,7 +67,7 @@ export class ClientTypeService implements OnModuleInit {
   }
 
   async findOne(id: number) {
-    const clientType = await this.prisma.clientType.findUnique({
+    const clientType = await this.prisma.clientType.findFirst({
       where: { id, isDeleted: false },
     });
     if (!clientType) {
@@ -77,7 +77,7 @@ export class ClientTypeService implements OnModuleInit {
   }
 
   async update(id: number, dto: UpdateClientTypeDto) {
-    const clientType = await this.prisma.clientType.findUnique({
+    const clientType = await this.prisma.clientType.findFirst({
       where: { id, isDeleted: false },
     });
     if (!clientType) throw HttpError({ code: 'ClientType not found' });
@@ -95,7 +95,7 @@ export class ClientTypeService implements OnModuleInit {
   }
 
   async remove(id: number) {
-    const clientType = await this.prisma.clientType.findUnique({
+    const clientType = await this.prisma.clientType.findFirst({
       where: { id: id, isDeleted: false },
     });
     if (!clientType) {

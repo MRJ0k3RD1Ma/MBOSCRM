@@ -53,8 +53,8 @@ export class ProductService {
       countSale,
     } = createProductDto;
 
-    const existingGroup = await this.prisma.productGroup.findUnique({
-      where: { id: groupId },
+    const existingGroup = await this.prisma.productGroup.findFirst({
+      where: { id: groupId, isDeleted: false },
     });
     if (!creatorId) {
       throw HttpError({ message: 'Creator not found' });
@@ -63,8 +63,8 @@ export class ProductService {
       throw HttpError({ message: 'Group not found' });
     }
     if (createProductDto.unitId) {
-      const existingUnit = await this.prisma.productUnit.findUnique({
-        where: { id: unitId },
+      const existingUnit = await this.prisma.productUnit.findFirst({
+        where: { id: unitId, isDeleted: false },
       });
       if (!existingUnit) {
         throw HttpError({ message: 'ProductUnit not found' });
@@ -155,9 +155,10 @@ export class ProductService {
   }
 
   async findOne(id: number) {
-    const product = await this.prisma.product.findUnique({
+    const product = await this.prisma.product.findFirst({
       where: {
         id,
+        isDeleted: false,
       },
     });
     if (!product) {
@@ -167,8 +168,8 @@ export class ProductService {
   }
 
   async update(id: number, dto: UpdateProductDto) {
-    const existingProduct = await this.prisma.product.findUnique({
-      where: { id },
+    const existingProduct = await this.prisma.product.findFirst({
+      where: { id, isDeleted: false },
     });
 
     if (!existingProduct) {
@@ -176,8 +177,8 @@ export class ProductService {
     }
 
     if (dto.groupId !== undefined) {
-      const groupExists = await this.prisma.productGroup.findUnique({
-        where: { id: dto.groupId },
+      const groupExists = await this.prisma.productGroup.findFirst({
+        where: { id: dto.groupId, isDeleted: false },
       });
       if (!groupExists) {
         throw new HttpError({
@@ -187,8 +188,8 @@ export class ProductService {
     }
 
     if (dto.unitId !== undefined) {
-      const unitExists = await this.prisma.productUnit.findUnique({
-        where: { id: dto.unitId },
+      const unitExists = await this.prisma.productUnit.findFirst({
+        where: { id: dto.unitId, isDeleted: false },
       });
       if (!unitExists) {
         throw new HttpError({
@@ -241,11 +242,11 @@ export class ProductService {
   }
 
   async remove(id: number) {
-    const product = await this.prisma.product.findUnique({
-      where: { id },
+    const product = await this.prisma.product.findFirst({
+      where: { id, isDeleted: false },
     });
     if (!product) {
-      throw HttpError({ code: 'Product not found' });
+      throw new HttpError({ code: 'Product not found' });
     }
     return this.prisma.product.update({
       where: { id },

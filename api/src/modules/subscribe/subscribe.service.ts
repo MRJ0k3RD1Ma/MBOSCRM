@@ -14,8 +14,8 @@ export class SubscribeService {
     const { clientId, paid, price, saleId, state, payingDate } =
       createSubscribeDto;
 
-    const client = await this.prisma.client.findUnique({
-      where: { id: clientId },
+    const client = await this.prisma.client.findFirst({
+      where: { id: clientId, isDeleted: false },
     });
 
     if (!client) {
@@ -24,8 +24,8 @@ export class SubscribeService {
       });
     }
 
-    const sale = await this.prisma.sale.findUnique({
-      where: { id: saleId },
+    const sale = await this.prisma.sale.findFirst({
+      where: { id: saleId, isDeleted: false },
     });
 
     if (!sale) {
@@ -128,8 +128,8 @@ export class SubscribeService {
   }
 
   async paidSubscripton(id: number) {
-    const subscribe = await this.prisma.subscribe.findUnique({
-      where: { id },
+    const subscribe = await this.prisma.subscribe.findFirst({
+      where: { id, isDeleted: false },
       include: { sale: true },
     });
     if (!subscribe) {
