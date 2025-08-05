@@ -91,7 +91,12 @@ const pages = [
   },
   {
     key: "/sales",
-    label: "Chiqimlar",
+    label: "sales",
+    icon: <InboxOutlined />,
+  },
+  {
+    key: "/subscribe",
+    label: "subscribe",
     icon: <InboxOutlined />,
   },
 ];

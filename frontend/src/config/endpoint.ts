@@ -143,3 +143,12 @@ export const saleProductEndpoints = {
   update: (id: string) => `sale-product/${id}`,
   delete: (id: string) => `sale-product/${id}`,
 };
+
+// ===================== SUBSCRIBE ENDPOINTS =====================
+export const subscribeEndpoints = {
+  all: "/subscribe",
+  one: (id: string) => `/subscribe/${id}`,
+  create: "/subscribe",
+  update: (id: string) => `/subscribe/${id}`,
+  delete: (id: string) => `/subscribe/${id}`,
+};

@@ -22,6 +22,7 @@ import ArrivedFormPage from "../pages/arrived/ui/arriveds-form-page";
 import Sales from "../pages/sale/sales";
 import SalesFormPage from "../pages/sale/ui/sales-form-page";
 import Sale from "../pages/sale/sale";
+import Subscribes from "../pages/subscribe/subscribes";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -124,6 +125,10 @@ export const router = createBrowserRouter([
           {
             path: "sale/edit/:id",
             element: <SalesFormPage />,
+          },
+          {
+            path: "subscribe",
+            element: <Subscribes />,
           },
           {
             path: "*",
