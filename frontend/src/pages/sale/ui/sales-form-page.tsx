@@ -224,7 +224,7 @@ export default function SalesFormPage() {
           </Form.Item>
 
           <Form.Item
-            name="credit"
+            name="dept"
             label="Umumiy to'langan summa"
             className="min-w-[200px] grow"
             rules={[{ required: true }]}
@@ -251,6 +251,18 @@ export default function SalesFormPage() {
               showSearch
               optionFilterProp="label"
               allowClear
+              onChange={(value) => {
+                const selectedProduct = productsList?.data.find(
+                  (p) => p.id === value
+                );
+                if (selectedProduct) {
+                  drawerForm.setFieldsValue({
+                    price: selectedProduct.price, // 👈 narxni inputga qo'yish
+                  });
+                } else {
+                  drawerForm.setFieldsValue({ price: null });
+                }
+              }}
             >
               {productsList?.data.map((p) => (
                 <Select.Option key={p.id} value={p.id} label={p.name}>
@@ -265,7 +277,7 @@ export default function SalesFormPage() {
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
-            <InputNumber min={1} className="w-full" placeholder="Soni" />
+            <InputNumber min={1} className="!w-full" placeholder="Soni" />
           </Form.Item>
 
           <Form.Item
@@ -273,7 +285,12 @@ export default function SalesFormPage() {
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
-            <InputNumber min={0} className="w-full" placeholder="Narxi" />
+            <InputNumber
+              min={0}
+              className="!w-full"
+              placeholder="Narxi"
+              disabled
+            />
           </Form.Item>
 
           <Form.Item style={{ flexShrink: 0 }}>
