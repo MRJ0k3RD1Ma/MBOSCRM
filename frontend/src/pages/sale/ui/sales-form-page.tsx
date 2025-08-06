@@ -50,7 +50,6 @@ export default function SalesFormPage() {
   const { data: saleProductsData } = useGetAllSaleProduct({
     saleId: isEdit ? Number(id) : undefined,
   });
-
   const createSale = useCreateSale();
   const updateSale = useUpdateSale();
   const createSaleProduct = useCreateSaleProduct();
@@ -222,25 +221,12 @@ export default function SalesFormPage() {
               ))}
             </Select>
           </Form.Item>
-
-          <Form.Item
-            name="dept"
-            label="Umumiy to'langan summa"
-            className="min-w-[200px] grow"
-            rules={[{ required: true }]}
-          >
-            <InputNumber
-              min={0}
-              placeholder="Umumiy to'langan summani kiriting"
-              className="!w-full"
-            />
-          </Form.Item>
         </div>
       </Form>
 
       <Title level={4}>Mahsulotlar</Title>
       <Form form={drawerForm} onFinish={onDrawerFinish}>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex gap-4">
           <Form.Item
             name="productId"
             rules={[{ required: true }]}
@@ -257,11 +243,16 @@ export default function SalesFormPage() {
                 );
                 if (selectedProduct) {
                   drawerForm.setFieldsValue({
-                    price: selectedProduct.price, // 👈 narxni inputga qo'yish
+                    price: selectedProduct.price,
                   });
                 } else {
                   drawerForm.setFieldsValue({ price: null });
                 }
+                const count = drawerForm.getFieldValue("count") || 0;
+                const total = selectedProduct?.price
+                  ? selectedProduct.price * count
+                  : 0;
+                drawerForm.setFieldsValue({ total });
               }}
             >
               {productsList?.data.map((p) => (
@@ -275,9 +266,19 @@ export default function SalesFormPage() {
           <Form.Item
             name="count"
             rules={[{ required: true }]}
-            className="min-w-[200px] grow"
+            className="min-w-[100px] max-w-[150px] grow"
           >
-            <InputNumber min={1} className="!w-full" placeholder="Soni" />
+            <InputNumber
+              min={1}
+              className="!w-full"
+              placeholder="Soni"
+              onChange={(value: any) => {
+                const price = drawerForm.getFieldValue("price") || 0;
+                drawerForm.setFieldsValue({
+                  total: price * value,
+                });
+              }}
+            />
           </Form.Item>
 
           <Form.Item
@@ -290,9 +291,17 @@ export default function SalesFormPage() {
               className="!w-full"
               placeholder="Narxi"
               disabled
+              onChange={(value: any) => {
+                const count = drawerForm.getFieldValue("count") || 0;
+                drawerForm.setFieldsValue({
+                  total: count * value,
+                });
+              }}
             />
           </Form.Item>
-
+          <Form.Item name="total" className="min-w-[200px] grow">
+            <InputNumber disabled className="!w-full" placeholder="Jami narx" />
+          </Form.Item>
           <Form.Item style={{ flexShrink: 0 }}>
             <Button htmlType="submit" type="primary">
               +
@@ -300,14 +309,12 @@ export default function SalesFormPage() {
           </Form.Item>
         </div>
       </Form>
-
       <Table
         rowKey={(r) => (isEdit ? r.id : `${r.productId}-${r.count}-${r.price}`)}
         dataSource={productDataSource}
         columns={columns}
         pagination={false}
       />
-
       <Drawer
         open={drawerOpen}
         title="Mahsulot tahrirlash"
@@ -355,7 +362,6 @@ export default function SalesFormPage() {
           >
             <InputNumber min={0} className="w-full" placeholder="Narxi" />
           </Form.Item>
-
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
               Saqlash
