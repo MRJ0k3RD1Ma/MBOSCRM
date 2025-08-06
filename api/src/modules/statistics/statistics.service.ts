@@ -157,7 +157,10 @@ export class StatisticsService {
       };
     });
 
+    const settings = await this.prisma.setting.findUnique({ where: { id: 1 } });
+
     return {
+      balance: settings.balance,
       totals: {
         clients: totalClients,
         suppliers: totalSuppliers,
