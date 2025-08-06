@@ -82,8 +82,51 @@ export class PaidClientService {
         where: { id: 1 },
         data: { balance: { increment: price } },
       });
+      this.checkDept(client.id);
     }
     return paidClient;
+  }
+
+  async checkDept(clientId: number) {
+    const sales = await this.prisma.sale.findMany({
+      where: { credit: { gt: 0 }, clientId },
+    });
+    const client = await this.prisma.client.findUnique({
+      where: { id: clientId },
+    });
+
+    for (let sale of sales) {
+      if (client.balance == 0) return;
+      if (client.balance < sale.price) {
+        sale = await this.prisma.sale.update({
+          where: { id: sale.id },
+          data: {
+            price: sale.price,
+            credit: sale.price - client.balance,
+            dept: client.balance,
+          },
+          include: { SaleProduct: { include: { product: true } } },
+        });
+        await this.prisma.client.update({
+          where: { id: client.id },
+          data: { balance: { decrement: sale.dept } },
+        });
+      } else {
+        sale = await this.prisma.sale.update({
+          where: { id: sale.id },
+          data: {
+            price: sale.price,
+            credit: 0,
+            dept: sale.price,
+          },
+          include: { SaleProduct: { include: { product: true } } },
+        });
+        await this.prisma.client.update({
+          where: { id: client.id },
+          data: { balance: { decrement: sale.price } },
+        });
+      }
+    }
   }
 
   async findAll(dto: FindAllQueryPaidClientDto) {

@@ -41,7 +41,6 @@ export class SaleService {
     const {
       date,
       clientId,
-      dept,
       products,
       subscribe_begin_date,
       subscribe_generate_day,
@@ -77,7 +76,6 @@ export class SaleService {
         code: `${new Date().getFullYear() - 2000}-${codeId}`,
         codeId,
         client: { connect: client },
-        dept,
         registerId: creatorId,
         modifyId: creatorId,
       },
@@ -97,11 +95,35 @@ export class SaleService {
       totalPrice += saleProduct.priceCount;
     }
 
-    sale = await this.prisma.sale.update({
-      where: { id: sale.id },
-      data: { price: totalPrice, credit: totalPrice - sale.dept },
-      include: { SaleProduct: { include: { product: true } } },
-    });
+    if (client.balance < totalPrice) {
+      sale = await this.prisma.sale.update({
+        where: { id: sale.id },
+        data: {
+          price: totalPrice,
+          credit: totalPrice - client.balance,
+          dept: client.balance,
+        },
+        include: { SaleProduct: { include: { product: true } } },
+      });
+      await this.prisma.client.update({
+        where: { id: client.id },
+        data: { balance: { decrement: sale.dept } },
+      });
+    } else {
+      sale = await this.prisma.sale.update({
+        where: { id: sale.id },
+        data: {
+          price: totalPrice,
+          credit: 0,
+          dept: totalPrice,
+        },
+        include: { SaleProduct: { include: { product: true } } },
+      });
+      await this.prisma.client.update({
+        where: { id: client.id },
+        data: { balance: { decrement: totalPrice } },
+      });
+    }
 
     return sale;
   }
