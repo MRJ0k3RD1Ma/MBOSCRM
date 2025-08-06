@@ -82,12 +82,12 @@ export class PaidClientService {
         where: { id: 1 },
         data: { balance: { increment: price } },
       });
-      this.checkDept(client.id);
+      this.checkCredit(client.id);
     }
     return paidClient;
   }
 
-  async checkDept(clientId: number) {
+  async checkCredit(clientId: number) {
     const sales = await this.prisma.sale.findMany({
       where: { credit: { gt: 0 }, clientId },
     });
