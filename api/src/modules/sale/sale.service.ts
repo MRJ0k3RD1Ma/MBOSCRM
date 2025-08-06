@@ -136,6 +136,7 @@ export class SaleService {
       toDate,
       clientId,
       code,
+      credit,
     } = dto;
 
     const where: Prisma.SaleWhereInput = {
@@ -143,6 +144,14 @@ export class SaleService {
     };
     if (clientId) {
       where.clientId = clientId;
+    }
+
+    if (credit !== undefined) {
+      if (credit === true) {
+        where.credit = { gt: 0 };
+      } else {
+        where.credit = { equals: 0 };
+      }
     }
     if (code) {
       where.code = {
