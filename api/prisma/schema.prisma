@@ -312,6 +312,21 @@ model PaidClient {
   Payment    Payment?  @relation(fields: [paymentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
+model PaidServer {
+  id            Int      @id @default(autoincrement())
+  serverId      Int
+  endDate       DateTime
+  paymentTypeId Int
+  paymentType   Payment  @relation(fields: [paymentTypeId], references: [id])
+  price         Float
+  description   String
+  isDeleted     Boolean? @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+  registerId    Int?
+  modifyId      Int?
+}
+
 // Uncomment if you have User relations for registerId and modifyId
 // User_PaidClient_registerId User? @relation("PaidClient_registerId", fields: [registerId], references: [id])
 // User_PaidClient_modifyId   User? @relation("PaidClient_modifyId", fields: [modifyId], references: [id])
@@ -341,6 +356,7 @@ model Payment {
   updatedAt    DateTime       @default(now()) @updatedAt
   PaidSupplier PaidSupplier[]
   PaidClient   PaidClient[]
+  PaidServer   PaidServer[]
 
   @@map("payment")
 }
