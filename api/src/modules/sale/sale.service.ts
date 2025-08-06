@@ -222,8 +222,6 @@ export class SaleService {
         subscribe_generate_day:
           updateSaleDto.subscribe_generate_day ?? sale.subscribe_generate_day,
         date: updateSaleDto.date ?? sale.date,
-        credit: updateSaleDto.credit ?? sale.credit,
-        dept: sale.price - (updateSaleDto.credit || sale.credit),
       },
     });
   }

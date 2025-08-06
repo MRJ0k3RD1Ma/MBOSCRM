@@ -9,11 +9,6 @@ export class UpdateSaleDto {
   @Type(() => Date)
   date?: Date;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber()
-  credit: number;
-
   @ApiPropertyOptional({ example: '2025-07-29T12:12:44.882Z' })
   @IsOptional()
   @IsDate()
