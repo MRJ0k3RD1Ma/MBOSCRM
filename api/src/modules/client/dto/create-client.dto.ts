@@ -22,6 +22,10 @@ export class CreateClientDto {
   @IsId(false)
   districtId: number;
 
+  @ApiPropertyOptional({ example: 1000 })
+  @IsOptional()
+  balance?: number;
+
   @ApiPropertyOptional({ example: '+998901234567' })
   @IsOptional()
   @IsPhoneNumber('UZ')

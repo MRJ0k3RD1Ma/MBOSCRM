@@ -91,6 +91,11 @@ export class ArrivedService {
       include: { ArrivedProduct: { include: { Product: true } } },
     });
 
+    await this.prisma.setting.update({
+      where: { id: 1 },
+      data: { balance: { decrement: totalPrice } },
+    });
+
     return arrived;
   }
 

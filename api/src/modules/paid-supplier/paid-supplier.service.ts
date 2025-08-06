@@ -59,6 +59,10 @@ export class PaidSupplierService {
         registerId: creatorId,
       },
     });
+    await this.prisma.setting.update({
+      where: { id: 1 },
+      data: { balance: { decrement: createPaidSupplierDto.price } },
+    });
     return paidsupplier;
   }
 

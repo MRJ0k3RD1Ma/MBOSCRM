@@ -55,7 +55,34 @@ export class PaidClientService {
         price,
       },
     });
+    if (clientId) {
+      const client = await this.prisma.client.findFirst({
+        where: { id: clientId, isDeleted: false },
+      });
+      if (!client) {
+        throw new HttpError({
+          message: `Client with ID ${clientId} not found or deleted`,
+        });
+      }
 
+      if (client.balance < price) {
+        throw new HttpError({
+          message: `Client with ID ${clientId} does not have enough balance`,
+        });
+      }
+
+      if (!saleId) {
+        await this.prisma.client.update({
+          where: { id: clientId },
+          data: { balance: { increment: price } },
+        });
+      }
+
+      await this.prisma.setting.update({
+        where: { id: 1 },
+        data: { balance: { increment: price } },
+      });
+    }
     return paidClient;
   }
 

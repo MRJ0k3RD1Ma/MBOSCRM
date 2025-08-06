@@ -86,6 +86,7 @@ export class ClientService implements OnModuleInit {
         regionId: createClientDto?.regionId,
         districtId: createClientDto?.districtId,
         modifyId: creatorId,
+        balance: createClientDto.balance || 0,
         registerId: creatorId,
       },
     });
@@ -187,7 +188,7 @@ export class ClientService implements OnModuleInit {
     let type: ClientType;
     if (updateData.typeId) {
       type = await this.prisma.clientType.findFirst({
-        where: { id: updateData.typeId, isDeleted: false},
+        where: { id: updateData.typeId, isDeleted: false },
       });
       if (!type) {
         throw HttpError({ code: 'type Not Found' });
