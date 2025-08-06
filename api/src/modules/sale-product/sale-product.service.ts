@@ -41,14 +41,13 @@ export class SaleProductService {
 
     const isSubscription =
       product.type === 'SUBSCRIPTION' || product.type === 'SERVICE';
-    const priceCount = createSaleProductDto.price * createSaleProductDto.count;
+    const priceCount = product.price * createSaleProductDto.count;
 
     const saleProduct = await this.prisma.saleProduct.create({
       data: {
         saleId: createSaleProductDto.saleId,
         productId: createSaleProductDto.productId,
         count: createSaleProductDto.count,
-        price: createSaleProductDto.price,
         priceCount,
         is_subscribe: isSubscription,
         registerId: creatorId,
@@ -159,7 +158,7 @@ export class SaleProductService {
       }
     }
 
-    const finalPrice = updateSaleProductDto.price ?? saleProduct.price;
+    const finalPrice = product.price ?? saleProduct.price;
     const finalCount = updateSaleProductDto.count ?? saleProduct.count;
     const totalPriceCount = finalPrice * finalCount;
 

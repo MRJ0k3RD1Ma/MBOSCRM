@@ -21,10 +21,6 @@ export class CreateSaleDto {
   @IsId()
   clientId: number;
 
-  @ApiProperty()
-  @IsNumber()
-  dept: number;
-
   @ApiPropertyOptional({ example: '2025-07-29T12:12:44.882Z' })
   @IsOptional()
   @IsDate()

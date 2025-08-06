@@ -24,8 +24,7 @@ export class SaleService {
           await this.create(
             {
               clientId: 1,
-              dept: 100,
-              products: [{ count: 1, price: 100, productId: 1 }],
+              products: [{ count: 1, productId: 1 }],
               subscribe_begin_date: new Date(),
               subscribe_generate_day: 10,
               date: new Date(),
@@ -87,7 +86,6 @@ export class SaleService {
         {
           saleId: sale.id,
           count: product.count,
-          price: product.price,
           productId: product.productId,
         },
         creatorId,

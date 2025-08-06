@@ -12,11 +12,6 @@ export class CreateSaleProductDto {
   @IsInt()
   productId?: number;
 
-  @ApiProperty({ example: 10000 })
-  @IsOptional()
-  @IsNumber()
-  price?: number;
-
   @ApiProperty({ example: 2 })
   @IsOptional()
   @IsNumber()

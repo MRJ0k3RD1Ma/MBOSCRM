@@ -4,11 +4,23 @@ import { UpdatePaidClientDto } from './dto/update-paid-client.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllQueryPaidClientDto } from './dto/findAll-query-paid-client.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, SubscribeState } from '@prisma/client';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class PaidClientService {
   constructor(private readonly prisma: PrismaService) {}
+
+  @Cron('* 0 * * * *')
+  async cron() {
+    const clients = await this.prisma.client.findMany({
+      select: { id: true },
+    });
+    for (const client of clients) {
+      await this.checkSubscribtions(client.id);
+    }
+  }
+
   async create(createPaidClientDto: CreatePaidClientDto) {
     const { clientId, saleId, paymentId, paidDate, price } =
       createPaidClientDto;
@@ -82,7 +94,8 @@ export class PaidClientService {
         where: { id: 1 },
         data: { balance: { increment: price } },
       });
-      this.checkCredit(client.id);
+      await this.checkCredit(client.id);
+      await this.checkSubscribtions(client.id);
     }
     return paidClient;
   }
@@ -97,13 +110,12 @@ export class PaidClientService {
 
     for (let sale of sales) {
       if (client.balance == 0) return;
-      if (client.balance < sale.price) {
+      if (client.balance < sale.credit) {
         sale = await this.prisma.sale.update({
           where: { id: sale.id },
           data: {
-            price: sale.price,
-            credit: sale.price - client.balance,
-            dept: client.balance,
+            credit: sale.credit - client.balance,
+            dept: sale.dept + client.balance,
           },
           include: { SaleProduct: { include: { product: true } } },
         });
@@ -112,18 +124,53 @@ export class PaidClientService {
           data: { balance: { decrement: sale.dept } },
         });
       } else {
+        await this.prisma.client.update({
+          where: { id: client.id },
+          data: { balance: { decrement: sale.credit } },
+        });
         sale = await this.prisma.sale.update({
           where: { id: sale.id },
           data: {
-            price: sale.price,
             credit: 0,
-            dept: sale.price,
+            dept: sale.dept + sale.credit,
           },
           include: { SaleProduct: { include: { product: true } } },
         });
+      }
+    }
+  }
+
+  async checkSubscribtions(clientId: number) {
+    const subscribtions = await this.prisma.subscribe.findMany({
+      where: { state: SubscribeState.NOTPAYING, clientId },
+    });
+    const client = await this.prisma.client.findUnique({
+      where: { id: clientId },
+    });
+
+    for (let subscribe of subscribtions) {
+      if (client.balance == 0) return;
+      if (client.balance < subscribe.price - subscribe.paid) {
+        subscribe = await this.prisma.subscribe.update({
+          where: { id: subscribe.id },
+          data: {
+            paid: subscribe.paid + client.balance,
+          },
+        });
         await this.prisma.client.update({
           where: { id: client.id },
-          data: { balance: { decrement: sale.price } },
+          data: { balance: { decrement: client.balance } },
+        });
+      } else {
+        await this.prisma.client.update({
+          where: { id: client.id },
+          data: { balance: { decrement: subscribe.price - subscribe.paid } },
+        });
+        subscribe = await this.prisma.subscribe.update({
+          where: { id: subscribe.id },
+          data: {
+            paid: subscribe.price,
+          },
         });
       }
     }
