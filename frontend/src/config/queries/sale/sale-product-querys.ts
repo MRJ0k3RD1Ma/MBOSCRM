@@ -64,6 +64,9 @@ export const useGetAllSaleProduct = (params?: {
   page?: number;
   limit?: number;
   saleId?: number;
+  clientId?: number;
+  isSubscribe?: boolean;
+  productId?: number;
 }) => {
   return useQuery<SaleProductResponse>({
     queryKey: ["sale-product", params],

@@ -272,6 +272,7 @@ export default function SalesFormPage() {
               min={1}
               className="!w-full"
               placeholder="Soni"
+              defaultValue={1}
               onChange={(value: any) => {
                 const price = drawerForm.getFieldValue("price") || 0;
                 drawerForm.setFieldsValue({
@@ -290,7 +291,6 @@ export default function SalesFormPage() {
               min={0}
               className="!w-full"
               placeholder="Narxi"
-              disabled
               onChange={(value: any) => {
                 const count = drawerForm.getFieldValue("count") || 0;
                 drawerForm.setFieldsValue({

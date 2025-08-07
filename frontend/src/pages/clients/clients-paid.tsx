@@ -123,11 +123,6 @@ export default function ClientsPaid() {
             danger: true,
             onClick: () => handleDelete(row.id),
           },
-          {
-            key: "view",
-            label: "Profilga o‘tish",
-            onClick: () => navigate(`/paid-client/${row.id}`),
-          },
         ];
 
         return (

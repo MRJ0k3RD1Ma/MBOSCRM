@@ -101,7 +101,6 @@ export default function PaidClientFormModal({
         <Form.Item
           name="saleId"
           label="Savdo"
-          rules={[{ required: true, message: "Iltimos savdoni tanlang" }]}
         >
           <Select
             placeholder="Savdoni tanlang"
