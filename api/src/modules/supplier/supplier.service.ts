@@ -87,6 +87,7 @@ export class SupplierService {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
+        include: { register: true, modify: true },
       }),
       this.prisma.supplier.count({
         where,
