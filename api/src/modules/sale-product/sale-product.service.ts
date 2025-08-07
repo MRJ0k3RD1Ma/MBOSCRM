@@ -90,7 +90,7 @@ export class SaleProductService {
     }
 
     if (clientId) {
-      where.sale.clientId = { equals: clientId };
+      where.sale = { clientId: { equals: clientId } };
     }
 
     if (isSubscribe !== undefined) {
