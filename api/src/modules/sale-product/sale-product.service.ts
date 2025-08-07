@@ -48,6 +48,7 @@ export class SaleProductService {
         saleId: createSaleProductDto.saleId,
         productId: createSaleProductDto.productId,
         count: createSaleProductDto.count,
+        price: product.price,
         priceCount,
         is_subscribe: isSubscription,
         registerId: creatorId,
@@ -102,7 +103,7 @@ export class SaleProductService {
         where,
         skip: (page - 1) * limit,
         take: limit,
-        include: { product: true },
+        include: { product: true, sale: true },
         orderBy: {
           createdAt: 'desc',
         },
