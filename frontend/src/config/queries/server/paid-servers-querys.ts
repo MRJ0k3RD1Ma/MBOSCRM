@@ -69,8 +69,6 @@ export const useGetPaidServerById = (id?: string) => {
   });
 };
 
-// ===================== Mutations =====================
-
 export const useCreatePaidServer = () => {
   const queryClient = useQueryClient();
   return useMutation({

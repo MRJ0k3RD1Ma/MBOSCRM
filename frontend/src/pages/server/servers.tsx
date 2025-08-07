@@ -80,39 +80,39 @@ export default function Servers() {
           : "—",
     },
     { title: "Holat", dataIndex: "state" },
-    {
-      title: "Amallar",
-      key: "actions",
-      render: (_: any, row: Server) => {
-        const items: MenuProps["items"] = [
-          {
-            key: "edit",
-            label: "Tahrirlash",
-            onClick: () => handleEdit(row),
-          },
-          {
-            key: "delete",
-            label: "O‘chirish",
-            danger: true,
-            onClick: () => handleDelete(row.id),
-          },
-          {
-            key: "view",
-            label: "Batafsil ko‘rish",
-            onClick: () => navigate(`/server/${row.id}`),
-          },
-        ];
-        return (
-          <div onClick={(e) => e.stopPropagation()}>
-            <Dropdown menu={{ items }} trigger={["click"]}>
-              <Tooltip title="Boshqarish">
-                <Button icon={<MoreOutlined />} />
-              </Tooltip>
-            </Dropdown>
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: "Amallar",
+    //   key: "actions",
+    //   render: (_: any, row: Server) => {
+    //     const items: MenuProps["items"] = [
+    //       {
+    //         key: "edit",
+    //         label: "Tahrirlash",
+    //         onClick: () => handleEdit(row),
+    //       },
+    //       {
+    //         key: "delete",
+    //         label: "O‘chirish",
+    //         danger: true,
+    //         onClick: () => handleDelete(row.id),
+    //       },
+    //       {
+    //         key: "view",
+    //         label: "Batafsil ko‘rish",
+    //         onClick: () => navigate(`/server/${row.id}`),
+    //       },
+    //     ];
+    //     return (
+    //       <div onClick={(e) => e.stopPropagation()}>
+    //         <Dropdown menu={{ items }} trigger={["click"]}>
+    //           <Tooltip title="Boshqarish">
+    //             <Button icon={<MoreOutlined />} />
+    //           </Tooltip>
+    //         </Dropdown>
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
 
   return (
