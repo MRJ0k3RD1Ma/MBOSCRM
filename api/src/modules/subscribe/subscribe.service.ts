@@ -98,10 +98,8 @@ export class SubscribeService {
         include: {
           client: true,
           sale: {
-            select: { PaidClient: true },
             include: {
               PaidClient: {
-                select: { Payment: true },
                 include: { Payment: true },
               },
             },
