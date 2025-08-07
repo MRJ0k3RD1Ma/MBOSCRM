@@ -81,7 +81,7 @@ export default function Subscribes() {
           />
           <Button
             icon={<FilterOutlined />}
-            onClick={() => setFilterModalOpen(true)}
+            onClick={() => setFilterModalOpen(!filterModalOpen)}
           >
             Filter
           </Button>

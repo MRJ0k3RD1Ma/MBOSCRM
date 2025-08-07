@@ -24,11 +24,13 @@ export interface ServerResponse {
   limit: number;
   data: Server[];
 }
-
 export interface CreateServerInput {
   name: string;
-  responsible: string;
-  plan: string;
+  ip: string;
+  port: string;
+  plan?: string;
+  responsible?: string;
+  description?: string;
   endDate: string;
 }
 
