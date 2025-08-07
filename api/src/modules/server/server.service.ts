@@ -12,7 +12,7 @@ export class ServerService {
 
   constructor(private readonly prisma: PrismaService) {}
 
-	@Cron('0 * * * * *')
+  @Cron('0 * * * * *')
   async handleExpiredServers() {
     this.logger.log('Checking expired servers...');
 
@@ -24,24 +24,24 @@ export class ServerService {
           lt: now,
         },
         state: {
-          not: ServerState.CLOSED, 
+          not: ServerState.CLOSED,
         },
       },
     });
     console.log(expiredServers);
-    
+
     this.logger.log(`Found ${expiredServers.length} expired servers`);
 
     for (const server of expiredServers) {
       await this.prisma.server.update({
         where: { id: server.id },
-        data: { state: ServerState.CLOSED }, 
+        data: { state: ServerState.CLOSED },
       });
     }
 
     this.logger.log('Expired server statuses updated.');
   }
-  
+
   async create(createServerDto: CreateServerDto, modifyId: number) {
     const server = await this.prisma.server.create({
       data: {
@@ -59,7 +59,7 @@ export class ServerService {
   async findAll(dto: FindAllQueryServer) {
     const { page = 1, limit = 10, name, responsible, plan } = dto;
 
-    const where: Prisma.ServerWhereInput = {};
+    const where: Prisma.ServerWhereInput = { isDeleted: false };
 
     if (name) {
       where.name = {
