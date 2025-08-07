@@ -74,12 +74,11 @@ export class SaleService {
         subscribe_generate_day,
         code: `${new Date().getFullYear() - 2000}-${codeId}`,
         codeId,
-        client: { connect: { id: clientId } }, 
-        User_Sale_registerId: { connect: { id: creatorId } },
-        User_Sale_modifyId: { connect: { id: creatorId } },
+        client: { connect: { id: clientId } },
+        register: { connect: { id: creatorId } },
+        modifier: { connect: { id: creatorId } },
       },
     });
-    
 
     let totalPrice = 0;
     for (const product of products) {
@@ -180,6 +179,8 @@ export class SaleService {
         take: limit,
         include: {
           SaleProduct: true,
+          modifier: true,
+          register: true,
         },
         orderBy: {
           date: 'desc',

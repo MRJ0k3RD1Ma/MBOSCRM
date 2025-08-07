@@ -267,20 +267,20 @@ model PaidSupplier {
 }
 
 model Supplier {
-  id                       Int       @id @default(autoincrement())
-  name                     String    @db.VarChar(255)
-  phone                    String    @db.VarChar(255)
-  phoneTwo                 String?   @map("phone_two") @db.VarChar(255)
-  description              String?   @db.Text
-  balance                  Float     @default(0)
-  isDeleted                Boolean?  @default(false)
-  createdAt                DateTime  @default(now())
-  updatedAt                DateTime  @default(now()) @updatedAt
-  registerId               Int?
-  modifyId                 Int?
-  arrived                  Arrived[]
-  User_Supplier_registerId User?     @relation("Supplier_registerId", fields: [registerId], references: [id])
-  User_Supplier_modifyId   User?     @relation("Supplier_modifyId", fields: [modifyId], references: [id])
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  phone       String    @db.VarChar(255)
+  phoneTwo    String?   @map("phone_two") @db.VarChar(255)
+  description String?   @db.Text
+  balance     Float     @default(0)
+  isDeleted   Boolean?  @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+  registerId  Int?
+  modifyId    Int?
+  arrived     Arrived[]
+  register    User?     @relation("Supplier_registerId", fields: [registerId], references: [id])
+  modify      User?     @relation("Supplier_modifyId", fields: [modifyId], references: [id])
 
   @@map("suppler")
 }
@@ -313,22 +313,22 @@ model Sale {
 }
 
 model SaleProduct {
-  id                          Int       @id @default(autoincrement())
-  saleId                      Int?
-  sale                        Sale?     @relation(fields: [saleId], references: [id])
-  productId                   Int?
-  product                     Product?  @relation(fields: [productId], references: [id])
-  price                       Float?
-  count                       Float?
-  priceCount                  Float?
-  is_subscribe                Boolean?  @default(false)
-  registerId                  Int?
-  modifyId                    Int?
-  isDeleted                   Boolean?  @default(false)
-  createdAt                   DateTime? @default(now())
-  updatedAt                   DateTime? @default(now()) @updatedAt
-  User_SaleProduct_registerId User?     @relation("RegisterRelation", fields: [registerId], references: [id])
-  User_SaleProduct_modifyId   User?     @relation("ModifyRelation", fields: [modifyId], references: [id])
+  id           Int       @id @default(autoincrement())
+  saleId       Int?
+  sale         Sale?     @relation(fields: [saleId], references: [id])
+  productId    Int?
+  product      Product?  @relation(fields: [productId], references: [id])
+  price        Float?
+  count        Float?
+  priceCount   Float?
+  is_subscribe Boolean?  @default(false)
+  registerId   Int?
+  modifyId     Int?
+  isDeleted    Boolean?  @default(false)
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now()) @updatedAt
+  register     User?     @relation("RegisterRelation", fields: [registerId], references: [id])
+  modify       User?     @relation("ModifyRelation", fields: [modifyId], references: [id])
 
   @@index([saleId])
   @@index([productId])
@@ -348,8 +348,8 @@ model PaidClient {
   updatedAt                  DateTime  @default(now()) @updatedAt
   registerId                 Int?
   modifyId                   Int?
-  User_PaidClient_registerId User?     @relation("PaidClient_registerId", fields: [registerId], references: [id])
-  User_PaidClient_modifyId   User?     @relation("PaidClient_modifyId", fields: [modifyId], references: [id])
+  register User?     @relation("PaidClient_registerId", fields: [registerId], references: [id])
+  modify   User?     @relation("PaidClient_modifyId", fields: [modifyId], references: [id])
   Client                     Client?   @relation(fields: [clientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Sale                       Sale?     @relation(fields: [saleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Payment                    Payment?  @relation(fields: [paymentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -369,8 +369,8 @@ model PaidServer {
   updatedAt                  DateTime @default(now()) @updatedAt
   registerId                 Int?
   modifyId                   Int?
-  User_PaidServer_registerId User?    @relation("PaidServer_registerId", fields: [registerId], references: [id])
-  User_PaidServer_modifyId   User?    @relation("PaidServer_modifyId", fields: [modifyId], references: [id])
+  register User?    @relation("PaidServer_registerId", fields: [registerId], references: [id])
+  modify   User?    @relation("PaidServer_modifyId", fields: [modifyId], references: [id])
 }
 
 model Server {
@@ -386,8 +386,8 @@ model Server {
   modifyId    Int?
   state       ServerState @default(RUNNING)
 
-  User_Server_registerId User?        @relation("Server_register", fields: [registerId], references: [id])
-  User_Server_modifyId   User?        @relation("Server_modify", fields: [modifyId], references: [id])
+  register User?        @relation("Server_register", fields: [registerId], references: [id])
+  modify   User?        @relation("Server_modify", fields: [modifyId], references: [id])
   paidServers            PaidServer[]
 
   @@map("servers")
@@ -425,8 +425,8 @@ model Payment {
   isDeleted               Boolean?       @default(false)
   createdAt               DateTime       @default(now())
   updatedAt               DateTime       @default(now()) @updatedAt
-  User_Payment_registerId User?          @relation("Payment_registerId", fields: [registerId], references: [id])
-  User_Payment_modifyId   User?          @relation("Payment_modifyId", fields: [modifyId], references: [id])
+  register User?          @relation("Payment_registerId", fields: [registerId], references: [id])
+  modify   User?          @relation("Payment_modifyId", fields: [modifyId], references: [id])
   registerId              Int?
   modifyId                Int?
   PaidSupplier            PaidSupplier[]
@@ -452,8 +452,8 @@ model PaidOther {
   registerId Int?
   modifyId   Int?
 
-  User_PaidOther_registerId User? @relation("PaidOther_registerId", fields: [registerId], references: [id])
-  User_PaidOther_modifyId   User? @relation("PaidOther_modifyId", fields: [modifyId], references: [id])
+  register User? @relation("PaidOther_registerId", fields: [registerId], references: [id])
+  modify   User? @relation("PaidOther_modifyId", fields: [modifyId], references: [id])
 }
 
 model PaidOtherGroup {
@@ -467,8 +467,8 @@ model PaidOtherGroup {
   registerId Int?
   modifyId   Int?
 
-  User_PaidOtherGroup_registerId User?       @relation("PaidOtherGroup_registerId", fields: [registerId], references: [id])
-  User_PaidOtherGroup_modifyId   User?       @relation("PaidOtherGroup_modifyId", fields: [modifyId], references: [id])
+  register User?       @relation("PaidOtherGroup_registerId", fields: [registerId], references: [id])
+  modify   User?       @relation("PaidOtherGroup_modifyId", fields: [modifyId], references: [id])
   PaidOther                      PaidOther[]
 }
 

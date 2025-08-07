@@ -103,7 +103,12 @@ export class SaleProductService {
         where,
         skip: (page - 1) * limit,
         take: limit,
-        include: { product: { include: { ProductUnit: true } }, sale: true },
+        include: {
+          product: { include: { ProductUnit: true } },
+          sale: true,
+          modify: true,
+          register: true,
+        },
         orderBy: {
           createdAt: 'desc',
         },

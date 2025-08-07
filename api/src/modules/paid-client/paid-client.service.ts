@@ -216,6 +216,8 @@ export class PaidClientService {
         Client: true,
         Sale: true,
         Payment: true,
+        modify: true,
+        register: true,
       },
     });
   }
