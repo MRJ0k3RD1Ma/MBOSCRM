@@ -77,11 +77,10 @@ export class PaidClientService {
         });
       }
 
-        await this.prisma.client.update({
-          where: { id: clientId },
-          data: { balance: { increment: price } },
-        });
-      
+      await this.prisma.client.update({
+        where: { id: clientId },
+        data: { balance: { increment: price } },
+      });
 
       await this.prisma.setting.update({
         where: { id: 1 },
@@ -163,6 +162,7 @@ export class PaidClientService {
           where: { id: subscribe.id },
           data: {
             paid: subscribe.price,
+            state: 'PAID',
           },
         });
       }
