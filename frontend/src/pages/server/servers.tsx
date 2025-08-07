@@ -1,21 +1,10 @@
 import { useState } from "react";
-import {
-  Button,
-  Card,
-  Dropdown,
-  Form,
-  Input,
-  Space,
-  Table,
-  Tooltip,
-  type MenuProps,
-} from "antd";
+import { Button, Card, Form, Input, Space, Table, Tag } from "antd";
 
-import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
+import { PlusOutlined, FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import {
   useCreateServer,
-  useDeleteServer,
   useGetAllServers,
   useUpdateServer,
   type CreateServerInput,
@@ -45,7 +34,7 @@ export default function Servers() {
 
   const createServer = useCreateServer();
   const updateServer = useUpdateServer();
-  const deleteServer = useDeleteServer();
+  // const deleteServer = useDeleteServer();
 
   const onSubmit = (values: CreateServerInput) => {
     if (editing) {
@@ -57,15 +46,15 @@ export default function Servers() {
     setEditing(null);
   };
 
-  const handleEdit = (server: Server) => {
-    setEditing(server);
-    form.setFieldsValue(server);
-    setOpen(true);
-  };
+  // const handleEdit = (server: Server) => {
+  //   setEditing(server);
+  //   form.setFieldsValue(server);
+  //   setOpen(true);
+  // };
 
-  const handleDelete = (id: number) => {
-    deleteServer.mutate(id);
-  };
+  // const handleDelete = (id: number) => {
+  //   deleteServer.mutate(id);
+  // };
 
   const columns = [
     { title: "Nomi", dataIndex: "name" },
@@ -79,7 +68,25 @@ export default function Servers() {
           ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
           : "—",
     },
-    { title: "Holat", dataIndex: "state" },
+    { title: "Tugashi", dataIndex: "state" },
+    {
+      title: "Holat",
+      dataIndex: "daysLeft",
+      render: (daysLeft: number) => {
+        let color = "green";
+        if (daysLeft < 3) {
+          color = "red";
+        } else if (daysLeft < 7) {
+          color = "orange";
+        }
+
+        const label =
+          daysLeft === 0 ? "Muddati tugagan" : `${daysLeft} kun qoldi`;
+
+        return <Tag color={color}>{label}</Tag>;
+      },
+    },
+
     // {
     //   title: "Amallar",
     //   key: "actions",

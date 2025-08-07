@@ -13,6 +13,7 @@ export interface Server {
   createdAt: string;
   updatedAt: string;
   registerId: number;
+  daysLeft?: number;
   modifyId: number;
   state: "RUNNING" | "STOPPED" | string;
   paidServers?: any[];

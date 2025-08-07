@@ -40,7 +40,10 @@ export default function ServerFormModal({
     try {
       const values = await form.validateFields();
       onSubmit(values);
-    } catch {}
+      form.resetFields();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
