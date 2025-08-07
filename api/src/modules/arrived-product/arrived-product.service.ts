@@ -19,7 +19,7 @@ export class ArrivedProductService {
     }
 
     const arrived = await this.prisma.arrived.findFirst({
-      where: { id: arrivedId, isDeleted: false},
+      where: { id: arrivedId, isDeleted: false },
     });
     if (!arrived) {
       throw new HttpError({
@@ -43,6 +43,12 @@ export class ArrivedProductService {
         price,
         arrivedId,
         productId,
+      },
+      include: {
+        Arrived: { include: { supplier: true } },
+        Product: true,
+        modify: true,
+        register: true,
       },
     });
 

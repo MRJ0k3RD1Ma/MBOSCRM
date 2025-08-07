@@ -86,8 +86,8 @@ model Product {
   registerId             Int?
   modifyId               Int?
   ProductGroup           ProductGroup     @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Product_modifyId  User?            @relation("Product_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Product_creatorId User?            @relation("Product_creatorId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  modify  User?            @relation("Product_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  register User?            @relation("Product_creatorId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ProductUnit            ProductUnit?     @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ArrivedProduct         ArrivedProduct[]
   SaleProduct            SaleProduct[]
@@ -108,8 +108,8 @@ model ProductGroup {
   registerId                  Int
   modifyId                    Int
   Product                     Product[]
-  User_ProductGroup_modifyId  User      @relation("ProductGroup_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_ProductGroup_creatorId User      @relation("ProductGroup_creatorId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  modify  User      @relation("ProductGroup_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  register User      @relation("ProductGroup_creatorId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([modifyId], map: "FK_product_group_modify_id")
   @@index([registerId], map: "FK_product_group_register_id")
@@ -125,8 +125,8 @@ model ProductUnit {
   Product                     Product[]
   registerId                  Int?
   modifyId                    Int?
-  User_ProductUnit_registerId User?     @relation("ProductUnit_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_ProductUnit_modifyId   User?     @relation("ProductUnit_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  register User?     @relation("ProductUnit_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  modify   User?     @relation("ProductUnit_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([registerId], map: "FK_product_unit_register_id")
   @@map("product_unit")
@@ -216,8 +216,8 @@ model Arrived {
   modifyId       Int?
   ArrivedProduct ArrivedProduct[]
 
-  User_Arrived_registerId User? @relation("Arrived_registerId", fields: [registerId], references: [id])
-  User_Arrived_modifyId   User? @relation("Arrived_modifyId", fields: [modifyId], references: [id])
+  register User? @relation("Arrived_registerId", fields: [registerId], references: [id])
+  modify   User? @relation("Arrived_modifyId", fields: [modifyId], references: [id])
 
   @@map("arrived")
 }
@@ -236,8 +236,8 @@ model ArrivedProduct {
   Product                        Product? @relation(fields: [productId], references: [id])
   registerId                     Int?
   modifyId                       Int?
-  User_ArrivedProduct_registerId User?    @relation("ArrivedProduct_registerId", fields: [registerId], references: [id])
-  User_ArrivedProduct_modifyId   User?    @relation("ArrivedProduct_modifyId", fields: [modifyId], references: [id])
+  register User?    @relation("ArrivedProduct_registerId", fields: [registerId], references: [id])
+  modify   User?    @relation("ArrivedProduct_modifyId", fields: [modifyId], references: [id])
 
   @@index([arrivedId], map: "arrived_id")
   @@index([productId], map: "product_id")
