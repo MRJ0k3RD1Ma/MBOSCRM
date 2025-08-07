@@ -37,7 +37,7 @@ export class ProductGroupService {
     const productGroup = await this.prisma.productGroup.create({
       data: {
         name: createProductGroupDto.name,
-        creatorId: creatorId,
+        registerId: creatorId,
         modifyId: creatorId,
       },
     });

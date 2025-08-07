@@ -94,7 +94,7 @@ export class ProductService {
           countReminder,
           countArrived,
           countSale,
-          creatorId: creatorId,
+          registerId: creatorId,
           modifyId: creatorId,
         },
       });
@@ -113,7 +113,7 @@ export class ProductService {
         countReminder,
         countArrived,
         countSale,
-        creatorId: creatorId,
+        registerId: creatorId,
         modifyId: creatorId,
       },
     });
