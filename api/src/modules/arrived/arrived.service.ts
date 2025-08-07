@@ -76,12 +76,15 @@ export class ArrivedService {
 
     let totalPrice = 0;
     for (const product of products) {
-      const arrivedProduct = await this.arrivedProductService.create({
-        arrivedId: arrived.id,
-        count: product.count,
-        price: product.price,
-        productId: product.productId,
-      });
+      const arrivedProduct = await this.arrivedProductService.create(
+        {
+          arrivedId: arrived.id,
+          count: product.count,
+          price: product.price,
+          productId: product.productId,
+        },
+        creatorId,
+      );
       totalPrice += arrivedProduct.priceCount;
     }
 
