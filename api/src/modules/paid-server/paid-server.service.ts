@@ -5,7 +5,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllQueryPaidServerDto } from './dto/findAll-query-paid-server.dto';
 import { Prisma, ServerState } from '@prisma/client';
-import dayjs from 'dayjs';
 
 @Injectable()
 export class PaidServerService {

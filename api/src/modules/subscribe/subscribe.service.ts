@@ -45,10 +45,6 @@ export class SubscribeService {
       } as Prisma.SubscribeCreateInput,
     });
 
-    if (state == 'PAID') {
-      await this.paidSubscripton(subscribe.id);
-    }
-
     return subscribe;
   }
 
@@ -97,7 +93,13 @@ export class SubscribeService {
         take: limit,
         include: {
           client: true,
-          sale: true,
+          sale: {
+            include: {
+              PaidClient: {
+                include: { Payment: true },
+              },
+            },
+          },
         },
       }),
       this.prisma.subscribe.count({ where }),
@@ -127,20 +129,6 @@ export class SubscribeService {
     return subscribe;
   }
 
-  async paidSubscripton(id: number) {
-    const subscribe = await this.prisma.subscribe.findFirst({
-      where: { id, isDeleted: false },
-      include: { sale: true },
-    });
-    if (!subscribe) {
-      throw HttpError({ message: `subscribe with id ${id} not found` });
-    }
-    await this.prisma.setting.update({
-      where: { id: 1 },
-      data: { balance: { increment: subscribe.price } },
-    });
-  }
-
   async update(id: number, updateSubscribeDto: UpdateSubscribeDto) {
     let subscribe = await this.prisma.subscribe.findFirst({
       where: {
@@ -162,10 +150,6 @@ export class SubscribeService {
         state: updateSubscribeDto.state ?? subscribe.state,
       },
     });
-
-    if (subscribe.state == 'PAID') {
-      await this.paidSubscripton(subscribe.id);
-    }
 
     return subscribe;
   }

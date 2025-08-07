@@ -48,6 +48,7 @@ export class SaleProductService {
         saleId: createSaleProductDto.saleId,
         productId: createSaleProductDto.productId,
         count: createSaleProductDto.count,
+        price: product.price,
         priceCount,
         is_subscribe: isSubscription,
         registerId: creatorId,
@@ -80,7 +81,7 @@ export class SaleProductService {
   }
 
   async findAll(dto: FindAllSaleProductQueryDto) {
-    const { limit = 10, page = 1, saleId } = dto;
+    const { limit = 10, page = 1, saleId, clientId, isSubscribe } = dto;
 
     const where: Prisma.SaleProductWhereInput = {
       isDeleted: false,
@@ -89,12 +90,20 @@ export class SaleProductService {
       where.saleId = saleId;
     }
 
+    if (clientId) {
+      where.sale = { clientId };
+    }
+
+    if (isSubscribe !== undefined) {
+      where.is_subscribe = { equals: isSubscribe };
+    }
+
     const [data, total] = await this.prisma.$transaction([
       this.prisma.saleProduct.findMany({
         where,
         skip: (page - 1) * limit,
         take: limit,
-        include: { product: true },
+        include: { product: { include: { ProductUnit: true } }, sale: true },
         orderBy: {
           createdAt: 'desc',
         },
