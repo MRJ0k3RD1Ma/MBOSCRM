@@ -15,11 +15,12 @@ export class ClientService implements OnModuleInit {
   async onModuleInit() {
     if (env.ENV != 'prod') {
       const clientCount = await this.prisma.client.count();
-      const requiredCount = 5;
+      const requiredCount = 3;
       if (clientCount < requiredCount) {
         for (let i = clientCount; i < requiredCount; i++) {
           await this.create(
             {
+              balance: 0,
               address: faker.location.streetAddress(),
               description: faker.person.jobTitle(),
               districtId: 1733223,

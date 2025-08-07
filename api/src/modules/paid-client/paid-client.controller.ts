@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { PaidClientService } from './paid-client.service';
 import { CreatePaidClientDto } from './dto/create-paid-client.dto';
@@ -15,6 +16,7 @@ import { UpdatePaidClientDto } from './dto/update-paid-client.dto';
 import { FindAllQueryPaidClientDto } from './dto/findAll-query-paid-client.dto';
 import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from 'src/common/auth/roles/role.enum';
+import { Request } from 'express';
 
 @Controller('paid-client')
 export class PaidClientController {
@@ -22,8 +24,11 @@ export class PaidClientController {
 
   @Post()
   @DecoratorWrapper('create PaidClient', true, [Role.Admin])
-  create(@Body() createPaidClientDto: CreatePaidClientDto) {
-    return this.paidClientService.create(createPaidClientDto);
+  create(
+    @Body() createPaidClientDto: CreatePaidClientDto,
+    @Req() req: Request,
+  ) {
+    return this.paidClientService.create(createPaidClientDto, req.user.id);
   }
 
   @Get()

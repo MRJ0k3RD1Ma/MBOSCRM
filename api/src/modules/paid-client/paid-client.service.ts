@@ -21,7 +21,7 @@ export class PaidClientService {
     }
   }
 
-  async create(createPaidClientDto: CreatePaidClientDto) {
+  async create(createPaidClientDto: CreatePaidClientDto, registerId: number) {
     const { clientId, saleId, paymentId, paidDate, price } =
       createPaidClientDto;
 
@@ -65,6 +65,7 @@ export class PaidClientService {
         paymentId,
         paidDate,
         price,
+        registerId,
       },
     });
     if (clientId) {
