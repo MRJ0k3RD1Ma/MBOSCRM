@@ -89,7 +89,7 @@ export class ArrivedProductService {
         take: limit,
         include: {
           Arrived: { include: { supplier: true } },
-          Product: true,
+          Product: { include: { ProductUnit: true } },
           register: true,
         },
       }),
