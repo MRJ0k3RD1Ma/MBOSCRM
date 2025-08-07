@@ -13,104 +13,77 @@ import {
 
 import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
 import {
-  useCreatePaidClient,
-  useDeletePaidClient,
-  useGetAllPaidClients,
-  useUpdatePaidClient,
-  type PaidClient,
-  type PaidClientDto,
-} from "../../config/queries/clients/paid-client-querys";
-import { useGetAllClients } from "../../config/queries/clients/clients-querys";
-import { useGetAllSale } from "../../config/queries/sale/sale-querys";
-import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
-import PaidClientFilterModal from "./ui/paid-clients-filter-modal";
-import PaidClientFormModal from "./ui/paid-clients-form-modal";
+  useCreateServer,
+  useDeleteServer,
+  useGetAllServers,
+  useUpdateServer,
+  type CreateServerInput,
+  type Server,
+} from "../../config/queries/server/servers-querys";
+import dayjs from "dayjs";
+import ServersFilterModal from "./ui/servers-filter-modal";
+import ServerFormModal from "./ui/servers-form-modal";
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-
-const formatDate = (date: string) =>
-  dayjs.utc(date).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm");
-
-export default function ClientsPaid() {
+export default function Servers() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<PaidClient | null>(null);
+  const [editing, setEditing] = useState<Server | null>(null);
   const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filters, setFilters] = useState<Record<string, string>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
-  const { data, isLoading } = useGetAllPaidClients({
+  const { data, isLoading } = useGetAllServers({
     page,
     limit,
-    ...(search ? { clientName: search } : {}),
+    ...(search ? { name: search } : {}),
     ...filters,
   });
-  const { data: clients } = useGetAllClients({ page: 1, limit: 1000 });
-  const { data: sales } = useGetAllSale({ page: 1, limit: 1000 });
-  const { data: payments } = useGetAllPayments({ page: 1, limit: 1000 });
 
-  const createPaidClient = useCreatePaidClient();
-  const updatePaidClient = useUpdatePaidClient();
-  const deletePaidClient = useDeletePaidClient();
+  const createServer = useCreateServer();
+  const updateServer = useUpdateServer();
+  const deleteServer = useDeleteServer();
 
-  const onSubmit = (values: PaidClientDto) => {
+  const onSubmit = (values: CreateServerInput) => {
     if (editing) {
-      updatePaidClient.mutate({ id: editing.id, ...values });
+      updateServer.mutate({ id: editing.id, ...values });
     } else {
-      createPaidClient.mutate(values);
+      createServer.mutate(values);
     }
     setOpen(false);
     setEditing(null);
   };
 
-  const handleEdit = (item: PaidClient) => {
-    setEditing(item);
-    form.setFieldsValue(item);
+  const handleEdit = (server: Server) => {
+    setEditing(server);
+    form.setFieldsValue(server);
     setOpen(true);
   };
 
   const handleDelete = (id: number) => {
-    deletePaidClient.mutate(id);
+    deleteServer.mutate(id);
   };
 
   const columns = [
+    { title: "Nomi", dataIndex: "name" },
+    { title: "Mas'ul", dataIndex: "responsible" },
+    { title: "Tarif", dataIndex: "plan" },
     {
-      title: "Client ID",
-      dataIndex: "clientId",
-      render: (clientId: number) =>
-        clients?.data.find((u) => u.id === clientId)?.name || "–",
+      title: "Tugash sanasi",
+      dataIndex: "endDate",
+      render: (text: string) =>
+        text
+          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
+          : "—",
     },
-
-    {
-      title: "Sale ID",
-      dataIndex: "saleId",
-      render: (saleId: number) =>
-        sales?.data.find((u) => u.id === saleId)?.code || "–",
-    },
-    {
-      title: "Payment ID",
-      dataIndex: "paymentId",
-      render: (paymentId: number) =>
-        payments?.data.find((u) => u.id === paymentId)?.name || "–",
-    },
-    {
-      title: "To‘lov sanasi",
-      dataIndex: "paidDate",
-      render: (date: string) => formatDate(date),
-    },
-    { title: "Narxi", dataIndex: "price" },
+    { title: "Holat", dataIndex: "state" },
     {
       title: "Amallar",
       key: "actions",
-      render: (_: any, row: PaidClient) => {
+      render: (_: any, row: Server) => {
         const items: MenuProps["items"] = [
           {
             key: "edit",
@@ -123,8 +96,12 @@ export default function ClientsPaid() {
             danger: true,
             onClick: () => handleDelete(row.id),
           },
+          {
+            key: "view",
+            label: "Batafsil ko‘rish",
+            onClick: () => navigate(`/server/${row.id}`),
+          },
         ];
-
         return (
           <div onClick={(e) => e.stopPropagation()}>
             <Dropdown menu={{ items }} trigger={["click"]}>
@@ -152,7 +129,7 @@ export default function ClientsPaid() {
       >
         <Space>
           <Input.Search
-            placeholder="Mijoz nomi bo‘yicha qidirish"
+            placeholder="Server nomi bo‘yicha qidirish"
             allowClear
             enterButton
             onSearch={(val) => {
@@ -177,11 +154,11 @@ export default function ClientsPaid() {
             setOpen(true);
           }}
         >
-          Yangi to‘lov qo‘shish
+          Yangi server qo‘shish
         </Button>
       </Space>
 
-      <PaidClientFilterModal
+      <ServersFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
         onApply={(values) => {
@@ -193,7 +170,7 @@ export default function ClientsPaid() {
 
       <Table
         columns={columns}
-        dataSource={data || []}
+        dataSource={data?.data || []}
         loading={isLoading}
         rowKey="id"
         onRow={(record) => ({
@@ -204,18 +181,18 @@ export default function ClientsPaid() {
             ) {
               return;
             }
-            // navigate(`/paid-client/${record.id}`);
+            navigate(`/server/${record.id}`);
           },
         })}
         pagination={{
           current: page,
           pageSize: limit,
-          total: data?.length,
+          total: data?.total,
           onChange: (page) => setPage(page),
         }}
       />
 
-      <PaidClientFormModal
+      <ServerFormModal
         open={open}
         onClose={() => {
           setOpen(false);
@@ -223,9 +200,6 @@ export default function ClientsPaid() {
         }}
         onSubmit={onSubmit}
         initialValues={editing || undefined}
-        clients={clients?.data || []}
-        sales={sales?.data || []}
-        payments={payments?.data || []}
       />
     </Card>
   );

@@ -5,6 +5,10 @@ import type {
   CreateClientInput,
 } from "../../../config/queries/clients/clients-querys";
 import { useThemeContext } from "../../../providers/theme-provider";
+import {
+  useGetAllRegions,
+  useGetDistrictsByRegion,
+} from "../../../config/queries/location/location-querys";
 
 interface Props {
   open: boolean;
@@ -22,6 +26,8 @@ export default function ClientModal({
   types,
 }: Props) {
   const [form] = Form.useForm<CreateClientInput>();
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     if (initialValues) {
@@ -31,14 +37,17 @@ export default function ClientModal({
     }
   }, [initialValues, form]);
 
+  const regionId = Form.useWatch("regionId", form);
+
+  const { data: regions } = useGetAllRegions();
+  const { data: districts } = useGetDistrictsByRegion(regionId);
+
   const handleFinish = async () => {
     try {
       const values = await form.validateFields();
       onSubmit(values);
     } catch {}
   };
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
 
   return (
     <Drawer
@@ -96,6 +105,53 @@ export default function ClientModal({
             {(types ?? []).map((type) => (
               <Select.Option key={type.id} value={type.id} label={type.name}>
                 {type.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="regionId"
+          label="Viloyat"
+          rules={[{ required: true, message: "Viloyatni tanlang" }]}
+        >
+          <Select
+            placeholder="Viloyatni tanlang"
+            showSearch
+            optionFilterProp="label"
+          >
+            {(regions ?? []).map((region) => (
+              <Select.Option
+                key={region.id}
+                value={region.id}
+                label={region.name}
+              >
+                {region.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="districtId"
+          label="Tuman"
+          rules={[{ required: true, message: "Tumanni tanlang" }]}
+        >
+          <Select
+            placeholder={
+              regionId ? "Tumanni tanlang" : "Avval viloyatni tanlang"
+            }
+            showSearch
+            optionFilterProp="label"
+            disabled={!regionId}
+          >
+            {(districts ?? []).map((district) => (
+              <Select.Option
+                key={district.id}
+                value={district.id}
+                label={district.name}
+              >
+                {district.name}
               </Select.Option>
             ))}
           </Select>

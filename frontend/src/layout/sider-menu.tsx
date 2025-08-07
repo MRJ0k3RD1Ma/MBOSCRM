@@ -3,25 +3,142 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMemo } from "react";
 import {
   HomeOutlined,
-  UsergroupAddOutlined,
-  FolderOpenOutlined,
-  UserOutlined,
-  ShoppingOutlined,
-  DollarCircleOutlined,
   TagsOutlined,
-  NumberOutlined,
+  ShoppingCartOutlined,
+  ShoppingOutlined,
+  CreditCardOutlined,
+  DollarCircleOutlined,
+  UsergroupAddOutlined,
+  UserOutlined,
+  TeamOutlined,
+  SolutionOutlined,
+  BankOutlined,
+  CloudServerOutlined,
+  AppstoreOutlined,
+  SettingOutlined,
   InboxOutlined,
+  ProfileOutlined,
+  FileTextOutlined,
+  ClusterOutlined,
+  ContainerOutlined,
+  CheckSquareOutlined,
+  FileDoneOutlined,
+  WalletOutlined,
+  ApartmentOutlined,
+  NumberOutlined,
 } from "@ant-design/icons";
 import Logo from "../../public/LogoMbos.svg";
 import { TokenManager } from "../config/token-manager";
 
 const { Sider } = Layout;
-
 const menuItems = [
   {
     key: "/dashboard",
-    label: "Bosh sahifa",
+    label: "Dashboard",
     icon: <HomeOutlined />,
+  },
+  {
+    key: "/subscribes",
+    label: "Obunalar",
+    icon: <TagsOutlined />,
+  },
+  {
+    key: "/sales-group",
+    label: "Sotuvlar",
+    icon: <ShoppingCartOutlined />,
+    children: [
+      {
+        key: "/sales",
+        label: "Sotuvni amalga oshirish",
+        icon: <ShoppingOutlined />,
+      },
+      {
+        key: "/sales",
+        label: "Sotilgan mahsulotlar",
+        icon: <FileDoneOutlined />,
+      },
+      {
+        key: "/sales-credit",
+        label: "Qarzdorliklar",
+        icon: <CreditCardOutlined />,
+      },
+    ],
+  },
+  {
+    key: "/paid-clients-group",
+    label: "Kassa",
+    icon: <WalletOutlined />,
+    children: [
+      {
+        key: "/paid-clients",
+        label: "Mijoz to’lovlari",
+        icon: <UserOutlined />,
+      },
+      {
+        key: "/paid-client",
+        label: "Yetkazuvchilarga to’langanlar",
+        icon: <TeamOutlined />,
+      },
+      {
+        key: "/paid-client",
+        label: "Boshqa xarajatlar",
+        icon: <ContainerOutlined />,
+      },
+      {
+        key: "/paid-client",
+        label: "Server xarajatlari",
+        icon: <CloudServerOutlined />,
+      },
+    ],
+  },
+  {
+    key: "/arriveds-group",
+    label: "Sklad",
+    icon: <InboxOutlined />,
+    children: [
+      {
+        key: "/arrived/create",
+        label: "Mahsulot qabul qilish",
+        icon: <ProfileOutlined />,
+      },
+      {
+        key: "/arriveds",
+        label: "Skladga qabul qilingan mahsulotlar",
+        icon: <InboxOutlined />,
+      },
+      {
+        key: "/arriveds",
+        label: "Qoldiqlar",
+        icon: <CheckSquareOutlined />,
+      },
+      {
+        key: "/arriveds",
+        label: "Prayskurant",
+        icon: <FileTextOutlined />,
+      },
+    ],
+  },
+  {
+    key: "/servers",
+    label: "Serverlar",
+    icon: <CloudServerOutlined />,
+  },
+  {
+    key: "products-group",
+    label: "Mahsulotlar",
+    icon: <AppstoreOutlined />,
+    children: [
+      {
+        key: "/products",
+        label: "Mahsulotlar ro‘yxati",
+        icon: <ShoppingOutlined />,
+      },
+      {
+        key: "/product-group",
+        label: "Mahsulot guruhlari",
+        icon: <ClusterOutlined />,
+      },
+    ],
   },
   {
     key: "clients-group",
@@ -34,75 +151,85 @@ const menuItems = [
         icon: <UserOutlined />,
       },
       {
+        key: "/",
+        label: "Qarzdorlar",
+        icon: <CreditCardOutlined />,
+      },
+      {
+        key: "/",
+        label: "Ortiqcha to'laganlar",
+        icon: <DollarCircleOutlined />,
+      },
+      {
         key: "/client-type",
         label: "Mijoz turlari",
-        icon: <TagsOutlined />,
-      },
-    ],
-  },
-  {
-    key: "products-group",
-    label: "Mahsulotlar",
-    icon: <ShoppingOutlined />,
-    children: [
-      {
-        key: "/products",
-        label: "Mahsulotlar ro‘yxati",
-        icon: <ShoppingOutlined />,
-      },
-      {
-        key: "/product-group",
-        label: "Mahsulot guruhlari",
-        icon: <FolderOpenOutlined />,
-      },
-      {
-        key: "/product-unit",
-        label: "O‘lchov birliklari",
-        icon: <NumberOutlined />,
+        icon: <SolutionOutlined />,
       },
     ],
   },
   {
     key: "suppliers-group",
-    label: "Ta'minotchilar",
-    icon: <UsergroupAddOutlined />,
+    label: "Yetkazuvchilar",
+    icon: <TeamOutlined />,
     children: [
       {
         key: "/suppliers",
-        label: "Ta'minotchilar ro‘yxati",
+        label: "Yetkazib beruvchilar ro’yhati",
         icon: <UserOutlined />,
       },
       {
         key: "/paid-suppliers",
         label: "To‘lov qilinganlar",
+        icon: <WalletOutlined />,
+      },
+      {
+        key: "/",
+        label: "Kelgan mahsulotlar",
+        icon: <InboxOutlined />,
+      },
+      {
+        key: "/",
+        label: "Qarzlarim",
+        icon: <CreditCardOutlined />,
+      },
+      {
+        key: "/",
+        label: "Ortiqcha to’lovlar",
         icon: <DollarCircleOutlined />,
       },
     ],
   },
   {
-    key: "/payment",
-    label: "To‘lov turlari",
-    icon: <DollarCircleOutlined />,
-  },
-  {
-    key: "/arriveds",
-    label: "Kirimlar",
-    icon: <InboxOutlined />,
-  },
-  {
-    key: "/sales",
-    label: "Sotuvlar",
-    icon: <DollarCircleOutlined />,
-  },
-  {
-    key: "/subscribes",
-    label: "Obunalar",
-    icon: <TagsOutlined />,
-  },
-  {
-    key: "/paid-clients",
-    label: "To'langan mijozlar",
-    icon: <DollarCircleOutlined />,
+    key: "setting-group",
+    label: "Sozlamalar",
+    icon: <SettingOutlined />,
+    children: [
+      {
+        key: "/",
+        label: "Foydalanuvchilar ro’yhati",
+        icon: <TeamOutlined />,
+      },
+      {
+        key: "/",
+        label: "Viloyatlar",
+        icon: <BankOutlined />,
+      },
+      {
+        key: "/",
+        label: "Tumanlar",
+        icon: <ApartmentOutlined />,
+      },
+      {
+        key: "/product-unit",
+        label: "Mahsulot birliklari",
+        icon: <NumberOutlined />,
+      },
+      {
+        key: "/payment",
+        label: "To‘lov turlari",
+        icon: <CreditCardOutlined />,
+      },
+    ],
   },
 ];
 

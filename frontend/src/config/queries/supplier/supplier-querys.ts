@@ -15,6 +15,10 @@ export interface Supplier {
   updatedAt?: string;
   registerId?: number;
   modifyId?: number;
+  register?: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface CreateSupplierInput {

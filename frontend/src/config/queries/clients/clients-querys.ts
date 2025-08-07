@@ -9,9 +9,24 @@ export interface Client {
   inn?: string;
   address?: string;
   phone?: string;
+  balance: number;
   typeId?: number;
   description?: string;
   districtId?: number | null;
+  regionId?: number | null;
+  registerId?: number | null;
+  modifyId?: number | null;
+  createdAt: string;
+  updatedAt?: string;
+  Region: {
+    id: number;
+    name: string;
+  };
+  District: {
+    id: number;
+    name: string;
+    regionId: number;
+  };
 }
 
 export interface CreateClientDto {

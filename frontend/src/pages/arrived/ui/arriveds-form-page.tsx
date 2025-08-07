@@ -256,19 +256,34 @@ export default function ArrivedFormPage() {
         Mahsulotlar
       </Title>
       <Form form={drawerForm} onFinish={onDrawerFinish}>
-        <div className="flex flex-wrap gap-4 w-full">
+        <div className="flex gap-4">
           <Form.Item
             name="productId"
-            rules={[{ required: true, message: "Mahsulotni tanlang" }]}
-            style={{ flex: 1 }}
-            className="min-w-[200px] grow !w-full"
+            rules={[{ required: true }]}
+            className="min-w-[200px] grow"
           >
             <Select
-              placeholder="Mahsulot"
+              placeholder="Mahsulot tanlang"
               showSearch
               optionFilterProp="label"
-              className="w-full"
               allowClear
+              onChange={(value) => {
+                const selectedProduct = productsList?.data.find(
+                  (p) => p.id === value
+                );
+                if (selectedProduct) {
+                  drawerForm.setFieldsValue({
+                    price: selectedProduct.price,
+                  });
+                } else {
+                  drawerForm.setFieldsValue({ price: null });
+                }
+                const count = drawerForm.getFieldValue("count") || 0;
+                const total = selectedProduct?.price
+                  ? selectedProduct.price * count
+                  : 0;
+                drawerForm.setFieldsValue({ total });
+              }}
             >
               {productsList?.data.map((p) => (
                 <Select.Option key={p.id} value={p.id} label={p.name}>
@@ -280,22 +295,43 @@ export default function ArrivedFormPage() {
 
           <Form.Item
             name="count"
-            rules={[{ required: true, message: "Soni kerak" }]}
-            style={{ flex: 1 }}
-            className="min-w-[200px] grow !w-full"
+            rules={[{ required: true }]}
+            className="min-w-[100px] max-w-[150px] grow"
           >
-            <InputNumber min={1} className="!w-full" placeholder="Soni" />
+            <InputNumber
+              min={1}
+              className="!w-full"
+              placeholder="Soni"
+              defaultValue={1}
+              onChange={(value: any) => {
+                const price = drawerForm.getFieldValue("price") || 0;
+                drawerForm.setFieldsValue({
+                  total: price * value,
+                });
+              }}
+            />
           </Form.Item>
 
           <Form.Item
             name="price"
-            rules={[{ required: true, message: "Narxi kerak" }]}
-            style={{ flex: 1 }}
-            className="min-w-[200px] grow !w-full"
+            rules={[{ required: true }]}
+            className="min-w-[200px] grow"
           >
-            <InputNumber min={0} className="!w-full" placeholder="Narxi" />
+            <InputNumber
+              min={0}
+              className="!w-full"
+              placeholder="Narxi"
+              onChange={(value: any) => {
+                const count = drawerForm.getFieldValue("count") || 0;
+                drawerForm.setFieldsValue({
+                  total: count * value,
+                });
+              }}
+            />
           </Form.Item>
-
+          <Form.Item name="total" className="min-w-[200px] grow">
+            <InputNumber disabled className="!w-full" placeholder="Jami narx" />
+          </Form.Item>
           <Form.Item style={{ flexShrink: 0 }}>
             <Button htmlType="submit" type="primary">
               +
