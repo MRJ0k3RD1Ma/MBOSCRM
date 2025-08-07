@@ -99,6 +99,7 @@ export class PaidSupplierService {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
+        include: { Payment: true, register: true, modify: true },
       }),
       this.prisma.paidSupplier.count({
         where,

@@ -143,7 +143,7 @@ export class ArrivedService {
         where,
         skip: (page - 1) * limit,
         take: limit,
-        include: { ArrivedProduct: true },
+        include: { ArrivedProduct: true, register: true, supplier: true },
         orderBy: {
           date: 'desc',
         },
@@ -165,7 +165,7 @@ export class ArrivedService {
         id,
         isDeleted: false,
       },
-      include: { ArrivedProduct: true },
+      include: { ArrivedProduct: true, register: true, supplier: true },
     });
     if (!arrived) {
       throw new HttpError({
