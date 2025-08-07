@@ -97,7 +97,15 @@ export class SubscribeService {
         take: limit,
         include: {
           client: true,
-          sale: true,
+          sale: {
+            select: { PaidClient: true },
+            include: {
+              PaidClient: {
+                select: { Payment: true },
+                include: { Payment: true },
+              },
+            },
+          },
         },
       }),
       this.prisma.subscribe.count({ where }),
