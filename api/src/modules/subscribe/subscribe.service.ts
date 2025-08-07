@@ -39,10 +39,10 @@ export class SubscribeService {
         paid,
         paying_date: payingDate,
         price,
-        clientId,
-        saleId,
         state,
-      },
+        sale: { connect: { id: saleId } },
+        client: { connect: { id: clientId } },
+      } as Prisma.SubscribeCreateInput,
     });
 
     if (state == 'PAID') {
