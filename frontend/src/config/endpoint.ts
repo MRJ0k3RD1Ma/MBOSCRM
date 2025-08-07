@@ -170,3 +170,21 @@ export const paidServerEndpoints = {
   update: (id: string) => `paid-server/${id}`,
   delete: (id: string) => `paid-server/${id}`,
 };
+
+// ===================== PAID OTHER ENDPOINTS =====================
+export const paidOtherEndpoints = {
+  all: "paid-other",
+  one: (id: string) => `paid-other/${id}`,
+  create: "paid-other",
+  update: (id: string) => `paid-other/${id}`,
+  delete: (id: string) => `paid-other/${id}`,
+};
+
+// ===================== PAID OTHER GROUP ENDPOINTS =====================
+export const paidOtherGroupEndpoints = {
+  all: "paid-other/group",
+  one: (id: string) => `paid-other/group/${id}`,
+  create: "paid-other/group",
+  update: (id: string) => `paid-other/group/${id}`,
+  delete: (id: string) => `paid-other/group/${id}`,
+};
