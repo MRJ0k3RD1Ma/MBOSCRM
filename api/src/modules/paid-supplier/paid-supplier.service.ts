@@ -116,7 +116,15 @@ export class PaidSupplierService {
 
   async findOne(id: number) {
     const paidSupplier = await this.prisma.paidSupplier.findFirst({
-      where: { id, isDeleted: false },
+      where: {
+        id,
+        isDeleted: false,
+      },
+      include: {
+        register: true,
+        Payment: true,
+        modify: true,
+      },
     });
     if (!paidSupplier) {
       throw HttpError({ code: 'PaidSupplier not found' });
