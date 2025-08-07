@@ -4,7 +4,8 @@ import { UpdatePaidServerDto } from './dto/update-paid-server.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllQueryPaidServerDto } from './dto/findAll-query-paid-server.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, ServerState } from '@prisma/client';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class PaidServerService {
@@ -14,7 +15,6 @@ export class PaidServerService {
       createPaidServerDto;
 
     if (serverId) {
-      //TO-DO server integration
       const server = await this.prisma.server.findFirst({
         where: { id: serverId, isDeleted: false },
       });
@@ -23,6 +23,10 @@ export class PaidServerService {
           message: `Server with ID ${serverId} not found or deleted`,
         });
       }
+      await this.prisma.server.update({
+        data: { state: ServerState.RUNNING, endDate },
+        where: { id: serverId },
+      });
     }
 
     const paidServer = await this.prisma.paidServer.create({
