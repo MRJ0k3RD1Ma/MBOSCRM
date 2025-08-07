@@ -26,6 +26,7 @@ import Subscribes from "../pages/subscribe/subscribes";
 import Subscribe from "../pages/subscribe/subscribe";
 import ClientsPaid from "../pages/clients/clients-paid";
 import Servers from "../pages/server/servers";
+import Server from "../pages/server/server";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -144,6 +145,10 @@ export const router = createBrowserRouter([
           {
             path: "servers",
             element: <Servers />,
+          },
+          {
+            path: "server/:id",
+            element: <Server />,
           },
           {
             path: "*",
