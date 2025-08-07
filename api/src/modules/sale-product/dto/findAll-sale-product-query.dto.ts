@@ -16,4 +16,7 @@ export class FindAllSaleProductQueryDto extends PaginationDto {
   @IsBoolean()
   @Transform((params) => (params.value == 'true' ? true : false))
   isSubscribe?: boolean;
+
+  @IsId(false)
+  productId: number;
 }

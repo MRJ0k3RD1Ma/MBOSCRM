@@ -81,7 +81,14 @@ export class SaleProductService {
   }
 
   async findAll(dto: FindAllSaleProductQueryDto) {
-    const { limit = 10, page = 1, saleId, clientId, isSubscribe } = dto;
+    const {
+      limit = 10,
+      page = 1,
+      saleId,
+      clientId,
+      productId,
+      isSubscribe,
+    } = dto;
 
     const where: Prisma.SaleProductWhereInput = {
       isDeleted: false,
@@ -92,6 +99,10 @@ export class SaleProductService {
 
     if (clientId) {
       where.sale = { clientId };
+    }
+
+    if (productId) {
+      where.productId = productId;
     }
 
     if (isSubscribe !== undefined) {
