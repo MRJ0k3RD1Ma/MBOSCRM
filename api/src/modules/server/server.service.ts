@@ -5,6 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { FindAllQueryServer } from './dto/findAll-query-server.dto';
 import { Prisma, ServerState } from '@prisma/client';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class ServerService {
@@ -79,7 +80,8 @@ export class ServerService {
       where.plan = plan;
     }
 
-    const [data, total] = await this.prisma.$transaction([
+    // eslint-disable-next-line prefer-const
+    let [data, total]: any[] = await this.prisma.$transaction([
       this.prisma.server.findMany({
         where,
         skip: (page - 1) * limit,
@@ -94,6 +96,11 @@ export class ServerService {
       this.prisma.server.count({ where }),
     ]);
 
+    data = data.map((server) => {
+      server.daysLeft = dayjs(server.endDate).diff(new Date(), 'days');
+      return server;
+    });
+
     return {
       total,
       page,
@@ -103,12 +110,14 @@ export class ServerService {
   }
 
   async findOne(id: number) {
-    const server = await this.prisma.server.findFirst({
+    const server: any = await this.prisma.server.findFirst({
       where: { id, isDeleted: false },
     });
     if (!server) {
       throw new Error(`Server with ID ${id} not found`);
     }
+
+    server.daysLeft = dayjs(server.endDate).diff(new Date(), 'days');
     return server;
   }
 
