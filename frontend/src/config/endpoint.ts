@@ -146,9 +146,27 @@ export const saleProductEndpoints = {
 
 // ===================== SUBSCRIBE ENDPOINTS =====================
 export const subscribeEndpoints = {
-  all: "/subscribe",
-  one: (id: string) => `/subscribe/${id}`,
-  create: "/subscribe",
-  update: (id: string) => `/subscribe/${id}`,
-  delete: (id: string) => `/subscribe/${id}`,
+  all: "subscribe",
+  one: (id: string) => `subscribe/${id}`,
+  create: "subscribe",
+  update: (id: string) => `subscribe/${id}`,
+  delete: (id: string) => `subscribe/${id}`,
+};
+
+// ===================== SERVER ENDPOINTS =====================
+export const serverEndpoints = {
+  all: "server",
+  one: (id: string) => `server/${id}`,
+  create: "server",
+  update: (id: string) => `server/${id}`,
+  delete: (id: string) => `server/${id}`,
+};
+
+// ===================== PAID SERVER ENDPOINTS =====================
+export const paidServerEndpoints = {
+  all: "paid-server",
+  one: (id: string) => `paid-server/${id}`,
+  create: "paid-server",
+  update: (id: string) => `paid-server/${id}`,
+  delete: (id: string) => `paid-server/${id}`,
 };
