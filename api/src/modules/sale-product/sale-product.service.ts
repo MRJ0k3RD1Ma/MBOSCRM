@@ -86,11 +86,11 @@ export class SaleProductService {
       isDeleted: false,
     };
     if (saleId) {
-      where.saleId = { equals: saleId };
+      where.saleId = saleId;
     }
 
     if (clientId) {
-      where.sale = { clientId: { equals: clientId } };
+      where.sale = { clientId };
     }
 
     if (isSubscribe !== undefined) {
