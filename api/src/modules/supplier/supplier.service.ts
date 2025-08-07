@@ -105,6 +105,7 @@ export class SupplierService {
   async findOne(id: number) {
     const supplier = await this.prisma.supplier.findFirst({
       where: { id, isDeleted: false },
+      include: { register: true, modify: true },
     });
     if (!supplier) {
       throw HttpError({ code: 'Supplier not found' });
