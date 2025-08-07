@@ -318,6 +318,7 @@ model PaidServer {
   endDate       DateTime
   paymentTypeId Int
   paymentType   Payment  @relation(fields: [paymentTypeId], references: [id])
+  server        Server   @relation(fields: [serverId], references: [id])
   price         Float
   description   String
   isDeleted     Boolean? @default(false)
@@ -325,6 +326,31 @@ model PaidServer {
   updatedAt     DateTime @default(now()) @updatedAt
   registerId    Int?
   modifyId      Int?
+}
+
+model Server {
+  id          Int         @id @default(autoincrement())
+  name        String?     @db.VarChar(255)
+  responsible String?     @db.VarChar(255)
+  plan        String?     @db.VarChar(255)
+  endDate     DateTime?
+  isDeleted   Boolean?    @default(false)
+  createdAt   DateTime    @default(now()) @map("created")
+  updatedAt   DateTime    @default(now()) @updatedAt @map("updated")
+  registerId  Int?
+  modifyId    Int?
+  state       ServerState @default(RUNNING)
+
+  // register    User?       @relation("ServerRegister", fields: [registerId], references: [id])
+  // modifier    User?       @relation("ServerModify", fields: [modifyId], references: [id])
+  paidServers PaidServer[] // One-to-Many relation
+
+  @@map("servers")
+}
+
+enum ServerState {
+  RUNNING
+  CLOSED
 }
 
 // Uncomment if you have User relations for registerId and modifyId

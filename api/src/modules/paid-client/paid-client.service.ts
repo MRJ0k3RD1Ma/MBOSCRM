@@ -77,18 +77,11 @@ export class PaidClientService {
         });
       }
 
-      if (client.balance < price) {
-        throw new HttpError({
-          message: `Client with ID ${clientId} does not have enough balance`,
-        });
-      }
-
-      if (!saleId) {
         await this.prisma.client.update({
           where: { id: clientId },
           data: { balance: { increment: price } },
         });
-      }
+      
 
       await this.prisma.setting.update({
         where: { id: 1 },

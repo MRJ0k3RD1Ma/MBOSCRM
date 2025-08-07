@@ -23,6 +23,7 @@ import { PaidOtherGroupModule } from './modules/paid-other-group/paid-other-grou
 import { PaidOtherModule } from './modules/paid-other/paid-other.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { PaidServerModule } from './modules/paid-server/paid-server.module';
+import { ServerModule } from './modules/server/server.module';
 
 @Module({
   controllers: [],
@@ -55,6 +56,7 @@ import { PaidServerModule } from './modules/paid-server/paid-server.module';
     PaidOtherModule,
     PaidServerModule,
     ScheduleModule.forRoot(),
+    ServerModule,
   ],
 })
 export class AppModule {}
