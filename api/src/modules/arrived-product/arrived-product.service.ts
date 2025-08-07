@@ -44,12 +44,6 @@ export class ArrivedProductService {
         arrivedId,
         productId,
       },
-      include: {
-        Arrived: { include: { supplier: true } },
-        Product: true,
-        modify: true,
-        register: true,
-      },
     });
 
     return arrivedproduct;
@@ -93,6 +87,11 @@ export class ArrivedProductService {
         where,
         skip: (page - 1) * limit,
         take: limit,
+        include: {
+          Arrived: { include: { supplier: true } },
+          Product: true,
+          register: true,
+        },
       }),
       this.prisma.arrivedProduct.count({ where }),
     ]);
