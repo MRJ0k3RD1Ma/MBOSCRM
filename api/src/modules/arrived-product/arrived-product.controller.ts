@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
 } from '@nestjs/common';
 import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from 'src/common/auth/roles/role.enum';
@@ -15,6 +16,7 @@ import { ArrivedProductService } from './arrived-product.service';
 import { CreateArrivedProductDto } from './dto/create-arrived-product.dto';
 import { FindAllArrivedProductQueryDto } from './dto/findAll-arrived-product-query.dto';
 import { UpdateArrivedProductDto } from './dto/update-arrived-product.dto';
+import { Request } from 'express';
 
 @Controller('arrived-product')
 export class ArrivedProductController {
@@ -22,8 +24,14 @@ export class ArrivedProductController {
 
   @Post()
   @DecoratorWrapper('create ArrivedProduct', true, [Role.Admin])
-  create(@Body() createArrivedProductDto: CreateArrivedProductDto) {
-    return this.arrivedproductService.create(createArrivedProductDto);
+  create(
+    @Body() createArrivedProductDto: CreateArrivedProductDto,
+    @Req() req: Request,
+  ) {
+    return this.arrivedproductService.create(
+      createArrivedProductDto,
+      req.user.id,
+    );
   }
 
   @Get()

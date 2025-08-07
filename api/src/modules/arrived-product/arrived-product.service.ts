@@ -9,7 +9,10 @@ import { UpdateArrivedProductDto } from './dto/update-arrived-product.dto';
 @Injectable()
 export class ArrivedProductService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createArrivedProductDto: CreateArrivedProductDto) {
+  async create(
+    createArrivedProductDto: CreateArrivedProductDto,
+    registerId: number,
+  ) {
     const { arrivedId, count, productId, price } = createArrivedProductDto;
 
     if (!arrivedId) {
@@ -43,6 +46,7 @@ export class ArrivedProductService {
         price,
         arrivedId,
         productId,
+        registerId,
       },
     });
 
