@@ -53,12 +53,13 @@ export class SaleProductService {
         registerId: creatorId,
         modifyId: creatorId,
       },
+      include: { product: true },
     });
     if (saleProduct.is_subscribe) {
       this.subscribeService.create({
         clientId: sale.clientId,
-        paid: saleProduct.price,
-        price: saleProduct.price,
+        paid: 0,
+        price: saleProduct.product.price,
         saleId: sale.id,
         state: SubscribeState.NOTPAYING,
         payingDate: dayjs(new Date()).add(1, 'month').toDate(),
