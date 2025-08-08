@@ -73,6 +73,7 @@ export const useGetAllSale = (params?: {
   toDate?: string;
   clientId?: number;
   code?: string;
+  credit?: boolean;
 }) => {
   return useQuery<SaleResponse>({
     queryKey: ["sale", params],

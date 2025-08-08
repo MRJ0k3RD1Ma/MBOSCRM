@@ -12,7 +12,7 @@ import {
   UserOutlined,
   TeamOutlined,
   SolutionOutlined,
-  BankOutlined,
+  // BankOutlined,
   CloudServerOutlined,
   AppstoreOutlined,
   SettingOutlined,
@@ -24,7 +24,7 @@ import {
   CheckSquareOutlined,
   FileDoneOutlined,
   WalletOutlined,
-  ApartmentOutlined,
+  // ApartmentOutlined,
   NumberOutlined,
 } from "@ant-design/icons";
 import Logo from "../../public/LogoMbos.svg";
@@ -83,6 +83,11 @@ const menuItems = [
         key: "/paid-suppliers",
         label: "Yetkazuvchilarga to’langanlar",
         icon: <TeamOutlined />,
+      },
+      {
+        key: "/paid-other-group",
+        label: "Boshqa xarajatlar Guruh",
+        icon: <ContainerOutlined />,
       },
       {
         key: "/paid-other",

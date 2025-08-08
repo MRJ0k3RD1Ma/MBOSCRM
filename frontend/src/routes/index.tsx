@@ -38,6 +38,7 @@ import ArrivedProducts from "../pages/arrived/arrived-products";
 import SupplierCredit from "../pages/suppler/supplier-credit";
 import SupplierOverPaid from "../pages/suppler/supplier-over-paid";
 import Users from "../pages/users/users";
+import PaidOtherGroup from "../pages/paid/paid-other-group";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -196,6 +197,10 @@ export const router = createBrowserRouter([
           {
             path: "paid-other",
             element: <PaidOther />,
+          },
+          {
+            path: "paid-other-group",
+            element: <PaidOtherGroup />,
           },
           {
             path: "paid-server",
