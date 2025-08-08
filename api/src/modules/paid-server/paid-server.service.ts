@@ -74,6 +74,7 @@ export class PaidServerService {
       where,
       include: {
         paymentType: true,
+        server: { select: { id: true, name: true } },
       },
     });
   }
