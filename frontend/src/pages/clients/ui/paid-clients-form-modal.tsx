@@ -23,6 +23,7 @@ interface Props {
   sales: any;
   payments: OptionType[];
   clientId: number | null;
+  saleId: number | null;
 }
 
 export default function PaidClientFormModal({
@@ -34,6 +35,7 @@ export default function PaidClientFormModal({
   sales,
   payments,
   clientId,
+  saleId,
 }: Props) {
   const [form] = Form.useForm<PaidClientFormValues>();
   const { theme } = useThemeContext();
@@ -105,24 +107,29 @@ export default function PaidClientFormModal({
             </Select>
           </Form.Item>
         )}
-
-        <Form.Item name="saleId" label="Savdo">
-          <Select
-            placeholder="Savdoni tanlang"
-            showSearch
-            optionFilterProp="label"
-          >
-            {sales.map((sale: any) => (
-              <Select.Option
-                key={sale.id}
-                value={sale.id}
-                label={sale.code || `ID: ${sale.id}`}
-              >
-                {sale.code || `ID: ${sale.id}`}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+        {saleId ? (
+          <Form.Item name="saleId" initialValue={saleId} hidden>
+            <input type="hidden" />
+          </Form.Item>
+        ) : (
+          <Form.Item name="saleId" label="Savdo">
+            <Select
+              placeholder="Savdoni tanlang"
+              showSearch
+              optionFilterProp="label"
+            >
+              {sales.map((sale: any) => (
+                <Select.Option
+                  key={sale.id}
+                  value={sale.id}
+                  label={sale.code || `ID: ${sale.id}`}
+                >
+                  {sale.code || `ID: ${sale.id}`}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
 
         <Form.Item
           name="paymentId"

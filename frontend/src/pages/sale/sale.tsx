@@ -234,6 +234,7 @@ export default function Sale() {
         sales={sales?.data || []}
         payments={payments?.data || []}
         clientId={Number(sale?.client?.id)}
+        saleId={currentId}
       />
       <Card
         title="Sotilgan mahsulotlar"
