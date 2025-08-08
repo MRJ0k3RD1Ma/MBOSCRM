@@ -8,7 +8,7 @@ import {
   Row,
   Col,
 } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { CreateProductInput } from "../../../config/queries/products/products-querys";
 import type { ProductUnit } from "../../../config/queries/products/product-unit-querys";
 import type { ProductGroup } from "../../../config/queries/products/product-gorup-querys";
@@ -32,12 +32,17 @@ export default function ProductsModal({
   group,
 }: Props) {
   const [form] = Form.useForm<CreateProductInput>();
+  const [isReminderDisabled, setIsReminderDisabled] = useState(false);
 
   useEffect(() => {
     if (initialValues) {
       form.setFieldsValue(initialValues);
+      if (initialValues.type === "SUBSCRIPTION") {
+        setIsReminderDisabled(true);
+      }
     } else {
       form.resetFields();
+      setIsReminderDisabled(false);
     }
   }, [initialValues, form]);
 
@@ -64,7 +69,21 @@ export default function ProductsModal({
         background: isDark ? "#001529" : "#ffffff",
       }}
     >
-      <Form layout="vertical" form={form} onFinish={handleFinish}>
+      <Form
+        layout="vertical"
+        form={form}
+        onFinish={handleFinish}
+        onValuesChange={(changedValues, allValues) => {
+          if (changedValues.type) {
+            if (changedValues.type === "SUBSCRIPTION") {
+              form.setFieldsValue({ reminderFirst: 0 });
+              setIsReminderDisabled(true);
+            } else {
+              setIsReminderDisabled(false);
+            }
+          }
+        }}
+      >
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
@@ -136,7 +155,12 @@ export default function ProductsModal({
                 { required: true, message: "Dastlabki qoldiqni kiriting" },
               ]}
             >
-              <InputNumber min={0} className="!w-full" placeholder="50" />
+              <InputNumber
+                min={0}
+                className="!w-full"
+                placeholder="50"
+                disabled={isReminderDisabled}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>

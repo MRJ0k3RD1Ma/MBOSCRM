@@ -187,6 +187,7 @@ export default function PaidSuppliers() {
         initialValues={editing || undefined}
         suppliers={suppliersData?.data || []}
         payments={paymentsData?.data || []}
+        supplierId={null}
       />
     </Card>
   );

@@ -23,6 +23,7 @@ import ClientModal from "./ui/clients-form-modal";
 import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
 import { useNavigate } from "react-router-dom";
 import ClientsFilterModal from "./ui/clients-filter-modal";
+import dayjs from "dayjs";
 
 export default function ClientsPage() {
   const [form] = Form.useForm();
@@ -71,8 +72,21 @@ export default function ClientsPage() {
     { title: "Name", dataIndex: "name" },
     { title: "INN", dataIndex: "inn" },
     { title: "Phone", dataIndex: "phone" },
-    { title: "Address", dataIndex: "address" },
-    { title: "Description", dataIndex: "description" },
+    { title: "Mijoz turi", dataIndex: ["ClientType", "name"] },
+    {
+      title: "Balans",
+      dataIndex: "balance",
+      render: (balance: number) =>
+        balance ? balance.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
+    {
+      title: "So'ngi o'zgarish",
+      dataIndex: "updatedAt",
+      render: (text: string) =>
+        text
+          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
+          : "—",
+    },
     {
       title: "Actions",
       key: "actions",

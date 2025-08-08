@@ -4,10 +4,10 @@ import dayjs from "dayjs";
 import { useThemeContext } from "../../../providers/theme-provider";
 
 type PaidSupplierFormValues = {
-  supplierId: number;
   paidDate: string;
   price: number;
   paymentId: number;
+  supplierId: number;
 };
 
 type Props = {
@@ -17,6 +17,7 @@ type Props = {
   initialValues?: PaidSupplierFormValues | null;
   suppliers: { id: number; name: string }[];
   payments: { id: number; name: string }[];
+  supplierId: number | null;
 };
 
 export default function PaidSupplierFormModal({
@@ -26,6 +27,7 @@ export default function PaidSupplierFormModal({
   initialValues,
   suppliers,
   payments,
+  supplierId,
 }: Props) {
   const [form] = Form.useForm();
 
@@ -77,22 +79,28 @@ export default function PaidSupplierFormModal({
       }
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
-        <Form.Item
-          label="Yetkazib beruvchi"
-          name="supplierId"
-          style={{ flex: 1, minWidth: 200 }}
-          rules={[{ required: true, message: "Yetkazib beruvchini tanlang" }]}
-        >
-          <Select
-            placeholder="Tanlang"
-            showSearch
-            optionFilterProp="label"
-            options={suppliers.map((s) => ({
-              label: s.name,
-              value: s.id,
-            }))}
-          />
-        </Form.Item>
+        {supplierId ? (
+          <Form.Item name="supplierId" initialValue={supplierId} hidden>
+            <input type="hidden" />
+          </Form.Item>
+        ) : (
+          <Form.Item
+            label="Yetkazib beruvchi"
+            name="supplierId"
+            style={{ flex: 1, minWidth: 200 }}
+            rules={[{ required: true, message: "Yetkazib beruvchini tanlang" }]}
+          >
+            <Select
+              placeholder="Tanlang"
+              showSearch
+              optionFilterProp="label"
+              options={suppliers.map((s) => ({
+                label: s.name,
+                value: s.id,
+              }))}
+            />
+          </Form.Item>
+        )}
 
         <Form.Item
           label="To‘lov turi"
