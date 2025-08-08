@@ -110,11 +110,7 @@ export default function ClientModal({
           </Select>
         </Form.Item>
 
-        <Form.Item
-          name="regionId"
-          label="Viloyat"
-          rules={[{ required: true, message: "Viloyatni tanlang" }]}
-        >
+        <Form.Item name="regionId" label="Viloyat">
           <Select
             placeholder="Viloyatni tanlang"
             showSearch
@@ -132,11 +128,7 @@ export default function ClientModal({
           </Select>
         </Form.Item>
 
-        <Form.Item
-          name="districtId"
-          label="Tuman"
-          rules={[{ required: true, message: "Tumanni tanlang" }]}
-        >
+        <Form.Item name="districtId" label="Tuman">
           <Select
             placeholder={
               regionId ? "Tumanni tanlang" : "Avval viloyatni tanlang"

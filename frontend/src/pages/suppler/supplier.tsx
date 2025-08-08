@@ -9,10 +9,12 @@ import {
   Tabs,
   type TabsProps,
   Table,
+  Space,
 } from "antd";
 import { useState } from "react";
 import {
   useDeleteSupplier,
+  useGetAllSuppliers,
   useGetSupplierById,
   useUpdateSupplier,
   type CreateSupplierInput,
@@ -20,7 +22,15 @@ import {
 import SupplierFormModal from "./ui/supplier-form-modal";
 import dayjs from "dayjs";
 import { useGetAllArrived } from "../../config/queries/arrived/arrived-qureys";
-import { useGetAllPaidSuppliers } from "../../config/queries/supplier/paid-supplier-querys";
+import {
+  useCreatePaidSupplier,
+  useGetAllPaidSuppliers,
+  type CreatePaidSupplierInput,
+} from "../../config/queries/supplier/paid-supplier-querys";
+import { PlusOutlined } from "@ant-design/icons";
+import Title from "antd/es/typography/Title";
+import PaidSupplierFormModal from "./ui/paid-supplier-form-modal";
+import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
 
 export default function Supplier() {
   const { id } = useParams();
@@ -30,11 +40,20 @@ export default function Supplier() {
   const { data: supplier, isLoading } = useGetSupplierById(supplierId);
   const { data: arrivedSupplierID } = useGetAllArrived({ supplierId });
   const { data: SupplierPaidID } = useGetAllPaidSuppliers({ supplierId });
+  const { data: suppliersData } = useGetAllSuppliers({ page: 1, limit: 1000 });
+  const { data: paymentsData } = useGetAllPayments({ page: 1, limit: 1000 });
 
+  const createPaidSupplier = useCreatePaidSupplier();
   const deleteSupplier = useDeleteSupplier();
   const updateSupplier = useUpdateSupplier();
 
   const [editOpen, setEditOpen] = useState(false);
+  const [paidOpen, setPaidOpen] = useState(false);
+
+  const onSubmit = (values: CreatePaidSupplierInput) => {
+    createPaidSupplier.mutate(values);
+    setPaidOpen(false);
+  };
 
   const handleDelete = () => {
     deleteSupplier.mutate(supplierId, {
@@ -64,12 +83,6 @@ export default function Supplier() {
           ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
           : "—",
     },
-    // {
-    //   title: "Narxi",
-    //   dataIndex: ["ArrivedProduct", "0", "price"],
-    //   render: (price: number) =>
-    //     price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
-    // },
     {
       title: "Umumiy narxi",
       dataIndex: "price",
@@ -103,21 +116,6 @@ export default function Supplier() {
       dataIndex: ["register", "name"],
     },
   ];
-
-  const dummyData = Array(8)
-    .fill(0)
-    .map((_, i) => ({
-      key: i,
-      checkNumber: "Lorem",
-      date: "Lorem",
-      price: "Lorem",
-      quantity: "Lorem",
-      total: "Lorem",
-      subscriber: "Lorem",
-      registerId: "Lorem",
-      supplier: "Lorem",
-    }));
-
   const tabItems: TabsProps["items"] = [
     {
       key: "1",
@@ -146,10 +144,35 @@ export default function Supplier() {
 
   return (
     <div style={{ display: "flex", gap: 16 }}>
-      <Card
-        style={{ flex: 1, maxWidth: 480 }}
-        title={`Yetkazib beruvchi: ${supplier.name}`}
-      >
+      <Card style={{ flex: 1, maxWidth: 480 }}>
+        <Space direction="vertical" className="mb-4">
+          <Title className="!text-[17px]">
+            Yetkazib beruvchi: {supplier.name}
+          </Title>
+          <Space>
+            <Button
+              onClick={() => setEditOpen(true)}
+              style={{ marginRight: 8 }}
+            >
+              O‘zgartirish
+            </Button>
+            <Popconfirm
+              title="Haqiqatan o‘chirmoqchimisiz?"
+              onConfirm={handleDelete}
+            >
+              <Button danger>O‘chirish</Button>
+            </Popconfirm>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                setPaidOpen(true);
+              }}
+            >
+              Yangi to‘lov qo‘shish
+            </Button>
+          </Space>
+        </Space>
         <Descriptions bordered column={1} size="small">
           <Descriptions.Item label="ID">{supplier.id}</Descriptions.Item>
           <Descriptions.Item label="Nomi">{supplier.name}</Descriptions.Item>
@@ -180,25 +203,20 @@ export default function Supplier() {
       <Card
         style={{ flex: 2 }}
         title="Yetkazib beruvchi qo‘shimcha ma’lumotlari"
-        extra={
-          <>
-            <Button
-              onClick={() => setEditOpen(true)}
-              style={{ marginRight: 8 }}
-            >
-              O‘zgartirish
-            </Button>
-            <Popconfirm
-              title="Haqiqatan o‘chirmoqchimisiz?"
-              onConfirm={handleDelete}
-            >
-              <Button danger>O‘chirish</Button>
-            </Popconfirm>
-          </>
-        }
       >
         <Tabs defaultActiveKey="1" items={tabItems} />
       </Card>
+      <PaidSupplierFormModal
+        open={paidOpen}
+        onClose={() => {
+          setPaidOpen(false);
+        }}
+        onSubmit={onSubmit}
+        suppliers={suppliersData?.data || []}
+        payments={paymentsData?.data || []}
+        supplierId={supplierId}
+      />
+
       <SupplierFormModal
         open={editOpen}
         onClose={() => setEditOpen(false)}

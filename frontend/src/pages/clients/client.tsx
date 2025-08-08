@@ -447,6 +447,7 @@ export default function ClientPage() {
       <Card style={{ flex: 2 }} title="Mahsulotning qo‘shimcha ma’lumotlari">
         <Tabs defaultActiveKey="1" items={tabItems} />
       </Card>
+      
       <PaidClientFormModal
         open={paidOpen}
         onClose={() => {
