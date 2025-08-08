@@ -75,7 +75,7 @@ export class SupplierService {
     }
 
     if (isPositiveBalance !== undefined) {
-      where.balance = isPositiveBalance ? { gte: 0 } : { lt: 0 };
+      where.balance = isPositiveBalance ? { gt: 0 } : { lt: 0 };
     }
 
     if (phone?.trim()) {
