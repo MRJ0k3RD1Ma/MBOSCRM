@@ -50,6 +50,18 @@ export class ArrivedProductService {
       },
     });
 
+    await this.prisma.product.update({
+      where: { id: productId },
+      data: {
+        countArrived: {
+          increment: count,
+        },
+        countReminder: {
+          increment: count,
+        },
+      },
+    });
+
     return arrivedproduct;
   }
 
