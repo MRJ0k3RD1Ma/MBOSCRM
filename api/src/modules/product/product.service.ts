@@ -115,7 +115,19 @@ export class ProductService {
   }
 
   async findAll(dto: FindAllProductQueryDto) {
-    const { limit = 10, page = 1, name } = dto;
+    const {
+      limit = 10,
+      page = 1,
+      name,
+      type,
+      barcode,
+      groupId,
+      unitId,
+      minPrice,
+      maxPrice,
+      minCount,
+      maxCount,
+    } = dto;
 
     const [data, total] = await this.prisma.$transaction([
       this.prisma.product.findMany({
@@ -124,6 +136,12 @@ export class ProductService {
             contains: name?.trim() || '',
             mode: 'insensitive',
           },
+          type: { equals: type },
+          barcode: { contains: barcode },
+          groupId: { equals: groupId },
+          unitId: { equals: unitId },
+          priceIncome: { gte: minPrice, lte: maxPrice },
+          countArrived: { gte: minCount, lte: maxCount },
           isDeleted: false,
         },
         skip: (page - 1) * limit,
