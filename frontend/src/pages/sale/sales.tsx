@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 import {
   useDeleteSale,
   useGetAllSale,
-  type Sale,
+  type Sale, 
 } from "../../config/queries/sale/sale-querys";
 import SalesFilterModal from "./ui/sales-filter-modal";
 

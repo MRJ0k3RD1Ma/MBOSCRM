@@ -405,7 +405,9 @@ export default function ClientPage() {
             {data.phone || "—"}
           </Descriptions.Item>
           <Descriptions.Item label="Balans">
-            {data.balance || "0"}
+            {data.balance
+              ? data.balance.toLocaleString("uz-UZ") + " so'm"
+              : "0"}
           </Descriptions.Item>
           <Descriptions.Item label="Manzil">
             {data.address || "—"}
@@ -447,7 +449,7 @@ export default function ClientPage() {
       <Card style={{ flex: 2 }} title="Mahsulotning qo‘shimcha ma’lumotlari">
         <Tabs defaultActiveKey="1" items={tabItems} />
       </Card>
-      
+
       <PaidClientFormModal
         open={paidOpen}
         onClose={() => {
@@ -458,6 +460,7 @@ export default function ClientPage() {
         sales={sales?.data || []}
         payments={payments?.data || []}
         clientId={clientId}
+        saleId={null}
       />
       <Modal
         title="Mijoz ma'lumotlarini tahrirlash"

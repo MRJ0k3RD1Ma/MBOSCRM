@@ -73,7 +73,7 @@ export default function ProductsModal({
         layout="vertical"
         form={form}
         onFinish={handleFinish}
-        onValuesChange={(changedValues, allValues) => {
+        onValuesChange={(changedValues) => {
           if (changedValues.type) {
             if (changedValues.type === "SUBSCRIPTION") {
               form.setFieldsValue({ reminderFirst: 0 });
