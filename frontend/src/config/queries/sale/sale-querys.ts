@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { notification } from "antd";
 import axiosPrivate from "../../api";
 import { saleEndpoints } from "../../endpoint";
+import type { Client } from "../clients/clients-querys";
 
 export interface SaleProductInput {
   productId: number;
@@ -53,6 +54,7 @@ export interface Sale {
   registerId: number;
   modifyId: number;
   SaleProduct: SaleProduct[];
+  client: Client;
 }
 
 export interface SaleResponse {
