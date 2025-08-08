@@ -15,10 +15,10 @@ export function IsPassword(required = true) {
         IsString(),
         IsStrongPassword({
           minLength: 4,
-          minLowercase: 0,
           minNumbers: 0,
           minUppercase: 0,
           minSymbols: 0,
+          minLowercase: 0,
         }),
       )
     : applyDecorators(
