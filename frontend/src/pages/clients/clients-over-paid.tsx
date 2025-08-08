@@ -19,7 +19,7 @@ export default function ClientsOverPaid() {
     limit,
     ...(search ? { name: search } : {}),
     ...filters,
-    isPasitiveBalance: true,
+    isPositiveBalance: true,
   });
 
   const columns = [
