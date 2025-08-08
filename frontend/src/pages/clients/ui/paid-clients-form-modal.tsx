@@ -23,7 +23,7 @@ interface Props {
   sales: any;
   payments: OptionType[];
   clientId: number | null;
-  saleId: number | null;
+  saleId: number | null | boolean;
 }
 
 export default function PaidClientFormModal({
@@ -107,7 +107,7 @@ export default function PaidClientFormModal({
             </Select>
           </Form.Item>
         )}
-        {saleId ? (
+        {saleId === false ? null : saleId ? (
           <Form.Item name="saleId" initialValue={saleId} hidden>
             <input type="hidden" />
           </Form.Item>
