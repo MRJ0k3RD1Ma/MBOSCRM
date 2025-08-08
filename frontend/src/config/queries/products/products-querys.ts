@@ -53,6 +53,7 @@ export const useGetAllProducts = (params?: {
   page?: number;
   limit?: number;
   name?: string;
+  type?: string;
 }) => {
   return useQuery<ProductResponse>({
     queryKey: ["products", params],

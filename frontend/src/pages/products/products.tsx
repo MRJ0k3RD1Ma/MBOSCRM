@@ -177,6 +177,7 @@ export default function ProductsPage() {
           setPage(1);
         }}
         initialValues={filters}
+        reminder={true}
       />
       <Table
         columns={columns}
