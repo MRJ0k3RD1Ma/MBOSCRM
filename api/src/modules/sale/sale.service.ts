@@ -95,7 +95,7 @@ export class SaleService {
     await this.prisma.$transaction(async (tx) => {
       if (client.balance < totalPrice) {
         const newBalance = client.balance - totalPrice;
-    
+
         sale = await tx.sale.update({
           where: { id: sale.id },
           data: {
@@ -105,19 +105,19 @@ export class SaleService {
           },
           include: { SaleProduct: { include: { product: true } } },
         });
-    
+
         await tx.setting.update({
           where: { id: 1 },
           data: { balance: { increment: client.balance } },
         });
-    
+
         await tx.client.update({
           where: { id: client.id },
           data: { balance: newBalance },
         });
       } else {
         const newBalance = client.balance - totalPrice;
-    
+
         sale = await tx.sale.update({
           where: { id: sale.id },
           data: {
@@ -127,19 +127,18 @@ export class SaleService {
           },
           include: { SaleProduct: { include: { product: true } } },
         });
-    
+
         await tx.setting.update({
           where: { id: 1 },
           data: { balance: { increment: totalPrice } },
         });
-    
+
         await tx.client.update({
           where: { id: client.id },
           data: { balance: newBalance },
         });
       }
     });
-    
 
     return sale;
   }
@@ -222,7 +221,7 @@ export class SaleService {
         id,
         isDeleted: false,
       },
-      include: { SaleProduct: true },
+      include: { SaleProduct: true, client: true },
     });
     if (!sale) {
       throw new HttpError({
