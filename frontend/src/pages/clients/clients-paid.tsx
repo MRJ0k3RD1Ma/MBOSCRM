@@ -12,7 +12,6 @@ import {
 } from "antd";
 
 import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -38,7 +37,6 @@ const formatDate = (date: string) =>
 
 export default function ClientsPaid() {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<PaidClient | null>(null);
   const [search, setSearch] = useState("");
@@ -196,17 +194,6 @@ export default function ClientsPaid() {
         dataSource={data || []}
         loading={isLoading}
         rowKey="id"
-        onRow={(record) => ({
-          onClick: (e) => {
-            if (
-              (e.target as HTMLElement).closest("button") ||
-              (e.target as HTMLElement).closest("svg")
-            ) {
-              return;
-            }
-            // navigate(`/paid-client/${record.id}`);
-          },
-        })}
         pagination={{
           current: page,
           pageSize: limit,
@@ -226,6 +213,8 @@ export default function ClientsPaid() {
         clients={clients?.data || []}
         sales={sales?.data || []}
         payments={payments?.data || []}
+        clientId={null}
+        saleId={null}
       />
     </Card>
   );

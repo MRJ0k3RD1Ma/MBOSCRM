@@ -1,35 +1,17 @@
 import { useState } from "react";
-import {
-  Button,
-  Card,
-  Dropdown,
-  Form,
-  Input,
-  Space,
-  Table,
-  Tooltip,
-  type MenuProps,
-} from "antd";
-import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
+import { Button, Card, Input, Space, Table } from "antd";
+import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import {
-  useCreateProduct,
-  useDeleteProduct,
   useGetAllProducts,
-  useUpdateProduct,
-  type CreateProductInput,
   type Product,
 } from "../../config/queries/products/products-querys";
-import ProductsFilterModal from "./ui/products-filter-modal";
-import ProductsModal from "./ui/products-form-modal";
 import { useGetAllProductUnits } from "../../config/queries/products/product-unit-querys";
 import { useGetAllProductGroups } from "../../config/queries/products/product-gorup-querys";
+import ProductsFilterModal from "../products/ui/products-filter-modal";
 
-export default function ProductsPage() {
-  const [form] = Form.useForm();
+export default function ArrivedsCredit() {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<Product | null>(null);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
@@ -41,33 +23,11 @@ export default function ProductsPage() {
     limit,
     ...(search ? { name: search } : {}),
     ...filters,
+    type: "DEVICE",
   });
 
-  const createProduct = useCreateProduct();
-  const updateProduct = useUpdateProduct();
-  const deleteProduct = useDeleteProduct();
   const { data: unitsData } = useGetAllProductUnits();
   const { data: groupData } = useGetAllProductGroups();
-
-  const onSubmit = (values: CreateProductInput) => {
-    if (editing) {
-      updateProduct.mutate({ id: editing.id, ...values });
-    } else {
-      createProduct.mutate(values);
-    }
-    setOpen(false);
-    setEditing(null);
-  };
-
-  const handleEdit = (product: Product) => {
-    setEditing(product);
-    form.setFieldsValue(product);
-    setOpen(true);
-  };
-
-  const handleDelete = (id: number) => {
-    deleteProduct.mutate(id);
-  };
 
   const columns = [
     { title: "Nomi", dataIndex: "name", key: "name" },
@@ -90,40 +50,6 @@ export default function ProductsPage() {
     },
     { title: "Sotuv narxi", dataIndex: "price", key: "price" },
     { title: "Turi", dataIndex: "type", key: "type" },
-    {
-      title: "Amallar",
-      key: "actions",
-      render: (_: any, row: Product) => {
-        const items: MenuProps["items"] = [
-          {
-            key: "edit",
-            label: "Tahrirlash",
-            onClick: () => handleEdit(row),
-          },
-          {
-            key: "delete",
-            label: "O‘chirish",
-            danger: true,
-            onClick: () => handleDelete(row.id),
-          },
-          {
-            key: "view",
-            label: "Profilga o‘tish",
-            onClick: () => navigate(`/product/${row.id}`),
-          },
-        ];
-
-        return (
-          <div onClick={(e) => e.stopPropagation()}>
-            <Dropdown menu={{ items }} trigger={["click"]}>
-              <Tooltip title="Boshqarish">
-                <Button icon={<MoreOutlined />} />
-              </Tooltip>
-            </Dropdown>
-          </div>
-        );
-      },
-    },
   ];
 
   return (
@@ -156,18 +82,6 @@ export default function ProductsPage() {
             Filter
           </Button>
         </Space>
-
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            setEditing(null);
-            form.resetFields();
-            setOpen(true);
-          }}
-        >
-          Yangi mahsulot qo‘shish
-        </Button>
       </Space>
       <ProductsFilterModal
         open={filterModalOpen}
@@ -177,7 +91,7 @@ export default function ProductsPage() {
           setPage(1);
         }}
         initialValues={filters}
-        reminder={true}
+        reminder={false}
       />
       <Table
         columns={columns}
@@ -201,18 +115,6 @@ export default function ProductsPage() {
           total: data?.total,
           onChange: (page) => setPage(page),
         }}
-      />
-
-      <ProductsModal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-          setEditing(null);
-        }}
-        onSubmit={onSubmit}
-        initialValues={editing || undefined}
-        units={unitsData?.data || []}
-        group={groupData?.data || []}
       />
     </Card>
   );

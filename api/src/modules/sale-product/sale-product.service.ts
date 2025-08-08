@@ -73,10 +73,12 @@ export class SaleProductService {
         countReminder: {
           decrement: createSaleProductDto.count,
         },
+        countSale: {
+          increment: createSaleProductDto.count,
+        },
         modifyId: creatorId,
       },
     });
-
     return saleProduct;
   }
 

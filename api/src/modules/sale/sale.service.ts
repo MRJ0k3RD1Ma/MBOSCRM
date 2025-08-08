@@ -92,36 +92,53 @@ export class SaleService {
       );
       totalPrice += saleProduct.priceCount;
     }
+    await this.prisma.$transaction(async (tx) => {
+      if (client.balance < totalPrice) {
+        const newBalance = client.balance - totalPrice;
 
-    if (client.balance < totalPrice) {
-      sale = await this.prisma.sale.update({
-        where: { id: sale.id },
-        data: {
-          price: totalPrice,
-          credit: totalPrice - client.balance,
-          dept: client.balance,
-        },
-        include: { SaleProduct: { include: { product: true } } },
-      });
-      await this.prisma.client.update({
-        where: { id: client.id },
-        data: { balance: { decrement: sale.dept } },
-      });
-    } else {
-      sale = await this.prisma.sale.update({
-        where: { id: sale.id },
-        data: {
-          price: totalPrice,
-          credit: 0,
-          dept: totalPrice,
-        },
-        include: { SaleProduct: { include: { product: true } } },
-      });
-      await this.prisma.client.update({
-        where: { id: client.id },
-        data: { balance: { decrement: totalPrice } },
-      });
-    }
+        sale = await tx.sale.update({
+          where: { id: sale.id },
+          data: {
+            price: totalPrice,
+            credit: totalPrice - client.balance,
+            dept: client.balance,
+          },
+          include: { SaleProduct: { include: { product: true } } },
+        });
+
+        await tx.setting.update({
+          where: { id: 1 },
+          data: { balance: { increment: client.balance } },
+        });
+
+        await tx.client.update({
+          where: { id: client.id },
+          data: { balance: newBalance },
+        });
+      } else {
+        const newBalance = client.balance - totalPrice;
+
+        sale = await tx.sale.update({
+          where: { id: sale.id },
+          data: {
+            price: totalPrice,
+            credit: 0,
+            dept: totalPrice,
+          },
+          include: { SaleProduct: { include: { product: true } } },
+        });
+
+        await tx.setting.update({
+          where: { id: 1 },
+          data: { balance: { increment: totalPrice } },
+        });
+
+        await tx.client.update({
+          where: { id: client.id },
+          data: { balance: newBalance },
+        });
+      }
+    });
 
     return sale;
   }
@@ -204,7 +221,10 @@ export class SaleService {
         id,
         isDeleted: false,
       },
-      include: { SaleProduct: true },
+      include: {
+        SaleProduct: true,
+        client: { include: { Region: true, District: true } },
+      },
     });
     if (!sale) {
       throw new HttpError({

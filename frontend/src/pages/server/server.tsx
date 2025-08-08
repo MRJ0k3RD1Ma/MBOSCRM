@@ -11,7 +11,6 @@ import {
   Input,
   DatePicker,
   Select,
-  Tag,
 } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
@@ -115,22 +114,6 @@ export default function Server() {
     }
   };
 
-  //   const renderDaysLeftTag = ({ daysLeft }: { daysLeft: number }) => {
-  //     let color = "green";
-  //     if (daysLeft < 3) {
-  //       color = "red";
-  //     } else if (daysLeft < 7) {
-  //       color = "orange";
-  //     }
-
-  //     const label =
-  //       server?.daysLeft === 0
-  //         ? "Muddati tugagan"
-  //         : `${server?.daysLeft} kun qoldi`;
-
-  //     return <Tag color={color}>{label}</Tag>;
-  //   };
-
   return (
     <div style={{ display: "flex", gap: 16 }}>
       <Card title="Server haqida ma'lumot" style={{ flex: 1, maxWidth: 480 }}>
@@ -145,7 +128,6 @@ export default function Server() {
             {server?.endDate && dayjs(server.endDate).format("YYYY-MM-DD")}
           </Descriptions.Item>
           <Descriptions.Item label="Tugash kuni">
-            {/* {renderDaysLeftTag(server?.daysLeft)} */}
             {server?.daysLeft}
           </Descriptions.Item>
         </Descriptions>
@@ -186,7 +168,7 @@ export default function Server() {
             },
             {
               title: "Sanasi",
-              dataIndex: "endDate",
+              dataIndex: "createdAt",
               render: (val) => dayjs(val).format("YYYY-MM-DD"),
             },
             {
@@ -197,7 +179,6 @@ export default function Server() {
         />
       </Card>
 
-      {/* Edit Modal */}
       <Modal
         title="Serverni tahrirlash"
         open={isEditModalOpen}

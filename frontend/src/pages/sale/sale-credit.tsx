@@ -1,27 +1,13 @@
 import { useState } from "react";
-import {
-  Button,
-  Card,
-  Dropdown,
-  Input,
-  Space,
-  Table,
-  Tooltip,
-  message,
-  type MenuProps,
-} from "antd";
-import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
+import { Button, Card, Input, Space, Table } from "antd";
+import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 import dayjs from "dayjs";
-import {
-  useDeleteSale,
-  useGetAllSale,
-  type Sale, 
-} from "../../config/queries/sale/sale-querys";
+import { useGetAllSale } from "../../config/queries/sale/sale-querys";
 import SalesFilterModal from "./ui/sales-filter-modal";
 
-export default function Sales() {
+export default function SaleCredit() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -33,14 +19,8 @@ export default function Sales() {
     limit: 10,
     ...(search ? { code: search } : {}),
     ...filters,
+    credit: true,
   });
-
-  const deleteSale = useDeleteSale();
-  const handleDelete = (id: number) => {
-    deleteSale.mutate(id, {
-      onSuccess: () => message.success("Savdo o‘chirildi"),
-    });
-  };
 
   const columns = [
     {
@@ -52,40 +32,6 @@ export default function Sales() {
     { title: "Mijoz", dataIndex: "clientId" },
     { title: "Narx", dataIndex: "price" },
     { title: "Qarz", dataIndex: "credit" },
-    {
-      title: "Amallar",
-      key: "actions",
-      render: (_: any, row: Sale) => {
-        const items: MenuProps["items"] = [
-          {
-            key: "edit",
-            label: "Tahrirlash",
-            onClick: () => navigate(`/sale/edit/${row.id}`),
-          },
-          {
-            key: "delete",
-            label: "O‘chirish",
-            danger: true,
-            onClick: () => handleDelete(row.id),
-          },
-          {
-            key: "view",
-            label: "Tafsilotlar",
-            onClick: () => navigate(`/sale/${row.id}`),
-          },
-        ];
-
-        return (
-          <div onClick={(e) => e.stopPropagation()}>
-            <Dropdown menu={{ items }} trigger={["click"]}>
-              <Tooltip title="Boshqarish">
-                <Button icon={<MoreOutlined />} />
-              </Tooltip>
-            </Dropdown>
-          </div>
-        );
-      },
-    },
   ];
 
   return (
@@ -117,16 +63,6 @@ export default function Sales() {
             Filter
           </Button>
         </Space>
-
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            navigate("/sale/create");
-          }}
-        >
-          Yangi savdo
-        </Button>
       </Space>
 
       <SalesFilterModal

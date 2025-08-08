@@ -145,6 +145,14 @@ export class ClientService implements OnModuleInit {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
+        include: {
+          ClientType: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
       }),
       this.prisma.client.count({ where }),
     ]);

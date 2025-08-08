@@ -26,7 +26,7 @@ export class ArrivedService {
               supplierId: 1,
               date: new Date(),
               description: 'description asdfghj',
-              products: [{ count: 1, price: 100, productId: 1 }],
+              products: [{ count: 1, productId: 1 }],
             },
             1,
           );
@@ -80,7 +80,6 @@ export class ArrivedService {
         {
           arrivedId: arrived.id,
           count: product.count,
-          price: product.price,
           productId: product.productId,
         },
         creatorId,

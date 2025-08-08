@@ -3,6 +3,7 @@ import {
   useGetClientById,
   useUpdateClient,
   useDeleteClient,
+  useGetAllClients,
 } from "../../config/queries/clients/clients-querys";
 import {
   Button,
@@ -19,8 +20,9 @@ import {
   Tabs,
   type TabsProps,
   Table,
+  Space,
 } from "antd";
-
+import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
 import dayjs from "dayjs";
@@ -30,10 +32,16 @@ import {
   useGetAllRegions,
   useGetDistrictsByRegion,
 } from "../../config/queries/location/location-querys";
-import { useGetAllPaidClients } from "../../config/queries/clients/paid-client-querys";
+import {
+  useCreatePaidClient,
+  useGetAllPaidClients,
+  type PaidClientDto,
+} from "../../config/queries/clients/paid-client-querys";
 import { useGetAllSubscribes } from "../../config/queries/subscribe/subscribe-querys";
 import { useGetAllSale } from "../../config/queries/sale/sale-querys";
 import { useGetAllSaleProduct } from "../../config/queries/sale/sale-product-querys";
+import PaidClientFormModal from "./ui/paid-clients-form-modal";
+import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
 
 const { Title } = Typography;
 
@@ -42,11 +50,16 @@ export default function ClientPage() {
   const [form] = Form.useForm();
   const clientId = Number(id);
   const regionId = Form.useWatch("regionId", form);
+  const [paidOpen, setPaidOpen] = useState(false);
   const { data, isLoading, refetch } = useGetClientById(clientId);
   const { data: regions } = useGetAllRegions();
   const { data: districts } = useGetDistrictsByRegion(regionId);
+  const createPaidClient = useCreatePaidClient();
   const updateClient = useUpdateClient();
   const deleteClient = useDeleteClient();
+  const { data: clients } = useGetAllClients({ page: 1, limit: 1000 });
+  const { data: sales } = useGetAllSale({ page: 1, limit: 1000 });
+  const { data: payments } = useGetAllPayments({ page: 1, limit: 1000 });
   const { data: types } = useGetAllClientTypes();
   const { data: paidClient } = useGetAllPaidClients({ clientId });
   const { data: subscribeClient } = useGetAllSubscribes({
@@ -69,6 +82,11 @@ export default function ClientPage() {
   const navigate = useNavigate();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const onSubmit = (values: PaidClientDto) => {
+    createPaidClient.mutate(values);
+    setPaidOpen(false);
+  };
 
   const handleDelete = async () => {
     try {
@@ -350,10 +368,36 @@ export default function ClientPage() {
 
   return (
     <div style={{ display: "flex", gap: 16 }}>
-      <Card
-        style={{ flex: 1, maxWidth: 480 }}
-        title="Mahsulot haqida ma’lumotlar"
-      >
+      <Card style={{ flex: 1, maxWidth: 480 }}>
+        <Space direction="vertical" className="mb-4">
+          <Title className="!text-[17px]">Mahsulot haqida ma’lumotlar</Title>
+          <Space>
+            <Button
+              onClick={() => {
+                form.setFieldsValue(data);
+                setIsEditOpen(true);
+              }}
+              style={{ marginRight: 8 }}
+            >
+              O‘zgartirish
+            </Button>
+            <Popconfirm
+              title="Haqiqatan o‘chirmoqchimisiz?"
+              onConfirm={handleDelete}
+            >
+              <Button danger>O‘chirish</Button>
+            </Popconfirm>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                setPaidOpen(true);
+              }}
+            >
+              Yangi to‘lov qo‘shish
+            </Button>
+          </Space>
+        </Space>
         <Descriptions bordered column={1} size="small">
           <Descriptions.Item label="Ismi">{data.name || "—"}</Descriptions.Item>
           <Descriptions.Item label="INN">{data.inn || "—"}</Descriptions.Item>
@@ -361,7 +405,9 @@ export default function ClientPage() {
             {data.phone || "—"}
           </Descriptions.Item>
           <Descriptions.Item label="Balans">
-            {data.balance || "0"}
+            {data.balance
+              ? data.balance.toLocaleString("uz-UZ") + " so'm"
+              : "0"}
           </Descriptions.Item>
           <Descriptions.Item label="Manzil">
             {data.address || "—"}
@@ -400,31 +446,22 @@ export default function ClientPage() {
           </Descriptions.Item>
         </Descriptions>
       </Card>
-      <Card
-        style={{ flex: 2 }}
-        title="Mahsulotning qo‘shimcha ma’lumotlari"
-        extra={
-          <>
-            <Button
-              onClick={() => {
-                form.setFieldsValue(data);
-                setIsEditOpen(true);
-              }}
-              style={{ marginRight: 8 }}
-            >
-              O‘zgartirish
-            </Button>
-            <Popconfirm
-              title="Haqiqatan o‘chirmoqchimisiz?"
-              onConfirm={handleDelete}
-            >
-              <Button danger>O‘chirish</Button>
-            </Popconfirm>
-          </>
-        }
-      >
+      <Card style={{ flex: 2 }} title="Mahsulotning qo‘shimcha ma’lumotlari">
         <Tabs defaultActiveKey="1" items={tabItems} />
       </Card>
+
+      <PaidClientFormModal
+        open={paidOpen}
+        onClose={() => {
+          setPaidOpen(false);
+        }}
+        onSubmit={onSubmit}
+        clients={clients?.data || []}
+        sales={sales?.data || []}
+        payments={payments?.data || []}
+        clientId={clientId}
+        saleId={false}
+      />
       <Modal
         title="Mijoz ma'lumotlarini tahrirlash"
         open={isEditOpen}

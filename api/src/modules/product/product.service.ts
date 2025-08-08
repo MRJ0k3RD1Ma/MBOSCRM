@@ -20,9 +20,6 @@ export class ProductService {
         for (let i = count; i < requiredCount; i++) {
           await this.create(
             {
-              countArrived: 5,
-              countReminder: 5,
-              countSale: 0,
               groupId: 1,
               name: faker.commerce.productName(),
               price: +faker.commerce.price(),
@@ -48,9 +45,6 @@ export class ProductService {
       reminderFirst,
       price,
       type,
-      countReminder,
-      countArrived,
-      countSale,
     } = createProductDto;
 
     const existingGroup = await this.prisma.productGroup.findFirst({
@@ -91,9 +85,9 @@ export class ProductService {
           reminderFirst,
           price,
           type,
-          countReminder,
-          countArrived,
-          countSale,
+          countReminder: 0,
+          countArrived: 0,
+          countSale: 0,
           registerId: creatorId,
           modifyId: creatorId,
         },
@@ -110,9 +104,9 @@ export class ProductService {
         reminderFirst,
         price,
         type,
-        countReminder,
-        countArrived,
-        countSale,
+        countReminder: 0,
+        countArrived: 0,
+        countSale: 0,
         registerId: creatorId,
         modifyId: creatorId,
       },

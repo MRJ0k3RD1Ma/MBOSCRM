@@ -38,13 +38,21 @@ export class PaidClientService {
 
     if (saleId) {
       const sale = await this.prisma.sale.findFirst({
-        where: { id: saleId, isDeleted: false },
+        where: { id: saleId, isDeleted: false, },
+        include: { SaleProduct: { include: { product: true } } },
       });
       if (!sale) {
         throw new HttpError({
           message: `Sale with ID ${saleId} not found or deleted`,
         });
       }
+      const saleProductId = sale.SaleProduct[0].productId;
+      if (!saleProductId) {
+        throw new HttpError({
+          message: `Sale with ID ${saleId} has no products`,
+        });
+      }
+
     }
 
     if (paymentId) {
@@ -83,10 +91,6 @@ export class PaidClientService {
         data: { balance: { increment: price } },
       });
 
-      await this.prisma.setting.update({
-        where: { id: 1 },
-        data: { balance: { increment: price } },
-      });
       await this.checkCredit(client.id);
       await this.checkSubscribtions(client.id);
     }

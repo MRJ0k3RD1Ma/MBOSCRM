@@ -11,6 +11,7 @@ type Props = {
   onClose: () => void;
   onApply: (filters: Record<string, any>) => void;
   initialValues: Record<string, any>;
+  reminder: boolean;
 };
 
 export default function ProductsFilterModal({
@@ -18,6 +19,7 @@ export default function ProductsFilterModal({
   onClose,
   onApply,
   initialValues,
+  reminder,
 }: Props) {
   const [form] = Form.useForm();
   const [, token] = useToken();
@@ -109,15 +111,17 @@ export default function ProductsFilterModal({
               <InputNumber style={{ width: "100%" }} placeholder="5" />
             </Form.Item>
           </Col>
-          <Col span={6}>
-            <Form.Item label="Turi" name="type">
-              <Select placeholder="Tanlang" allowClear>
-                <Option value="DEVICE">Qurilma</Option>
-                <Option value="SERVICE">Xizmat</Option>
-                <Option value="SUBSCRIPTION">Obuna</Option>
-              </Select>
-            </Form.Item>
-          </Col>
+          {reminder ? (
+            <Col span={6}>
+              <Form.Item label="Turi" name="type">
+                <Select placeholder="Tanlang" allowClear>
+                  <Option value="DEVICE">Qurilma</Option>
+                  <Option value="SERVICE">Xizmat</Option>
+                  <Option value="SUBSCRIPTION">Obuna</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          ) : null}
         </Row>
 
         <Row justify="end" gutter={8}>
