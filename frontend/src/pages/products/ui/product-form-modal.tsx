@@ -139,24 +139,6 @@ export default function ProductFormDrawer({
           </Col>
 
           <Col span={12}>
-            <Form.Item label="Joriy qoldiq" name="countReminder">
-              <InputNumber style={{ width: "100%" }} placeholder="10" />
-            </Form.Item>
-          </Col>
-
-          <Col span={12}>
-            <Form.Item label="Keltirilgan soni" name="countArrived">
-              <InputNumber style={{ width: "100%" }} placeholder="100" />
-            </Form.Item>
-          </Col>
-
-          <Col span={12}>
-            <Form.Item label="Sotilgan soni" name="countSale">
-              <InputNumber style={{ width: "100%" }} placeholder="90" />
-            </Form.Item>
-          </Col>
-
-          <Col span={12}>
             <Form.Item label="Turi" name="type" rules={[{ required: true }]}>
               <Select
                 options={PRODUCT_TYPES}

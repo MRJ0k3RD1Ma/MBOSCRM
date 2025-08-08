@@ -158,35 +158,6 @@ export default function ProductsModal({
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item
-              name="countReminder"
-              label="Qoldiq"
-              rules={[{ required: true, message: "Qoldiq sonini kiriting" }]}
-            >
-              <InputNumber min={0} className="!w-full" placeholder="10" />
-            </Form.Item>
-          </Col>
-
-          <Col span={12}>
-            <Form.Item
-              name="countArrived"
-              label="Kelgan soni"
-              rules={[{ required: true, message: "Kelgan sonini kiriting" }]}
-            >
-              <InputNumber min={0} className="!w-full" placeholder="100" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="countSale"
-              label="Sotilgan soni"
-              rules={[{ required: true, message: "Sotilgan sonini kiriting" }]}
-            >
-              <InputNumber min={0} className="!w-full" placeholder="90" />
-            </Form.Item>
-          </Col>
-
           <Col span={24}>
             <Form.Item name="description" label="Izoh">
               <Input.TextArea rows={3} placeholder="Qo‘shimcha ma’lumot..." />
