@@ -1,10 +1,9 @@
-import { Card, Col, Row, Select, Typography, Spin, Button } from "antd";
+import { Card, Col, Row, Select, Typography, Spin } from "antd";
 import {
   ArrowUpOutlined,
   ArrowDownOutlined,
   UserOutlined,
   FileTextOutlined,
-  ClockCircleOutlined,
 } from "@ant-design/icons";
 import {
   BarChart,

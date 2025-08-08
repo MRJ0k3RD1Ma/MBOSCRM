@@ -1,9 +1,10 @@
-import { Modal, Form, Input, InputNumber } from "antd";
+import { Drawer, Form, Input, InputNumber, Space, Button } from "antd";
 import { useEffect } from "react";
 import type {
   CreateUserInput,
   User,
 } from "../../../config/queries/users/users-querys";
+import { useThemeContext } from "../../../providers/theme-provider";
 
 type Props = {
   open: boolean;
@@ -12,13 +13,15 @@ type Props = {
   initialValues?: User;
 };
 
-export default function UserFormModal({
+export default function UserFormDrawer({
   open,
   onClose,
   onSubmit,
   initialValues,
 }: Props) {
   const [form] = Form.useForm<CreateUserInput>();
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     if (initialValues) {
@@ -29,32 +32,33 @@ export default function UserFormModal({
     }
   }, [initialValues, form]);
 
-  const handleOk = async () => {
+  const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
       onSubmit(values);
       form.resetFields();
-    } catch (err) {
+    } catch {
       // validation error
     }
   };
 
   return (
-    <Modal
+    <Drawer
       title={
         initialValues
           ? "Foydalanuvchini tahrirlash"
           : "Yangi foydalanuvchi qo‘shish"
       }
       open={open}
-      onCancel={() => {
+      onClose={() => {
         form.resetFields();
         onClose();
       }}
-      onOk={handleOk}
-      okText={initialValues ? "Saqlash" : "Qo‘shish"}
-      cancelText="Bekor qilish"
       destroyOnClose
+      width={400}
+      bodyStyle={{
+        background: isDark ? "#001529" : "#ffffff",
+      }}
     >
       <Form form={form} layout="vertical">
         <Form.Item
@@ -94,7 +98,10 @@ export default function UserFormModal({
         <Form.Item name="chatId" label="Telegram Chat ID">
           <Input placeholder="Telegram Chat ID" />
         </Form.Item>
+        <Button type="primary" htmlType="submit" onClick={handleSubmit} block>
+          {initialValues ? "Saqlash" : "Qo‘shish"}
+        </Button>
       </Form>
-    </Modal>
+    </Drawer>
   );
 }
