@@ -52,7 +52,9 @@ export default function ArrivedFormPage() {
   const deleteArrivedProduct = useDeleteArrivedProduct();
   const { data: arrivedData } = useGetArrivedById(Number(id), isEdit);
   const { data: suppliers } = useGetAllSuppliers();
-  const { data: productsList } = useGetAllProducts();
+  const { data: productsList } = useGetAllProducts({
+    type: "DEVICE",
+  });
   const { data: arrivedProductsData } = useGetAllArrivedProduct({
     arrivedId: isEdit ? Number(id) : undefined,
   });
@@ -271,18 +273,20 @@ export default function ArrivedFormPage() {
                 const selectedProduct = productsList?.data.find(
                   (p) => p.id === value
                 );
+
                 if (selectedProduct) {
                   drawerForm.setFieldsValue({
+                    count: 1,
                     price: selectedProduct.price,
+                    total: selectedProduct.price * 1,
                   });
                 } else {
-                  drawerForm.setFieldsValue({ price: null });
+                  drawerForm.setFieldsValue({
+                    count: null,
+                    price: null,
+                    total: null,
+                  });
                 }
-                const count = drawerForm.getFieldValue("count") || 0;
-                const total = selectedProduct?.price
-                  ? selectedProduct.price * count
-                  : 0;
-                drawerForm.setFieldsValue({ total });
               }}
             >
               {productsList?.data.map((p) => (
@@ -302,7 +306,6 @@ export default function ArrivedFormPage() {
               min={1}
               className="!w-full"
               placeholder="Soni"
-              defaultValue={1}
               onChange={(value: any) => {
                 const price = drawerForm.getFieldValue("price") || 0;
                 drawerForm.setFieldsValue({

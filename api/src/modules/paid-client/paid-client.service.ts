@@ -38,22 +38,45 @@ export class PaidClientService {
 
     if (saleId) {
       const sale = await this.prisma.sale.findFirst({
-        where: { id: saleId, isDeleted: false, },
+        where: { id: saleId, isDeleted: false },
         include: { SaleProduct: { include: { product: true } } },
       });
+    
       if (!sale) {
         throw new HttpError({
           message: `Sale with ID ${saleId} not found or deleted`,
         });
       }
-      const saleProductId = sale.SaleProduct[0].productId;
-      if (!saleProductId) {
+
+      if (!sale.credit || sale.credit <= 0) {
         throw new HttpError({
-          message: `Sale with ID ${saleId} has no products`,
+          message: `Sizning bu mahsulot bo‘yicha qarzingiz yo‘q`,
         });
       }
-
+    
+      const remainingDebt = sale.credit; 
+      
+      if (price > remainingDebt) {
+        const extra = price - remainingDebt;
+    
+        await this.prisma.sale.update({
+          where: { id: saleId },
+          data: { credit: 0, dept: sale.dept + remainingDebt },
+        });
+    
+        await this.prisma.client.update({
+          where: { id: sale.clientId },
+          data: { balance: { increment: extra } },
+        });
+    
+      } else {
+        await this.prisma.sale.update({
+          where: { id: saleId },
+          data: { credit: remainingDebt - price, dept: sale.dept + price },
+        });
+      }
     }
+    
 
     if (paymentId) {
       const payment = await this.prisma.payment.findFirst({

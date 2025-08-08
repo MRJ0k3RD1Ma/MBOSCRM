@@ -75,7 +75,7 @@ export const router = createBrowserRouter([
             element: <ClientsOverPaid />,
           },
           {
-            path: "сlients-credit",
+            path: "clients-credit",
             element: <ClientsCredit />,
           },
           {

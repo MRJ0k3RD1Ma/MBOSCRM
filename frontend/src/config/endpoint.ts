@@ -8,10 +8,12 @@ export const authEndpoints = {
 
 // ===================== USER ENDPOINTS =====================
 export const userEndpoints = {
+  create: "user",
   all: "user",
   me: "user/check",
   one: (id: string) => `user/${id}`,
   update: (id: string) => `user/${id}`,
+  delete: (id: string) => `user/${id}`,
 };
 
 // ===================== USER ROLE ENDPOINTS =====================

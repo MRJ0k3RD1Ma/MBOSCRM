@@ -46,6 +46,7 @@ export const useGetAllSuppliers = (params?: {
   name?: string;
   phone?: string;
   description?: string;
+  isPositiveBalance?: boolean;
 }) => {
   return useQuery<SupplierResponse>({
     queryKey: ["suppliers", params],

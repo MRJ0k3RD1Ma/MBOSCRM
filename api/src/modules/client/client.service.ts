@@ -7,6 +7,7 @@ import { FindAllClientQueryDto } from './dto/findAll-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { env } from 'src/common/config';
 import { faker } from '@faker-js/faker';
+import { is } from 'date-fns/locale';
 
 @Injectable()
 export class ClientService implements OnModuleInit {
@@ -105,6 +106,7 @@ export class ClientService implements OnModuleInit {
       description,
       inn,
       phone,
+      isPositiveBalance,
     } = dto;
 
     const where: Prisma.ClientWhereInput = {
@@ -116,15 +118,19 @@ export class ClientService implements OnModuleInit {
     }
 
     if (districtId) {
-      where.districtId = { equals: districtId };
+      where.districtId = districtId;
     }
 
     if (regionId) {
-      where.regionId = { equals: regionId };
+      where.regionId = regionId;
     }
 
     if (address?.trim()) {
       where.address = { contains: address.trim(), mode: 'insensitive' };
+    }
+
+    if (isPositiveBalance !== undefined) {
+      where.balance = isPositiveBalance ? { gt: 0 } : { lt: 0 };
     }
 
     if (description?.trim()) {
