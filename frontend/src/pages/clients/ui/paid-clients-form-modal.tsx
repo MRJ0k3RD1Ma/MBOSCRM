@@ -22,6 +22,7 @@ interface Props {
   clients: OptionType[];
   sales: any;
   payments: OptionType[];
+  clientId: number | null;
 }
 
 export default function PaidClientFormModal({
@@ -32,6 +33,7 @@ export default function PaidClientFormModal({
   clients,
   sales,
   payments,
+  clientId,
 }: Props) {
   const [form] = Form.useForm<PaidClientFormValues>();
   const { theme } = useThemeContext();
@@ -76,32 +78,35 @@ export default function PaidClientFormModal({
       }}
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
-        <Form.Item
-          name="clientId"
-          label="Mijoz"
-          rules={[{ required: true, message: "Iltimos mijozni tanlang" }]}
-        >
-          <Select
-            placeholder="Mijozni tanlang"
-            showSearch
-            optionFilterProp="label"
+        {clientId ? (
+          <Form.Item name="clientId" initialValue={clientId} hidden>
+            <input type="hidden" />
+          </Form.Item>
+        ) : (
+          <Form.Item
+            name="clientId"
+            label="Mijoz"
+            rules={[{ required: true, message: "Iltimos mijozni tanlang" }]}
           >
-            {clients.map((client) => (
-              <Select.Option
-                key={client.id}
-                value={client.id}
-                label={client.name}
-              >
-                {client.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+            <Select
+              placeholder="Mijozni tanlang"
+              showSearch
+              optionFilterProp="label"
+            >
+              {clients.map((client) => (
+                <Select.Option
+                  key={client.id}
+                  value={client.id}
+                  label={client.name}
+                >
+                  {client.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
 
-        <Form.Item
-          name="saleId"
-          label="Savdo"
-        >
+        <Form.Item name="saleId" label="Savdo">
           <Select
             placeholder="Savdoni tanlang"
             showSearch
