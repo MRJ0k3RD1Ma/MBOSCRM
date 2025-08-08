@@ -36,16 +36,4 @@ export class CreateProductDto {
   @ApiProperty({ enum: ProductType, example: ProductType.DEVICE })
   @IsEnum(ProductType)
   type: ProductType;
-
-  @ApiProperty({ example: 100.0 })
-  @IsNumber()
-  countReminder: number;
-
-  @ApiProperty({ example: 200.0 })
-  @IsNumber()
-  countArrived: number;
-
-  @ApiProperty({ example: 0 })
-  @IsNumber()
-  countSale: number;
 }

@@ -13,7 +13,7 @@ export class ArrivedProductService {
     createArrivedProductDto: CreateArrivedProductDto,
     registerId: number,
   ) {
-    const { arrivedId, count, productId, price } = createArrivedProductDto;
+    const { arrivedId, count, productId,  } = createArrivedProductDto;
 
     if (!arrivedId) {
       throw new HttpError({
@@ -42,8 +42,8 @@ export class ArrivedProductService {
     const arrivedproduct = await this.prisma.arrivedProduct.create({
       data: {
         count,
-        priceCount: price * count,
-        price,
+        priceCount: product.price * count,
+        price: product.price,
         arrivedId,
         productId,
         registerId,

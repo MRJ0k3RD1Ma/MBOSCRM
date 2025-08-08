@@ -14,7 +14,5 @@ export class CreateArrivedProductDto {
   @Min(1)
   count: number;
 
-  @ApiProperty()
-  @IsNumber()
-  price: number;
+
 }
