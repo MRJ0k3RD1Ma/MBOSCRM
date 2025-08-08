@@ -181,6 +181,7 @@ export class SaleService {
           SaleProduct: true,
           modifier: true,
           register: true,
+          client: true,
         },
         orderBy: {
           date: 'desc',

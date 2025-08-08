@@ -29,8 +29,6 @@ export class ServerService {
         },
       },
     });
-    console.log(expiredServers);
-
     this.logger.log(`Found ${expiredServers.length} expired servers`);
 
     for (const server of expiredServers) {
@@ -97,7 +95,7 @@ export class ServerService {
     ]);
 
     data = data.map((server) => {
-      server.daysLeft = dayjs(server.endDate).diff(new Date(), 'days');
+      server.daysLeft = dayjs(server.endDate).diff(new Date(), 'day');
       return server;
     });
 

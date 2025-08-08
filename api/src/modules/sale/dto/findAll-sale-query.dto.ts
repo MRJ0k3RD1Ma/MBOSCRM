@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsBooleanString, IsDate, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsBooleanString, IsDate, IsOptional, IsString } from 'class-validator';
 import { IsId } from 'src/common/dtos/id.dto';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
@@ -29,7 +29,7 @@ export class FindAllSaleQueryDto extends PaginationDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsBooleanString()
+  @IsBoolean()
   @Type(() => Boolean)
   credit: boolean;
 
