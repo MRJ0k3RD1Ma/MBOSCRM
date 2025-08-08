@@ -194,7 +194,7 @@ const menuItems = [
       },
       {
         key: "/supplier-credit",
-        label: "Qarzlarim",
+        label: "Qarzdorlar",
         icon: <CreditCardOutlined />,
       },
       {
