@@ -95,13 +95,13 @@ export class SaleService {
     await this.prisma.$transaction(async (tx) => {
       if (client.balance < totalPrice) {
         const newBalance = client.balance - totalPrice;
-
+        const paidAmount = Math.max(client.balance, 0);
         sale = await tx.sale.update({
           where: { id: sale.id },
           data: {
             price: totalPrice,
             credit: totalPrice - client.balance,
-            dept: client.balance,
+            dept: paidAmount,
           },
           include: { SaleProduct: { include: { product: true } } },
         });

@@ -60,7 +60,7 @@ export class SupplierService {
   }
 
   async findAll(dto: FindAllSupplierQueryDto) {
-    const { limit = 10, page = 1, name, description, phone } = dto;
+    const { limit = 10, page = 1, name, description, phone,isPositiveBalance } = dto;
 
     const where: Prisma.SupplierWhereInput = {
       isDeleted: false,
@@ -72,6 +72,10 @@ export class SupplierService {
 
     if (description?.trim()) {
       where.description = { contains: description.trim() };
+    }
+
+    if (isPositiveBalance !== undefined) {
+      where.balance = isPositiveBalance ? { gte: 0 } : { lt: 0 };
     }
 
     if (phone?.trim()) {

@@ -1,3 +1,6 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform, Type } from 'class-transformer';
+import { IsBoolean, IsOptional } from 'class-validator';
 import { IsId } from 'src/common/dtos/id.dto';
 import { IsName } from 'src/common/dtos/name.dto';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
@@ -23,4 +26,10 @@ export class FindAllClientQueryDto extends PaginationDto {
 
   @IsId(false)
   districtId: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  @Transform((params) => (params.value == 'true' ? true : false))
+  isPositiveBalance?: boolean;
 }
