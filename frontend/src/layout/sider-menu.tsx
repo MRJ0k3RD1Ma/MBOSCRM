@@ -43,7 +43,7 @@ const menuItems = [
     icon: <TagsOutlined />,
   },
   {
-    key: "/sales-group",
+    key: "/sales",
     label: "Sotuvlar",
     icon: <ShoppingCartOutlined />,
     children: [
@@ -156,7 +156,7 @@ const menuItems = [
         icon: <UserOutlined />,
       },
       {
-        key: "/сlients-credit",
+        key: "/clients-credit",
         label: "Qarzdorlar",
         icon: <CreditCardOutlined />,
       },
@@ -210,7 +210,7 @@ const menuItems = [
     icon: <SettingOutlined />,
     children: [
       {
-        key: "/",
+        key: "/users",
         label: "Foydalanuvchilar ro’yhati",
         icon: <TeamOutlined />,
       },
@@ -249,16 +249,21 @@ export default function SiderMenu({ collapsed, setCollapsed }: Props) {
 
   const selectedKey = useMemo(() => {
     const currentPath = location.pathname;
+
     const flatKeys = menuItems.flatMap((item) =>
-      item.children ? item.children.map((child) => child.key) : item.key
+      item.children ? item.children.map((child) => child.key) : [item.key]
     );
-    const matchedKey = flatKeys.find((key) => currentPath.startsWith(key));
-    return [matchedKey || currentPath];
+
+    const exactMatch = flatKeys.find((key) => key === currentPath);
+    if (exactMatch) return [exactMatch];
+
+    const partialMatch = flatKeys.find((key) => currentPath.startsWith(key));
+    return [partialMatch || currentPath];
   }, [location.pathname]);
 
   const openKeys = useMemo(() => {
     const match = menuItems.find((item) =>
-      item.children?.some((child) => child.key === location.pathname)
+      item.children?.some((child) => location.pathname.startsWith(child.key))
     );
     return match ? [match.key] : [];
   }, [location.pathname]);
