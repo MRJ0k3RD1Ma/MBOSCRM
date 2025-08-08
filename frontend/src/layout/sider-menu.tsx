@@ -48,7 +48,7 @@ const menuItems = [
     icon: <ShoppingCartOutlined />,
     children: [
       {
-        key: "/sales",
+        key: "/sale/create",
         label: "Sotuvni amalga oshirish",
         icon: <ShoppingOutlined />,
       },
@@ -61,6 +61,11 @@ const menuItems = [
         key: "/sales-credit",
         label: "Qarzdorliklar",
         icon: <CreditCardOutlined />,
+      },
+      {
+        key: "/price-curant",
+        label: "Prayskurant",
+        icon: <FileTextOutlined />,
       },
     ],
   },
@@ -75,17 +80,17 @@ const menuItems = [
         icon: <UserOutlined />,
       },
       {
-        key: "/paid-client",
+        key: "/paid-suppliers",
         label: "Yetkazuvchilarga to’langanlar",
         icon: <TeamOutlined />,
       },
       {
-        key: "/paid-client",
+        key: "/paid-other",
         label: "Boshqa xarajatlar",
         icon: <ContainerOutlined />,
       },
       {
-        key: "/paid-client",
+        key: "/paid-server",
         label: "Server xarajatlari",
         icon: <CloudServerOutlined />,
       },
@@ -107,14 +112,9 @@ const menuItems = [
         icon: <InboxOutlined />,
       },
       {
-        key: "/arriveds",
+        key: "/arriveds-credit",
         label: "Qoldiqlar",
         icon: <CheckSquareOutlined />,
-      },
-      {
-        key: "/arriveds",
-        label: "Prayskurant",
-        icon: <FileTextOutlined />,
       },
     ],
   },
@@ -156,12 +156,12 @@ const menuItems = [
         icon: <UserOutlined />,
       },
       {
-        key: "/",
+        key: "/сlients-credit",
         label: "Qarzdorlar",
         icon: <CreditCardOutlined />,
       },
       {
-        key: "/",
+        key: "/clients-over-paid",
         label: "Ortiqcha to'laganlar",
         icon: <DollarCircleOutlined />,
       },
@@ -188,17 +188,17 @@ const menuItems = [
         icon: <WalletOutlined />,
       },
       {
-        key: "/",
+        key: "/arrived-products",
         label: "Kelgan mahsulotlar",
         icon: <InboxOutlined />,
       },
       {
-        key: "/",
+        key: "/supplier-credit",
         label: "Qarzlarim",
         icon: <CreditCardOutlined />,
       },
       {
-        key: "/",
+        key: "/supplier-over-paid",
         label: "Ortiqcha to’lovlar",
         icon: <DollarCircleOutlined />,
       },

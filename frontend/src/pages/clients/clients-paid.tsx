@@ -226,6 +226,7 @@ export default function ClientsPaid() {
         clients={clients?.data || []}
         sales={sales?.data || []}
         payments={payments?.data || []}
+        clientId={null}
       />
     </Card>
   );

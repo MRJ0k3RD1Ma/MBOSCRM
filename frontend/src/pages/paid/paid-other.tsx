@@ -1,3 +1,3 @@
 export default function PaidOther() {
-  return <div>paid-oither</div>;
+  return <div>paid-other</div>;
 }
