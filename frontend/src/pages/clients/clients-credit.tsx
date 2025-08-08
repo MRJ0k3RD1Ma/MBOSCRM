@@ -19,7 +19,7 @@ export default function ClientsCredit() {
     limit,
     ...(search ? { name: search } : {}),
     ...filters,
-    isPasitiveBalance: false,
+    isPositiveBalance: false,
   });
 
   const columns = [
