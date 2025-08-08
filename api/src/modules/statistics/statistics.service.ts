@@ -1,195 +1,312 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { PaidOtherType, Prisma, SubscribeState } from '@prisma/client';
 
 @Injectable()
 export class StatisticsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getStatistics() {
+  // Place this inside the service where `this.prisma` is available.
+  async getStatistics(year: number = new Date().getFullYear()) {
     const today = new Date();
-    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+    const currentMonthStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      1,
+    );
+    const currentMonthEnd = new Date(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+      999,
+    );
 
+    const startOfYear = new Date(year, 0, 1);
+    const endOfYear = new Date(year, 11, 31, 23, 59, 59, 999);
+
+    const startOfLastYear = new Date(year - 1, 0, 1);
+    const endOfLastYear = new Date(year - 1, 11, 31, 23, 59, 59, 999);
+
+    // Helper to safely read aggregate sums
+    const sumOrZero = (agg: any, field: string) =>
+      (agg && agg._sum && (agg._sum[field] ?? 0)) || 0;
+
+    // Basic counts & settings
+    const [settings, totalClients, totalSales] = await Promise.all([
+      this.prisma.setting.findUnique({ where: { id: 1 } }),
+      this.prisma.client.count({ where: { isDeleted: false } }), // "Mijozlar"
+      this.prisma.sale.count({ where: { isDeleted: false } }), // "Shartnomalar" (use Sale)
+    ]);
+
+    // Yearly totals (income / expense sources)
+    // ASSUMPTION: Incoming money = PaidClient.price + PaidOther.price (type = INCOME)
+    //            Expenses = PaidSupplier.price + Arrived.price + PaidServer.price + PaidOther.price (type = OUTCOME)
     const [
-      totalClients,
-      totalSuppliers,
-      totalProducts,
-      totalSales,
-      totalDebt,
-      totalPaidToSupplier,
-      totalPaidByClient,
-      totalOtherIncome,
-      totalOtherOutcome,
-      totalClientBalance,
-      totalSupplierBalance,
-      salesThisMonth,
-      arrivedThisMonth,
-      paidToSuppliersThisMonth,
-      paidByClientsThisMonth,
-      monthlySales,
-      topClients,
-      topProducts,
-      activeSubscriptions,
-      totalSubscriptionRevenue,
+      paidClientYearAgg,
+      paidOtherIncomeYearAgg,
+      paidSupplierYearAgg,
+      arrivedYearAgg,
+      paidServerYearAgg,
+      paidOtherOutcomeYearAgg,
+      saleDebtAgg,
+      paidClientCurrentMonthAgg,
+      paidOtherIncomeCurrentMonthAgg,
+      paidSupplierCurrentMonthAgg,
+      arrivedCurrentMonthAgg,
+      paidServerCurrentMonthAgg,
+      paidOtherOutcomeCurrentMonthAgg,
+      lastYearPaidClientAgg,
+      lastYearPaidOtherIncomeAgg,
     ] = await Promise.all([
-      this.prisma.client.count({ where: { isDeleted: false } }),
-      this.prisma.supplier.count({ where: { isDeleted: false } }),
-      this.prisma.product.count({ where: { isDeleted: false } }),
-      this.prisma.sale.aggregate({
+      // yearly income pieces
+      this.prisma.paidClient.aggregate({
         _sum: { price: true },
-        where: { isDeleted: false },
+        where: {
+          paidDate: { gte: startOfYear, lte: endOfYear },
+          isDeleted: false,
+        },
       }),
+      this.prisma.paidOther.aggregate({
+        _sum: { price: true },
+        where: {
+          paidDate: { gte: startOfYear, lte: endOfYear },
+          type: 'INCOME',
+          isDeleted: false,
+        },
+      }),
+
+      // yearly expense pieces
+      this.prisma.paidSupplier.aggregate({
+        _sum: { price: true },
+        where: {
+          paidDate: { gte: startOfYear, lte: endOfYear },
+          isDeleted: false,
+        },
+      }),
+      this.prisma.arrived.aggregate({
+        _sum: { price: true },
+        where: {
+          created: { gte: startOfYear, lte: endOfYear },
+          isDeleted: false,
+        },
+      }),
+      this.prisma.paidServer.aggregate({
+        _sum: { price: true },
+        where: {
+          createdAt: { gte: startOfYear, lte: endOfYear },
+          isDeleted: false,
+        },
+      }),
+      this.prisma.paidOther.aggregate({
+        _sum: { price: true },
+        where: {
+          paidDate: { gte: startOfYear, lte: endOfYear },
+          type: 'OUTCOME',
+          isDeleted: false,
+        },
+      }),
+
+      // total outstanding debts (sum of sale.dept)
       this.prisma.sale.aggregate({
         _sum: { dept: true },
         where: { isDeleted: false },
       }),
-      this.prisma.paidSupplier.aggregate({
-        _sum: { price: true },
-        where: { isDeleted: false },
-      }),
+
+      // current month pieces (for daily top-right cards)
       this.prisma.paidClient.aggregate({
         _sum: { price: true },
-        where: { isDeleted: false },
+        where: {
+          paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
+          isDeleted: false,
+        },
       }),
       this.prisma.paidOther.aggregate({
         _sum: { price: true },
-        where: { type: PaidOtherType.INCOME, isDeleted: false },
+        where: {
+          paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
+          type: 'INCOME',
+          isDeleted: false,
+        },
       }),
-      this.prisma.paidOther.aggregate({
+      this.prisma.paidSupplier.aggregate({
         _sum: { price: true },
-        where: { type: PaidOtherType.OUTCOME, isDeleted: false },
-      }),
-      this.prisma.client.aggregate({
-        _sum: { balance: true },
-        where: { isDeleted: false },
-      }),
-      this.prisma.supplier.aggregate({
-        _sum: { balance: true },
-        where: { isDeleted: false },
-      }),
-      this.prisma.sale.aggregate({
-        _sum: { price: true },
-        where: { isDeleted: false, date: { gte: startDate, lt: endDate } },
+        where: {
+          paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
+          isDeleted: false,
+        },
       }),
       this.prisma.arrived.aggregate({
         _sum: { price: true },
-        where: { isDeleted: false, date: { gte: startDate, lt: endDate } },
-      }),
-      this.prisma.paidSupplier.aggregate({
-        _sum: { price: true },
         where: {
+          created: { gte: currentMonthStart, lte: currentMonthEnd },
           isDeleted: false,
-          paidDate: { gte: startDate, lt: endDate },
         },
       }),
+      this.prisma.paidServer.aggregate({
+        _sum: { price: true },
+        where: {
+          createdAt: { gte: currentMonthStart, lte: currentMonthEnd },
+          isDeleted: false,
+        },
+      }),
+      this.prisma.paidOther.aggregate({
+        _sum: { price: true },
+        where: {
+          paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
+          type: 'OUTCOME',
+          isDeleted: false,
+        },
+      }),
+
+      // last year's income (for YoY comparison)
       this.prisma.paidClient.aggregate({
         _sum: { price: true },
         where: {
+          paidDate: { gte: startOfLastYear, lte: endOfLastYear },
           isDeleted: false,
-          paidDate: { gte: startDate, lt: endDate },
         },
       }),
-      this.prisma.$queryRaw<
-        { year: number; month: number; total_sales: number }[]
-      >(
-        Prisma.sql`
-          SELECT
-            EXTRACT(YEAR FROM "date")::int AS year,
-            EXTRACT(MONTH FROM "date")::int AS month,
-            SUM("price") AS total_sales
-          FROM "Sale"
-          WHERE "isDeleted" = false
-          GROUP BY 1, 2
-          ORDER BY 1, 2;
-        `,
-      ),
-      this.prisma.sale.groupBy({
-        by: ['clientId'],
+      this.prisma.paidOther.aggregate({
         _sum: { price: true },
-        where: { isDeleted: false },
-        orderBy: { _sum: { price: 'desc' } },
-        take: 10,
-      }),
-      this.prisma.saleProduct.groupBy({
-        by: ['productId'],
-        _sum: { count: true },
-        where: { isDeleted: false },
-        orderBy: { _sum: { count: 'desc' } },
-        take: 10,
-      }),
-      this.prisma.subscribe.count({
-        where: { isDeleted: false, state: SubscribeState.NOTPAYING },
-      }),
-      this.prisma.subscribe.aggregate({
-        _sum: { paid: true },
-        where: { isDeleted: false, state: SubscribeState.PAID },
+        where: {
+          paidDate: { gte: startOfLastYear, lte: endOfLastYear },
+          type: 'INCOME',
+          isDeleted: false,
+        },
       }),
     ]);
 
-    const clientIds = topClients.map((c) => c.clientId);
-    const productIds = topProducts.map((p) => p.productId);
+    // Year totals assembled
+    const yearlyIncome =
+      sumOrZero(paidClientYearAgg, 'price') +
+      sumOrZero(paidOtherIncomeYearAgg, 'price');
+    const yearlyExpenses =
+      sumOrZero(paidSupplierYearAgg, 'price') +
+      sumOrZero(arrivedYearAgg, 'price') +
+      sumOrZero(paidServerYearAgg, 'price') +
+      sumOrZero(paidOtherOutcomeYearAgg, 'price');
 
-    const [clientDetails, productDetails] = await Promise.all([
-      this.prisma.client.findMany({
-        where: { id: { in: clientIds } },
-        select: { id: true, name: true },
+    const currentMonthIncome =
+      sumOrZero(paidClientCurrentMonthAgg, 'price') +
+      sumOrZero(paidOtherIncomeCurrentMonthAgg, 'price');
+    const currentMonthExpenses =
+      sumOrZero(paidSupplierCurrentMonthAgg, 'price') +
+      sumOrZero(arrivedCurrentMonthAgg, 'price') +
+      sumOrZero(paidServerCurrentMonthAgg, 'price') +
+      sumOrZero(paidOtherOutcomeCurrentMonthAgg, 'price');
+
+    const lastYearIncome =
+      sumOrZero(lastYearPaidClientAgg, 'price') +
+      sumOrZero(lastYearPaidOtherIncomeAgg, 'price');
+    const totalDebts = sumOrZero(saleDebtAgg, 'dept');
+
+    // Monthly bar chart & subscription forecast (12 months)
+    const monthlyStats = await Promise.all(
+      Array.from({ length: 12 }, (_, i) => {
+        const mStart = new Date(year, i, 1);
+        const mEnd = new Date(year, i + 1, 0, 23, 59, 59, 999);
+
+        return Promise.all([
+          // income pieces for month
+          this.prisma.paidClient.aggregate({
+            _sum: { price: true },
+            where: { paidDate: { gte: mStart, lte: mEnd }, isDeleted: false },
+          }),
+          this.prisma.paidOther.aggregate({
+            _sum: { price: true },
+            where: {
+              paidDate: { gte: mStart, lte: mEnd },
+              type: 'INCOME',
+              isDeleted: false,
+            },
+          }),
+
+          // expense pieces for month
+          this.prisma.paidSupplier.aggregate({
+            _sum: { price: true },
+            where: { paidDate: { gte: mStart, lte: mEnd }, isDeleted: false },
+          }),
+          this.prisma.arrived.aggregate({
+            _sum: { price: true },
+            where: { created: { gte: mStart, lte: mEnd }, isDeleted: false },
+          }),
+          this.prisma.paidServer.aggregate({
+            _sum: { price: true },
+            where: { createdAt: { gte: mStart, lte: mEnd }, isDeleted: false },
+          }),
+          this.prisma.paidOther.aggregate({
+            _sum: { price: true },
+            where: {
+              paidDate: { gte: mStart, lte: mEnd },
+              type: 'OUTCOME',
+              isDeleted: false,
+            },
+          }),
+
+          // debts created this month (sum of sale.dept where sale.createdAt in month)
+          this.prisma.sale.aggregate({
+            _sum: { dept: true },
+            where: { createdAt: { gte: mStart, lte: mEnd }, isDeleted: false },
+          }),
+
+          // subscription expected for month: sum(price) - sum(paid)
+          this.prisma.subscribe.aggregate({
+            _sum: { price: true, paid: true },
+            where: {
+              paying_date: { gte: mStart, lte: mEnd },
+              isDeleted: false,
+            },
+          }),
+        ]).then(
+          ([pc, poInc, psup, arr, pserv, poOut, saleDebtMonth, subAgg]) => {
+            const incomeMonth =
+              sumOrZero(pc, 'price') + sumOrZero(poInc, 'price');
+            const expenseMonth =
+              sumOrZero(psup, 'price') +
+              sumOrZero(arr, 'price') +
+              sumOrZero(pserv, 'price') +
+              sumOrZero(poOut, 'price');
+            const debtMonth = sumOrZero(saleDebtMonth, 'dept');
+
+            const subPrice = sumOrZero(subAgg, 'price');
+            const subPaid = sumOrZero(subAgg, 'paid');
+            const expectedSubscription = Math.max(0, subPrice - subPaid);
+
+            return {
+              month: i + 1,
+              tushum: incomeMonth,
+              chiqim: expenseMonth,
+              qarzdorlik: debtMonth,
+              expectedSubscription, // helpful for debugging / local charting
+            };
+          },
+        );
       }),
-      this.prisma.product.findMany({
-        where: { id: { in: productIds } },
-        select: { id: true, name: true },
-      }),
-    ]);
+    );
 
-    const topClientsWithNames = topClients.map((client) => {
-      const detail = clientDetails.find((d) => d.id === client.clientId);
-      return {
-        ...client,
-        name: detail?.name || 'Unknown Client',
-      };
-    });
-
-    const topProductsWithNames = topProducts.map((product) => {
-      const detail = productDetails.find((d) => d.id === product.productId);
-      return {
-        ...product,
-        name: detail?.name || 'Unknown Product',
-      };
-    });
-
-    const settings = await this.prisma.setting.findUnique({ where: { id: 1 } });
+    // Build the subscription forecast array (blue line chart)
+    const subscriptionForecast = monthlyStats.map(
+      (m) => m.expectedSubscription,
+    );
 
     return {
-      balance: settings.balance,
+      balance: settings?.balance ?? 0,
       totals: {
         clients: totalClients,
-        suppliers: totalSuppliers,
-        products: totalProducts,
-      },
-      financials: {
-        totalSales: totalSales._sum.price || 0,
-        totalDebt: totalDebt._sum.dept || 0,
-        totalPaidToSupplier: totalPaidToSupplier._sum.price || 0,
-        totalPaidByClient: totalPaidByClient._sum.price || 0,
-        totalOtherIncome: totalOtherIncome._sum.price || 0,
-        totalOtherOutcome: totalOtherOutcome._sum.price || 0,
-        totalClientBalance: totalClientBalance._sum.balance || 0,
-        totalSupplierBalance: totalSupplierBalance._sum.balance || 0,
-      },
-      thisMonth: {
-        sales: salesThisMonth._sum.price || 0,
-        arrived: arrivedThisMonth._sum.price || 0,
-        paidToSuppliers: paidToSuppliersThisMonth._sum.price || 0,
-        paidByClients: paidByClientsThisMonth._sum.price || 0,
-      },
-      subscriptions: {
-        active: activeSubscriptions,
-        totalRevenue: totalSubscriptionRevenue._sum.paid || 0,
+        contracts: totalSales, // SHARTNOMALAR -> Sale count
+        income: yearlyIncome,
+        expenses: yearlyExpenses,
+        debts: totalDebts,
+        currentMonthIncome,
+        currentMonthExpenses,
+        yearlyIncome,
+        lastYearIncome,
       },
       charts: {
-        monthlySales,
-        topClients: topClientsWithNames,
-        topProducts: topProductsWithNames,
+        monthlyStats, // array of 12 objects {month, tushum, chiqim, qarzdorlik, expectedSubscription}
+        subscriptionForecast, // array of 12 numbers (expected subscription income per month)
       },
     };
   }
