@@ -106,7 +106,7 @@ export default function Sale() {
   ];
 
   return (
-    <Card style={{ width: "100%", maxHeight: "800px", overflow: "auto" }}>
+    <Card style={{ width: "100%" }}>
       <Row
         justify="space-between"
         align="middle"

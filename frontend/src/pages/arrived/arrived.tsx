@@ -79,12 +79,7 @@ export default function Arrived() {
   ];
 
   return (
-    <Card
-      style={{
-        maxHeight: "800px",
-        overflow: "auto",
-      }}
-    >
+    <Card>
       <Row justify="space-between" align="middle" style={{ marginBottom: 24 }}>
         <Title level={4}>Kirim tafsilotlari</Title>
         <Space>

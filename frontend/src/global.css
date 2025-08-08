@@ -23,3 +23,7 @@
 *::-webkit-scrollbar-thumb:hover {
   background-color: #888;
 }
+.ant-card-body {
+  max-height: 800px;
+  overflow-y: auto;
+}

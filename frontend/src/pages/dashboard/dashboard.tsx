@@ -185,7 +185,7 @@ export default function Dashboard() {
     v == null ? "-" : new Intl.NumberFormat("ru-RU").format(v) + " so'm";
 
   return (
-    <Card style={{ width: "100%", maxHeight: "800px", overflow: "auto" }}>
+    <Card style={{ width: "100%" }}>
       <Row justify="space-between" align="middle" style={{ marginBottom: 20 }}>
         <Title level={3} style={{ color: "#fff", margin: 0 }}>
           Statistika
