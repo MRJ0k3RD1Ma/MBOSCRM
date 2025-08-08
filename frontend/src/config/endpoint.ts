@@ -30,6 +30,10 @@ export const settingsEndpoints = {
   get: "settings",
   update: "settings",
 };
+// ===================== SETTINGS ENDPOINTS =====================
+export const statisticsEndpoints = {
+  get: "statistics",
+};
 
 // ===================== LOCATION ENDPOINTS =====================
 export const locationEndpoints = {
