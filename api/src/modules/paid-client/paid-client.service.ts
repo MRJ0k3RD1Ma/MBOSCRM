@@ -38,11 +38,18 @@ export class PaidClientService {
 
     if (saleId) {
       const sale = await this.prisma.sale.findFirst({
-        where: { id: saleId, isDeleted: false },
+        where: { id: saleId, isDeleted: false, },
+        include: { SaleProduct: { include: { product: true } } },
       });
       if (!sale) {
         throw new HttpError({
           message: `Sale with ID ${saleId} not found or deleted`,
+        });
+      }
+      const saleProductId = sale.SaleProduct[0].productId;
+      if (!saleProductId) {
+        throw new HttpError({
+          message: `Sale with ID ${saleId} has no products`,
         });
       }
     }
@@ -58,39 +65,35 @@ export class PaidClientService {
       }
     }
 
-    const paidClient = await this.prisma.paidClient.create({
-      data: {
-        clientId,
-        saleId,
-        paymentId,
-        paidDate,
-        price,
-        registerId,
-      },
-    });
-    if (clientId) {
-      const client = await this.prisma.client.findFirst({
-        where: { id: clientId, isDeleted: false },
-      });
-      if (!client) {
-        throw new HttpError({
-          message: `Client with ID ${clientId} not found or deleted`,
-        });
-      }
+    // const paidClient = await this.prisma.paidClient.create({
+    //   data: {
+    //     clientId,
+    //     saleId,
+    //     paymentId,
+    //     paidDate,
+    //     price,
+    //     registerId,
+    //   },
+    // });
+    // if (clientId) {
+    //   const client = await this.prisma.client.findFirst({
+    //     where: { id: clientId, isDeleted: false },
+    //   });
+    //   if (!client) {
+    //     throw new HttpError({
+    //       message: `Client with ID ${clientId} not found or deleted`,
+    //     });
+    //   }
 
-      await this.prisma.client.update({
-        where: { id: clientId },
-        data: { balance: { increment: price } },
-      });
+    //   await this.prisma.client.update({
+    //     where: { id: clientId },
+    //     data: { balance: { increment: price } },
+    //   });
 
-      await this.prisma.setting.update({
-        where: { id: 1 },
-        data: { balance: { increment: price } },
-      });
-      await this.checkCredit(client.id);
-      await this.checkSubscribtions(client.id);
-    }
-    return paidClient;
+    //   await this.checkCredit(client.id);
+    //   await this.checkSubscribtions(client.id);
+    // }
+    // return paidClient;
   }
 
   async checkCredit(clientId: number) {

@@ -83,6 +83,7 @@ export class PaidServerService {
       where: { id, isDeleted: false },
       include: {
         paymentType: true,
+        server: { select: { id: true, name: true } },
       },
     });
     if (!paidServer) {
