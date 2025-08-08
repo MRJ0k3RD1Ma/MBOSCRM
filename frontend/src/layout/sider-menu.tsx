@@ -85,11 +85,6 @@ const menuItems = [
         icon: <TeamOutlined />,
       },
       {
-        key: "/paid-other-group",
-        label: "Boshqa xarajatlar Guruh",
-        icon: <ContainerOutlined />,
-      },
-      {
         key: "/paid-other",
         label: "Boshqa xarajatlar",
         icon: <ContainerOutlined />,
@@ -218,6 +213,11 @@ const menuItems = [
         key: "/",
         label: "Foydalanuvchilar ro’yhati",
         icon: <TeamOutlined />,
+      },
+      {
+        key: "/paid-other-group",
+        label: "Boshqa xarajatlar Guruh",
+        icon: <ContainerOutlined />,
       },
       // {
       //   key: "/",

@@ -460,7 +460,7 @@ export default function ClientPage() {
         sales={sales?.data || []}
         payments={payments?.data || []}
         clientId={clientId}
-        saleId={null}
+        saleId={false}
       />
       <Modal
         title="Mijoz ma'lumotlarini tahrirlash"

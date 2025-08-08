@@ -168,7 +168,7 @@ export default function Server() {
             },
             {
               title: "Sanasi",
-              dataIndex: "endDate",
+              dataIndex: "createdAt",
               render: (val) => dayjs(val).format("YYYY-MM-DD"),
             },
             {
