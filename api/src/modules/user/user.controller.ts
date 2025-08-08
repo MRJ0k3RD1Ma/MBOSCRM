@@ -8,6 +8,7 @@ import {
   Query,
   Req,
   ParseIntPipe,
+  Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { FindAllUserQueryDto } from './dto/findAll-user.dto';
@@ -75,9 +76,9 @@ export class UserController {
     return this.userService.update(+id, updateUserDto);
   }
 
-  // @Delete(':id')
-  // @DecoratorWrapper('Delete User', true, [Role.User])
-  // remove(@Param('id',ParseIntPipe) id: string) {
-  //   return this.userService.remove(+id);
-  // }
+  @Delete(':id')
+  @DecoratorWrapper('Delete User', true, [Role.User])
+  remove(@Param('id', ParseIntPipe) id: string) {
+    return this.userService.remove(+id);
+  }
 }
