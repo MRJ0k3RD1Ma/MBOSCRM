@@ -121,7 +121,7 @@ export default function Supplier() {
   const tabItems: TabsProps["items"] = [
     {
       key: "1",
-      label: "Kirim ma'lumotlari",
+      label: "Kelgan mahsulotlar",
       children: (
         <Table
           columns={salesColumns}
@@ -132,7 +132,7 @@ export default function Supplier() {
     },
     {
       key: "2",
-      label: "Kirim tolov ma'lumotlari",
+      label: "To'lovlar",
       children: (
         <Table
           columns={arrivalsColumns}

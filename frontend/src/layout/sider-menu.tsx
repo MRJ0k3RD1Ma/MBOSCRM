@@ -138,6 +138,11 @@ const menuItems = [
         label: "Mahsulot guruhlari",
         icon: <ClusterOutlined />,
       },
+      {
+        key: "/product-unit",
+        label: "Mahsulot birliklari",
+        icon: <NumberOutlined />,
+      },
     ],
   },
   {
@@ -209,21 +214,16 @@ const menuItems = [
         label: "Foydalanuvchilar ro’yhati",
         icon: <TeamOutlined />,
       },
-      {
-        key: "/",
-        label: "Viloyatlar",
-        icon: <BankOutlined />,
-      },
-      {
-        key: "/",
-        label: "Tumanlar",
-        icon: <ApartmentOutlined />,
-      },
-      {
-        key: "/product-unit",
-        label: "Mahsulot birliklari",
-        icon: <NumberOutlined />,
-      },
+      // {
+      //   key: "/",
+      //   label: "Viloyatlar",
+      //   icon: <BankOutlined />,
+      // },
+      // {
+      //   key: "/",
+      //   label: "Tumanlar",
+      //   icon: <ApartmentOutlined />,
+      // },
       {
         key: "/payment",
         label: "To‘lov turlari",
