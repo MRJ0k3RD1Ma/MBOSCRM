@@ -73,6 +73,7 @@ export const useGetAllClients = (params?: {
   phone?: string;
   inn?: string;
   districtId?: number;
+  isPasitiveBalance?: boolean;
 }) => {
   return useQuery<ClientResponse>({
     queryKey: ["clients", params],

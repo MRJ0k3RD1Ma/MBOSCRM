@@ -20,7 +20,7 @@ const nameMap: Record<string, string> = {
   "product-group": "Mahsulot guruhlari",
   "product-unit": "Mahsulot birliklari",
   clients: "Mijozlar ro‘yxati",
-  "сlients-credit": "Qarzdor mijozlar",
+  "clients-credit": "Qarzdor mijozlar",
   "clients-over-paid": "Ortiqcha to‘lagan mijozlar",
   "client-type": "Mijoz turlari",
   suppliers: "Yetkazib beruvchilar ro‘yxati",
