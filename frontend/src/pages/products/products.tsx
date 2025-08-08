@@ -24,6 +24,7 @@ import ProductsFilterModal from "./ui/products-filter-modal";
 import ProductsModal from "./ui/products-form-modal";
 import { useGetAllProductUnits } from "../../config/queries/products/product-unit-querys";
 import { useGetAllProductGroups } from "../../config/queries/products/product-gorup-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function ProductsPage() {
   const [form] = Form.useForm();
@@ -70,6 +71,7 @@ export default function ProductsPage() {
   };
 
   const columns = [
+    indexColumn(page, limit),
     { title: "Nomi", dataIndex: "name", key: "name" },
     { title: "Shtrix kodi", dataIndex: "barcode", key: "barcode" },
     {
@@ -88,7 +90,13 @@ export default function ProductsPage() {
         return `${row.reminderFirst} , ${unitName}`;
       },
     },
-    { title: "Sotuv narxi", dataIndex: "price", key: "price" },
+    {
+      title: "Sotuv narxi",
+      dataIndex: "price",
+      key: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
     { title: "Turi", dataIndex: "type", key: "type" },
     {
       title: "Amallar",

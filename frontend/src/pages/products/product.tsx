@@ -25,26 +25,42 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { useGetAllSaleProduct } from "../../config/queries/sale/sale-product-querys";
 import { useGetAllArrivedProduct } from "../../config/queries/arrived/arrived-product-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function Product() {
   const { id } = useParams();
   const navigate = useNavigate();
   const productId = Number(id);
 
+  // === Sotuvlar pagination state ===
+  const [salesPage, setSalesPage] = useState(1);
+  const [salesLimit, setSalesLimit] = useState(10);
+
+  // === Kelganlar pagination state ===
+  const [arrivalsPage, setArrivalsPage] = useState(1);
+  const [arrivalsLimit, setArrivalsLimit] = useState(10);
+
   const { data: product, isLoading } = useGetProductById(productId);
   const { data: productUnitId } = useGetAllProductUnits();
   const { data: productGroupId } = useGetAllProductGroups();
-  const { data: saleProductsClient } = useGetAllSaleProduct({
-    productId,
-  });
-  const { data: arrivedProducts } = useGetAllArrivedProduct({
-    productId,
-  });
+
+  // API chaqiruvlar pagination bilan
+  const { data: saleProductsClient, isLoading: salesLoading } =
+    useGetAllSaleProduct({
+      productId,
+      page: salesPage,
+      limit: salesLimit,
+    });
+
+  const { data: arrivedProducts, isLoading: arrivalsLoading } =
+    useGetAllArrivedProduct({
+      productId,
+      page: arrivalsPage,
+      limit: arrivalsLimit,
+    });
 
   const deleteProduct = useDeleteProduct();
   const updateProduct = useUpdateProduct();
-  console.log("saleProductsClient", saleProductsClient);
-  console.log("arrivedProducts", arrivedProducts);
 
   const [editOpen, setEditOpen] = useState(false);
 
@@ -70,11 +86,11 @@ export default function Product() {
   dayjs.extend(timezone);
 
   const salesColumns = [
+    indexColumn(salesPage, salesLimit),
     { title: "Shartnoma raqami", dataIndex: ["sale", "code"] },
     {
       title: "Sana",
       dataIndex: "createdAt",
-      key: "createdAt",
       render: (text: string) =>
         text
           ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
@@ -83,7 +99,6 @@ export default function Product() {
     {
       title: "Narxi",
       dataIndex: "price",
-      key: "price",
       render: (price: number) =>
         price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
     },
@@ -111,11 +126,11 @@ export default function Product() {
   ];
 
   const arrivalsColumns = [
+    indexColumn(arrivalsPage, arrivalsLimit),
     { title: "Shartnoma raqami", dataIndex: ["Arrived", "code"] },
     {
       title: "Sana",
       dataIndex: "createdAt",
-      key: "createdAt",
       render: (text: string) =>
         text
           ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
@@ -151,9 +166,19 @@ export default function Product() {
       label: "Sotuvlar",
       children: (
         <Table
+          loading={salesLoading}
           columns={salesColumns}
           dataSource={saleProductsClient?.data}
-          pagination={false}
+          rowKey="id"
+          pagination={{
+            current: salesPage,
+            pageSize: salesLimit,
+            total: saleProductsClient?.total || 0,
+            onChange: (p, ps) => {
+              setSalesPage(p);
+              setSalesLimit(ps);
+            },
+          }}
         />
       ),
     },
@@ -162,9 +187,19 @@ export default function Product() {
       label: "Skladga kelganlar",
       children: (
         <Table
+          loading={arrivalsLoading}
           columns={arrivalsColumns}
           dataSource={arrivedProducts?.data}
-          pagination={false}
+          rowKey="id"
+          pagination={{
+            current: arrivalsPage,
+            pageSize: arrivalsLimit,
+            total: arrivedProducts?.total || 0,
+            onChange: (p, ps) => {
+              setArrivalsPage(p);
+              setArrivalsLimit(ps);
+            },
+          }}
         />
       ),
     },

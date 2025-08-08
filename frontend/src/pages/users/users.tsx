@@ -22,6 +22,7 @@ import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import UserFormModal from "./ui/user-form-modal";
 import UsersFilterModal from "./ui/user-filter-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function Users() {
   const [form] = Form.useForm();
@@ -65,6 +66,7 @@ export default function Users() {
   };
 
   const columns = [
+    indexColumn(page, limit),
     { title: "Ism", dataIndex: "name" },
     { title: "Login", dataIndex: "username" },
     { title: "Telefon", dataIndex: "phone" },

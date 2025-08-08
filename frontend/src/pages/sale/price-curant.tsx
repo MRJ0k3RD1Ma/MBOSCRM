@@ -9,6 +9,7 @@ import {
 import { useGetAllProductUnits } from "../../config/queries/products/product-unit-querys";
 import { useGetAllProductGroups } from "../../config/queries/products/product-gorup-querys";
 import ProductsFilterModal from "../products/ui/products-filter-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function PriceCurant() {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ export default function PriceCurant() {
   const { data: groupData } = useGetAllProductGroups();
 
   const columns = [
+    indexColumn(page, limit),
     { title: "Nomi", dataIndex: "name", key: "name" },
     { title: "Shtrix kodi", dataIndex: "barcode", key: "barcode" },
     {
@@ -47,7 +49,13 @@ export default function PriceCurant() {
         return `${row.reminderFirst} , ${unitName}`;
       },
     },
-    { title: "Sotuv narxi", dataIndex: "price", key: "price" },
+    {
+      title: "Sotuv narxi",
+      dataIndex: "price",
+      key: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
     { title: "Turi", dataIndex: "type", key: "type" },
   ];
 

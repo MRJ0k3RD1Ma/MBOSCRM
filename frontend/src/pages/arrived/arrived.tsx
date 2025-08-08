@@ -18,12 +18,14 @@ import { useGetAllArrivedProduct } from "../../config/queries/arrived/arrived-pr
 import { useEffect, useState } from "react";
 import { useGetAllSuppliers } from "../../config/queries/supplier/supplier-querys";
 import { useGetAllProducts } from "../../config/queries/products/products-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 const { Title } = Typography;
 
 export default function Arrived() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
   const [currentId, setCurrentId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -33,9 +35,14 @@ export default function Arrived() {
   const { data: arrived, isLoading } = useGetArrivedById(
     currentId ?? undefined
   );
+
   const { data: suppliers } = useGetAllSuppliers();
   const { data: productsList } = useGetAllProducts();
-  const { data: arrivedProducts } = useGetAllArrivedProduct();
+  const { data: arrivedProducts } = useGetAllArrivedProduct({
+    page,
+    limit: 5,
+    arrivedId: currentId ?? undefined,
+  });
 
   const deleteArrived = useDeleteArrived();
   const handleDelete = () => {
@@ -49,6 +56,7 @@ export default function Arrived() {
   };
 
   const productColumns = [
+    indexColumn(page, 5),
     {
       title: "Mahsulot nomi",
       dataIndex: "productId",
@@ -56,8 +64,18 @@ export default function Arrived() {
         productsList?.data?.find((p) => p.id === id)?.name || `ID: ${id}`,
     },
     { title: "Soni", dataIndex: "count" },
-    { title: "Narxi", dataIndex: "price" },
-    { title: "Jami narx", dataIndex: "priceCount" },
+    {
+      title: "Narxi",
+      dataIndex: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
+    {
+      title: "Jami narx",
+      dataIndex: "priceCount",
+      render: (priceCount: number) =>
+        priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
   ];
 
   return (
@@ -101,7 +119,9 @@ export default function Arrived() {
             {arrived?.description}
           </Descriptions.Item>
           <Descriptions.Item label="Umumiy narx">
-            {arrived?.price}
+            {arrived?.price
+              ? arrived?.price.toLocaleString("uz-UZ") + " so'm"
+              : "0"}
           </Descriptions.Item>
         </Descriptions>
       </Card>
@@ -119,7 +139,12 @@ export default function Arrived() {
           }
           columns={productColumns}
           rowKey="id"
-          pagination={{ pageSize: 5 }}
+          pagination={{
+            current: page,
+            pageSize: 5,
+            total: arrivedProducts?.total,
+            onChange: setPage,
+          }}
         />
       </Card>
     </Card>

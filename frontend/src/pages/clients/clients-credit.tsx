@@ -5,6 +5,7 @@ import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import ClientsFilterModal from "./ui/clients-filter-modal";
 import dayjs from "dayjs";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function ClientsCredit() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function ClientsCredit() {
   });
 
   const columns = [
+    indexColumn(page, limit),
     { title: "Name", dataIndex: "name" },
     { title: "INN", dataIndex: "inn" },
     { title: "Phone", dataIndex: "phone" },

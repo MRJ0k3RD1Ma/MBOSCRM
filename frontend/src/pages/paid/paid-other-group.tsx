@@ -21,6 +21,7 @@ import {
   useGetAllPaidOtherGroups,
 } from "../../config/queries/paid/paid-other-group";
 import PaidOtherGroupFormModal from "./ui/paid-other-group-form-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function PaidOtherGroup() {
   const [search, setSearch] = useState("");
@@ -52,11 +53,7 @@ export default function PaidOtherGroup() {
   }, [filters]);
 
   const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    indexColumn(filters.page, filters.limit),
     {
       title: "Turi nomi",
       dataIndex: "name",

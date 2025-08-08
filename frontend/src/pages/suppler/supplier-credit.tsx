@@ -5,6 +5,7 @@ import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useGetAllSuppliers } from "../../config/queries/supplier/supplier-querys";
 import SuppliersFilterModal from "./ui/suppliers-filter-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function SupplierCredit() {
   const navigate = useNavigate();
@@ -23,11 +24,17 @@ export default function SupplierCredit() {
   });
 
   const columns = [
+    indexColumn(page, limit),
     { title: "Nomi", dataIndex: "name" },
     { title: "Telefon", dataIndex: "phone" },
     { title: "Qo‘shimcha telefon", dataIndex: "phoneTwo" },
     { title: "Izoh", dataIndex: "description" },
-    { title: "Balans", dataIndex: "balance" },
+    {
+      title: "Balans",
+      dataIndex: "balance",
+      render: (dept: number) =>
+        dept ? dept.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
   ];
 
   return (

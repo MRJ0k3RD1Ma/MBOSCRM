@@ -27,11 +27,13 @@ export interface StatisticsResponse {
   };
 }
 
-export const useGetStatistics = () => {
+export const useGetStatistics = (params?: { year?: number }) => {
   return useQuery<StatisticsResponse>({
-    queryKey: ["statistics"],
+    queryKey: ["statistics", params?.year],
     queryFn: async () => {
-      const { data } = await axiosPrivate.get(statisticsEndpoints.get);
+      const { data } = await axiosPrivate.get(statisticsEndpoints.get, {
+        params,
+      });
       return data;
     },
   });
