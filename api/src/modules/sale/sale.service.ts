@@ -221,7 +221,10 @@ export class SaleService {
         id,
         isDeleted: false,
       },
-      include: { SaleProduct: true, client: true },
+      include: {
+        SaleProduct: true,
+        client: { include: { Region: true, District: true } },
+      },
     });
     if (!sale) {
       throw new HttpError({
