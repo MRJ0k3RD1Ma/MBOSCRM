@@ -60,7 +60,14 @@ export class SupplierService {
   }
 
   async findAll(dto: FindAllSupplierQueryDto) {
-    const { limit = 10, page = 1, name, description, phone,isPositiveBalance } = dto;
+    const {
+      limit = 10,
+      page = 1,
+      name,
+      description,
+      phone,
+      isPositiveBalance,
+    } = dto;
 
     const where: Prisma.SupplierWhereInput = {
       isDeleted: false,

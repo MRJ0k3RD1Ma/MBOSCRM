@@ -72,7 +72,6 @@ export class ProductService {
         take: 1,
         orderBy: { barcodeId: 'desc' },
       });
-      console.log(createProductDto);
       barcodeId = (max[0]?.barcodeId || 1_000_000) + 1;
 
       const product = await this.prisma.product.create({

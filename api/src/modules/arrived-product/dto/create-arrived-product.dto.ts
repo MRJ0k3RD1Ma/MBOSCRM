@@ -13,6 +13,4 @@ export class CreateArrivedProductDto {
   @IsNumber()
   @Min(1)
   count: number;
-
-
 }

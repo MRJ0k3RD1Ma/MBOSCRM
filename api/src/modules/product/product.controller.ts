@@ -45,7 +45,10 @@ export class ProductController {
 
   @Patch(':id')
   @DecoratorWrapper('Update product', true, [Role.Admin])
-  update(@Param('id', ParseIntPipe) id: string, @Body() updateProductDto: UpdateProductDto) {
+  update(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
     return this.productService.update(+id, updateProductDto);
   }
 

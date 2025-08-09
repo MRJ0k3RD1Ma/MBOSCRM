@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsPhoneNumber, Matches } from 'class-validator';
+import { IsOptional, Matches } from 'class-validator';
 import { IsId } from 'src/common/dtos/id.dto';
 import { IsName } from 'src/common/dtos/name.dto';
 
@@ -28,7 +28,8 @@ export class CreateClientDto {
 
   @ApiProperty({ example: '+998901234567' })
   @Matches(/^\+998\d{9}$/, {
-    message: 'Phone number must be a valid Uzbekistan phone number (+998XXXXXXXXX)',
+    message:
+      'Phone number must be a valid Uzbekistan phone number (+998XXXXXXXXX)',
   })
   phone: string;
 
