@@ -104,7 +104,7 @@ export default function Dashboard() {
 
   const years = useMemo(() => {
     const arr = [];
-    for (let y = 2025; y <= 2050; y++) {
+    for (let y = 2024; y <= 2025; y++) {
       arr.push(y);
     }
     return arr;
