@@ -41,7 +41,7 @@ export class ClientService implements OnModuleInit {
     const creator = await this.prisma.user.findFirst({
       where: { id: creatorId, isDeleted: false },
     });
-    if (!creatorId) {
+    if (!creator) {
       throw HttpError({ message: 'Creator not found' });
     }
     const existingPhone = await this.prisma.client.findFirst({

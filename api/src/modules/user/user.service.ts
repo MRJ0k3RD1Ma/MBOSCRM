@@ -27,9 +27,13 @@ export class UserService implements OnModuleInit {
 
   async onModuleInit() {
     if ((await this.prisma.user.count({})) == 0) {
-      await this.create({ name: 'admin', password: 'admin', username: 'admin' });
+      await this.create({
+        name: 'admin',
+        password: 'admin',
+        username: 'admin',
+        roleId: 1,
+      });
     }
-    
 
     if (env.ENV != 'prod') {
       const count = await this.prisma.userRole.count();

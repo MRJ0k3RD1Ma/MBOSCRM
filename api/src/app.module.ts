@@ -24,6 +24,8 @@ import { PaidOtherModule } from './modules/paid-other/paid-other.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { PaidServerModule } from './modules/paid-server/paid-server.module';
 import { ServerModule } from './modules/server/server.module';
+import { NestjsGrammyModule } from '@grammyjs/nestjs';
+import { env } from './common/config';
 
 @Module({
   controllers: [],
@@ -54,8 +56,9 @@ import { ServerModule } from './modules/server/server.module';
     PaidOtherGroupModule,
     PaidOtherModule,
     PaidServerModule,
-    ScheduleModule.forRoot(),
     ServerModule,
+    ScheduleModule.forRoot(),
+    NestjsGrammyModule.forRoot({ token: env.BOT_TOKEN }),
   ],
 })
 export class AppModule {}
