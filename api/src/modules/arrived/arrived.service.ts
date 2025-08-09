@@ -64,7 +64,7 @@ export class ArrivedService {
     let arrived = await this.prisma.arrived.create({
       data: {
         date,
-        code: `${new Date().getFullYear()}-${codeId}`,
+        code: `${new Date().getFullYear() - 2000}-${codeId}`,
         codeId,
         waybillNumber,
         supplierId,

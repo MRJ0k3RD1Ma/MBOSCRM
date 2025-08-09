@@ -99,9 +99,7 @@ export class PaidClientService {
       remainingPayment -= payAmount;
       currentBalance += payAmount;
     }
-    console.log('b', remainingPayment);
     remainingPayment = await this.checkSubscribtions(clientId, paymentAmount);
-    console.log('a', remainingPayment);
 
     if (remainingPayment > 0) {
       currentBalance += remainingPayment;
