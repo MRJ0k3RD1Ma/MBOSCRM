@@ -4,20 +4,63 @@ import { UpdateServerDto } from './dto/update-server.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllQueryServer } from './dto/findAll-query-server.dto';
 import { Prisma, ServerState } from '@prisma/client';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import dayjs from 'dayjs';
+import { InjectBot } from '@grammyjs/nestjs';
+import { Bot, Context } from 'grammy';
 
 @Injectable()
 export class ServerService {
   private readonly logger = new Logger(ServerService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @InjectBot() private readonly bot: Bot<Context>,
+  ) {}
 
-  @Cron('0 * * * * *')
+  @Cron('* * 8 * * *')
   async handleExpiredServers() {
     this.logger.log('Checking expired servers...');
 
     const now = new Date();
+
+    const sevenDaysLeftServers = await this.prisma.server.findMany({
+      where: {
+        endDate: {
+          lt: dayjs(now).add(7, 'days').toDate(),
+        },
+        state: {
+          not: ServerState.CLOSED,
+        },
+      },
+    });
+    if (sevenDaysLeftServers?.length > 0) {
+      for (const server of sevenDaysLeftServers) {
+        const leftDays = dayjs(server.endDate).diff(now, 'days');
+        const users = [];
+        users.push(
+          ...(await this.prisma.user.findMany({
+            where: { UserRole: { name: 'superadmin' } },
+          })),
+        );
+        if (leftDays < 4) {
+          users.push(
+            ...(await this.prisma.user.findMany({
+              where: { UserRole: { name: 'admin' } },
+            })),
+          );
+        }
+        for (const user of users) {
+          if (!user.chatId) continue;
+          try {
+            await this.bot.api.sendMessage(
+              user.chatId,
+              `${server.name} serveri yopilishiga ${Math.abs(dayjs(now).diff(server.endDate, 'days'))} kun qoldi`,
+            );
+          } catch {}
+        }
+      }
+    }
 
     const expiredServers = await this.prisma.server.findMany({
       where: {
