@@ -4,23 +4,20 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserRoleDto } from './dto/create-user-role.dto';
 import { FindAllUserRoleQueryDto } from './dto/findAll-user-role.dto';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
-import { env } from 'src/common/config';
 
 @Injectable()
 export class UserRoleService {
   constructor(private readonly prisma: PrismaService) {}
 
   async onModuleInit() {
-    if (env.ENV != 'prod') {
-      const count = await this.prisma.userRole.count();
-      const requiredCount = 1;
-      if (count < requiredCount) {
-        for (let i = count; i < requiredCount; i++) {
-          await this.create({
-            name: 'admin',
-          });
-        }
-      }
+    const count = await this.prisma.userRole.count();
+    if (count == 0) {
+      await this.create({
+        name: 'superadmin',
+      });
+      await this.create({
+        name: 'admin',
+      });
     }
   }
 

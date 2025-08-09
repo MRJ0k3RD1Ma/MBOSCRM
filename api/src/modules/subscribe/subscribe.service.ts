@@ -78,7 +78,6 @@ export class SubscribeService {
         client: { connect: { id: clientId } },
       } as Prisma.SubscribeCreateInput,
     });
-    console.log(price, clientId, client.balance, client.balance - price);
     await this.prisma.client.update({
       where: { id: clientId },
       data: { balance: client.balance - price },

@@ -13,7 +13,7 @@ export class ArrivedProductService {
     createArrivedProductDto: CreateArrivedProductDto,
     registerId: number,
   ) {
-    const { arrivedId, count, productId,  } = createArrivedProductDto;
+    const { arrivedId, count, productId } = createArrivedProductDto;
 
     if (!arrivedId) {
       throw new HttpError({
