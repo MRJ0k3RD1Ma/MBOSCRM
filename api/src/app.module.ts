@@ -48,7 +48,6 @@ import { ServerModule } from './modules/server/server.module';
     ArrivedModule,
     SaleModule,
     SaleProductModule,
-    SaleModule,
     SubscribeModule,
     ArrivedProductModule,
     PaidClientModule,

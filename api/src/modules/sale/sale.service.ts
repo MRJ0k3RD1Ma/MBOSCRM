@@ -23,7 +23,7 @@ export class SaleService {
         for (let i = count; i < requiredCount; i++) {
           await this.create(
             {
-              clientId: 1,
+              clientId: 14,
               products: [{ count: 1, productId: 1 }],
               subscribe_begin_date: new Date(),
               subscribe_generate_day: 10,

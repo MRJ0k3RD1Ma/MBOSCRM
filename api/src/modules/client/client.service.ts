@@ -16,7 +16,7 @@ export class ClientService implements OnModuleInit {
   async onModuleInit() {
     if (env.ENV != 'prod') {
       const clientCount = await this.prisma.client.count();
-      const requiredCount = 3;
+      const requiredCount = 1;
       if (clientCount < requiredCount) {
         for (let i = clientCount; i < requiredCount; i++) {
           await this.create(
@@ -39,6 +39,9 @@ export class ClientService implements OnModuleInit {
   }
 
   async create(createClientDto: CreateClientDto, creatorId: number) {
+    const creator = await this.prisma.user.findFirst({
+      where: { id:creatorId, isDeleted: false },
+    });
     if (!creatorId) {
       throw HttpError({ message: 'Creator not found' });
     }
