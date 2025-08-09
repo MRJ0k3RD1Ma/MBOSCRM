@@ -15,10 +15,10 @@ export declare class UserController {
         phone: string | null;
         roleId: number | null;
         chatId: string | null;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     login(loginUserDto: LoginUserDto): Promise<{
         user: {
@@ -28,10 +28,10 @@ export declare class UserController {
             phone: string | null;
             roleId: number | null;
             chatId: string | null;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
         };
         accessToken: string;
         refreshToken: string;
@@ -46,33 +46,49 @@ export declare class UserController {
         total: number;
         page: number;
         limit: number;
-        data: {
+        data: ({
+            UserRole: {
+                name: string;
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+            };
+        } & {
             name: string;
             username: string;
             password: string;
             phone: string | null;
             roleId: number | null;
             chatId: string | null;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
-        }[];
+        })[];
     }>;
     findMe(req: Request): Promise<{
         success: boolean;
     }>;
     findOne(id: string): Promise<{
+        UserRole: {
+            name: string;
+            id: number;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+    } & {
         name: string;
         username: string;
         password: string;
         phone: string | null;
         roleId: number | null;
         chatId: string | null;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<{
         name: string;
@@ -81,10 +97,10 @@ export declare class UserController {
         phone: string | null;
         roleId: number | null;
         chatId: string | null;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     remove(id: string): Promise<{
         name: string;
@@ -93,9 +109,9 @@ export declare class UserController {
         phone: string | null;
         roleId: number | null;
         chatId: string | null;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
 }

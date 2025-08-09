@@ -7,10 +7,10 @@ export declare class SaleController {
     private readonly saleService;
     constructor(saleService: SaleService);
     create(createSaleDto: CreateSaleDto, req: Request): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -34,10 +34,10 @@ export declare class SaleController {
                 description: string | null;
                 name: string;
                 phone: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 balance: number;
                 inn: string;
                 address: string | null;
@@ -54,19 +54,19 @@ export declare class SaleController {
                 phone: string | null;
                 roleId: number | null;
                 chatId: string | null;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             SaleProduct: ({
                 product: {
                     type: import(".prisma/client").$Enums.ProductType;
                     name: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                     barcode: string | null;
@@ -81,10 +81,10 @@ export declare class SaleController {
                     countSale: number;
                 };
             } & {
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date | null;
                 updatedAt: Date | null;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number | null;
@@ -101,16 +101,16 @@ export declare class SaleController {
                 phone: string | null;
                 roleId: number | null;
                 chatId: string | null;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number;
@@ -141,10 +141,10 @@ export declare class SaleController {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -155,10 +155,10 @@ export declare class SaleController {
             modifyId: number | null;
         };
         SaleProduct: {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date | null;
             updatedAt: Date | null;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
@@ -169,10 +169,10 @@ export declare class SaleController {
             is_subscribe: boolean | null;
         }[];
     } & {
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -188,10 +188,10 @@ export declare class SaleController {
         subscribe_generate_day: number | null;
     }>;
     update(id: string, updateSaleDto: UpdateSaleDto): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -207,10 +207,10 @@ export declare class SaleController {
         subscribe_generate_day: number | null;
     }>;
     remove(id: string): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;

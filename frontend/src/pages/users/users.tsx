@@ -70,7 +70,7 @@ export default function Users() {
     { title: "Ism", dataIndex: "name" },
     { title: "Login", dataIndex: "username" },
     { title: "Telefon", dataIndex: "phone" },
-    { title: "Rol ID", dataIndex: "roleId" },
+    { title: "Role", dataIndex: "roleId" },
     {
       title: "Yaratilgan vaqti",
       dataIndex: "createdAt",

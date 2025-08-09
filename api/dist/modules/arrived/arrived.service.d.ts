@@ -10,8 +10,8 @@ export declare class ArrivedService {
     onModuleInit(): Promise<void>;
     create(createArrivedDto: CreateArrivedDto, creatorId: number): Promise<{
         description: string | null;
-        isDeleted: boolean | null;
         id: number;
+        isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -32,10 +32,10 @@ export declare class ArrivedService {
                 description: string | null;
                 name: string;
                 phone: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 balance: number;
                 registerId: number | null;
                 modifyId: number | null;
@@ -48,16 +48,16 @@ export declare class ArrivedService {
                 phone: string | null;
                 roleId: number | null;
                 chatId: string | null;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             ArrivedProduct: {
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number | null;
@@ -68,8 +68,8 @@ export declare class ArrivedService {
             }[];
         } & {
             description: string | null;
-            isDeleted: boolean | null;
             id: number;
+            isDeleted: boolean | null;
             registerId: number | null;
             modifyId: number | null;
             price: number;
@@ -87,10 +87,10 @@ export declare class ArrivedService {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             registerId: number | null;
             modifyId: number | null;
@@ -103,16 +103,16 @@ export declare class ArrivedService {
             phone: string | null;
             roleId: number | null;
             chatId: string | null;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
         };
         ArrivedProduct: {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
@@ -123,8 +123,8 @@ export declare class ArrivedService {
         }[];
     } & {
         description: string | null;
-        isDeleted: boolean | null;
         id: number;
+        isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -138,8 +138,8 @@ export declare class ArrivedService {
     }>;
     update(id: number, updateArrivedDto: UpdateArrivedDto): Promise<{
         description: string | null;
-        isDeleted: boolean | null;
         id: number;
+        isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -153,8 +153,8 @@ export declare class ArrivedService {
     }>;
     remove(id: number): Promise<{
         description: string | null;
-        isDeleted: boolean | null;
         id: number;
+        isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;

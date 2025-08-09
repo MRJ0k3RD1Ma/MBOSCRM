@@ -8,10 +8,10 @@ export declare class ProductGroupService {
     onModuleInit(): Promise<void>;
     create(createProductGroupDto: CreateProductGroupDto, creatorId: number): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number;
         modifyId: number;
     }>;
@@ -21,38 +21,38 @@ export declare class ProductGroupService {
         limit: number;
         data: {
             name: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number;
             modifyId: number;
         }[];
     }>;
     findOne(id: number): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number;
         modifyId: number;
     }>;
     update(id: number, updateProductGroupDto: UpdateProductGroupDto, userId: number): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number;
         modifyId: number;
     }>;
     remove(id: number, modifierId: number): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number;
         modifyId: number;
     }>;

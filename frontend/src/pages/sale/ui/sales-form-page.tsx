@@ -125,7 +125,7 @@ export default function SalesFormPage() {
       }
 
       drawerForm.resetFields();
-      setSelectedProductCountReminder(null); // tozalash
+      setSelectedProductCountReminder(null);
       setDrawerOpen(false);
     } catch (error) {
       message.error("Mahsulot kiritishda xatolik yuz berdi");
@@ -421,7 +421,12 @@ export default function SalesFormPage() {
             label="Mahsulot"
             rules={[{ required: true }]}
           >
-            <Select placeholder="Tanlang" showSearch optionFilterProp="label">
+            <Select
+              placeholder="Tanlang"
+              showSearch
+              allowClear
+              optionFilterProp="label"
+            >
               {productsList?.data.map((p: any) => (
                 <Select.Option key={p.id} value={p.id} label={p.name}>
                   {p.name}

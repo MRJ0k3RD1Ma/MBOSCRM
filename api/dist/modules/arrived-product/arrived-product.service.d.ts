@@ -6,10 +6,10 @@ export declare class ArrivedProductService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(createArrivedProductDto: CreateArrivedProductDto, registerId: number): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -26,20 +26,20 @@ export declare class ArrivedProductService {
             Product: {
                 ProductUnit: {
                     name: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                 };
             } & {
                 type: import(".prisma/client").$Enums.ProductType;
                 name: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
@@ -60,20 +60,20 @@ export declare class ArrivedProductService {
                 phone: string | null;
                 roleId: number | null;
                 chatId: string | null;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             Arrived: {
                 supplier: {
                     description: string | null;
                     name: string;
                     phone: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     balance: number;
                     registerId: number | null;
                     modifyId: number | null;
@@ -81,8 +81,8 @@ export declare class ArrivedProductService {
                 };
             } & {
                 description: string | null;
-                isDeleted: boolean | null;
                 id: number;
+                isDeleted: boolean | null;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number;
@@ -95,10 +95,10 @@ export declare class ArrivedProductService {
                 updated: Date;
             };
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
@@ -109,10 +109,10 @@ export declare class ArrivedProductService {
         })[];
     }>;
     findOne(id: number): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -122,10 +122,10 @@ export declare class ArrivedProductService {
         priceCount: number | null;
     }>;
     update(id: number, updateArrivedProductDto: UpdateArrivedProductDto): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -135,10 +135,10 @@ export declare class ArrivedProductService {
         priceCount: number | null;
     }>;
     remove(id: number): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
