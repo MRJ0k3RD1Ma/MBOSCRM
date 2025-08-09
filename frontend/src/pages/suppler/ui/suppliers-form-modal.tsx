@@ -1,4 +1,4 @@
-import { Drawer, Form, Input, Button, InputNumber } from "antd";
+import { Drawer, Form, Input, Button } from "antd";
 import { useEffect } from "react";
 import { useThemeContext } from "../../../providers/theme-provider";
 
@@ -83,15 +83,6 @@ export default function SuppliersFormModal({
 
         <Form.Item name="description" label="Izoh">
           <Input.TextArea placeholder="Qo‘shimcha izoh..." rows={3} />
-        </Form.Item>
-
-        <Form.Item name="balance" label="Balans">
-          <InputNumber
-            style={{ width: "100%" }}
-            placeholder="0"
-            min={0}
-            step={1000}
-          />
         </Form.Item>
 
         <Button type="primary" htmlType="submit" block>
