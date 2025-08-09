@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Modal } from "antd";
+import { Form, Input, Modal } from "antd";
 import { useEffect } from "react";
 
 type SupplierFormValues = {
@@ -75,10 +75,6 @@ export default function SupplierFormModal({
 
         <Form.Item label="Izoh" name="description">
           <Input.TextArea placeholder="Qo‘shimcha ma'lumotlar..." rows={3} />
-        </Form.Item>
-
-        <Form.Item label="Balans" name="balance">
-          <InputNumber placeholder="0" style={{ width: "100%" }} />
         </Form.Item>
       </Form>
     </Modal>
