@@ -263,9 +263,7 @@ export default function ArrivedFormPage() {
           </Form.Item>
         </div>
       </Form>
-      <Title level={4} className="!mb-6 !w-full">
-        Mahsulotlar
-      </Title>
+      <Title level={4}>Mahsulotlar</Title>
       <Form form={drawerForm} onFinish={onDrawerFinish}>
         <div className="flex gap-4">
           <Form.Item
@@ -282,7 +280,6 @@ export default function ArrivedFormPage() {
                 const selectedProduct = productsList?.data.find(
                   (p) => p.id === value
                 );
-
                 if (selectedProduct) {
                   drawerForm.setFieldsValue({
                     count: 1,
@@ -293,7 +290,7 @@ export default function ArrivedFormPage() {
                   drawerForm.setFieldsValue({
                     count: null,
                     price: null,
-                    priceCount: null,
+                    priceCount: 0,
                   });
                 }
               }}
