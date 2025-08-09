@@ -26,7 +26,7 @@ const nameMap: Record<string, string> = {
   suppliers: "Yetkazib beruvchilar ro‘yxati",
   "paid-suppliers-list": "To‘lov qilingan yetkazuvchilar",
   "arrived-products": "Kelgan mahsulotlar",
-  "supplier-credit": "Qarzlarim",
+  "supplier-credit": "Qarzdor yetkazib beruvchilar",
   "supplier-over-paid": "Ortiqcha to‘lovlar",
   "paid-other-group": "Boshqa xarajatlar guruhi",
   payment: "To‘lov turlari",
@@ -37,6 +37,7 @@ const nameMap: Record<string, string> = {
   "arrived/edit": "Kirimni tahrirlash",
   sale: "Sotuv tafsiloti",
   subscribe: "Obuna tafsiloti",
+  users: "Foydalanuvchilar ro’yhati",
   profile: "Profil",
 };
 

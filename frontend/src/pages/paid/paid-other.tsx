@@ -22,6 +22,7 @@ import {
 } from "../../config/queries/paid/paid-other";
 import PaidOtherFilterModal from "./ui/paid-other-filter-modal";
 import PaidOtherFormModal from "./ui/paid-other-form-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function PaidOtherPage() {
   const [form] = Form.useForm();
@@ -66,7 +67,7 @@ export default function PaidOtherPage() {
   };
 
   const columns = [
-    { title: "ID", dataIndex: "id" },
+    indexColumn(page, limit),
     {
       title: "Guruh",
       dataIndex: "groupId",
@@ -78,7 +79,12 @@ export default function PaidOtherPage() {
       render: (type: PaidOther["type"]) =>
         type === "INCOME" ? "Kirim" : "Chiqim",
     },
-    { title: "To‘lov miqdori", dataIndex: "price" },
+    {
+      title: "To‘lov miqdori",
+      dataIndex: "price",
+      render: (priceCount: number) =>
+        priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
     {
       title: "To‘langan sana",
       dataIndex: "paidDate",

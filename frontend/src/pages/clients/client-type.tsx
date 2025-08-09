@@ -21,12 +21,19 @@ import {
   useGetAllClientTypes,
 } from "../../config/queries/clients/client-type-querys";
 import ClientTypeFormModal from "./ui/client-type-form-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function ClientType() {
   const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState({ name: "", page: 1, limit: 10 });
-
-  const { data, isLoading, refetch } = useGetAllClientTypes(filters);
+  const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState({ name: "" });
+  
+  const { data, isLoading, refetch } = useGetAllClientTypes({
+    page,
+    limit: 10,
+    ...(search ? { code: search } : {}),
+    ...filters,
+  });
   const deleteClientType = useDeleteClientType();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -52,11 +59,7 @@ export default function ClientType() {
   }, [filters]);
 
   const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    indexColumn(page, 10),
     {
       title: "Turi nomi",
       dataIndex: "name",
@@ -138,11 +141,10 @@ export default function ClientType() {
         dataSource={data?.data || []}
         rowKey="id"
         pagination={{
-          current: filters.page,
-          pageSize: filters.limit,
-          total: data?.total || 0,
-          onChange: (page, pageSize) =>
-            setFilters((prev) => ({ ...prev, page, limit: pageSize })),
+          current: page,
+          pageSize: 10,
+          total: data?.total,
+          onChange: setPage,
         }}
       />
 

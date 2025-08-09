@@ -28,6 +28,7 @@ import {
   useCreatePaidClient,
   type PaidClientDto,
 } from "../../config/queries/clients/paid-client-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 const { Title } = Typography;
 
@@ -40,9 +41,13 @@ export default function Sale() {
   useEffect(() => {
     if (id) setCurrentId(Number(id));
   }, [id]);
+  const [page, setPage] = useState(1);
+  const limit = 5;
 
   const { data: sale, isLoading } = useGetSaleById(currentId ?? undefined);
   const { data: saleProducts } = useGetAllSaleProduct({
+    page,
+    limit,
     saleId: currentId ?? undefined,
   });
   const { data: sales } = useGetAllSale({ page: 1, limit: 1000 });
@@ -70,6 +75,7 @@ export default function Sale() {
   };
 
   const productColumns = [
+    indexColumn(page, limit),
     {
       title: "Mahsulot nomi",
       dataIndex: "productId",
@@ -100,7 +106,7 @@ export default function Sale() {
   ];
 
   return (
-    <Card style={{ width: "100%", maxHeight: "800px", overflow: "auto" }}>
+    <Card style={{ width: "100%" }}>
       <Row
         justify="space-between"
         align="middle"
@@ -246,7 +252,12 @@ export default function Sale() {
           dataSource={saleProducts?.data || []}
           columns={productColumns}
           rowKey="id"
-          pagination={{ pageSize: 5 }}
+          pagination={{
+            current: page,
+            pageSize: limit,
+            total: saleProducts?.total || saleProducts?.data?.length || 0,
+            onChange: setPage,
+          }}
         />
       </Card>
     </Card>

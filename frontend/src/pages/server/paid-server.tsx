@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 
 import { useGetAllPaidServers } from "../../config/queries/server/paid-servers-querys";
 import PaidServersFilterModal from "./ui/paid-servers-filter-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function PaidServer() {
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -22,6 +23,7 @@ export default function PaidServer() {
   });
 
   const columns = [
+    indexColumn(page, limit),
     {
       title: "To'lov turi",
       dataIndex: ["server", "name"],

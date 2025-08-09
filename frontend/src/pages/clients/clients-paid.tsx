@@ -28,6 +28,7 @@ import { useGetAllSale } from "../../config/queries/sale/sale-querys";
 import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
 import PaidClientFilterModal from "./ui/paid-clients-filter-modal";
 import PaidClientFormModal from "./ui/paid-clients-form-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -80,6 +81,7 @@ export default function ClientsPaid() {
   };
 
   const columns = [
+    indexColumn(page, limit),
     {
       title: "Client ID",
       dataIndex: "clientId",

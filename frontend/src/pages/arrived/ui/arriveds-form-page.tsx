@@ -125,6 +125,11 @@ export default function ArrivedFormPage() {
 
   const columns = [
     {
+      title: "№",
+      dataIndex: "index",
+      render: (_: any, __: any, index: number) => +index + 1,
+    },
+    {
       title: "Mahsulot",
       dataIndex: "productId",
       render: (id: number) =>
@@ -137,10 +142,14 @@ export default function ArrivedFormPage() {
     {
       title: "Narxi",
       dataIndex: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
       title: "Umumiy narxi",
       dataIndex: "priceCount",
+      render: (priceCount: number) =>
+        priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
       title: "Amallar",
@@ -278,13 +287,13 @@ export default function ArrivedFormPage() {
                   drawerForm.setFieldsValue({
                     count: 1,
                     price: selectedProduct.price,
-                    total: selectedProduct.price * 1,
+                    priceCount: selectedProduct.price * 1,
                   });
                 } else {
                   drawerForm.setFieldsValue({
                     count: null,
                     price: null,
-                    total: null,
+                    priceCount: null,
                   });
                 }
               }}
@@ -309,7 +318,7 @@ export default function ArrivedFormPage() {
               onChange={(value: any) => {
                 const price = drawerForm.getFieldValue("price") || 0;
                 drawerForm.setFieldsValue({
-                  total: price * value,
+                  priceCount: price * value,
                 });
               }}
             />
@@ -327,12 +336,12 @@ export default function ArrivedFormPage() {
               onChange={(value: any) => {
                 const count = drawerForm.getFieldValue("count") || 0;
                 drawerForm.setFieldsValue({
-                  total: count * value,
+                  priceCount: count * value,
                 });
               }}
             />
           </Form.Item>
-          <Form.Item name="total" className="min-w-[200px] grow">
+          <Form.Item name="priceCount" className="min-w-[200px] grow">
             <InputNumber disabled className="!w-full" placeholder="Jami narx" />
           </Form.Item>
           <Form.Item style={{ flexShrink: 0 }}>

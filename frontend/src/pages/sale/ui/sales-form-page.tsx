@@ -130,6 +130,11 @@ export default function SalesFormPage() {
 
   const columns = [
     {
+      title: "№",
+      dataIndex: "index",
+      render: (_: any, __: any, index: number) => +index + 1,
+    },
+    {
       title: "Mahsulot",
       dataIndex: "productId",
       render: (id: number) =>
@@ -142,10 +147,14 @@ export default function SalesFormPage() {
     {
       title: "Narxi",
       dataIndex: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
-      title: "Umumiy",
-      render: (record: any) => record.count * record.price,
+      title: "Umumiy narxi",
+      dataIndex: "priceCount",
+      render: (priceCount: number) =>
+        priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
       title: "Amallar",
@@ -249,10 +258,10 @@ export default function SalesFormPage() {
                   drawerForm.setFieldsValue({ price: null });
                 }
                 const count = drawerForm.getFieldValue("count") || 0;
-                const total = selectedProduct?.price
+                const priceCount = selectedProduct?.price
                   ? selectedProduct.price * count
                   : 0;
-                drawerForm.setFieldsValue({ total });
+                drawerForm.setFieldsValue({ priceCount });
               }}
             >
               {productsList?.data.map((p) => (
@@ -276,7 +285,7 @@ export default function SalesFormPage() {
               onChange={(value: any) => {
                 const price = drawerForm.getFieldValue("price") || 0;
                 drawerForm.setFieldsValue({
-                  total: price * value,
+                  priceCount: price * value,
                 });
               }}
             />
@@ -294,12 +303,12 @@ export default function SalesFormPage() {
               onChange={(value: any) => {
                 const count = drawerForm.getFieldValue("count") || 0;
                 drawerForm.setFieldsValue({
-                  total: count * value,
+                  priceCount: count * value,
                 });
               }}
             />
           </Form.Item>
-          <Form.Item name="total" className="min-w-[200px] grow">
+          <Form.Item name="priceCount" className="min-w-[200px] grow">
             <InputNumber disabled className="!w-full" placeholder="Jami narx" />
           </Form.Item>
           <Form.Item style={{ flexShrink: 0 }}>

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { useGetAllSale } from "../../config/queries/sale/sale-querys";
 import SalesFilterModal from "./ui/sales-filter-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
+import { useGetAllClients } from "../../config/queries/clients/clients-querys";
 
 export default function SaleCredit() {
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ export default function SaleCredit() {
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const { data: clients } = useGetAllClients({ page: 1, limit: 1000 });
 
   const { data, isLoading } = useGetAllSale({
     page,
@@ -23,15 +26,33 @@ export default function SaleCredit() {
   });
 
   const columns = [
+    indexColumn(page, 10),
     {
       title: "Sana",
       dataIndex: "date",
       render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
     },
     { title: "Kod", dataIndex: "code" },
-    { title: "Mijoz", dataIndex: "clientId" },
-    { title: "Narx", dataIndex: "price" },
-    { title: "Qarz", dataIndex: "credit" },
+    {
+      title: "Mijoz",
+      dataIndex: "clientId",
+      render: (clientId: number) => {
+        const client = clients?.data?.find((c) => c.id === clientId);
+        return client?.name || "—";
+      },
+    },
+    {
+      title: "Narx",
+      dataIndex: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
+    {
+      title: "Qarz",
+      dataIndex: "credit",
+      render: (credit: number) =>
+        credit ? credit.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
   ];
 
   return (
