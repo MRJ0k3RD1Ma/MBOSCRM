@@ -84,7 +84,7 @@ export default function ClientPage() {
       </div>
     );
   }
-  
+
   const tabItems: TabsProps["items"] = [
     {
       key: "1",
