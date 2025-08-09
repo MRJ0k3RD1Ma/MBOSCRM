@@ -201,16 +201,7 @@ export default function SalesFormPage() {
       </div>
 
       <Form layout="vertical" form={form} onFinish={onFinish}>
-        <div className="flex flex-wrap gap-4">
-          <Form.Item
-            name="date"
-            label="Sana"
-            rules={[{ required: true }]}
-            className="min-w-[200px] grow"
-          >
-            <DatePicker className="w-full" format="YYYY-MM-DD" />
-          </Form.Item>
-
+        <div className="!w-full flex justify-between gap-4">
           <Form.Item
             name="clientId"
             label="Mijoz"
@@ -229,6 +220,22 @@ export default function SalesFormPage() {
                 </Select.Option>
               ))}
             </Select>
+          </Form.Item>
+          <Form.Item
+            name="date"
+            label="Yaratilish sanasi"
+            rules={[{ required: true }]}
+            className="min-w-[200px] grow"
+          >
+            <DatePicker className="w-full" format="YYYY-MM-DD" />
+          </Form.Item>
+          <Form.Item
+            name="subscribe_begin_date"
+            label="Obuna boshlanish sanasi"
+            rules={[{ required: true }]}
+            className="min-w-[200px] grow"
+          >
+            <DatePicker className="w-full" format="YYYY-MM-DD" />
           </Form.Item>
         </div>
       </Form>

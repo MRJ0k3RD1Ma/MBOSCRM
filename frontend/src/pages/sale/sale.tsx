@@ -94,14 +94,24 @@ export default function Sale() {
     {
       title: "Narxi",
       dataIndex: "price",
-      render: (price: number) =>
-        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+      render: (_: number, record: any) => {
+        const priceToUse = record.is_subscribe
+          ? record.product?.price
+          : record.price;
+
+        return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
+      },
     },
     {
       title: "Jami narx",
       dataIndex: "priceCount",
-      render: (price: number) =>
-        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+      render: (_: number, record: any) => {
+        const priceToUse = record.is_subscribe
+          ? record.product?.price * (record.count || 0)
+          : record.priceCount;
+
+        return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
+      },
     },
   ];
 
