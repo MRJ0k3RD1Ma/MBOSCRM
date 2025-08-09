@@ -48,7 +48,7 @@ export class ClientService implements OnModuleInit {
       where: { phone: createClientDto.phone, isDeleted: false },
     });
     if (existingPhone) {
-      throw HttpError({ code: 'Phone already exists' });
+      throw HttpError({ message: 'Phone already exists', statusCode: 409 });
     }
 
     if (createClientDto.districtId) {

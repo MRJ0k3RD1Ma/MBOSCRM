@@ -248,16 +248,31 @@ export default function ClientPage() {
     {
       title: "To’ladi",
       dataIndex: "dept",
-      render: (dept: number) =>
-        dept ? dept.toLocaleString("uz-UZ") + " so'm" : "0",
+      render: (_: number, record: any) => {
+        const priceToUse = record.SaleProduct[0].is_subscribe
+          ? record.SaleProduct[0].product?.dept
+          : record.dept;
+
+        return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
+      },
     },
     {
       title: "Narxi",
       dataIndex: "price",
-      render: (price: number) =>
-        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+      render: (_: number, record: any) => {
+        const priceToUse = record.SaleProduct[0].is_subscribe
+          ? record.SaleProduct[0].product?.price
+          : record.price;
+
+        return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
+      },
     },
-    { title: "Qarzdorlik", dataIndex: "credit" },
+    {
+      title: "Qarzdorlik",
+      dataIndex: "credit",
+      render: (dept: number) =>
+        dept ? dept.toLocaleString("uz-UZ") + " so'm" : "-",
+    },
     {
       title: "Obunami",
       dataIndex: ["SaleProduct", "0", "is_subscribe"],

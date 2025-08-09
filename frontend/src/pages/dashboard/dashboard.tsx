@@ -188,7 +188,10 @@ export default function Dashboard() {
     <Card style={{ width: "100%" }}>
       <Row justify="space-between" align="middle" style={{ marginBottom: 20 }}>
         <Title level={3} style={{ color: "#fff", margin: 0 }}>
-          Statistika
+          Statistika Kompaniya hisob:{" "}
+          {data?.balance
+            ? data?.balance.toLocaleString("uz-UZ") + " so'm"
+            : " 0"}
         </Title>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <Text style={{ color: "rgba(255,255,255,0.75)" }}>
