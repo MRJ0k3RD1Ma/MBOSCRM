@@ -120,7 +120,7 @@ let UserService = class UserService {
                 expiresIn: '2h',
             }),
             (0, jsonwebtoken_1.sign)({ id: user.id, role: role_enum_1.Role.Admin, refreshTokenVersion }, config_1.env.REFRESH_TOKEN_SECRET, {
-                expiresIn: '1d',
+                expiresIn: '7d',
             }),
         ];
         delete user.password;

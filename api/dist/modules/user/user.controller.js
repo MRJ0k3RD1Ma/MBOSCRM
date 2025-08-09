@@ -123,7 +123,7 @@ __decorate([
 ], UserController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, decorator_auth_1.DecoratorWrapper)('Delete User', true, [role_enum_1.Role.User]),
+    (0, decorator_auth_1.DecoratorWrapper)('Delete User', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
