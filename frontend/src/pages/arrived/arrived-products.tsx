@@ -7,6 +7,7 @@ import { useGetAllArrivedProduct } from "../../config/queries/arrived/arrived-pr
 import ArrivedProductsFilterModal from "./ui/arrived-products-filter-modal";
 import { useGetAllArrived } from "../../config/queries/arrived/arrived-qureys";
 import { useGetAllProducts } from "../../config/queries/products/products-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function ArrivedProducts() {
   const [search, setSearch] = useState("");
@@ -23,6 +24,7 @@ export default function ArrivedProducts() {
   });
 
   const columns = [
+    indexColumn(page, 10),
     {
       title: "Sana",
       dataIndex: "createdAt",

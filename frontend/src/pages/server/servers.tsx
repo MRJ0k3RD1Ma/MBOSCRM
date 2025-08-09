@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button, Card, Form, Input, Space, Table, Tag } from "antd";
-
 import { PlusOutlined, FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,6 +12,7 @@ import {
 import dayjs from "dayjs";
 import ServersFilterModal from "./ui/servers-filter-modal";
 import ServerFormModal from "./ui/servers-form-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function Servers() {
   const [form] = Form.useForm();
@@ -34,7 +34,6 @@ export default function Servers() {
 
   const createServer = useCreateServer();
   const updateServer = useUpdateServer();
-  // const deleteServer = useDeleteServer();
 
   const onSubmit = (values: CreateServerInput) => {
     if (editing) {
@@ -46,17 +45,8 @@ export default function Servers() {
     setEditing(null);
   };
 
-  // const handleEdit = (server: Server) => {
-  //   setEditing(server);
-  //   form.setFieldsValue(server);
-  //   setOpen(true);
-  // };
-
-  // const handleDelete = (id: number) => {
-  //   deleteServer.mutate(id);
-  // };
-
   const columns = [
+    indexColumn(page, limit),
     { title: "Nomi", dataIndex: "name" },
     { title: "Mas'ul", dataIndex: "responsible" },
     { title: "Tarif", dataIndex: "plan" },
@@ -86,40 +76,6 @@ export default function Servers() {
         return <Tag color={color}>{label}</Tag>;
       },
     },
-
-    // {
-    //   title: "Amallar",
-    //   key: "actions",
-    //   render: (_: any, row: Server) => {
-    //     const items: MenuProps["items"] = [
-    //       {
-    //         key: "edit",
-    //         label: "Tahrirlash",
-    //         onClick: () => handleEdit(row),
-    //       },
-    //       {
-    //         key: "delete",
-    //         label: "O‘chirish",
-    //         danger: true,
-    //         onClick: () => handleDelete(row.id),
-    //       },
-    //       {
-    //         key: "view",
-    //         label: "Batafsil ko‘rish",
-    //         onClick: () => navigate(`/server/${row.id}`),
-    //       },
-    //     ];
-    //     return (
-    //       <div onClick={(e) => e.stopPropagation()}>
-    //         <Dropdown menu={{ items }} trigger={["click"]}>
-    //           <Tooltip title="Boshqarish">
-    //             <Button icon={<MoreOutlined />} />
-    //           </Tooltip>
-    //         </Dropdown>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
 
   return (

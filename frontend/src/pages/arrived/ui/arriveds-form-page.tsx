@@ -52,7 +52,9 @@ export default function ArrivedFormPage() {
   const deleteArrivedProduct = useDeleteArrivedProduct();
   const { data: arrivedData } = useGetArrivedById(Number(id), isEdit);
   const { data: suppliers } = useGetAllSuppliers();
-  const { data: productsList } = useGetAllProducts();
+  const { data: productsList } = useGetAllProducts({
+    type: "DEVICE",
+  });
   const { data: arrivedProductsData } = useGetAllArrivedProduct({
     arrivedId: isEdit ? Number(id) : undefined,
   });
@@ -123,6 +125,11 @@ export default function ArrivedFormPage() {
 
   const columns = [
     {
+      title: "№",
+      dataIndex: "index",
+      render: (_: any, __: any, index: number) => +index + 1,
+    },
+    {
       title: "Mahsulot",
       dataIndex: "productId",
       render: (id: number) =>
@@ -135,10 +142,14 @@ export default function ArrivedFormPage() {
     {
       title: "Narxi",
       dataIndex: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
       title: "Umumiy narxi",
       dataIndex: "priceCount",
+      render: (priceCount: number) =>
+        priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
       title: "Amallar",
@@ -271,18 +282,20 @@ export default function ArrivedFormPage() {
                 const selectedProduct = productsList?.data.find(
                   (p) => p.id === value
                 );
+
                 if (selectedProduct) {
                   drawerForm.setFieldsValue({
+                    count: 1,
                     price: selectedProduct.price,
+                    priceCount: selectedProduct.price * 1,
                   });
                 } else {
-                  drawerForm.setFieldsValue({ price: null });
+                  drawerForm.setFieldsValue({
+                    count: null,
+                    price: null,
+                    priceCount: null,
+                  });
                 }
-                const count = drawerForm.getFieldValue("count") || 0;
-                const total = selectedProduct?.price
-                  ? selectedProduct.price * count
-                  : 0;
-                drawerForm.setFieldsValue({ total });
               }}
             >
               {productsList?.data.map((p) => (
@@ -302,11 +315,10 @@ export default function ArrivedFormPage() {
               min={1}
               className="!w-full"
               placeholder="Soni"
-              defaultValue={1}
               onChange={(value: any) => {
                 const price = drawerForm.getFieldValue("price") || 0;
                 drawerForm.setFieldsValue({
-                  total: price * value,
+                  priceCount: price * value,
                 });
               }}
             />
@@ -324,12 +336,12 @@ export default function ArrivedFormPage() {
               onChange={(value: any) => {
                 const count = drawerForm.getFieldValue("count") || 0;
                 drawerForm.setFieldsValue({
-                  total: count * value,
+                  priceCount: count * value,
                 });
               }}
             />
           </Form.Item>
-          <Form.Item name="total" className="min-w-[200px] grow">
+          <Form.Item name="priceCount" className="min-w-[200px] grow">
             <InputNumber disabled className="!w-full" placeholder="Jami narx" />
           </Form.Item>
           <Form.Item style={{ flexShrink: 0 }}>

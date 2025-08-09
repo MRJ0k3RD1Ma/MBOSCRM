@@ -28,6 +28,11 @@ export class PaidServerService {
       });
     }
 
+    await this.prisma.setting.update({
+      where: { id: 1 },
+      data: { balance: { decrement: price } },
+    });
+
     const paidServer = await this.prisma.paidServer.create({
       data: {
         description,

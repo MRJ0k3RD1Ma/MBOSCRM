@@ -42,6 +42,7 @@ import { useGetAllSale } from "../../config/queries/sale/sale-querys";
 import { useGetAllSaleProduct } from "../../config/queries/sale/sale-product-querys";
 import PaidClientFormModal from "./ui/paid-clients-form-modal";
 import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 const { Title } = Typography;
 
@@ -50,6 +51,13 @@ export default function ClientPage() {
   const [form] = Form.useForm();
   const clientId = Number(id);
   const regionId = Form.useWatch("regionId", form);
+  const [page1, setPage1] = useState(1);
+  const [page2, setPage2] = useState(1);
+  const [page3, setPage3] = useState(1);
+  const [page4, setPage4] = useState(1);
+  const [page5, setPage5] = useState(1);
+  const limit = 5;
+
   const [paidOpen, setPaidOpen] = useState(false);
   const { data, isLoading, refetch } = useGetClientById(clientId);
   const { data: regions } = useGetAllRegions();
@@ -57,27 +65,43 @@ export default function ClientPage() {
   const createPaidClient = useCreatePaidClient();
   const updateClient = useUpdateClient();
   const deleteClient = useDeleteClient();
+
   const { data: clients } = useGetAllClients({ page: 1, limit: 1000 });
   const { data: sales } = useGetAllSale({ page: 1, limit: 1000 });
   const { data: payments } = useGetAllPayments({ page: 1, limit: 1000 });
   const { data: types } = useGetAllClientTypes();
-  const { data: paidClient } = useGetAllPaidClients({ clientId });
+
   const { data: subscribeClient } = useGetAllSubscribes({
     clientId,
     state: "NOTPAYING",
+    page: page1,
+    limit,
   });
+
   const { data: allSubscribeClient } = useGetAllSubscribes({
     clientId,
+    page: page2,
+    limit,
   });
+
   const { data: salesClient } = useGetAllSale({
     clientId,
+    page: page3,
+    limit,
   });
+
+  const { data: paidClient } = useGetAllPaidClients({
+    clientId,
+    page: page4,
+    limit,
+  });
+
   const { data: saleProductsClient } = useGetAllSaleProduct({
     clientId,
     isSubscribe: false,
+    page: page5,
+    limit,
   });
-  console.log("salesClient", salesClient);
-  console.log("saleProductsClient", saleProductsClient);
 
   const navigate = useNavigate();
 
@@ -128,6 +152,7 @@ export default function ClientPage() {
   }
 
   const paidColumns = [
+    indexColumn(page1, limit),
     {
       title: "Shartnoma raqami",
       dataIndex: ["sale", "code"],
@@ -170,6 +195,7 @@ export default function ClientPage() {
   ];
 
   const allSubscribeColumns = [
+    indexColumn(page2, limit),
     {
       title: "Shartnoma raqami",
       dataIndex: ["sale", "code"],
@@ -213,6 +239,7 @@ export default function ClientPage() {
   ];
 
   const contractColumns = [
+    indexColumn(page3, limit),
     {
       title: "Shartnoma raqami",
       dataIndex: "code",
@@ -247,6 +274,7 @@ export default function ClientPage() {
   ];
 
   const paidByClientColumns = [
+    indexColumn(page4, limit),
     {
       title: "To’lov sanasi",
       dataIndex: "paidDate",
@@ -275,6 +303,7 @@ export default function ClientPage() {
   ];
 
   const somxColumns = [
+    indexColumn(page5, limit),
     {
       title: "Shartnoma raqami",
       dataIndex: ["sale", "code"],
@@ -284,7 +313,12 @@ export default function ClientPage() {
       title: "Mahsulot nomi",
       dataIndex: ["product", "name"],
     },
-    { title: "Narxi", dataIndex: "price" },
+    {
+      title: "Narxi",
+      dataIndex: "price",
+      render: (priceCount: number) =>
+        priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
     {
       title: "Soni",
       dataIndex: "count",
@@ -314,7 +348,13 @@ export default function ClientPage() {
         <Table
           columns={paidColumns}
           dataSource={subscribeClient?.data}
-          pagination={false}
+          rowKey="id"
+          pagination={{
+            current: page1,
+            pageSize: limit,
+            total: subscribeClient?.total,
+            onChange: (p) => setPage1(p),
+          }}
         />
       ),
     },
@@ -325,7 +365,13 @@ export default function ClientPage() {
         <Table
           columns={allSubscribeColumns}
           dataSource={allSubscribeClient?.data}
-          pagination={false}
+          rowKey="id"
+          pagination={{
+            current: page2,
+            pageSize: limit,
+            total: allSubscribeClient?.total,
+            onChange: (p) => setPage2(p),
+          }}
         />
       ),
     },
@@ -336,7 +382,13 @@ export default function ClientPage() {
         <Table
           columns={contractColumns}
           dataSource={salesClient?.data}
-          pagination={false}
+          rowKey="id"
+          pagination={{
+            current: page3,
+            pageSize: limit,
+            total: salesClient?.total,
+            onChange: (p) => setPage3(p),
+          }}
         />
       ),
     },
@@ -347,7 +399,13 @@ export default function ClientPage() {
         <Table
           columns={paidByClientColumns}
           dataSource={paidClient}
-          pagination={false}
+          rowKey="id"
+          pagination={{
+            current: page4,
+            pageSize: limit,
+            total: paidClient?.length,
+            onChange: (p) => setPage4(p),
+          }}
         />
       ),
     },
@@ -358,11 +416,18 @@ export default function ClientPage() {
         <Table
           columns={somxColumns}
           dataSource={saleProductsClient?.data}
-          pagination={false}
+          rowKey="id"
+          pagination={{
+            current: page5,
+            pageSize: limit,
+            total: saleProductsClient?.total,
+            onChange: (p) => setPage5(p),
+          }}
         />
       ),
     },
   ];
+
   dayjs.extend(utc);
   dayjs.extend(timezone);
 

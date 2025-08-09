@@ -31,15 +31,29 @@ import { PlusOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import PaidSupplierFormModal from "./ui/paid-supplier-form-modal";
 import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function Supplier() {
   const { id } = useParams();
   const navigate = useNavigate();
   const supplierId = Number(id);
-
+  const [page1, setPage1] = useState(1);
+  const [page2, setPage2] = useState(1);
+  const limit = 5;
   const { data: supplier, isLoading } = useGetSupplierById(supplierId);
-  const { data: arrivedSupplierID } = useGetAllArrived({ supplierId });
-  const { data: SupplierPaidID } = useGetAllPaidSuppliers({ supplierId });
+  const { data: arrivedSupplierID, isLoading: isArrivalsLoading } =
+    useGetAllArrived({
+      supplierId,
+      page: page1,
+      limit,
+    });
+  const { data: SupplierPaidID, isLoading: isPaidLoading } =
+    useGetAllPaidSuppliers({
+      supplierId,
+      page: page2,
+      limit,
+    });
+
   const { data: suppliersData } = useGetAllSuppliers({ page: 1, limit: 1000 });
   const { data: paymentsData } = useGetAllPayments({ page: 1, limit: 1000 });
 
@@ -74,6 +88,7 @@ export default function Supplier() {
   }
 
   const salesColumns = [
+    indexColumn(page1, limit),
     { title: "Kirim code", dataIndex: "code" },
     {
       title: "Sana",
@@ -96,6 +111,7 @@ export default function Supplier() {
   ];
 
   const arrivalsColumns = [
+    indexColumn(page2, limit),
     {
       title: "To'lov sanasi",
       dataIndex: "paidDate",
@@ -124,7 +140,14 @@ export default function Supplier() {
         <Table
           columns={salesColumns}
           dataSource={arrivedSupplierID?.data}
-          pagination={false}
+          loading={isArrivalsLoading}
+          pagination={{
+            current: page1,
+            pageSize: limit,
+            total: arrivedSupplierID?.total,
+            onChange: setPage1,
+          }}
+          rowKey="id"
         />
       ),
     },
@@ -135,7 +158,14 @@ export default function Supplier() {
         <Table
           columns={arrivalsColumns}
           dataSource={SupplierPaidID?.data}
-          pagination={false}
+          loading={isPaidLoading}
+          pagination={{
+            current: page2,
+            pageSize: limit,
+            total: SupplierPaidID?.total,
+            onChange: setPage2,
+          }}
+          rowKey="id"
         />
       ),
     },

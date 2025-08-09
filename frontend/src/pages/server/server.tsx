@@ -26,15 +26,20 @@ import {
   useGetAllPaidServers,
 } from "../../config/queries/server/paid-servers-querys";
 import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function Server() {
   const { id } = useParams();
   const navigate = useNavigate();
   const serverId = Number(id);
-
+  const [page, setPage] = useState(1);
+  const limit = 5;
   const { data: server } = useGetServerById(serverId);
-  const { data: paidServers = [], isLoading: isPaidLoading } =
-    useGetAllPaidServers({ serverId });
+  const { data: paidServers, isLoading: isPaidLoading } = useGetAllPaidServers({
+    serverId,
+    page,
+    limit,
+  });
 
   const deleteMutation = useDeleteServer();
   const updateMutation = useUpdateServer();
@@ -114,6 +119,32 @@ export default function Server() {
     }
   };
 
+  const columns = [
+    indexColumn(page, limit),
+    {
+      title: "To'lov turi",
+      dataIndex: ["paymentType", "name"],
+    },
+    {
+      title: "Narxi",
+      dataIndex: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
+    {
+      title: "Sanasi",
+      dataIndex: "createdAt",
+      render: (text: string) =>
+        text
+          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
+          : "—",
+    },
+    {
+      title: "Izoh",
+      dataIndex: "description",
+    },
+  ];
+
   return (
     <div style={{ display: "flex", gap: 16 }}>
       <Card title="Server haqida ma'lumot" style={{ flex: 1, maxWidth: 480 }}>
@@ -155,27 +186,13 @@ export default function Server() {
           loading={isPaidLoading}
           dataSource={paidServers}
           rowKey="id"
-          pagination={{ pageSize: 5 }}
-          columns={[
-            {
-              title: "To'lov turi",
-              dataIndex: ["paymentType", "name"],
-            },
-            {
-              title: "Narxi",
-              dataIndex: "price",
-              render: (val) => `${val.toLocaleString()} so'm`,
-            },
-            {
-              title: "Sanasi",
-              dataIndex: "createdAt",
-              render: (val) => dayjs(val).format("YYYY-MM-DD"),
-            },
-            {
-              title: "Izoh",
-              dataIndex: "description",
-            },
-          ]}
+          pagination={{
+            current: page,
+            pageSize: limit,
+            total: paidServers?.length,
+            onChange: setPage,
+          }}
+          columns={columns}
         />
       </Card>
 

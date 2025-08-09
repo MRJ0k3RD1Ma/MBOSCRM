@@ -10,6 +10,7 @@ import SubscribesFilterModal from "./ui/subscribe-filter-modal";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { indexColumn } from "../../components/tables/indexColumn";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -29,6 +30,7 @@ export default function Subscribes() {
   });
 
   const columns = [
+    indexColumn(page, limit),
     {
       title: "To‘lov sanasi",
       dataIndex: "paying_date",
@@ -45,7 +47,12 @@ export default function Subscribes() {
       dataIndex: "sale",
       render: (sale: any) => sale?.id || "-",
     },
-    { title: "Narx", dataIndex: "price" },
+    {
+      title: "Narx",
+      dataIndex: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
     { title: "To‘langan", dataIndex: "paid" },
     {
       title: "Holat",

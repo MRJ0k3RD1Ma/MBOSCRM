@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #377e3a #001529;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #001529;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #377e3a;
+  border-radius: 3px;
+  border: 1px solid #001529;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+}
+.ant-card-body {
+  max-height: 800px;
+  overflow-y: auto;
+}

@@ -49,6 +49,10 @@ export class PaidSupplierService {
       throw new HttpError({ message: 'Supplier Not Found', code: 404 });
     }
 
+    await this.prisma.setting.update({
+      where: { id: 1 },
+      data: { balance: { decrement: createPaidSupplierDto.price } },
+    });
     const paidsupplier = await this.prisma.paidSupplier.create({
       data: {
         supplierId: createPaidSupplierDto.supplierId,
@@ -58,10 +62,6 @@ export class PaidSupplierService {
         modifyId: creatorId,
         registerId: creatorId,
       },
-    });
-    await this.prisma.setting.update({
-      where: { id: 1 },
-      data: { balance: { decrement: createPaidSupplierDto.price } },
     });
     return paidsupplier;
   }

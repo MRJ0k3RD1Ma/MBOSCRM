@@ -93,6 +93,7 @@ export default function PaidClientFormModal({
             <Select
               placeholder="Mijozni tanlang"
               showSearch
+              allowClear
               optionFilterProp="label"
             >
               {clients.map((client) => (
@@ -117,6 +118,7 @@ export default function PaidClientFormModal({
               placeholder="Savdoni tanlang"
               showSearch
               optionFilterProp="label"
+              allowClear
             >
               {sales.map((sale: any) => (
                 <Select.Option

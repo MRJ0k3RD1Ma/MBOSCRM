@@ -194,7 +194,7 @@ const menuItems = [
       },
       {
         key: "/supplier-credit",
-        label: "Qarzlarim",
+        label: "Qarzdorlar",
         icon: <CreditCardOutlined />,
       },
       {
@@ -284,12 +284,14 @@ export default function SiderMenu({ collapsed, setCollapsed }: Props) {
       collapsed={collapsed}
       onCollapse={setCollapsed}
       theme="dark"
-      width={280}
+      width={290}
       style={{
-        position: "fixed",
-        height: "100vh",
-        left: 0,
-        zIndex: 100,
+      position: "fixed",
+    height: "100vh",
+    left: 0,
+    zIndex: 100,
+    display: "flex",
+    flexDirection: "column",
       }}
     >
       <div className="flex items-center justify-center py-4 px-3">
@@ -302,6 +304,10 @@ export default function SiderMenu({ collapsed, setCollapsed }: Props) {
         defaultOpenKeys={openKeys}
         onClick={handleMenuClick}
         items={menuItems}
+        style={{
+          height: "calc(100vh - 140px)",
+          overflowY: "auto",
+        }}
       />
     </Sider>
   );
