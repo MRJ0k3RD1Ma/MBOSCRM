@@ -4,7 +4,7 @@ import { UpdateSaleDto } from './dto/update-sale.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, ProductType } from '@prisma/client';
 import { SaleProductService } from '../sale-product/sale-product.service';
 import { env } from 'src/common/config';
 
@@ -19,11 +19,14 @@ export class SaleService {
     if (env.ENV != 'prod') {
       const count = await this.prisma.sale.count();
       const requiredCount = 1;
+      const client = await this.prisma.client.findFirst({
+        where: { isDeleted: false },
+      });
       if (count < requiredCount) {
         for (let i = count; i < requiredCount; i++) {
           await this.create(
             {
-              clientId: 14,
+              clientId: client.id,
               products: [{ count: 1, productId: 1 }],
               subscribe_begin_date: new Date(),
               subscribe_generate_day: 10,
@@ -69,7 +72,11 @@ export class SaleService {
 
     const productIds = products.map((product) => product.productId);
     const notReminderProducts = await this.prisma.product.findMany({
-      where: { id: { in: productIds }, countReminder: { lte: 0 } },
+      where: {
+        id: { in: productIds },
+        countReminder: { lte: 0 },
+        type: ProductType.DEVICE,
+      },
     });
 
     if (notReminderProducts.length > 0) {
@@ -104,6 +111,7 @@ export class SaleService {
       totalPrice += saleProduct.priceCount;
     }
     await this.prisma.$transaction(async (tx) => {
+      const client = await tx.client.findFirst({ where: { id: clientId } });
       if (client.balance < totalPrice) {
         const newBalance = client.balance - totalPrice;
         const paidAmount = Math.max(client.balance, 0);

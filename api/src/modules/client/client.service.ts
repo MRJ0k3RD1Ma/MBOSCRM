@@ -7,7 +7,6 @@ import { FindAllClientQueryDto } from './dto/findAll-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { env } from 'src/common/config';
 import { faker } from '@faker-js/faker';
-import { is } from 'date-fns/locale';
 
 @Injectable()
 export class ClientService implements OnModuleInit {
@@ -16,7 +15,7 @@ export class ClientService implements OnModuleInit {
   async onModuleInit() {
     if (env.ENV != 'prod') {
       const clientCount = await this.prisma.client.count();
-      const requiredCount = 1;
+      const requiredCount = 3;
       if (clientCount < requiredCount) {
         for (let i = clientCount; i < requiredCount; i++) {
           await this.create(
@@ -40,7 +39,7 @@ export class ClientService implements OnModuleInit {
 
   async create(createClientDto: CreateClientDto, creatorId: number) {
     const creator = await this.prisma.user.findFirst({
-      where: { id:creatorId, isDeleted: false },
+      where: { id: creatorId, isDeleted: false },
     });
     if (!creatorId) {
       throw HttpError({ message: 'Creator not found' });

@@ -4,7 +4,7 @@ import { UpdateSaleProductDto } from './dto/update-sale-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllSaleProductQueryDto } from './dto/findAll-sale-product-query.dto';
-import { Prisma, SubscribeState } from '@prisma/client';
+import { Prisma, ProductType, SubscribeState } from '@prisma/client';
 import { SubscribeService } from '../subscribe/subscribe.service';
 import dayjs from 'dayjs';
 
@@ -42,9 +42,12 @@ export class SaleProductService {
       });
     }
 
-    const isSubscription =
-      product.type === 'SUBSCRIPTION' || product.type === 'SERVICE';
-    const priceCount = product.price * createSaleProductDto.count;
+    const isSubscription = product.type == ProductType.SUBSCRIPTION;
+    let priceCount = product.price * createSaleProductDto.count;
+
+    if (isSubscription) {
+      priceCount = 0;
+    }
 
     const saleProduct = await this.prisma.saleProduct.create({
       data: {
@@ -60,7 +63,7 @@ export class SaleProductService {
       include: { product: true },
     });
     if (saleProduct.is_subscribe) {
-      this.subscribeService.create({
+      await this.subscribeService.create({
         clientId: sale.clientId,
         paid: 0,
         price: saleProduct.product.price,
@@ -70,7 +73,7 @@ export class SaleProductService {
       });
     }
 
-    if (product.type !== 'DEVICE') {
+    if (product.type == 'DEVICE') {
       await this.prisma.product.update({
         where: { id: product.id },
         data: {
