@@ -215,7 +215,7 @@ export class SaleService {
         skip: (page - 1) * limit,
         take: limit,
         include: {
-          SaleProduct: true,
+          SaleProduct: { include: { product: true } },
           modifier: true,
           register: true,
           client: true,
