@@ -4,17 +4,52 @@ import { UpdateSaleDto } from './dto/update-sale.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, ProductType } from '@prisma/client';
+import { SaleProductService } from '../sale-product/sale-product.service';
+import { env } from 'src/common/config';
 
 @Injectable()
 export class SaleService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly saleProductService: SaleProductService,
+  ) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.sale.count();
+      const requiredCount = 1;
+      const client = await this.prisma.client.findFirst({
+        where: { isDeleted: false },
+      });
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create(
+            {
+              clientId: client.id,
+              products: [{ count: 1, productId: 1 }],
+              subscribe_begin_date: new Date(),
+              subscribe_generate_day: 10,
+              date: new Date(),
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
 
   async create(createSaleDto: CreateSaleDto, creatorId: number) {
-    const { date, clientId, credit } = createSaleDto;
+    const {
+      date,
+      clientId,
+      products,
+      subscribe_begin_date,
+      subscribe_generate_day,
+    } = createSaleDto;
 
-    const client = await this.prisma.supplier.findUnique({
-      where: { id: clientId },
+    const client = await this.prisma.client.findFirst({
+      where: { id: clientId, isDeleted: false },
     });
 
     if (!client) {
@@ -35,35 +70,95 @@ export class SaleService {
 
     const codeId = (maxCode?.codeId || 0) + 1;
 
-    let sale = await this.prisma.sale.create({
-      data: {
-        date,
-        code: `${new Date().getFullYear()}-${codeId}`,
-        codeId,
-        clientId,
-        credit,
-        registerId: creatorId,
-        modifyId: creatorId,
+    const productIds = products.map((product) => product.productId);
+    const notReminderProducts = await this.prisma.product.findMany({
+      where: {
+        id: { in: productIds },
+        countReminder: { lte: 0 },
+        type: ProductType.DEVICE,
       },
     });
 
-    //TO-DO integration with sale product
-    //let totalPrice = 0;
-    //for (const product of products) {
-    //  const saleProduct = await this.saleProductService.create({
-    //    saleId: sale.id,
-    //    count: product.count,
-    //    price: product.price,
-    //    productId: product.productId,
-    //  });
-    //  totalPrice += saleProduct.priceCount;
-    //}
-    //
-    //sale = await this.prisma.sale.update({
-    //  where: { id: sale.id },
-    //  data: { price: totalPrice },
-    //  include: { SaleProduct: { include: { Product: true } } },
-    //});
+    if (notReminderProducts.length > 0) {
+      throw new HttpError({
+        message: `Maxsulot soni yetarli emas`,
+      });
+    }
+
+    let sale = await this.prisma.sale.create({
+      data: {
+        date,
+        subscribe_begin_date,
+        subscribe_generate_day,
+        code: `${new Date().getFullYear() - 2000}-${codeId}`,
+        codeId,
+        client: { connect: { id: clientId } },
+        register: { connect: { id: creatorId } },
+        modifier: { connect: { id: creatorId } },
+      },
+    });
+
+    let totalPrice = 0;
+    for (const product of products) {
+      const saleProduct = await this.saleProductService.create(
+        {
+          saleId: sale.id,
+          count: product.count,
+          productId: product.productId,
+        },
+        creatorId,
+      );
+      totalPrice += saleProduct.priceCount;
+    }
+    await this.prisma.$transaction(async (tx) => {
+      const client = await tx.client.findFirst({ where: { id: clientId } });
+      if (client.balance < totalPrice) {
+        const newBalance = client.balance - totalPrice;
+        const paidAmount = Math.max(client.balance, 0);
+
+        sale = await tx.sale.update({
+          where: { id: sale.id },
+          data: {
+            price: totalPrice,
+            credit: totalPrice - paidAmount,
+            dept: paidAmount,
+          },
+          include: { SaleProduct: { include: { product: true } } },
+        });
+
+        await tx.setting.update({
+          where: { id: 1 },
+          data: { balance: { increment: client.balance } },
+        });
+
+        await tx.client.update({
+          where: { id: client.id },
+          data: { balance: newBalance },
+        });
+      } else {
+        const newBalance = client.balance - totalPrice;
+
+        sale = await tx.sale.update({
+          where: { id: sale.id },
+          data: {
+            price: totalPrice,
+            credit: 0,
+            dept: totalPrice,
+          },
+          include: { SaleProduct: { include: { product: true } } },
+        });
+
+        await tx.setting.update({
+          where: { id: 1 },
+          data: { balance: { increment: totalPrice } },
+        });
+
+        await tx.client.update({
+          where: { id: client.id },
+          data: { balance: newBalance },
+        });
+      }
+    });
 
     return sale;
   }
@@ -78,6 +173,7 @@ export class SaleService {
       toDate,
       clientId,
       code,
+      credit,
     } = dto;
 
     const where: Prisma.SaleWhereInput = {
@@ -85,6 +181,14 @@ export class SaleService {
     };
     if (clientId) {
       where.clientId = clientId;
+    }
+
+    if (credit !== undefined) {
+      if (credit === true) {
+        where.credit = { gt: 0 };
+      } else {
+        where.credit = { equals: 0 };
+      }
     }
     if (code) {
       where.code = {
@@ -105,12 +209,17 @@ export class SaleService {
       };
     }
 
-    //TO-DO don't forget include
     const [data, total] = await this.prisma.$transaction([
       this.prisma.sale.findMany({
         where,
         skip: (page - 1) * limit,
         take: limit,
+        include: {
+          SaleProduct: { include: { product: true } },
+          modifier: true,
+          register: true,
+          client: true,
+        },
         orderBy: {
           date: 'desc',
         },
@@ -131,6 +240,10 @@ export class SaleService {
       where: {
         id,
         isDeleted: false,
+      },
+      include: {
+        SaleProduct: true,
+        client: { include: { Region: true, District: true } },
       },
     });
     if (!sale) {
@@ -156,6 +269,10 @@ export class SaleService {
     return this.prisma.sale.update({
       where: { id },
       data: {
+        subscribe_begin_date:
+          updateSaleDto.subscribe_begin_date ?? sale.subscribe_begin_date,
+        subscribe_generate_day:
+          updateSaleDto.subscribe_generate_day ?? sale.subscribe_generate_day,
         date: updateSaleDto.date ?? sale.date,
       },
     });

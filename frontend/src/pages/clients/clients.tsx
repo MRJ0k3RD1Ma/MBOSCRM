@@ -5,6 +5,7 @@ import {
   Dropdown,
   Form,
   Input,
+  message,
   Space,
   Table,
   Tooltip,
@@ -19,10 +20,11 @@ import {
   type CreateClientInput,
 } from "../../config/queries/clients/clients-querys";
 import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
-import ClientModal from "./ui/clients-form-modal";
-import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
 import { useNavigate } from "react-router-dom";
 import ClientsFilterModal from "./ui/clients-filter-modal";
+import dayjs from "dayjs";
+import { indexColumn } from "../../components/tables/indexColumn";
+import ClientFormModal from "./ui/clients-form-modal";
 
 export default function ClientsPage() {
   const [form] = Form.useForm();
@@ -42,7 +44,6 @@ export default function ClientsPage() {
     ...filters,
   });
 
-  const { data: types } = useGetAllClientTypes();
   const createClient = useCreateClient();
   const updateClient = useUpdateClient();
   const deleteClient = useDeleteClient();
@@ -50,8 +51,10 @@ export default function ClientsPage() {
   const onSubmit = (values: CreateClientInput) => {
     if (editing) {
       updateClient.mutate({ id: editing.id, ...values });
+      message.success("Mijoz yangilandi");
     } else {
       createClient.mutate(values);
+      message.success("Mijoz yaratildi");
     }
     setOpen(false);
     setEditing(null);
@@ -68,11 +71,25 @@ export default function ClientsPage() {
   };
 
   const columns = [
+    indexColumn(page, limit),
     { title: "Name", dataIndex: "name" },
     { title: "INN", dataIndex: "inn" },
     { title: "Phone", dataIndex: "phone" },
-    { title: "Address", dataIndex: "address" },
-    { title: "Description", dataIndex: "description" },
+    { title: "Mijoz turi", dataIndex: ["ClientType", "name"] },
+    {
+      title: "Balans",
+      dataIndex: "balance",
+      render: (balance: number) =>
+        balance ? balance.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
+    {
+      title: "So'ngi o'zgarish",
+      dataIndex: "updatedAt",
+      render: (text: string) =>
+        text
+          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
+          : "—",
+    },
     {
       title: "Actions",
       key: "actions",
@@ -134,12 +151,11 @@ export default function ClientsPage() {
           />
           <Button
             icon={<FilterOutlined />}
-            onClick={() => setFilterModalOpen(true)}
+            onClick={() => setFilterModalOpen(!filterModalOpen)}
           >
             Filter
           </Button>
         </Space>
-
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -152,7 +168,15 @@ export default function ClientsPage() {
           Yangi mijoz qo‘shish
         </Button>
       </Space>
-
+      <ClientsFilterModal
+        open={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+        initialValues={filters}
+      />
       <Table
         columns={columns}
         dataSource={data?.data || []}
@@ -177,7 +201,7 @@ export default function ClientsPage() {
         }}
       />
 
-      <ClientModal
+      <ClientFormModal
         open={open}
         onClose={() => {
           setOpen(false);
@@ -185,16 +209,6 @@ export default function ClientsPage() {
         }}
         onSubmit={onSubmit}
         initialValues={editing || undefined}
-        types={types?.data || []}
-      />
-      <ClientsFilterModal
-        open={filterModalOpen}
-        onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
-        initialValues={filters}
       />
     </Card>
   );

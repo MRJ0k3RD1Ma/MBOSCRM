@@ -13,7 +13,7 @@ export interface Product {
   priceIncome: number;
   reminderFirst: number;
   price: number;
-  type: "DEVICE" | "SERVICE" | string;
+  type: "DEVICE" | "SERVICE" | "SERVICE";
   countReminder: number;
   countArrived: number;
   countSale: number;
@@ -53,6 +53,7 @@ export const useGetAllProducts = (params?: {
   page?: number;
   limit?: number;
   name?: string;
+  type?: string;
 }) => {
   return useQuery<ProductResponse>({
     queryKey: ["products", params],

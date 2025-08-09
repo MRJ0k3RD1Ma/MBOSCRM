@@ -1,26 +1,30 @@
 import { Drawer, Form, Input, Select, Button } from "antd";
 import { useEffect } from "react";
-import type {
-  ClientType,
-  CreateClientInput,
-} from "../../../config/queries/clients/clients-querys";
+import type { CreateClientInput } from "../../../config/queries/clients/clients-querys";
+import { useThemeContext } from "../../../providers/theme-provider";
+import {
+  useGetAllRegions,
+  useGetDistrictsByRegion,
+} from "../../../config/queries/location/location-querys";
+import { useGetAllClientTypes } from "../../../config/queries/clients/client-type-querys";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onSubmit: (values: CreateClientInput) => void;
   initialValues?: Partial<CreateClientInput> | null;
-  types: ClientType[];
 }
 
-export default function ClientModal({
+export default function ClientFormModal({
   open,
   onClose,
   onSubmit,
   initialValues,
-  types,
 }: Props) {
   const [form] = Form.useForm<CreateClientInput>();
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
+  const { data: types } = useGetAllClientTypes();
 
   useEffect(() => {
     if (initialValues) {
@@ -29,6 +33,11 @@ export default function ClientModal({
       form.resetFields();
     }
   }, [initialValues, form]);
+
+  const regionId = Form.useWatch("regionId", form);
+
+  const { data: regions } = useGetAllRegions();
+  const { data: districts } = useGetDistrictsByRegion(regionId);
 
   const handleFinish = async () => {
     try {
@@ -47,6 +56,9 @@ export default function ClientModal({
       open={open}
       destroyOnClose
       width={400}
+      bodyStyle={{
+        background: isDark ? "#001529" : "#ffffff",
+      }}
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item
@@ -87,9 +99,48 @@ export default function ClientModal({
             showSearch
             optionFilterProp="label"
           >
-            {(types ?? []).map((type) => (
+            {types?.data.map((type: any) => (
               <Select.Option key={type.id} value={type.id} label={type.name}>
                 {type.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item name="regionId" label="Viloyat">
+          <Select
+            placeholder="Viloyatni tanlang"
+            showSearch
+            optionFilterProp="label"
+          >
+            {(regions ?? []).map((region) => (
+              <Select.Option
+                key={region.id}
+                value={region.id}
+                label={region.name}
+              >
+                {region.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item name="districtId" label="Tuman">
+          <Select
+            placeholder={
+              regionId ? "Tumanni tanlang" : "Avval viloyatni tanlang"
+            }
+            showSearch
+            optionFilterProp="label"
+            disabled={!regionId}
+          >
+            {(districts ?? []).map((district) => (
+              <Select.Option
+                key={district.id}
+                value={district.id}
+                label={district.name}
+              >
+                {district.name}
               </Select.Option>
             ))}
           </Select>

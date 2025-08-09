@@ -15,6 +15,10 @@ export interface Supplier {
   updatedAt?: string;
   registerId?: number;
   modifyId?: number;
+  register?: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface CreateSupplierInput {
@@ -42,6 +46,7 @@ export const useGetAllSuppliers = (params?: {
   name?: string;
   phone?: string;
   description?: string;
+  isPositiveBalance?: boolean;
 }) => {
   return useQuery<SupplierResponse>({
     queryKey: ["suppliers", params],

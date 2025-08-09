@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ArrivedService } from './arrived.service';
 import { CreateArrivedDto } from './dto/create-arrived.dto';
@@ -36,19 +37,22 @@ export class ArrivedController {
 
   @Get(':id')
   @DecoratorWrapper('find Arrived', true, [Role.Admin])
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.arrivedService.findOne(+id);
   }
 
   @Patch(':id')
   @DecoratorWrapper('update Arrived', true, [Role.Admin])
-  update(@Param('id') id: string, @Body() updateArrivedDto: UpdateArrivedDto) {
+  update(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updateArrivedDto: UpdateArrivedDto,
+  ) {
     return this.arrivedService.update(+id, updateArrivedDto);
   }
 
   @Delete(':id')
   @DecoratorWrapper('delete Arrived', true, [Role.Admin])
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.arrivedService.remove(+id);
   }
 }

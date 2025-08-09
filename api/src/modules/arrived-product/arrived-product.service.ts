@@ -3,14 +3,17 @@ import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { Prisma } from '@prisma/client';
 import { CreateArrivedProductDto } from './dto/create-arrived-product.dto';
-import { FindAllArrivedProdcutQueryDto } from './dto/findAll-arrived-product-query.dto';
+import { FindAllArrivedProductQueryDto } from './dto/findAll-arrived-product-query.dto';
 import { UpdateArrivedProductDto } from './dto/update-arrived-product.dto';
 
 @Injectable()
 export class ArrivedProductService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createArrivedProductDto: CreateArrivedProductDto) {
-    const { arrivedId, count, productId, price } = createArrivedProductDto;
+  async create(
+    createArrivedProductDto: CreateArrivedProductDto,
+    registerId: number,
+  ) {
+    const { arrivedId, count, productId } = createArrivedProductDto;
 
     if (!arrivedId) {
       throw new HttpError({
@@ -18,8 +21,8 @@ export class ArrivedProductService {
       });
     }
 
-    const arrived = await this.prisma.arrived.findUnique({
-      where: { id: arrivedId },
+    const arrived = await this.prisma.arrived.findFirst({
+      where: { id: arrivedId, isDeleted: false },
     });
     if (!arrived) {
       throw new HttpError({
@@ -27,29 +30,42 @@ export class ArrivedProductService {
       });
     }
 
-    const product = await this.prisma.product.findUnique({
-      where: { id: productId },
+    const product = await this.prisma.product.findFirst({
+      where: { id: productId, isDeleted: false },
     });
     if (!product) {
       throw new HttpError({
-        message: `Product with ID ${product} not found`,
+        message: `Product with ID ${productId} not found`,
       });
     }
 
     const arrivedproduct = await this.prisma.arrivedProduct.create({
       data: {
         count,
-        priceCount: price * count,
-        price,
+        priceCount: product.price * count,
+        price: product.price,
         arrivedId,
         productId,
+        registerId,
+      },
+    });
+
+    await this.prisma.product.update({
+      where: { id: productId },
+      data: {
+        countArrived: {
+          increment: count,
+        },
+        countReminder: {
+          increment: count,
+        },
       },
     });
 
     return arrivedproduct;
   }
 
-  async findAll(dto: FindAllArrivedProdcutQueryDto) {
+  async findAll(dto: FindAllArrivedProductQueryDto) {
     const {
       limit = 10,
       page = 1,
@@ -57,6 +73,7 @@ export class ArrivedProductService {
       maxPrice,
       productId,
       supplierId,
+      arrivedId,
     } = dto;
 
     const where: Prisma.ArrivedProductWhereInput = {
@@ -64,6 +81,10 @@ export class ArrivedProductService {
     };
     if (supplierId) {
       where.Arrived = { supplierId };
+    }
+
+    if (arrivedId) {
+      where.arrivedId = arrivedId;
     }
 
     if (productId) {
@@ -82,6 +103,11 @@ export class ArrivedProductService {
         where,
         skip: (page - 1) * limit,
         take: limit,
+        include: {
+          Arrived: { include: { supplier: true } },
+          Product: { include: { ProductUnit: true } },
+          register: true,
+        },
       }),
       this.prisma.arrivedProduct.count({ where }),
     ]);

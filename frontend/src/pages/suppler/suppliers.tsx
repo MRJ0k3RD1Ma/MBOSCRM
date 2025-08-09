@@ -23,6 +23,7 @@ import {
 } from "../../config/queries/supplier/supplier-querys";
 import SuppliersFilterModal from "./ui/suppliers-filter-modal";
 import SuppliersFormModal from "./ui/suppliers-form-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function Suppliers() {
   const [form] = Form.useForm();
@@ -67,11 +68,17 @@ export default function Suppliers() {
   };
 
   const columns = [
+    indexColumn(page, limit),
     { title: "Nomi", dataIndex: "name" },
     { title: "Telefon", dataIndex: "phone" },
     { title: "Qo‘shimcha telefon", dataIndex: "phoneTwo" },
     { title: "Izoh", dataIndex: "description" },
-    { title: "Balans", dataIndex: "balance" },
+    {
+      title: "Balans",
+      dataIndex: "balance",
+      render: (balance: number) =>
+        balance ? balance.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
     {
       title: "Amallar",
       key: "actions",
@@ -133,7 +140,7 @@ export default function Suppliers() {
           />
           <Button
             icon={<FilterOutlined />}
-            onClick={() => setFilterModalOpen(true)}
+            onClick={() => setFilterModalOpen(!filterModalOpen)}
           >
             Filter
           </Button>
@@ -151,7 +158,15 @@ export default function Suppliers() {
           Yangi yetkazib beruvchi
         </Button>
       </Space>
-
+      <SuppliersFilterModal
+        open={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+        initialValues={filters}
+      />
       <Table
         columns={columns}
         dataSource={data?.data || []}
@@ -184,16 +199,6 @@ export default function Suppliers() {
         }}
         onSubmit={onSubmit}
         initialValues={editing || undefined}
-      />
-
-      <SuppliersFilterModal
-        open={filterModalOpen}
-        onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
-        initialValues={filters}
       />
     </Card>
   );

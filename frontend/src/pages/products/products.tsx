@@ -24,6 +24,7 @@ import ProductsFilterModal from "./ui/products-filter-modal";
 import ProductsModal from "./ui/products-form-modal";
 import { useGetAllProductUnits } from "../../config/queries/products/product-unit-querys";
 import { useGetAllProductGroups } from "../../config/queries/products/product-gorup-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function ProductsPage() {
   const [form] = Form.useForm();
@@ -70,6 +71,7 @@ export default function ProductsPage() {
   };
 
   const columns = [
+    indexColumn(page, limit),
     { title: "Nomi", dataIndex: "name", key: "name" },
     { title: "Shtrix kodi", dataIndex: "barcode", key: "barcode" },
     {
@@ -85,10 +87,16 @@ export default function ProductsPage() {
       render: (_: any, row: Product) => {
         const unitName =
           unitsData?.data.find((u) => u.id === row.unitId)?.name || "";
-        return `${row.reminderFirst} , ${unitName}`;
+        return `${row.reminderFirst} ${unitName}`;
       },
     },
-    { title: "Sotuv narxi", dataIndex: "price", key: "price" },
+    {
+      title: "Sotuv narxi",
+      dataIndex: "price",
+      key: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
     { title: "Turi", dataIndex: "type", key: "type" },
     {
       title: "Amallar",
@@ -151,7 +159,7 @@ export default function ProductsPage() {
           />
           <Button
             icon={<FilterOutlined />}
-            onClick={() => setFilterModalOpen(true)}
+            onClick={() => setFilterModalOpen(!filterModalOpen)}
           >
             Filter
           </Button>
@@ -169,7 +177,16 @@ export default function ProductsPage() {
           Yangi mahsulot qo‘shish
         </Button>
       </Space>
-
+      <ProductsFilterModal
+        open={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+        initialValues={filters}
+        reminder={true}
+      />
       <Table
         columns={columns}
         dataSource={data?.data || []}
@@ -204,16 +221,6 @@ export default function ProductsPage() {
         initialValues={editing || undefined}
         units={unitsData?.data || []}
         group={groupData?.data || []}
-      />
-
-      <ProductsFilterModal
-        open={filterModalOpen}
-        onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
-        initialValues={filters}
       />
     </Card>
   );

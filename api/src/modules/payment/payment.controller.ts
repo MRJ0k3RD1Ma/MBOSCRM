@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -35,19 +36,22 @@ export class PaymentController {
 
   @Get(':id')
   @DecoratorWrapper('Get payment by id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.paymentService.findOne(+id);
   }
 
   @Patch(':id')
   @DecoratorWrapper('Update payment', true, [Role.Admin])
-  update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
+  update(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updatePaymentDto: UpdatePaymentDto,
+  ) {
     return this.paymentService.update(+id, updatePaymentDto);
   }
 
   @Delete(':id')
   @DecoratorWrapper('Delete payment', true, [Role.Admin])
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.paymentService.remove(+id);
   }
 }

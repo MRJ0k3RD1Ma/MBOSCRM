@@ -8,27 +8,29 @@ datasource db {
 }
 
 model Client {
-  id                     Int         @id @default(autoincrement())
+  id                     Int          @id @default(autoincrement())
   typeId                 Int?
-  name                   String      @db.VarChar(255)
-  inn                    String      @db.VarChar(255)
+  name                   String       @db.VarChar(255)
+  inn                    String       @db.VarChar(255)
   regionId               Int?
   districtId             Int?
-  address                String?     @db.VarChar(255)
-  balance                Float       @default(0)
-  description            String?     @db.Text
+  address                String?      @db.VarChar(255)
+  balance                Float        @default(0)
+  description            String?      @db.Text
   registerId             Int?
   modifyId               Int?
-  isDeleted              Boolean?    @default(false)
-  createdAt              DateTime    @default(now())
-  updatedAt              DateTime    @default(now()) @updatedAt
-  phone                  String?     @unique() @db.VarChar(255)
-  District               District?   @relation(fields: [districtId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Client_modifyId   User?       @relation("Client_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Region                 Region?     @relation(fields: [regionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Client_registerId User?       @relation("Client_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  ClientType             ClientType? @relation(fields: [typeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  isDeleted              Boolean?     @default(false)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @default(now()) @updatedAt
+  phone                  String       @db.VarChar(255)
+  District               District?    @relation(fields: [districtId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Client_modifyId   User?        @relation("Client_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Client_registerId User?        @relation("Client_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Region                 Region?      @relation(fields: [regionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ClientType             ClientType?  @relation(fields: [typeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Sale                   Sale[]
+  PaidClient             PaidClient[]
+  Subscribe              Subscribe[]
 
   @@index([districtId], map: "FK_client_district_id")
   @@index([modifyId], map: "FK_client_modify_id")
@@ -65,63 +67,68 @@ model District {
 }
 
 model Product {
-  id                     Int              @id @default(autoincrement())
-  name                   String           @db.VarChar(255)
-  barcode                String?          @db.VarChar(255)
-  barcodeId              Int?             @unique()
-  groupId                Int
-  unitId                 Int?
-  priceIncome            Float            @default(0)
-  reminderFirst          Float            @default(0)
-  price                  Float            @default(0)
-  type                   ProductType
-  countReminder          Float            @default(0)
-  countArrived           Float            @default(0)
-  countSale              Float            @default(0)
-  isDeleted              Boolean?         @default(false)
-  createdAt              DateTime         @default(now())
-  updatedAt              DateTime         @default(now())
-  creatorId              Int?
-  modifyId               Int?
-  ProductGroup           ProductGroup     @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Product_modifyId  User?            @relation("Product_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_Product_creatorId User?            @relation("Product_creatorId", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  ProductUnit            ProductUnit?     @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  ArrivedProduct         ArrivedProduct[]
-  SaleProduct            SaleProduct[]
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(255)
+  barcode        String?          @db.VarChar(255)
+  barcodeId      Int?             @unique()
+  groupId        Int
+  unitId         Int?
+  priceIncome    Float            @default(0)
+  reminderFirst  Float            @default(0)
+  price          Float            @default(0)
+  type           ProductType
+  countReminder  Float            @default(0)
+  countArrived   Float            @default(0)
+  countSale      Float            @default(0)
+  isDeleted      Boolean?         @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  registerId     Int?
+  modifyId       Int?
+  ProductGroup   ProductGroup     @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  modify         User?            @relation("Product_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  register       User?            @relation("Product_creatorId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ProductUnit    ProductUnit?     @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ArrivedProduct ArrivedProduct[]
+  SaleProduct    SaleProduct[]
 
   @@index([groupId], map: "FK_product_group_id")
   @@index([modifyId], map: "FK_product_modify_id")
-  @@index([creatorId], map: "FK_product_creator_id")
+  @@index([registerId], map: "FK_product_register_id")
   @@index([unitId], map: "FK_product_unit_id")
   @@map("product")
 }
 
 model ProductGroup {
-  id                          Int       @id @default(autoincrement())
-  name                        String
-  isDeleted                   Boolean?  @default(false)
-  createdAt                   DateTime  @default(now())
-  updatedAt                   DateTime  @default(now()) @updatedAt
-  creatorId                   Int
-  modifyId                    Int
-  Product                     Product[]
-  User_ProductGroup_modifyId  User      @relation("ProductGroup_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User_ProductGroup_creatorId User      @relation("ProductGroup_creatorId", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id         Int       @id @default(autoincrement())
+  name       String
+  isDeleted  Boolean?  @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+  registerId Int
+  modifyId   Int
+  Product    Product[]
+  modify     User      @relation("ProductGroup_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  register   User      @relation("ProductGroup_creatorId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@index([modifyId], map: "FK_product_type_modify_id")
-  @@index([creatorId], map: "FK_product_type_creator_id")
+  @@index([modifyId], map: "FK_product_group_modify_id")
+  @@index([registerId], map: "FK_product_group_register_id")
   @@map("product_group")
 }
 
 model ProductUnit {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
-  isDeleted Boolean?  @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
-  Product   Product[]
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  isDeleted  Boolean?  @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+  Product    Product[]
+  registerId Int?
+  modifyId   Int?
+  register   User?     @relation("ProductUnit_registerId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  modify     User?     @relation("ProductUnit_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([registerId], map: "FK_product_unit_register_id")
   @@map("product_unit")
 }
 
@@ -142,25 +149,51 @@ model Setting {
 }
 
 model User {
-  id                                  Int            @id @default(autoincrement())
-  name                                String         @db.VarChar(255)
-  username                            String         @db.VarChar(255)
-  password                            String         @db.VarChar(500)
-  phone                               String?        @db.VarChar(255)
-  roleId                              Int?
-  isDeleted                           Boolean?       @default(false)
-  createdAt                           DateTime       @default(now())
-  updatedAt                           DateTime       @default(now()) @updatedAt
-  chatId                              String?        @db.VarChar(255)
-  Client_Client_modifyId              Client[]       @relation("Client_modifyId")
-  Client_Client_registerId            Client[]       @relation("Client_registerId")
-  ClientType_ClientType_modifyId      ClientType[]   @relation("ClientType_modifyId")
-  ClientType_ClientType_registerId    ClientType[]   @relation("ClientType_registerId")
-  Product_Product_modifyId            Product[]      @relation("Product_modifyId")
-  Product_Product_creatorId           Product[]      @relation("Product_creatorId")
-  ProductGroup_ProductGroup_modifyId  ProductGroup[] @relation("ProductGroup_modifyId")
-  ProductGroup_ProductGroup_creatorId ProductGroup[] @relation("ProductGroup_creatorId")
-  UserRole                            UserRole?      @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                                       Int              @id @default(autoincrement())
+  name                                     String           @db.VarChar(255)
+  username                                 String           @db.VarChar(255)
+  password                                 String           @db.VarChar(500)
+  phone                                    String?          @db.VarChar(255)
+  roleId                                   Int?
+  isDeleted                                Boolean?         @default(false)
+  createdAt                                DateTime         @default(now())
+  updatedAt                                DateTime         @default(now()) @updatedAt
+  chatId                                   String?          @db.VarChar(255)
+  Client_Client_modifyId                   Client[]         @relation("Client_modifyId")
+  Client_Client_registerId                 Client[]         @relation("Client_registerId")
+  ClientType_ClientType_modifyId           ClientType[]     @relation("ClientType_modifyId")
+  ClientType_ClientType_registerId         ClientType[]     @relation("ClientType_registerId")
+  Product_Product_modifyId                 Product[]        @relation("Product_modifyId")
+  Product_Product_creatorId                Product[]        @relation("Product_creatorId")
+  ProductGroup_ProductGroup_modifyId       ProductGroup[]   @relation("ProductGroup_modifyId")
+  ProductGroup_ProductGroup_creatorId      ProductGroup[]   @relation("ProductGroup_creatorId")
+  ProductUnit_ProductUnit_registerId       ProductUnit[]    @relation("ProductUnit_registerId")
+  ProductUnit_ProductUnit_modifyId         ProductUnit[]    @relation("ProductUnit_modifyId")
+  Arrived_Arrived_registerId               Arrived[]        @relation("Arrived_registerId")
+  Arrived_Arrived_modifyId                 Arrived[]        @relation("Arrived_modifyId")
+  ArrivedProduct_ArrivedProduct_registerId ArrivedProduct[] @relation("ArrivedProduct_registerId")
+  ArrivedProduct_ArrivedProduct_modifyId   ArrivedProduct[] @relation("ArrivedProduct_modifyId")
+  PaidSupplier_PaidSupplier_registerId     PaidSupplier[]   @relation("PaidSupplier_registerId")
+  PaidSupplier_PaidSupplier_modifyId       PaidSupplier[]   @relation("PaidSupplier_modifyId")
+  Supplier_Supplier_registerId             Supplier[]       @relation("Supplier_registerId")
+  Supplier_Supplier_modifyId               Supplier[]       @relation("Supplier_modifyId")
+  Sale_Sale_registerId                     Sale[]           @relation("RegisterRelation")
+  Sale_Sale_modifyId                       Sale[]           @relation("ModifyRelation")
+  SaleProduct_SaleProduct_registerId       SaleProduct[]    @relation("RegisterRelation")
+  SaleProduct_SaleProduct_modifyId         SaleProduct[]    @relation("ModifyRelation")
+  PaidClient_PaidClient_registerId         PaidClient[]     @relation("PaidClient_registerId")
+  PaidClient_PaidClient_modifyId           PaidClient[]     @relation("PaidClient_modifyId")
+  PaidServer_PaidServer_registerId         PaidServer[]     @relation("PaidServer_registerId")
+  PaidServer_PaidServer_modifyId           PaidServer[]     @relation("PaidServer_modifyId")
+  Server_Server_registerId                 Server[]         @relation("Server_register")
+  Server_Server_modifyId                   Server[]         @relation("Server_modify")
+  Payment_Payment_registerId               Payment[]        @relation("Payment_registerId")
+  Payment_Payment_modifyId                 Payment[]        @relation("Payment_modifyId")
+  PaidOther_PaidOther_registerId           PaidOther[]      @relation("PaidOther_registerId")
+  PaidOther_PaidOther_modifyId             PaidOther[]      @relation("PaidOther_modifyId")
+  PaidOtherGroup_PaidOtherGroup_registerId PaidOtherGroup[] @relation("PaidOtherGroup_registerId")
+  PaidOtherGroup_PaidOtherGroup_modifyId   PaidOtherGroup[] @relation("PaidOtherGroup_modifyId")
+  UserRole                                 UserRole?        @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([roleId], map: "FK_user_role_id")
   @@map("user")
@@ -183,9 +216,8 @@ model Arrived {
   modifyId       Int?
   ArrivedProduct ArrivedProduct[]
 
-  // You might want to add relations to User table for registerId and modifyId
-  // User_Arrived_registerId User? @relation("Arrived_registerId", fields: [registerId], references: [id])
-  // User_Arrived_modifyId User? @relation("Arrived_modifyId", fields: [modifyId], references: [id])
+  register User? @relation("Arrived_registerId", fields: [registerId], references: [id])
+  modify   User? @relation("Arrived_modifyId", fields: [modifyId], references: [id])
 
   @@map("arrived")
 }
@@ -202,6 +234,10 @@ model ArrivedProduct {
   updatedAt  DateTime @default(now()) @updatedAt
   Arrived    Arrived? @relation(fields: [arrivedId], references: [id])
   Product    Product? @relation(fields: [productId], references: [id])
+  registerId Int?
+  modifyId   Int?
+  register   User?    @relation("ArrivedProduct_registerId", fields: [registerId], references: [id])
+  modify     User?    @relation("ArrivedProduct_modifyId", fields: [modifyId], references: [id])
 
   @@index([arrivedId], map: "arrived_id")
   @@index([productId], map: "product_id")
@@ -219,6 +255,8 @@ model PaidSupplier {
   updatedAt  DateTime  @default(now()) @updatedAt
   registerId Int?
   modifyId   Int?
+  register   User?     @relation("PaidSupplier_registerId", fields: [registerId], references: [id])
+  modify     User?     @relation("PaidSupplier_modifyId", fields: [modifyId], references: [id])
   Payment    Payment?  @relation(fields: [paymentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   // Assuming 'supplier' refers to a User or a dedicated Supplier model if it exists
   // User_PaidSupplier_registerId User? @relation("PaidSupplier_registerId", fields: [registerId], references: [id])
@@ -240,31 +278,38 @@ model Supplier {
   updatedAt   DateTime  @default(now()) @updatedAt
   registerId  Int?
   modifyId    Int?
-  arrived     Arrived[] // 1:N bog'lanish
-  // If `register_id` and `modify_id` refer to the `User` table, uncomment and adjust these relations:
-  // User_Supplier_registerId User? @relation("Supplier_registerId", fields: [registerId], references: [id])
-  // User_Supplier_modifyId   User? @relation("Supplier_modifyId", fields: [modifyId], references: [id])
+  arrived     Arrived[]
+  register    User?     @relation("Supplier_registerId", fields: [registerId], references: [id])
+  modify      User?     @relation("Supplier_modifyId", fields: [modifyId], references: [id])
 
-  @@map("suppler") // Keep the original table name mapping
+  @@map("suppler")
 }
 
 model Sale {
-  id          Int           @id @default(autoincrement())
-  date        DateTime?     @db.Date
-  code        String?       @db.VarChar(255)
-  codeId      Int?          @default(1)
-  client      Client        @relation(fields: [clientId], references: [id])
-  clientId    Int           @default(1) @map("client_id")
-  price       Float         @default(0)
-  dept        Float         @default(0)
-  credit      Float         @default(0)
-  state       SaleState     @default(CLOSED)
-  isDeleted   Boolean?      @default(false)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
-  registerId  Int?
-  modifyId    Int?
-  SaleProduct SaleProduct[]
+  id         Int       @id @default(autoincrement())
+  date       DateTime? @db.Date
+  code       String?   @db.VarChar(255)
+  codeId     Int?      @default(1)
+  client     Client    @relation(fields: [clientId], references: [id])
+  clientId   Int       @default(1) @map("client_id")
+  price      Float     @default(0)
+  dept       Float     @default(0)
+  credit     Float     @default(0)
+  state      SaleState @default(CLOSED)
+  isDeleted  Boolean?  @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+  register   User?     @relation("RegisterRelation", fields: [registerId], references: [id])
+  registerId Int?
+
+  modifier               User?         @relation("ModifyRelation", fields: [modifyId], references: [id])
+  modifyId               Int?
+  clientName             String?       @db.VarChar(255)
+  SaleProduct            SaleProduct[]
+  subscribe_begin_date   DateTime?
+  subscribe_generate_day Int?
+  Subscribe              Subscribe[]
+  PaidClient             PaidClient[]
 }
 
 model SaleProduct {
@@ -281,12 +326,96 @@ model SaleProduct {
   modifyId     Int?
   isDeleted    Boolean?  @default(false)
   createdAt    DateTime? @default(now())
-  updatedAt    DateTime? @updatedAt
+  updatedAt    DateTime? @default(now()) @updatedAt
+  register     User?     @relation("RegisterRelation", fields: [registerId], references: [id])
+  modify       User?     @relation("ModifyRelation", fields: [modifyId], references: [id])
 
   @@index([saleId])
   @@index([productId])
   @@index([registerId])
   @@index([modifyId])
+}
+
+model PaidClient {
+  id         Int       @id @default(autoincrement())
+  clientId   Int?      @map("client_id")
+  saleId     Int?      @map("sale_id")
+  paymentId  Int?      @map("payment_id")
+  paidDate   DateTime? @map("paid_date") @db.Date
+  price      Float?
+  isDeleted  Boolean?  @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+  registerId Int?
+  modifyId   Int?
+  register   User?     @relation("PaidClient_registerId", fields: [registerId], references: [id])
+  modify     User?     @relation("PaidClient_modifyId", fields: [modifyId], references: [id])
+  Client     Client?   @relation(fields: [clientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Sale       Sale?     @relation(fields: [saleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Payment    Payment?  @relation(fields: [paymentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model PaidServer {
+  id            Int      @id @default(autoincrement())
+  serverId      Int
+  endDate       DateTime
+  paymentTypeId Int
+  paymentType   Payment  @relation(fields: [paymentTypeId], references: [id])
+  server        Server   @relation(fields: [serverId], references: [id])
+  price         Float
+  description   String
+  isDeleted     Boolean? @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+  registerId    Int?
+  modifyId      Int?
+  register      User?    @relation("PaidServer_registerId", fields: [registerId], references: [id])
+  modify        User?    @relation("PaidServer_modifyId", fields: [modifyId], references: [id])
+}
+
+model Server {
+  id          Int         @id @default(autoincrement())
+  name        String?     @db.VarChar(255)
+  responsible String?     @db.VarChar(255)
+  plan        String?     @db.VarChar(255)
+  endDate     DateTime?
+  isDeleted   Boolean?    @default(false)
+  createdAt   DateTime    @default(now()) @map("created")
+  updatedAt   DateTime    @default(now()) @updatedAt @map("updated")
+  registerId  Int?
+  modifyId    Int?
+  state       ServerState @default(RUNNING)
+
+  register    User?        @relation("Server_register", fields: [registerId], references: [id])
+  modify      User?        @relation("Server_modify", fields: [modifyId], references: [id])
+  paidServers PaidServer[]
+
+  @@map("servers")
+}
+
+enum ServerState {
+  RUNNING
+  CLOSED
+}
+
+// Uncomment if you have User relations for registerId and modifyId
+// User_PaidClient_registerId User? @relation("PaidClient_registerId", fields: [registerId], references: [id])
+// User_PaidClient_modifyId   User? @relation("PaidClient_modifyId", fields: [modifyId], references: [id])
+model Subscribe {
+  id          Int            @id @default(autoincrement())
+  saleId      Int?
+  sale        Sale?          @relation(fields: [saleId], references: [id])
+  clientId    Int
+  client      Client         @relation(fields: [clientId], references: [id])
+  paying_date DateTime
+  price       Float
+  paid        Float
+  state       SubscribeState @default(NOTPAYING)
+  isDeleted   Boolean        @default(false)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt
+
+  @@index([clientId], map: "FK_paid_client_client_id")
 }
 
 model Payment {
@@ -296,9 +425,51 @@ model Payment {
   isDeleted    Boolean?       @default(false)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now()) @updatedAt
+  register     User?          @relation("Payment_registerId", fields: [registerId], references: [id])
+  modify       User?          @relation("Payment_modifyId", fields: [modifyId], references: [id])
+  registerId   Int?
+  modifyId     Int?
   PaidSupplier PaidSupplier[]
+  PaidClient   PaidClient[]
+  PaidServer   PaidServer[]
 
   @@map("payment")
+}
+
+model PaidOther {
+  id          Int            @id @default(autoincrement())
+  type        PaidOtherType
+  groupId     Int
+  price       Int
+  description String?
+  paidDate    DateTime       @default(now())
+  isDeleted   Boolean        @default(false)
+  group       PaidOtherGroup @relation(references: [id], fields: [groupId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  registerId Int?
+  modifyId   Int?
+
+  register User? @relation("PaidOther_registerId", fields: [registerId], references: [id])
+  modify   User? @relation("PaidOther_modifyId", fields: [modifyId], references: [id])
+}
+
+model PaidOtherGroup {
+  id        Int     @id @default(autoincrement())
+  name      String
+  isDeleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  registerId Int?
+  modifyId   Int?
+
+  register  User?       @relation("PaidOtherGroup_registerId", fields: [registerId], references: [id])
+  modify    User?       @relation("PaidOtherGroup_modifyId", fields: [modifyId], references: [id])
+  PaidOther PaidOther[]
 }
 
 model UserRole {
@@ -312,10 +483,20 @@ model UserRole {
   @@map("user_role")
 }
 
+enum PaidOtherType {
+  INCOME
+  OUTCOME
+}
+
 enum ProductType {
   SERVICE
   DEVICE
   SUBSCRIPTION
+}
+
+enum SubscribeState {
+  NOTPAYING
+  PAID
 }
 
 enum SaleState {

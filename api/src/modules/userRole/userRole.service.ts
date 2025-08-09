@@ -9,6 +9,18 @@ import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 export class UserRoleService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async onModuleInit() {
+    const count = await this.prisma.userRole.count();
+    if (count == 0) {
+      await this.create({
+        name: 'superadmin',
+      });
+      await this.create({
+        name: 'admin',
+      });
+    }
+  }
+
   async create(createUserRoleDto: CreateUserRoleDto) {
     const userRole = await this.prisma.userRole.create({
       data: createUserRoleDto,

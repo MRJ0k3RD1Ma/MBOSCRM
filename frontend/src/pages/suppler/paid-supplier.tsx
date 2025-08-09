@@ -23,6 +23,7 @@ import {
 } from "../../config/queries/supplier/paid-supplier-querys";
 import { useGetAllSuppliers } from "../../config/queries/supplier/supplier-querys";
 import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function PaidSuppliers() {
   const [form] = Form.useForm();
@@ -70,14 +71,19 @@ export default function PaidSuppliers() {
   };
 
   const columns = [
-    { title: "ID", dataIndex: "id" },
+    indexColumn(page, limit),
     {
       title: "Ta'minotchi",
       dataIndex: "supplierId",
       render: (supplierId: number) =>
         suppliersData?.data.find((u) => u.id === supplierId)?.name || "–",
     },
-    { title: "To‘lov miqdori", dataIndex: "price" },
+    {
+      title: "To‘lov miqdori",
+      dataIndex: "price",
+      render: (dept: number) =>
+        dept ? dept.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
     {
       title: "To‘langan sana",
       dataIndex: "paidDate",
@@ -134,7 +140,7 @@ export default function PaidSuppliers() {
       >
         <Button
           icon={<FilterOutlined />}
-          onClick={() => setFilterModalOpen(true)}
+          onClick={() => setFilterModalOpen(!filterModalOpen)}
         >
           Filter
         </Button>
@@ -151,6 +157,18 @@ export default function PaidSuppliers() {
           Yangi to‘lov
         </Button>
       </Space>
+
+      <PaidSupplierFilterModal
+        open={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+        initialValues={filters}
+        suppliers={suppliersData?.data || []}
+        payments={paymentsData?.data || []}
+      />
 
       <Table
         columns={columns}
@@ -175,18 +193,7 @@ export default function PaidSuppliers() {
         initialValues={editing || undefined}
         suppliers={suppliersData?.data || []}
         payments={paymentsData?.data || []}
-      />
-
-      <PaidSupplierFilterModal
-        open={filterModalOpen}
-        onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
-        initialValues={filters}
-        suppliers={suppliersData?.data || []}
-        payments={paymentsData?.data || []}
+        supplierId={null}
       />
     </Card>
   );

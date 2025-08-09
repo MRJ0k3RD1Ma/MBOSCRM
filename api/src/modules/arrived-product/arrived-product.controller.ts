@@ -4,16 +4,19 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
+  Req,
 } from '@nestjs/common';
 import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from 'src/common/auth/roles/role.enum';
 import { ArrivedProductService } from './arrived-product.service';
 import { CreateArrivedProductDto } from './dto/create-arrived-product.dto';
-import { FindAllArrivedProdcutQueryDto } from './dto/findAll-arrived-product-query.dto';
+import { FindAllArrivedProductQueryDto } from './dto/findAll-arrived-product-query.dto';
 import { UpdateArrivedProductDto } from './dto/update-arrived-product.dto';
+import { Request } from 'express';
 
 @Controller('arrived-product')
 export class ArrivedProductController {
@@ -21,26 +24,32 @@ export class ArrivedProductController {
 
   @Post()
   @DecoratorWrapper('create ArrivedProduct', true, [Role.Admin])
-  create(@Body() createArrivedProductDto: CreateArrivedProductDto) {
-    return this.arrivedproductService.create(createArrivedProductDto);
+  create(
+    @Body() createArrivedProductDto: CreateArrivedProductDto,
+    @Req() req: Request,
+  ) {
+    return this.arrivedproductService.create(
+      createArrivedProductDto,
+      req.user.id,
+    );
   }
 
   @Get()
   @DecoratorWrapper('find ArrivedProduct', true, [Role.Admin])
-  findAll(@Query() dto: FindAllArrivedProdcutQueryDto) {
+  findAll(@Query() dto: FindAllArrivedProductQueryDto) {
     return this.arrivedproductService.findAll(dto);
   }
 
   @Get(':id')
   @DecoratorWrapper('find ArrivedProduct', true, [Role.Admin])
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.arrivedproductService.findOne(+id);
   }
 
   @Patch(':id')
   @DecoratorWrapper('update ArrivedProduct', true, [Role.Admin])
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateArrivedProductDto: UpdateArrivedProductDto,
   ) {
     return this.arrivedproductService.update(+id, updateArrivedProductDto);
@@ -48,7 +57,7 @@ export class ArrivedProductController {
 
   @Delete(':id')
   @DecoratorWrapper('delete ArrivedProduct', true, [Role.Admin])
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.arrivedproductService.remove(+id);
   }
 }

@@ -3,36 +3,57 @@ import { Link, useLocation } from "react-router-dom";
 
 const nameMap: Record<string, string> = {
   dashboard: "Bosh sahifa",
-  clients: "Mijozlar",
-  "client-type": "Mijoz turlari",
-  client: "Mijoz tafsiloti",
-  products: "Mahsulotlar",
+  subscribes: "Obunalar",
+  "sale/create": "Sotuvni amalga oshirish",
+  sales: "Sotilgan mahsulotlar",
+  "sales-credit": "Qarzdorliklar",
+  "price-curant": "Prayskurant",
+  "paid-clients": "Mijoz to‘lovlari",
+  "paid-suppliers": "Yetkazuvchilarga to‘langanlar",
+  "paid-other": "Boshqa xarajatlar",
+  "paid-server": "Server xarajatlari",
+  "arrived/create": "Mahsulot qabul qilish",
+  arriveds: "Skladga qabul qilingan mahsulotlar",
+  "arriveds-credit": "Qoldiqlar",
+  servers: "Serverlar",
+  products: "Mahsulotlar ro‘yxati",
   "product-group": "Mahsulot guruhlari",
-  "product-unit": "O‘lchov birliklari",
-  product: "Mahsulot tafsiloti",
-  suppliers: "Ta'minotchilar",
-  supplier: "Ta'minotchi tafsiloti",
-  "paid-suppliers": "To‘lov qilingan ta'minotchilar",
+  "product-unit": "Mahsulot birliklari",
+  clients: "Mijozlar ro‘yxati",
+  "clients-credit": "Qarzdor mijozlar",
+  "clients-over-paid": "Ortiqcha to‘lagan mijozlar",
+  "client-type": "Mijoz turlari",
+  suppliers: "Yetkazib beruvchilar ro‘yxati",
+  "paid-suppliers-list": "To‘lov qilingan yetkazuvchilar",
+  "arrived-products": "Kelgan mahsulotlar",
+  "supplier-credit": "Qarzdor yetkazib beruvchilar",
+  "supplier-over-paid": "Ortiqcha to‘lovlar",
+  "paid-other-group": "Boshqa xarajatlar guruhi",
   payment: "To‘lov turlari",
-  arriveds: "Kirimlar",
+  client: "Mijoz tafsiloti",
+  product: "Mahsulot tafsiloti",
+  supplier: "Yetkazib beruvchi tafsiloti",
   arrived: "Kirim tafsiloti",
-  "arrived/create": "Yangi kirim",
   "arrived/edit": "Kirimni tahrirlash",
+  sale: "Sotuv tafsiloti",
+  subscribe: "Obuna tafsiloti",
+  users: "Foydalanuvchilar ro’yhati",
   profile: "Profil",
 };
 
 export function usePageTitle() {
   const location = useLocation();
   const pathSnippets = location.pathname.split("/").filter(Boolean);
-  const lastKey = pathSnippets.slice(0).join("/");
-  const lastSegment = pathSnippets[pathSnippets.length - 1];
-  return nameMap[lastKey] || nameMap[lastSegment] || "Bosh sahifa";
+
+  const fullPath = pathSnippets.join("/");
+  const lastKey = pathSnippets[pathSnippets.length - 1];
+
+  return nameMap[fullPath] || nameMap[lastKey] || "Sahifa";
 }
 
 export default function BreadcrumbNav() {
   const location = useLocation();
   const pathSnippets = location.pathname.split("/").filter(Boolean);
-
   if (pathSnippets.length === 1 && pathSnippets[0] === "dashboard") {
     return (
       <Breadcrumb style={{ margin: "16px 24px 0" }}>
@@ -43,13 +64,18 @@ export default function BreadcrumbNav() {
     );
   }
 
-  const items = [
+  const breadcrumbItems = [
     <Breadcrumb.Item key="dashboard">
       <Link to="/dashboard">Bosh sahifa</Link>
     </Breadcrumb.Item>,
     ...pathSnippets.map((_, index) => {
       const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
-      const name = nameMap[pathSnippets[index]] || pathSnippets[index];
+      const segmentKey = pathSnippets[index];
+      const name =
+        nameMap[url.slice(1)] ||
+        nameMap[segmentKey] ||
+        (Number(segmentKey) ? "Tafsilot" : segmentKey);
+
       return (
         <Breadcrumb.Item key={url}>
           <Link to={url}>{name}</Link>
@@ -58,5 +84,7 @@ export default function BreadcrumbNav() {
     }),
   ];
 
-  return <Breadcrumb style={{ margin: "16px 24px 0" }}>{items}</Breadcrumb>;
+  return (
+    <Breadcrumb style={{ margin: "16px 24px 0" }}>{breadcrumbItems}</Breadcrumb>
+  );
 }

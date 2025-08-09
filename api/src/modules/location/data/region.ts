@@ -7,7 +7,6 @@ interface RegionData {
 }
 
 export async function main(prisma: PrismaClient) {
-  console.log(regions);
   for (const region of regions as RegionData[]) {
     await prisma.region.upsert({
       where: { id: region.id },

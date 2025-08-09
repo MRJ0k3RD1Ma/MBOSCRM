@@ -21,6 +21,7 @@ import {
   useGetAllProductGroups,
 } from "../../config/queries/products/product-gorup-querys";
 import ProductGroupFormModal from "./ui/product-group-form-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function ProductGroup() {
   const [search, setSearch] = useState("");
@@ -52,11 +53,7 @@ export default function ProductGroup() {
   }, [filters]);
 
   const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    indexColumn(filters.page, filters.limit),
     {
       title: "Guruh nomi",
       dataIndex: "name",

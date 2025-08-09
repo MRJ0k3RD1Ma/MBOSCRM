@@ -19,6 +19,7 @@ import {
   useUpdatePayment,
   type Payment,
 } from "../../config/queries/payment/payment-querys";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function Payments() {
   const [search, setSearch] = useState("");
@@ -57,6 +58,7 @@ export default function Payments() {
   };
 
   const columns = [
+    indexColumn(page, limit),
     { title: "Nomi", dataIndex: "name" },
     { title: "Ikon", dataIndex: "icon" },
     {

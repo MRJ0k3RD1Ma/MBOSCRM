@@ -16,31 +16,49 @@ import { ArrivedModule } from './modules/arrived/arrived.module';
 import { SaleProductModule } from './modules/sale-product/sale-product.module';
 import { ArrivedProductModule } from './modules/arrived-product/arrived-product.module';
 import { SaleModule } from './modules/sale/sale.module';
+import { PaidClientModule } from './modules/paid-client/paid-client.module';
+import { SubscribeModule } from './modules/subscribe/subscribe.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { PaidOtherGroupModule } from './modules/paid-other-group/paid-other-group.module';
+import { PaidOtherModule } from './modules/paid-other/paid-other.module';
+import { StatisticsModule } from './modules/statistics/statistics.module';
+import { PaidServerModule } from './modules/paid-server/paid-server.module';
+import { ServerModule } from './modules/server/server.module';
+import { NestjsGrammyModule } from '@grammyjs/nestjs';
+import { env } from './common/config';
 
 @Module({
   controllers: [],
   providers: [],
   imports: [
     LocationModule,
+    UserRoleModule,
     UserModule,
+    StatisticsModule,
     SettingsModule,
     PrismaModule,
     ClientTypeModule,
+    ProductUnitModule,
     ClientModule,
     ProductGroupModule,
-    UserRoleModule,
     SettingsModule,
     PrismaModule,
     ProductModule,
-    ProductUnitModule,
     SupplierModule,
-    PaidSupplierModule,
     PaymentModule,
+    PaidSupplierModule,
     ArrivedModule,
     SaleModule,
     SaleProductModule,
-    SaleModule,
+    SubscribeModule,
     ArrivedProductModule,
+    PaidClientModule,
+    PaidOtherGroupModule,
+    PaidOtherModule,
+    PaidServerModule,
+    ServerModule,
+    ScheduleModule.forRoot(),
+    NestjsGrammyModule.forRoot({ token: env.BOT_TOKEN }),
   ],
 })
 export class AppModule {}

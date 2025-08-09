@@ -1,5 +1,8 @@
-import { Modal, Form, Input, Select, InputNumber, Row, Col } from "antd";
-import dayjs from "dayjs";
+import { Button, Col, Form, Input, InputNumber, Row, Select } from "antd";
+import { useEffect } from "react";
+import { useToken } from "antd/es/theme/internal";
+import { useGetAllProductUnits } from "../../../config/queries/products/product-unit-querys";
+import { useGetAllProductGroups } from "../../../config/queries/products/product-gorup-querys";
 
 const { Option } = Select;
 
@@ -8,6 +11,7 @@ type Props = {
   onClose: () => void;
   onApply: (filters: Record<string, any>) => void;
   initialValues: Record<string, any>;
+  reminder: boolean;
 };
 
 export default function ProductsFilterModal({
@@ -15,107 +19,122 @@ export default function ProductsFilterModal({
   onClose,
   onApply,
   initialValues,
+  reminder,
 }: Props) {
   const [form] = Form.useForm();
+  const [, token] = useToken();
+  const { data: unitsData } = useGetAllProductUnits();
+  const { data: groupData } = useGetAllProductGroups();
 
-  const handleOk = () => {
-    form.validateFields().then((values) => {
-      onApply(values);
-      onClose();
-    });
-  };
+  useEffect(() => {
+    if (open) {
+      form.setFieldsValue(initialValues);
+    }
+  }, [open]);
+
   const handleClear = () => {
     form.resetFields();
     onApply({});
     onClose();
   };
 
+  const handleApply = () => {
+    form.validateFields().then((values) => {
+      onApply(values);
+      onClose();
+    });
+  };
+
+  if (!open) return null;
+
   return (
-    <Modal
-      title="Maxsulotlar bo‘yicha filter"
-      open={open}
-      onOk={handleOk}
-      onCancel={handleClear}
-      okText="Qo‘llash"
-      cancelText="Tozalash"
-      width={800}
+    <div
+      style={{
+        backgroundColor: token.colorBgContainer,
+        color: token.colorText,
+        padding: 16,
+        borderRadius: 8,
+        marginBottom: 16,
+        boxShadow: token.boxShadowSecondary,
+        border: `1px solid ${token.colorBorderSecondary}`,
+      }}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        initialValues={{
-          ...initialValues,
-          createdAt: initialValues.createdAtFrom
-            ? [
-                dayjs(initialValues.createdAtFrom),
-                dayjs(initialValues.createdAtTo),
-              ]
-            : undefined,
-          updatedAt: initialValues.updatedAtFrom
-            ? [
-                dayjs(initialValues.updatedAtFrom),
-                dayjs(initialValues.updatedAtTo),
-              ]
-            : undefined,
-        }}
-      >
+      <Form form={form} layout="vertical" initialValues={initialValues}>
         <Row gutter={16}>
-          <Col span={12}>
+          <Col span={6}>
             <Form.Item label="Nomi" name="name">
               <Input placeholder="Masalan: Apple" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col span={6}>
             <Form.Item label="Shtrix kod" name="barcode">
-              <Input placeholder="Masalan: 1234567890123" />
+              <Input placeholder="1234567890123" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col span={6}>
             <Form.Item label="Guruh ID" name="groupId">
-              <Input placeholder="Masalan: 1" />
+              <Select placeholder="Tanlang" showSearch optionFilterProp="label">
+                {groupData?.data.map((item) => (
+                  <Select.Option
+                    key={item.id}
+                    value={item.id}
+                    label={item.name}
+                  >
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
-
-          <Col span={12}>
+          <Col span={6}>
             <Form.Item label="Birlik ID" name="unitId">
-              <Input placeholder="Masalan: 1" />
+              <Select placeholder="Tanlang" showSearch optionFilterProp="label">
+                {unitsData?.data.map((item) => (
+                  <Select.Option
+                    key={item.id}
+                    value={item.id}
+                    label={item.name}
+                  >
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col span={6}>
             <Form.Item label="Narxi (dan)" name="minPrice">
-              <InputNumber
-                style={{ width: "100%" }}
-                placeholder="Masalan: 10000"
-              />
+              <InputNumber style={{ width: "100%" }} placeholder="10000" />
             </Form.Item>
           </Col>
-
-          <Col span={12}>
+          <Col span={6}>
             <Form.Item label="Minimal Soni" name="minCount">
-              <InputNumber style={{ width: "100%" }} placeholder="Masalan: 5" />
+              <InputNumber style={{ width: "100%" }} placeholder="5" />
             </Form.Item>
           </Col>
+          {reminder ? (
+            <Col span={6}>
+              <Form.Item label="Turi" name="type">
+                <Select placeholder="Tanlang" allowClear>
+                  <Option value="DEVICE">Qurilma</Option>
+                  <Option value="SERVICE">Xizmat</Option>
+                  <Option value="SUBSCRIPTION">Obuna</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          ) : null}
+        </Row>
 
-          <Col span={12}>
-            <Form.Item label="Turi" name="type">
-              <Select placeholder="Tanlang">
-                <Option value="DEVICE">DEVICE</Option>
-                <Option value="SERVICE">SERVICE</Option>
-                <Option value="OTHER">OTHER</Option>
-              </Select>
-            </Form.Item>
+        <Row justify="end" gutter={8}>
+          <Col>
+            <Button onClick={handleClear}>Tozalash</Button>
           </Col>
-
-          <Col span={12}>
-            <Form.Item label="Holati" name="status">
-              <Select placeholder="Tanlang">
-                <Option value="ACTIVE">ACTIVE</Option>
-                <Option value="INACTIVE">INACTIVE</Option>
-              </Select>
-            </Form.Item>
+          <Col>
+            <Button type="primary" onClick={handleApply}>
+              Qo‘llash
+            </Button>
           </Col>
         </Row>
       </Form>
-    </Modal>
+    </div>
   );
 }

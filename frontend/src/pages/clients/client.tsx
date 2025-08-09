@@ -1,71 +1,72 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   useGetClientById,
   useUpdateClient,
-  useDeleteClient,
+  useGetAllClients,
+  type CreateClientInput,
 } from "../../config/queries/clients/clients-querys";
 import {
-  Button,
-  Input,
   Spin,
   Typography,
   Card,
-  Space,
-  Descriptions,
-  Modal,
-  Popconfirm,
   message,
   Form,
-  Select,
+  Tabs,
+  type TabsProps,
 } from "antd";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  UserOutlined,
-  PhoneOutlined,
-  EnvironmentOutlined,
-  InfoCircleOutlined,
-  NumberOutlined,
-  ApartmentOutlined,
-} from "@ant-design/icons";
 import { useState } from "react";
-import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+import {
+  useCreatePaidClient,
+  type PaidClientDto,
+} from "../../config/queries/clients/paid-client-querys";
+import { useGetAllSale } from "../../config/queries/sale/sale-querys";
+import PaidClientFormModal from "./ui/paid-clients-form-modal";
+import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
+import ClientSubscribesNotpayingTable from "./tables/client-subscribes-notpaying-table copy";
+import ClientSubscribesTable from "./tables/client-subscribes-table";
+import ClientSalesTable from "./tables/client-sales-table";
+import ClientPaidsTable from "./tables/client-paids-table";
+import ClientSaleProductsTable from "./tables/client-sale-products-table";
+import ClientInfos from "./ui/client-infos";
+import ClientFormModal from "./ui/clients-form-modal";
 
 const { Title } = Typography;
 
 export default function ClientPage() {
   const { id } = useParams<{ id: string }>();
-  const clientId = Number(id);
-  const { data, isLoading, refetch } = useGetClientById(clientId);
-  const updateClient = useUpdateClient();
-  const deleteClient = useDeleteClient();
-  const { data: types } = useGetAllClientTypes();
-  const navigate = useNavigate();
-
-  const [isEditOpen, setIsEditOpen] = useState(false);
   const [form] = Form.useForm();
+  const clientId = Number(id);
 
-  const handleDelete = async () => {
-    try {
-      await deleteClient.mutateAsync(clientId);
-      message.success("Mijoz muvaffaqiyatli o‘chirildi");
-      navigate("/clients");
-    } catch (error) {
-      message.error("O‘chirishda xatolik yuz berdi");
-    }
+  const { data, isLoading, refetch } = useGetClientById(clientId);
+
+  const { data: clients } = useGetAllClients({ page: 1, limit: 1000 });
+  const { data: sales } = useGetAllSale({ page: 1, limit: 1000 });
+  const { data: payments } = useGetAllPayments({ page: 1, limit: 1000 });
+
+  const updateClient = useUpdateClient();
+  const createPaidClient = useCreatePaidClient();
+
+  const [paidOpen, setPaidOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const onSubmit = (values: PaidClientDto) => {
+    createPaidClient.mutate(values);
+    setPaidOpen(false);
   };
 
-  const handleEdit = () => {
-    form.validateFields().then(async (values) => {
-      try {
-        await updateClient.mutateAsync({ id: clientId, ...values });
-        message.success("Mijoz yangilandi");
-        setIsEditOpen(false);
-        refetch();
-      } catch (error) {
-        message.error("Yangilashda xatolik yuz berdi");
-      }
-    });
+  const handleEdit = (values: CreateClientInput) => {
+    try {
+      updateClient.mutateAsync({ id: clientId, ...values });
+      message.success("Mijoz yangilandi");
+      setIsEditOpen(false);
+      refetch();
+    } catch (error) {
+      message.error("Yangilashda xatolik yuz berdi");
+    }
   };
 
   if (isLoading) {
@@ -83,123 +84,70 @@ export default function ClientPage() {
       </div>
     );
   }
+  
+  const tabItems: TabsProps["items"] = [
+    {
+      key: "1",
+      label: "To'lanmagan obunalar",
+      children: <ClientSubscribesNotpayingTable clientId={clientId} />,
+    },
+    {
+      key: "2",
+      label: "Obunalar",
+      children: <ClientSubscribesTable clientId={clientId} />,
+    },
+    {
+      key: "3",
+      label: "Shartnomalar",
+      children: <ClientSalesTable clientId={clientId} />,
+    },
+    {
+      key: "4",
+      label: "To'lovlar",
+      children: <ClientPaidsTable clientId={clientId} />,
+    },
+    {
+      key: "5",
+      label: "Sotilgan mahsulotlar",
+      children: <ClientSaleProductsTable clientId={clientId} />,
+    },
+  ];
+
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
 
   return (
-    <div className="h-full">
-      <div className="flex justify-between items-start gap-3 h-full">
-        <Card
-          bordered
-          className="flex flex-col justify-between text-center shadow-md w-[40%] !h-full"
-        >
-          <div>
-            <div className="flex justify-center">
-              <div className="bg-gray-100 w-24 h-24 rounded-full flex items-center justify-center border">
-                <UserOutlined style={{ fontSize: 30, color: "#aaa" }} />
-              </div>
-            </div>
-            <Title level={4} className="!mb-0">
-              {data.name}
-            </Title>
-          </div>
+    <div style={{ display: "flex", gap: 16 }}>
+      <ClientInfos
+        clientId={clientId}
+        data={data}
+        form={form}
+        setIsEditOpen={setIsEditOpen}
+        setPaidOpen={setPaidOpen}
+      />
 
-          <Descriptions column={1} className="!mt-6 !h-full" size="small">
-            <Descriptions.Item label="INN">
-              <Space>
-                <NumberOutlined />
-                {data.inn || "—"}
-              </Space>
-            </Descriptions.Item>
-            <Descriptions.Item label="Telefon">
-              <Space>
-                <PhoneOutlined />
-                {data.phone || "—"}
-              </Space>
-            </Descriptions.Item>
-            <Descriptions.Item label="Manzil">
-              <Space>
-                <EnvironmentOutlined />
-                {data.address || "—"}
-              </Space>
-            </Descriptions.Item>
-            <Descriptions.Item label="Tavsif">
-              <Space>
-                <InfoCircleOutlined />
-                {data.description || "—"}
-              </Space>
-            </Descriptions.Item>
-            <Descriptions.Item label="Mijoz turi">
-              <Space>
-                <ApartmentOutlined />
-                {types?.data.find((t) => t.id === data.typeId)?.name || "—"}
-              </Space>
-            </Descriptions.Item>
-          </Descriptions>
+      <Card style={{ flex: 2 }} title="Mijozning qo‘shimcha ma’lumotlari">
+        <Tabs defaultActiveKey="1" items={tabItems} />
+      </Card>
 
-          <Space direction="vertical" className="w-full pt-4">
-            <Button
-              icon={<EditOutlined />}
-              block
-              onClick={() => {
-                form.setFieldsValue(data);
-                setIsEditOpen(true);
-              }}
-            >
-              Tahrirlash
-            </Button>
-            <Popconfirm
-              title="Haqiqatan ham o‘chirmoqchimisiz?"
-              okText="Ha"
-              cancelText="Yo‘q"
-              onConfirm={handleDelete}
-            >
-              <Button icon={<DeleteOutlined />} danger block>
-                O‘chirish
-              </Button>
-            </Popconfirm>
-          </Space>
-        </Card>
-
-        <Card bordered className="w-[60%] h-full">
-          <Title level={5}>Qo‘shimcha ma'lumotlar hozircha yo‘q</Title>
-        </Card>
-      </div>
-
-      <Modal
-        title="Mijoz ma'lumotlarini tahrirlash"
+      <PaidClientFormModal
+        open={paidOpen}
+        onClose={() => {
+          setPaidOpen(false);
+        }}
+        onSubmit={onSubmit}
+        clients={clients?.data || []}
+        sales={sales?.data || []}
+        payments={payments?.data || []}
+        clientId={clientId}
+        saleId={false}
+      />
+      <ClientFormModal
         open={isEditOpen}
-        onCancel={() => setIsEditOpen(false)}
-        onOk={handleEdit}
-        okText="Saqlash"
-        cancelText="Bekor qilish"
-        confirmLoading={updateClient.isPending}
-      >
-        <Form form={form} layout="vertical">
-          <Form.Item label="Nomi" name="name" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="INN" name="inn">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Telefon" name="phone">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Manzil" name="address">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Tavsif" name="description">
-            <Input.TextArea rows={3} />
-          </Form.Item>
-          <Form.Item label="Turi" name="typeId">
-            <Select showSearch optionFilterProp="label">
-              {types?.data.map((type) => (
-                <Select.Option key={type.id} value={type.id} label={type.name}>
-                  {type.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Form>
-      </Modal>
+        onClose={() => setIsEditOpen(false)}
+        onSubmit={handleEdit}
+        initialValues={data || undefined}
+      />
     </div>
   );
 }

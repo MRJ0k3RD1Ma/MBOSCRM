@@ -5,29 +5,54 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreatePaidSupplierDto } from './dto/create-paid-supplier.dto';
 import { FindAllPaidSupplierQueryDto } from './dto/findAll-paid-supplier.dto';
 import { UpdatePaidSupplierDto } from './dto/update-paid-supplier.dto';
+import { env } from 'src/common/config';
 
 @Injectable()
 export class PaidSupplierService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.paidSupplier.count();
+      const requiredCount = 5;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create(
+            {
+              paymentId: 1,
+              price: 100,
+              supplierId: 1,
+              paidDate: new Date(),
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
+
   async create(
     createPaidSupplierDto: CreatePaidSupplierDto,
     creatorId: number,
   ) {
-    const payment = await this.prisma.payment.findUnique({
-      where: { id: createPaidSupplierDto.paymentId },
+    const payment = await this.prisma.payment.findFirst({
+      where: { id: createPaidSupplierDto.paymentId, isDeleted: false },
     });
     if (!payment) {
       throw new HttpError({ message: 'Payment Not Found' });
     }
 
-    const supplier = await this.prisma.supplier.findUnique({
-      where: { id: createPaidSupplierDto.supplierId },
+    const supplier = await this.prisma.supplier.findFirst({
+      where: { id: createPaidSupplierDto.supplierId, isDeleted: false },
     });
     if (!supplier) {
       throw new HttpError({ message: 'Supplier Not Found', code: 404 });
     }
 
+    await this.prisma.setting.update({
+      where: { id: 1 },
+      data: { balance: { decrement: createPaidSupplierDto.price } },
+    });
     const paidsupplier = await this.prisma.paidSupplier.create({
       data: {
         supplierId: createPaidSupplierDto.supplierId,
@@ -74,6 +99,7 @@ export class PaidSupplierService {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
+        include: { Payment: true, register: true, modify: true },
       }),
       this.prisma.paidSupplier.count({
         where,
@@ -90,7 +116,15 @@ export class PaidSupplierService {
 
   async findOne(id: number) {
     const paidSupplier = await this.prisma.paidSupplier.findFirst({
-      where: { id, isDeleted: false },
+      where: {
+        id,
+        isDeleted: false,
+      },
+      include: {
+        register: true,
+        Payment: true,
+        modify: true,
+      },
     });
     if (!paidSupplier) {
       throw HttpError({ code: 'PaidSupplier not found' });
@@ -118,8 +152,8 @@ export class PaidSupplierService {
   }
 
   async remove(id: number, modifierId: number) {
-    const paidsupplier = await this.prisma.paidSupplier.findUnique({
-      where: { id: id },
+    const paidsupplier = await this.prisma.paidSupplier.findFirst({
+      where: { id: id, isDeleted: false },
     });
     if (!paidsupplier) {
       throw HttpError({ code: 'PaidSupplier not found' });

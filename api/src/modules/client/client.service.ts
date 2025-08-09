@@ -1,24 +1,54 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Client, ClientType, Prisma } from '@prisma/client';
 import { HttpError } from 'src/common/exception/http.error';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { FindAllClientQueryDto } from './dto/findAll-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { env } from 'src/common/config';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
-export class ClientService {
+export class ClientService implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
 
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const clientCount = await this.prisma.client.count();
+      const requiredCount = 3;
+      if (clientCount < requiredCount) {
+        for (let i = clientCount; i < requiredCount; i++) {
+          await this.create(
+            {
+              balance: 0,
+              address: faker.location.streetAddress(),
+              description: faker.person.jobTitle(),
+              districtId: 1733223,
+              regionId: 1733,
+              inn: faker.commerce.isbn(),
+              name: faker.person.fullName(),
+              phone: faker.phone.number(),
+              typeId: 1,
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
+
   async create(createClientDto: CreateClientDto, creatorId: number) {
-    if (!creatorId) {
+    const creator = await this.prisma.user.findFirst({
+      where: { id: creatorId, isDeleted: false },
+    });
+    if (!creator) {
       throw HttpError({ message: 'Creator not found' });
     }
     const existingPhone = await this.prisma.client.findFirst({
-      where: { phone: createClientDto.phone },
+      where: { phone: createClientDto.phone, isDeleted: false },
     });
     if (existingPhone) {
-      throw HttpError({ code: 'Phone already exists' });
+      throw HttpError({ message: 'Phone already exists', statusCode: 409 });
     }
 
     if (createClientDto.districtId) {
@@ -41,8 +71,8 @@ export class ClientService {
 
     let type: ClientType;
     if (createClientDto.typeId) {
-      type = await this.prisma.clientType.findUnique({
-        where: { id: createClientDto.typeId },
+      type = await this.prisma.clientType.findFirst({
+        where: { id: createClientDto.typeId, isDeleted: false },
       });
       if (!type) {
         throw HttpError({ code: 'type Not Found' });
@@ -60,6 +90,7 @@ export class ClientService {
         regionId: createClientDto?.regionId,
         districtId: createClientDto?.districtId,
         modifyId: creatorId,
+        balance: createClientDto.balance || 0,
         registerId: creatorId,
       },
     });
@@ -77,6 +108,7 @@ export class ClientService {
       description,
       inn,
       phone,
+      isPositiveBalance,
     } = dto;
 
     const where: Prisma.ClientWhereInput = {
@@ -88,15 +120,19 @@ export class ClientService {
     }
 
     if (districtId) {
-      where.districtId = { equals: districtId };
+      where.districtId = districtId;
     }
 
     if (regionId) {
-      where.regionId = { equals: regionId };
+      where.regionId = regionId;
     }
 
     if (address?.trim()) {
       where.address = { contains: address.trim(), mode: 'insensitive' };
+    }
+
+    if (isPositiveBalance !== undefined) {
+      where.balance = isPositiveBalance ? { gt: 0 } : { lt: 0 };
     }
 
     if (description?.trim()) {
@@ -117,6 +153,14 @@ export class ClientService {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
+        include: {
+          ClientType: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
       }),
       this.prisma.client.count({ where }),
     ]);
@@ -160,8 +204,8 @@ export class ClientService {
 
     let type: ClientType;
     if (updateData.typeId) {
-      type = await this.prisma.clientType.findUnique({
-        where: { id: updateData.typeId },
+      type = await this.prisma.clientType.findFirst({
+        where: { id: updateData.typeId, isDeleted: false },
       });
       if (!type) {
         throw HttpError({ code: 'type Not Found' });

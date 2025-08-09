@@ -30,7 +30,7 @@ export default function HeaderBar({ pageTitle }: Props) {
 
   const profileMenu = {
     items: [
-      { key: "profile", icon: <UserOutlined />, label: "Profil" },
+      // { key: "profile", icon: <UserOutlined />, label: "Profil" },
       { key: "logout", icon: <LogoutOutlined />, label: "Chiqish" },
     ],
     onClick: handleMenuClick,

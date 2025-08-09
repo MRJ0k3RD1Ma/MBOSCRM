@@ -29,6 +29,7 @@ import {
   useGetAllArrivedProduct,
   useUpdateArrivedProduct,
 } from "../../../config/queries/arrived/arrived-product-querys";
+import { useThemeContext } from "../../../providers/theme-provider";
 
 const { Title } = Typography;
 
@@ -38,6 +39,8 @@ export default function ArrivedFormPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   const [products, setProducts] = useState<ArrivedProductInput[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -49,7 +52,9 @@ export default function ArrivedFormPage() {
   const deleteArrivedProduct = useDeleteArrivedProduct();
   const { data: arrivedData } = useGetArrivedById(Number(id), isEdit);
   const { data: suppliers } = useGetAllSuppliers();
-  const { data: productsList } = useGetAllProducts();
+  const { data: productsList } = useGetAllProducts({
+    type: "DEVICE",
+  });
   const { data: arrivedProductsData } = useGetAllArrivedProduct({
     arrivedId: isEdit ? Number(id) : undefined,
   });
@@ -113,13 +118,17 @@ export default function ArrivedFormPage() {
       }
 
       drawerForm.resetFields();
-      setDrawerOpen(false);
     } catch (err) {
       message.error("Mahsulot kiritishda xatolik yuz berdi");
     }
   };
 
   const columns = [
+    {
+      title: "№",
+      dataIndex: "index",
+      render: (_: any, __: any, index: number) => +index + 1,
+    },
     {
       title: "Mahsulot",
       dataIndex: "productId",
@@ -133,10 +142,14 @@ export default function ArrivedFormPage() {
     {
       title: "Narxi",
       dataIndex: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
       title: "Umumiy narxi",
       dataIndex: "priceCount",
+      render: (priceCount: number) =>
+        priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
       title: "Amallar",
@@ -177,53 +190,163 @@ export default function ArrivedFormPage() {
         <Title level={4}>
           {isEdit ? "Kirimni tahrirlash" : "Yangi kirim qo‘shish"}
         </Title>
-        <div className="flex justify-end items-center gap-2 ">
-          <Space>
-            <Button type="primary" htmlType="submit">
-              {isEdit ? "Yangilash" : "Saqlash"}
-            </Button>
-            {!isEdit && (
-              <Button
-                type="dashed"
-                onClick={() => setDrawerOpen(true)}
-                disabled={false}
-              >
-                Mahsulot qo‘shish
-              </Button>
-            )}
-          </Space>
+        <div>
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={() => form.submit()}
+          >
+            {isEdit ? "Yangilash" : "Saqlash"}
+          </Button>
         </div>
       </div>
+
       <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Form.Item name="date" label="Sana" rules={[{ required: true }]}>
-          <DatePicker format="YYYY-MM-DD" className="w-full" />
-        </Form.Item>
+        <div className="flex flex-wrap gap-4 w-full">
+          <Form.Item
+            name="date"
+            label="Sana"
+            rules={[{ required: true }]}
+            style={{ flex: 1 }}
+            className="min-w-[200px] grow !w-full"
+          >
+            <DatePicker
+              className="w-full"
+              placeholder="Sanani tanlang"
+              format="YYYY-MM-DD"
+            />
+          </Form.Item>
 
-        <Form.Item
-          name="waybillNumber"
-          label="Waybill raqami"
-          rules={[{ required: true }]}
-        >
-          <Input placeholder="Waybill raqamini yozing" />
-        </Form.Item>
+          <Form.Item
+            name="waybillNumber"
+            label="Waybill raqami"
+            rules={[{ required: true }]}
+            style={{ flex: 1 }}
+            className="min-w-[200px] grow !w-full"
+          >
+            <Input placeholder="Waybill raqamini yozing" className="w-full" />
+          </Form.Item>
 
-        <Form.Item
-          name="supplierId"
-          label="Ta'minotchi"
-          rules={[{ required: true }]}
-        >
-          <Select placeholder="Tanlang" showSearch optionFilterProp="label">
-            {suppliers?.data.map((s) => (
-              <Select.Option key={s.id} value={s.id} label={s.name}>
-                {s.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+          <Form.Item
+            name="supplierId"
+            label="Ta'minotchi"
+            rules={[{ required: true }]}
+            style={{ flex: 1 }}
+            className="min-w-[200px] grow !w-full"
+          >
+            <Select
+              placeholder="Ta'minotchini tanlang"
+              showSearch
+              optionFilterProp="label"
+              className="w-full"
+            >
+              {suppliers?.data.map((s) => (
+                <Select.Option key={s.id} value={s.id} label={s.name}>
+                  {s.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-        <Form.Item name="description" label="Izoh">
-          <Input.TextArea rows={3} placeholder="Kirim haqidagi izohni yozing" />
-        </Form.Item>
+          <Form.Item
+            name="description"
+            label="Izoh"
+            style={{ flex: 2 }}
+            className="min-w-[200px] grow !w-full"
+          >
+            <Input.TextArea
+              rows={1}
+              placeholder="Izoh yozing"
+              className="w-full"
+              autoSize={{ minRows: 1, maxRows: 1 }}
+            />
+          </Form.Item>
+        </div>
+      </Form>
+      <Title level={4}>Mahsulotlar</Title>
+      <Form form={drawerForm} onFinish={onDrawerFinish}>
+        <div className="flex gap-4">
+          <Form.Item
+            name="productId"
+            rules={[{ required: true }]}
+            className="min-w-[200px] grow"
+          >
+            <Select
+              placeholder="Mahsulot tanlang"
+              showSearch
+              optionFilterProp="label"
+              allowClear
+              onChange={(value) => {
+                const selectedProduct = productsList?.data.find(
+                  (p) => p.id === value
+                );
+                if (selectedProduct) {
+                  drawerForm.setFieldsValue({
+                    count: 1,
+                    price: selectedProduct.price,
+                    priceCount: selectedProduct.price * 1,
+                  });
+                } else {
+                  drawerForm.setFieldsValue({
+                    count: null,
+                    price: null,
+                    priceCount: 0,
+                  });
+                }
+              }}
+            >
+              {productsList?.data.map((p) => (
+                <Select.Option key={p.id} value={p.id} label={p.name}>
+                  {p.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="count"
+            rules={[{ required: true }]}
+            className="min-w-[100px] max-w-[150px] grow"
+          >
+            <InputNumber
+              min={1}
+              className="!w-full"
+              placeholder="Soni"
+              onChange={(value: any) => {
+                const price = drawerForm.getFieldValue("price") || 0;
+                drawerForm.setFieldsValue({
+                  priceCount: price * value,
+                });
+              }}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="price"
+            rules={[{ required: true }]}
+            className="min-w-[200px] grow"
+          >
+            <InputNumber
+              min={0}
+              className="!w-full"
+              placeholder="Narxi"
+              onChange={(value: any) => {
+                const count = drawerForm.getFieldValue("count") || 0;
+                drawerForm.setFieldsValue({
+                  priceCount: count * value,
+                });
+              }}
+            />
+          </Form.Item>
+          <Form.Item name="priceCount" className="min-w-[200px] grow">
+            <InputNumber disabled className="!w-full" placeholder="Jami narx" />
+          </Form.Item>
+          <Form.Item style={{ flexShrink: 0 }}>
+            <Button htmlType="submit" type="primary">
+              +
+            </Button>
+          </Form.Item>
+        </div>
       </Form>
 
       <Table
@@ -236,18 +359,24 @@ export default function ArrivedFormPage() {
         columns={columns}
         pagination={false}
       />
-
       <Drawer
         open={drawerOpen}
-        title="Mahsulot qo‘shish"
-        onClose={() => setDrawerOpen(false)}
+        title="Mahsulot tahrirlash"
+        onClose={() => {
+          drawerForm.resetFields();
+          setDrawerOpen(false);
+        }}
         width={400}
         destroyOnClose
+        bodyStyle={{
+          background: isDark ? "#001529" : "#ffffff",
+        }}
       >
         <Form layout="vertical" form={drawerForm} onFinish={onDrawerFinish}>
           <Form.Item name="id" hidden>
             <Input />
           </Form.Item>
+
           <Form.Item
             name="productId"
             label="Mahsulot"
@@ -289,9 +418,10 @@ export default function ArrivedFormPage() {
               placeholder="Mahsulot narxini kiriting"
             />
           </Form.Item>
+
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
-              Qo‘shish
+              Saqlash
             </Button>
           </Form.Item>
         </Form>

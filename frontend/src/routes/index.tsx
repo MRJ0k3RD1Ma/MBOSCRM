@@ -19,6 +19,26 @@ import Payments from "../pages/payment/payment";
 import Arriveds from "../pages/arrived/arriveds";
 import Arrived from "../pages/arrived/arrived";
 import ArrivedFormPage from "../pages/arrived/ui/arriveds-form-page";
+import Sales from "../pages/sale/sales";
+import SalesFormPage from "../pages/sale/ui/sales-form-page";
+import Sale from "../pages/sale/sale";
+import Subscribes from "../pages/subscribe/subscribes";
+import Subscribe from "../pages/subscribe/subscribe";
+import ClientsPaid from "../pages/clients/clients-paid";
+import Servers from "../pages/server/servers";
+import Server from "../pages/server/server";
+import SaleCredit from "../pages/sale/sale-credit";
+import PaidOther from "../pages/paid/paid-other";
+import PaidServer from "../pages/server/paid-server";
+import PriceCurant from "../pages/sale/price-curant";
+import ArrivedsCredit from "../pages/arrived/arriveds-credit";
+import ClientsOverPaid from "../pages/clients/clients-over-paid";
+import ClientsCredit from "../pages/clients/clients-credit";
+import ArrivedProducts from "../pages/arrived/arrived-products";
+import SupplierCredit from "../pages/suppler/supplier-credit";
+import SupplierOverPaid from "../pages/suppler/supplier-over-paid";
+import Users from "../pages/users/users";
+import PaidOtherGroup from "../pages/paid/paid-other-group";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -51,6 +71,18 @@ export const router = createBrowserRouter([
             element: <Clients />,
           },
           {
+            path: "clients-over-paid",
+            element: <ClientsOverPaid />,
+          },
+          {
+            path: "clients-credit",
+            element: <ClientsCredit />,
+          },
+          {
+            path: "paid-clients",
+            element: <ClientsPaid />,
+          },
+          {
             path: "client/:id",
             element: <ClientPage />,
           },
@@ -61,6 +93,10 @@ export const router = createBrowserRouter([
           {
             path: "products",
             element: <Products />,
+          },
+          {
+            path: "price-curant",
+            element: <PriceCurant />,
           },
           {
             path: "product/:id",
@@ -83,6 +119,14 @@ export const router = createBrowserRouter([
             element: <Supplier />,
           },
           {
+            path: "supplier-credit",
+            element: <SupplierCredit />,
+          },
+          {
+            path: "supplier-over-paid",
+            element: <SupplierOverPaid />,
+          },
+          {
             path: "paid-suppliers",
             element: <PaidSuppliers />,
           },
@@ -95,6 +139,10 @@ export const router = createBrowserRouter([
             element: <Arriveds />,
           },
           {
+            path: "arrived-products",
+            element: <ArrivedProducts />,
+          },
+          {
             path: "arrived/create",
             element: <ArrivedFormPage />,
           },
@@ -105,6 +153,62 @@ export const router = createBrowserRouter([
           {
             path: "arrived/:id",
             element: <Arrived />,
+          },
+          {
+            path: "arriveds-credit",
+            element: <ArrivedsCredit />,
+          },
+          {
+            path: "sales",
+            element: <Sales />,
+          },
+          {
+            path: "sales-credit",
+            element: <SaleCredit />,
+          },
+          {
+            path: "sale/:id",
+            element: <Sale />,
+          },
+          {
+            path: "sale/create",
+            element: <SalesFormPage />,
+          },
+          {
+            path: "sale/edit/:id",
+            element: <SalesFormPage />,
+          },
+          {
+            path: "subscribes",
+            element: <Subscribes />,
+          },
+          {
+            path: "subscribe/:id",
+            element: <Subscribe />,
+          },
+          {
+            path: "servers",
+            element: <Servers />,
+          },
+          {
+            path: "server/:id",
+            element: <Server />,
+          },
+          {
+            path: "paid-other",
+            element: <PaidOther />,
+          },
+          {
+            path: "paid-other-group",
+            element: <PaidOtherGroup />,
+          },
+          {
+            path: "paid-server",
+            element: <PaidServer />,
+          },
+          {
+            path: "users",
+            element: <Users />,
           },
           {
             path: "*",

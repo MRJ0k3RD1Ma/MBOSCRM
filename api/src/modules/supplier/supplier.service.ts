@@ -5,20 +5,49 @@ import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { FindAllSupplierQueryDto } from './dto/findAll-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { Prisma, Supplier } from '@prisma/client';
+import { env } from 'src/common/config';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class SupplierService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.supplier.count();
+      const requiredCount = 5;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create(
+            {
+              description: 'supplier description',
+              name: faker.person.fullName(),
+              phone: faker.phone.number(),
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
+
   async create(createSupplierDto: CreateSupplierDto, creatorId: number) {
     if (!creatorId) {
       throw HttpError({ code: 'Creator not found' });
+    }
+    if (createSupplierDto.phone) {
+      const existingPhone = await this.prisma.supplier.findFirst({
+        where: { phone: createSupplierDto.phone, isDeleted: false },
+      });
+      if (existingPhone) {
+        throw HttpError({ code: 'Phone already exists' });
+      }
     }
 
     const supplier = await this.prisma.supplier.create({
       data: {
         name: createSupplierDto.name,
-        balance: createSupplierDto.balance,
+        balance: 0,
         description: createSupplierDto.description,
         phone: createSupplierDto.phone,
         phoneTwo: createSupplierDto.phoneTwo,
@@ -30,7 +59,14 @@ export class SupplierService {
   }
 
   async findAll(dto: FindAllSupplierQueryDto) {
-    const { limit = 10, page = 1, name, description, phone } = dto;
+    const {
+      limit = 10,
+      page = 1,
+      name,
+      description,
+      phone,
+      isPositiveBalance,
+    } = dto;
 
     const where: Prisma.SupplierWhereInput = {
       isDeleted: false,
@@ -42,6 +78,10 @@ export class SupplierService {
 
     if (description?.trim()) {
       where.description = { contains: description.trim() };
+    }
+
+    if (isPositiveBalance !== undefined) {
+      where.balance = isPositiveBalance ? { gt: 0 } : { lt: 0 };
     }
 
     if (phone?.trim()) {
@@ -57,6 +97,7 @@ export class SupplierService {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
+        include: { register: true, modify: true },
       }),
       this.prisma.supplier.count({
         where,
@@ -74,6 +115,7 @@ export class SupplierService {
   async findOne(id: number) {
     const supplier = await this.prisma.supplier.findFirst({
       where: { id, isDeleted: false },
+      include: { register: true, modify: true },
     });
     if (!supplier) {
       throw HttpError({ code: 'Supplier not found' });
@@ -89,7 +131,6 @@ export class SupplierService {
 
     const updateData: Partial<Supplier> = {
       name: dto.name ?? supplier.name,
-      balance: dto.balance ?? supplier.balance,
       description: dto.description ?? supplier.description,
       phone: dto.phone ?? supplier.phone,
       phoneTwo: dto.phoneTwo ?? supplier.phoneTwo,

@@ -8,10 +8,11 @@ import {
   Row,
   Col,
 } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { CreateProductInput } from "../../../config/queries/products/products-querys";
 import type { ProductUnit } from "../../../config/queries/products/product-unit-querys";
 import type { ProductGroup } from "../../../config/queries/products/product-gorup-querys";
+import { useThemeContext } from "../../../providers/theme-provider";
 
 interface Props {
   open: boolean;
@@ -31,12 +32,17 @@ export default function ProductsModal({
   group,
 }: Props) {
   const [form] = Form.useForm<CreateProductInput>();
+  const [isReminderDisabled, setIsReminderDisabled] = useState(false);
 
   useEffect(() => {
     if (initialValues) {
       form.setFieldsValue(initialValues);
+      if (initialValues.type === "SUBSCRIPTION") {
+        setIsReminderDisabled(true);
+      }
     } else {
       form.resetFields();
+      setIsReminderDisabled(false);
     }
   }, [initialValues, form]);
 
@@ -46,6 +52,8 @@ export default function ProductsModal({
       onSubmit(values);
     } catch {}
   };
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   return (
     <Drawer
@@ -57,8 +65,25 @@ export default function ProductsModal({
       open={open}
       destroyOnClose
       width={720}
+      bodyStyle={{
+        background: isDark ? "#001529" : "#ffffff",
+      }}
     >
-      <Form layout="vertical" form={form} onFinish={handleFinish}>
+      <Form
+        layout="vertical"
+        form={form}
+        onFinish={handleFinish}
+        onValuesChange={(changedValues) => {
+          if (changedValues.type) {
+            if (changedValues.type === "SUBSCRIPTION") {
+              form.setFieldsValue({ reminderFirst: 0 });
+              setIsReminderDisabled(true);
+            } else {
+              setIsReminderDisabled(false);
+            }
+          }
+        }}
+      >
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
@@ -70,11 +95,7 @@ export default function ProductsModal({
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item
-              name="barcode"
-              label="Shtrix kod"
-              rules={[{ required: true, message: "Shtrix kod kiriting" }]}
-            >
+            <Form.Item name="barcode" label="Shtrix kod">
               <Input placeholder="1234567890123" className="!w-full" />
             </Form.Item>
           </Col>
@@ -134,7 +155,12 @@ export default function ProductsModal({
                 { required: true, message: "Dastlabki qoldiqni kiriting" },
               ]}
             >
-              <InputNumber min={0} className="!w-full" placeholder="50" />
+              <InputNumber
+                min={0}
+                className="!w-full"
+                placeholder="50"
+                disabled={isReminderDisabled}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -148,49 +174,14 @@ export default function ProductsModal({
           </Col>
 
           <Col span={12}>
-            <Form.Item
-              name="type"
-              label="Turi"
-              rules={[{ required: true, message: "Turi tanlang" }]}
-            >
-              <Select
-                placeholder="Mahsulot turi"
-                defaultValue={"DEVICE"}
-                disabled
-              >
-                <Select.Option value="DEVICE">DEVICE</Select.Option>
+            <Form.Item name="type" label="Turi">
+              <Select placeholder="Mahsulot turi">
+                <Select.Option value="DEVICE">Qurilma</Select.Option>
+                <Select.Option value="SERVICE">Xizmat</Select.Option>
+                <Select.Option value="SUBSCRIPTION">Obuna</Select.Option>
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item
-              name="countReminder"
-              label="Qoldiq"
-              rules={[{ required: true, message: "Qoldiq sonini kiriting" }]}
-            >
-              <InputNumber min={0} className="!w-full" placeholder="10" />
-            </Form.Item>
-          </Col>
-
-          <Col span={12}>
-            <Form.Item
-              name="countArrived"
-              label="Kelgan soni"
-              rules={[{ required: true, message: "Kelgan sonini kiriting" }]}
-            >
-              <InputNumber min={0} className="!w-full" placeholder="100" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="countSale"
-              label="Sotilgan soni"
-              rules={[{ required: true, message: "Sotilgan sonini kiriting" }]}
-            >
-              <InputNumber min={0} className="!w-full" placeholder="90" />
-            </Form.Item>
-          </Col>
-
           <Col span={24}>
             <Form.Item name="description" label="Izoh">
               <Input.TextArea rows={3} placeholder="Qo‘shimcha ma’lumot..." />

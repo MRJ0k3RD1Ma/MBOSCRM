@@ -21,6 +21,7 @@ import {
   useGetAllProductUnits,
 } from "../../config/queries/products/product-unit-querys";
 import ProductUnitFormModal from "./ui/product-unit-form-modal";
+import { indexColumn } from "../../components/tables/indexColumn";
 
 export default function ProductUnit() {
   const [search, setSearch] = useState("");
@@ -52,11 +53,7 @@ export default function ProductUnit() {
   }, [filters]);
 
   const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    indexColumn(filters.page, filters.limit),
     {
       title: "Birlik nomi",
       dataIndex: "name",

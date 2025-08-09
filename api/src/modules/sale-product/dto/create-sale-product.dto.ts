@@ -5,17 +5,12 @@ export class CreateSaleProductDto {
   @ApiProperty({ example: 1 })
   @IsOptional()
   @IsInt()
-  sale_id?: number;
+  saleId?: number;
 
   @ApiProperty({ example: 5 })
   @IsOptional()
   @IsInt()
-  product_id?: number;
-
-  @ApiProperty({ example: 10000 })
-  @IsOptional()
-  @IsNumber()
-  price?: number;
+  productId?: number;
 
   @ApiProperty({ example: 2 })
   @IsOptional()

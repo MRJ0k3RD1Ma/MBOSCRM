@@ -8,10 +8,12 @@ export const authEndpoints = {
 
 // ===================== USER ENDPOINTS =====================
 export const userEndpoints = {
+  create: "user",
   all: "user",
   me: "user/check",
   one: (id: string) => `user/${id}`,
   update: (id: string) => `user/${id}`,
+  delete: (id: string) => `user/${id}`,
 };
 
 // ===================== USER ROLE ENDPOINTS =====================
@@ -27,6 +29,10 @@ export const userRoleEndpoints = {
 export const settingsEndpoints = {
   get: "settings",
   update: "settings",
+};
+// ===================== SETTINGS ENDPOINTS =====================
+export const statisticsEndpoints = {
+  get: "statistics",
 };
 
 // ===================== LOCATION ENDPOINTS =====================
@@ -124,4 +130,67 @@ export const arrivedProductEndpoints = {
   one: (id: string) => `arrived-product/${id}`,
   update: (id: string) => `arrived-product/${id}`,
   delete: (id: string) => `arrived-product/${id}`,
+};
+
+// ===================== SALE ENDPOINTS =====================
+export const saleEndpoints = {
+  create: "sale",
+  all: "sale",
+  one: (id: string) => `sale/${id}`,
+  update: (id: string) => `sale/${id}`,
+  delete: (id: string) => `sale/${id}`,
+};
+
+// ===================== SALE PRODUCT ENDPOINTS =====================
+export const saleProductEndpoints = {
+  create: "sale-product",
+  all: "sale-product",
+  one: (id: string) => `sale-product/${id}`,
+  update: (id: string) => `sale-product/${id}`,
+  delete: (id: string) => `sale-product/${id}`,
+};
+
+// ===================== SUBSCRIBE ENDPOINTS =====================
+export const subscribeEndpoints = {
+  all: "subscribe",
+  one: (id: string) => `subscribe/${id}`,
+  create: "subscribe",
+  update: (id: string) => `subscribe/${id}`,
+  delete: (id: string) => `subscribe/${id}`,
+};
+
+// ===================== SERVER ENDPOINTS =====================
+export const serverEndpoints = {
+  all: "server",
+  one: (id: string) => `server/${id}`,
+  create: "server",
+  update: (id: string) => `server/${id}`,
+  delete: (id: string) => `server/${id}`,
+};
+
+// ===================== PAID SERVER ENDPOINTS =====================
+export const paidServerEndpoints = {
+  all: "paid-server",
+  one: (id: string) => `paid-server/${id}`,
+  create: "paid-server",
+  update: (id: string) => `paid-server/${id}`,
+  delete: (id: string) => `paid-server/${id}`,
+};
+
+// ===================== PAID OTHER ENDPOINTS =====================
+export const paidOtherEndpoints = {
+  all: "paid-other",
+  one: (id: string) => `paid-other/${id}`,
+  create: "paid-other",
+  update: (id: string) => `paid-other/${id}`,
+  delete: (id: string) => `paid-other/${id}`,
+};
+
+// ===================== PAID OTHER GROUP ENDPOINTS =====================
+export const paidOtherGroupEndpoints = {
+  all: "paid-other/group",
+  one: (id: string) => `paid-other/group/${id}`,
+  create: "paid-other/group",
+  update: (id: string) => `paid-other/group/${id}`,
+  delete: (id: string) => `paid-other/group/${id}`,
 };

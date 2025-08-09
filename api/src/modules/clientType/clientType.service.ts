@@ -1,13 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { HttpError } from 'src/common/exception/http.error';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateClientTypeDto } from './dto/create-client-type.dto';
 import { FindAllClientTypeQueryDto } from './dto/findAll-client-type.dto';
 import { UpdateClientTypeDto } from './dto/update-client-type.dto';
+import { env } from 'src/common/config';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
-export class ClientTypeService {
+export class ClientTypeService implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
+
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.clientType.count();
+      const requiredCount = 5;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create({
+            name: faker.person.jobType(),
+          });
+        }
+      }
+    }
+  }
 
   async create(createClientTypeDto: CreateClientTypeDto) {
     const clientType = await this.prisma.clientType.create({
@@ -51,7 +67,7 @@ export class ClientTypeService {
   }
 
   async findOne(id: number) {
-    const clientType = await this.prisma.clientType.findUnique({
+    const clientType = await this.prisma.clientType.findFirst({
       where: { id, isDeleted: false },
     });
     if (!clientType) {
@@ -61,7 +77,7 @@ export class ClientTypeService {
   }
 
   async update(id: number, dto: UpdateClientTypeDto) {
-    const clientType = await this.prisma.clientType.findUnique({
+    const clientType = await this.prisma.clientType.findFirst({
       where: { id, isDeleted: false },
     });
     if (!clientType) throw HttpError({ code: 'ClientType not found' });
@@ -79,7 +95,7 @@ export class ClientTypeService {
   }
 
   async remove(id: number) {
-    const clientType = await this.prisma.clientType.findUnique({
+    const clientType = await this.prisma.clientType.findFirst({
       where: { id: id, isDeleted: false },
     });
     if (!clientType) {

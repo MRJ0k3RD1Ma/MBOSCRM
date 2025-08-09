@@ -19,6 +19,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from 'src/common/auth/roles/role.enum';
 import { User, UserRole } from '@prisma/client';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -26,7 +27,28 @@ export class UserService implements OnModuleInit {
 
   async onModuleInit() {
     if ((await this.prisma.user.count({})) == 0) {
-      this.create({ name: 'admin', password: 'admin', username: 'admin' });
+      await this.create({
+        name: 'admin',
+        password: 'admin',
+        username: 'admin',
+        roleId: 1,
+      });
+    }
+
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.userRole.count();
+      const requiredCount = 1;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create({
+            name: faker.person.fullName(),
+            password: '1234',
+            username: faker.person.firstName(),
+            roleId: 1,
+            phone: faker.phone.number(),
+          });
+        }
+      }
     }
   }
   async create(createUserDto: CreateUserDto) {
