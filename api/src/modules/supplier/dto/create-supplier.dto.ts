@@ -29,9 +29,4 @@ export class CreateSupplierDto {
   @IsString()
   @IsPhoneNumber('UZ')
   phoneTwo?: string;
-
-  @ApiProperty({ example: '1000000' })
-  @IsNumber()
-  @IsNotEmpty()
-  balance: number;
 }

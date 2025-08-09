@@ -14,9 +14,4 @@ export class UpdateSupplierDto {
 
   @IsName(false)
   phoneTwo?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber()
-  balance: number;
 }

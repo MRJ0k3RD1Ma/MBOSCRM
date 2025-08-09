@@ -20,7 +20,6 @@ export class SupplierService {
         for (let i = count; i < requiredCount; i++) {
           await this.create(
             {
-              balance: 0,
               description: 'supplier description',
               name: faker.person.fullName(),
               phone: faker.phone.number(),
@@ -48,7 +47,7 @@ export class SupplierService {
     const supplier = await this.prisma.supplier.create({
       data: {
         name: createSupplierDto.name,
-        balance: createSupplierDto.balance,
+        balance: 0,
         description: createSupplierDto.description,
         phone: createSupplierDto.phone,
         phoneTwo: createSupplierDto.phoneTwo,
@@ -125,7 +124,6 @@ export class SupplierService {
 
     const updateData: Partial<Supplier> = {
       name: dto.name ?? supplier.name,
-      balance: dto.balance ?? supplier.balance,
       description: dto.description ?? supplier.description,
       phone: dto.phone ?? supplier.phone,
       phoneTwo: dto.phoneTwo ?? supplier.phoneTwo,
