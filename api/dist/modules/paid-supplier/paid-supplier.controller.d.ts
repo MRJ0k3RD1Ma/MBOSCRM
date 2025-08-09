@@ -1,0 +1,144 @@
+import { PaidSupplierService } from './paid-supplier.service';
+import { FindAllPaidSupplierQueryDto } from './dto/findAll-paid-supplier.dto';
+import { CreatePaidSupplierDto } from './dto/create-paid-supplier.dto';
+import { UpdatePaidSupplierDto } from './dto/update-paid-supplier.dto';
+import { Request } from 'express';
+export declare class PaidSupplierController {
+    private readonly paidsupplierService;
+    constructor(paidsupplierService: PaidSupplierService);
+    create(createPaidSupplierDto: CreatePaidSupplierDto, req: Request): Promise<{
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        supplierId: number | null;
+        paidDate: Date | null;
+        paymentId: number | null;
+    }>;
+    findAll(query: FindAllPaidSupplierQueryDto): Promise<{
+        total: number;
+        page: number;
+        limit: number;
+        data: ({
+            modify: {
+                name: string;
+                username: string;
+                password: string;
+                phone: string | null;
+                roleId: number | null;
+                chatId: string | null;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+            };
+            register: {
+                name: string;
+                username: string;
+                password: string;
+                phone: string | null;
+                roleId: number | null;
+                chatId: string | null;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+            };
+            Payment: {
+                name: string | null;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+                registerId: number | null;
+                modifyId: number | null;
+                icon: string | null;
+            };
+        } & {
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            registerId: number | null;
+            modifyId: number | null;
+            price: number | null;
+            supplierId: number | null;
+            paidDate: Date | null;
+            paymentId: number | null;
+        })[];
+    }>;
+    findOne(id: string): Promise<{
+        modify: {
+            name: string;
+            username: string;
+            password: string;
+            phone: string | null;
+            roleId: number | null;
+            chatId: string | null;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+        };
+        register: {
+            name: string;
+            username: string;
+            password: string;
+            phone: string | null;
+            roleId: number | null;
+            chatId: string | null;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+        };
+        Payment: {
+            name: string | null;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            registerId: number | null;
+            modifyId: number | null;
+            icon: string | null;
+        };
+    } & {
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        supplierId: number | null;
+        paidDate: Date | null;
+        paymentId: number | null;
+    }>;
+    update(id: string, updatePaidSupplierDto: UpdatePaidSupplierDto): Promise<{
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        supplierId: number | null;
+        paidDate: Date | null;
+        paymentId: number | null;
+    }>;
+    remove(id: string, req: Request): Promise<{
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        supplierId: number | null;
+        paidDate: Date | null;
+        paymentId: number | null;
+    }>;
+}

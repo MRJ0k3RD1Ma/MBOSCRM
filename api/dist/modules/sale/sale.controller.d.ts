@@ -1,0 +1,228 @@
+import { SaleService } from './sale.service';
+import { CreateSaleDto } from './dto/create-sale.dto';
+import { UpdateSaleDto } from './dto/update-sale.dto';
+import { Request } from 'express';
+import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
+export declare class SaleController {
+    private readonly saleService;
+    constructor(saleService: SaleService);
+    create(createSaleDto: CreateSaleDto, req: Request): Promise<{
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number;
+        date: Date | null;
+        code: string | null;
+        codeId: number | null;
+        clientId: number;
+        state: import(".prisma/client").$Enums.SaleState;
+        dept: number;
+        credit: number;
+        clientName: string | null;
+        subscribe_begin_date: Date | null;
+        subscribe_generate_day: number | null;
+    }>;
+    findAll(dto: FindAllSaleQueryDto): Promise<{
+        total: number;
+        page: number;
+        limit: number;
+        data: ({
+            client: {
+                description: string | null;
+                name: string;
+                phone: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+                balance: number;
+                inn: string;
+                address: string | null;
+                regionId: number | null;
+                districtId: number | null;
+                typeId: number | null;
+                registerId: number | null;
+                modifyId: number | null;
+            };
+            register: {
+                name: string;
+                username: string;
+                password: string;
+                phone: string | null;
+                roleId: number | null;
+                chatId: string | null;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+            };
+            SaleProduct: ({
+                product: {
+                    type: import(".prisma/client").$Enums.ProductType;
+                    name: string;
+                    isDeleted: boolean | null;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    id: number;
+                    registerId: number | null;
+                    modifyId: number | null;
+                    barcode: string | null;
+                    groupId: number;
+                    unitId: number | null;
+                    priceIncome: number;
+                    reminderFirst: number;
+                    price: number;
+                    barcodeId: number | null;
+                    countReminder: number;
+                    countArrived: number;
+                    countSale: number;
+                };
+            } & {
+                isDeleted: boolean | null;
+                createdAt: Date | null;
+                updatedAt: Date | null;
+                id: number;
+                registerId: number | null;
+                modifyId: number | null;
+                price: number | null;
+                productId: number | null;
+                count: number | null;
+                priceCount: number | null;
+                saleId: number | null;
+                is_subscribe: boolean | null;
+            })[];
+            modifier: {
+                name: string;
+                username: string;
+                password: string;
+                phone: string | null;
+                roleId: number | null;
+                chatId: string | null;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+            };
+        } & {
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            registerId: number | null;
+            modifyId: number | null;
+            price: number;
+            date: Date | null;
+            code: string | null;
+            codeId: number | null;
+            clientId: number;
+            state: import(".prisma/client").$Enums.SaleState;
+            dept: number;
+            credit: number;
+            clientName: string | null;
+            subscribe_begin_date: Date | null;
+            subscribe_generate_day: number | null;
+        })[];
+    }>;
+    findOne(id: string): Promise<{
+        client: {
+            District: {
+                name: string | null;
+                id: number;
+                regionId: number | null;
+            };
+            Region: {
+                name: string | null;
+                id: number;
+            };
+        } & {
+            description: string | null;
+            name: string;
+            phone: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            balance: number;
+            inn: string;
+            address: string | null;
+            regionId: number | null;
+            districtId: number | null;
+            typeId: number | null;
+            registerId: number | null;
+            modifyId: number | null;
+        };
+        SaleProduct: {
+            isDeleted: boolean | null;
+            createdAt: Date | null;
+            updatedAt: Date | null;
+            id: number;
+            registerId: number | null;
+            modifyId: number | null;
+            price: number | null;
+            productId: number | null;
+            count: number | null;
+            priceCount: number | null;
+            saleId: number | null;
+            is_subscribe: boolean | null;
+        }[];
+    } & {
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number;
+        date: Date | null;
+        code: string | null;
+        codeId: number | null;
+        clientId: number;
+        state: import(".prisma/client").$Enums.SaleState;
+        dept: number;
+        credit: number;
+        clientName: string | null;
+        subscribe_begin_date: Date | null;
+        subscribe_generate_day: number | null;
+    }>;
+    update(id: string, updateSaleDto: UpdateSaleDto): Promise<{
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number;
+        date: Date | null;
+        code: string | null;
+        codeId: number | null;
+        clientId: number;
+        state: import(".prisma/client").$Enums.SaleState;
+        dept: number;
+        credit: number;
+        clientName: string | null;
+        subscribe_begin_date: Date | null;
+        subscribe_generate_day: number | null;
+    }>;
+    remove(id: string): Promise<{
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number;
+        date: Date | null;
+        code: string | null;
+        codeId: number | null;
+        clientId: number;
+        state: import(".prisma/client").$Enums.SaleState;
+        dept: number;
+        credit: number;
+        clientName: string | null;
+        subscribe_begin_date: Date | null;
+        subscribe_generate_day: number | null;
+    }>;
+}
