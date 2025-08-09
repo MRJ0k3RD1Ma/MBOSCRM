@@ -33,7 +33,10 @@ export class SaleProductService {
       });
     }
 
-    if (product.countReminder < createSaleProductDto.count) {
+    if (
+      product.countReminder < createSaleProductDto.count &&
+      product.type === 'DEVICE'
+    ) {
       throw new HttpError({
         message: `Maxsulot soni yetarli emas`,
       });
@@ -67,18 +70,21 @@ export class SaleProductService {
       });
     }
 
-    await this.prisma.product.update({
-      where: { id: product.id },
-      data: {
-        countReminder: {
-          decrement: createSaleProductDto.count,
+    if (product.type !== 'DEVICE') {
+      await this.prisma.product.update({
+        where: { id: product.id },
+        data: {
+          countReminder: {
+            decrement: createSaleProductDto.count,
+          },
+          countSale: {
+            increment: createSaleProductDto.count,
+          },
+          modifyId: creatorId,
         },
-        countSale: {
-          increment: createSaleProductDto.count,
-        },
-        modifyId: creatorId,
-      },
-    });
+      });
+    }
+
     return saleProduct;
   }
 

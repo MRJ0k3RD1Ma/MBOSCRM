@@ -5,20 +5,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllQueryPaidClientDto } from './dto/findAll-query-paid-client.dto';
 import { Prisma, SubscribeState } from '@prisma/client';
-import { Cron } from '@nestjs/schedule';
 @Injectable()
 export class PaidClientService {
   constructor(private readonly prisma: PrismaService) {}
-
-  @Cron('* 0 * * * *')
-  async cron() {
-    const clients = await this.prisma.client.findMany({
-      select: { id: true },
-    });
-    for (const client of clients) {
-      await this.checkSubscribtions(client.id);
-    }
-  }
 
   async create(createPaidClientDto: CreatePaidClientDto, registerId: number) {
     const { clientId, saleId, paymentId, paidDate, price } =
@@ -33,98 +22,6 @@ export class PaidClientService {
           message: `Client with ID ${clientId} not found or deleted`,
         });
       }
-    }
-
-    if (saleId) {
-      const sale = await this.prisma.sale.findFirst({
-        where: { id: saleId, isDeleted: false },
-        include: { SaleProduct: { include: { product: true } } },
-      });
-
-      if (!sale) {
-        throw new HttpError({
-          message: `Sale with ID ${saleId} not found or deleted`,
-        });
-      }
-
-      if (!sale.credit || sale.credit <= 0) {
-        throw new HttpError({
-          message: `Sizning bu mahsulot bo‘yicha qarzingiz yo‘q`,
-        });
-      }
-
-      const remainingDebt = sale.credit;
-      console.log("=== To'lov boshlangan ===");
-      console.log('Sale ID:', saleId);
-      console.log('Mijoz ID:', sale.clientId);
-      console.log('Qarzdorlik (credit):', remainingDebt);
-      console.log("To'lov summasi (price):", price);
-
-      if (price >= remainingDebt) {
-        const extra = price - remainingDebt;
-
-        console.log(`To'lov summasi qarzdan katta yoki teng. Qarzni yopamiz.`);
-        console.log(
-          `Qarz miqdori: ${remainingDebt}, To'lov: ${price}, Ortiqcha summa: ${extra}`,
-        );
-
-        await this.prisma.sale.update({
-          where: { id: saleId },
-          data: { credit: 0, dept: sale.dept + remainingDebt },
-        });
-        console.log(`Sale credit 0 ga yangilandi, dept +${remainingDebt}`);
-
-        await this.prisma.client.update({
-          where: { id: sale.clientId },
-          data: { balance: { decrement: price } },
-        });
-        console.log(`Client balansidan ${price} kamaytirildi`);
-
-        // Agar ortiqcha pul bo'lsa, balansga qo'shish
-        if (extra > 0) {
-          await this.prisma.client.update({
-            where: { id: sale.clientId },
-            data: { balance: { increment: extra } },
-          });
-          console.log(`Ortiqcha summa balansga +${extra} qo'shildi`);
-        }
-      } else {
-        console.log(`To'lov summasi qarzdan kam. Qarzni qisman to'laymiz.`);
-        console.log(`Qarz miqdori: ${remainingDebt}, To'lov: ${price}`);
-
-        // Qarzni kamaytirish
-        await this.prisma.sale.update({
-          where: { id: saleId },
-          data: { credit: remainingDebt - price, dept: sale.dept + price },
-        });
-        console.log(
-          `Sale credit ${remainingDebt} -> ${remainingDebt - price}, dept +${price}`,
-        );
-
-        // Mijoz balansini kamaytirish (to'lov summasi bo'yicha)
-        // Clientni oling
-        const client = await this.prisma.client.findUnique({
-          where: { id: sale.clientId },
-        });
-
-        if (!client) throw new Error('Client not found');
-
-        if ((client.balance ?? 0) < 0) {
-          await this.prisma.client.update({
-            where: { id: sale.clientId },
-            data: { balance: { increment: price } },
-          });
-        } else {
-          await this.prisma.client.update({
-            where: { id: sale.clientId },
-            data: { balance: { decrement: price } },
-          });
-        }
-
-        console.log(`Client balansidan ${price} kamaytirildi`);
-      }
-
-      console.log("=== To'lov yakunlandi ===");
     }
 
     if (paymentId) {
@@ -157,12 +54,16 @@ export class PaidClientService {
           message: `Client with ID ${clientId} not found or deleted`,
         });
       }
-      await this.processPayment(client.id, price);
-      await this.checkSubscribtions(client.id);
+      await this.processPayment(client.id, price, saleId);
     }
     return paidClient;
   }
-  async processPayment(clientId: number, paymentAmount: number) {
+
+  async processPayment(
+    clientId: number,
+    paymentAmount: number,
+    saleId?: number,
+  ) {
     const client = await this.prisma.client.findUnique({
       where: { id: clientId },
     });
@@ -170,14 +71,20 @@ export class PaidClientService {
     let remainingPayment = paymentAmount;
     let currentBalance = client.balance ?? 0;
 
-    const sales = await this.prisma.sale.findMany({
-      where: { clientId, credit: { gt: 0 } },
+    let sales = await this.prisma.sale.findMany({
+      where: { clientId, credit: { gt: 0 }, id: { not: saleId } },
       orderBy: { createdAt: 'asc' },
     });
 
+    if (saleId) {
+      const prioritySale = await this.prisma.sale.findFirst({
+        where: { id: saleId },
+      });
+      sales = [prioritySale, ...sales];
+    }
+
     for (const sale of sales) {
       if (remainingPayment <= 0) break;
-
       const payAmount = Math.min(sale.credit, remainingPayment);
 
       await this.prisma.sale.update({
@@ -192,6 +99,9 @@ export class PaidClientService {
       remainingPayment -= payAmount;
       currentBalance += payAmount;
     }
+    console.log('b', remainingPayment);
+    remainingPayment = await this.checkSubscribtions(clientId, paymentAmount);
+    console.log('a', remainingPayment);
 
     if (remainingPayment > 0) {
       currentBalance += remainingPayment;
@@ -206,7 +116,7 @@ export class PaidClientService {
     return { paidAmount: paymentAmount, newBalance: currentBalance };
   }
 
-  async checkSubscribtions(clientId: number) {
+  async checkSubscribtions(clientId: number, paymentAmount: number) {
     const subscribtions = await this.prisma.subscribe.findMany({
       where: { state: SubscribeState.NOTPAYING, clientId },
     });
@@ -214,33 +124,35 @@ export class PaidClientService {
       where: { id: clientId },
     });
 
-    for (let subscribe of subscribtions) {
-      if (client.balance == 0) return;
-      if (client.balance < subscribe.price - subscribe.paid) {
-        subscribe = await this.prisma.subscribe.update({
-          where: { id: subscribe.id },
-          data: {
-            paid: subscribe.paid + client.balance,
-          },
-        });
-        await this.prisma.client.update({
-          where: { id: client.id },
-          data: { balance: { decrement: client.balance } },
-        });
-      } else {
-        await this.prisma.client.update({
-          where: { id: client.id },
-          data: { balance: { decrement: subscribe.price - subscribe.paid } },
-        });
-        subscribe = await this.prisma.subscribe.update({
-          where: { id: subscribe.id },
-          data: {
-            paid: subscribe.price,
-            state: 'PAID',
-          },
-        });
-      }
+    let remainingPayment = paymentAmount;
+    let currentBalance = client.balance ?? 0;
+
+    for (const subscribe of subscribtions) {
+      if (remainingPayment <= 0) break;
+
+      const credit = subscribe.price - subscribe.paid;
+      const payAmount = Math.min(credit, remainingPayment);
+
+      await this.prisma.subscribe.update({
+        where: { id: subscribe.id },
+        data: {
+          paid: subscribe.paid + payAmount,
+          state:
+            subscribe.paid + payAmount == subscribe.price
+              ? SubscribeState.PAID
+              : SubscribeState.NOTPAYING,
+        },
+      });
+
+      remainingPayment -= payAmount;
+      currentBalance += payAmount;
     }
+
+    this.prisma.client.update({
+      where: { id: clientId },
+      data: { balance: currentBalance },
+    });
+    return remainingPayment;
   }
 
   async findAll(dto: FindAllQueryPaidClientDto) {

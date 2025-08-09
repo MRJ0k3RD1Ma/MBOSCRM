@@ -45,6 +45,11 @@ export class SubscribeService {
       } as Prisma.SubscribeCreateInput,
     });
 
+    await this.prisma.client.update({
+      where: { id: clientId },
+      data: { balance: { decrement: price } },
+    });
+
     return subscribe;
   }
 

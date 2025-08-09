@@ -67,6 +67,17 @@ export class SaleService {
 
     const codeId = (maxCode?.codeId || 0) + 1;
 
+    const productIds = products.map((product) => product.productId);
+    const notReminderProducts = await this.prisma.product.findMany({
+      where: { id: { in: productIds }, countReminder: { lte: 0 } },
+    });
+
+    if (notReminderProducts.length > 0) {
+      throw new HttpError({
+        message: `Maxsulot soni yetarli emas`,
+      });
+    }
+
     let sale = await this.prisma.sale.create({
       data: {
         date,
@@ -91,19 +102,17 @@ export class SaleService {
         creatorId,
       );
       totalPrice += saleProduct.priceCount;
-      console.log('saleProduct', totalPrice);
-      
     }
     await this.prisma.$transaction(async (tx) => {
       if (client.balance < totalPrice) {
         const newBalance = client.balance - totalPrice;
         const paidAmount = Math.max(client.balance, 0);
-        
+
         sale = await tx.sale.update({
           where: { id: sale.id },
           data: {
             price: totalPrice,
-            credit: totalPrice-paidAmount,
+            credit: totalPrice - paidAmount,
             dept: paidAmount,
           },
           include: { SaleProduct: { include: { product: true } } },
