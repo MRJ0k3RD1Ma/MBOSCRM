@@ -86,6 +86,7 @@ export class PaidClientService {
     for (const sale of sales) {
       if (remainingPayment <= 0) break;
       const payAmount = Math.min(sale.credit, remainingPayment);
+      console.log('sale credit', sale.credit, 'payAmount', payAmount);
 
       await this.prisma.sale.update({
         where: { id: sale.id },
@@ -100,13 +101,20 @@ export class PaidClientService {
       currentBalance += payAmount;
     }
     console.log('b', remainingPayment);
-    remainingPayment = await this.checkSubscribtions(clientId, paymentAmount);
+    let result = await this.checkSubscribtions(
+      clientId,
+      remainingPayment,
+      currentBalance,
+    );
+    remainingPayment = result.remainingPayment;
+    currentBalance = result.currentBalance;
     console.log('a', remainingPayment);
 
     if (remainingPayment > 0) {
       currentBalance += remainingPayment;
       remainingPayment = 0;
     }
+    console.log('Final current balance:', currentBalance);
 
     await this.prisma.client.update({
       where: { id: clientId },
@@ -116,7 +124,11 @@ export class PaidClientService {
     return { paidAmount: paymentAmount, newBalance: currentBalance };
   }
 
-  async checkSubscribtions(clientId: number, paymentAmount: number) {
+  async checkSubscribtions(
+    clientId: number,
+    paymentAmount: number,
+    currentBalance: number,
+  ) {
     const subscribtions = await this.prisma.subscribe.findMany({
       where: { state: SubscribeState.NOTPAYING, clientId },
     });
@@ -125,8 +137,8 @@ export class PaidClientService {
     });
 
     let remainingPayment = paymentAmount;
-    let currentBalance = client.balance ?? 0;
-
+    console.log('Initial remaining payment:', remainingPayment);
+    console.log('Initial current balance:', currentBalance);
     for (const subscribe of subscribtions) {
       if (remainingPayment <= 0) break;
 
@@ -147,12 +159,14 @@ export class PaidClientService {
       remainingPayment -= payAmount;
       currentBalance += payAmount;
     }
+    console.log('Remaining payment after subscriptions:', remainingPayment);
+    console.log('Current balance after subscriptions:', currentBalance);
 
     this.prisma.client.update({
       where: { id: clientId },
       data: { balance: currentBalance },
     });
-    return remainingPayment;
+    return { remainingPayment, currentBalance };
   }
 
   async findAll(dto: FindAllQueryPaidClientDto) {
