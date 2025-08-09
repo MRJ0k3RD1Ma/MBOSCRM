@@ -1,9 +1,6 @@
 import { Drawer, Form, Input, Select, Button } from "antd";
 import { useEffect } from "react";
-import type {
-  ClientType,
-  CreateClientInput,
-} from "../../../config/queries/clients/clients-querys";
+import type { CreateClientInput } from "../../../config/queries/clients/clients-querys";
 import { useThemeContext } from "../../../providers/theme-provider";
 import {
   useGetAllRegions,
