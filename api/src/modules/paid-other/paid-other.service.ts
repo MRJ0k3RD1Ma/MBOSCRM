@@ -34,12 +34,12 @@ export class PaidOtherService {
     });
 
     if (type === 'OUTCOME') {
-      const setting = await this.prisma.setting.update({
+      await this.prisma.setting.update({
         where: { id: 1 },
         data: { balance: { decrement: price } },
       });
     } else if (type === 'INCOME') {
-      const setting = await this.prisma.setting.update({
+      await this.prisma.setting.update({
         where: { id: 1 },
         data: { balance: { increment: price } },
       });
