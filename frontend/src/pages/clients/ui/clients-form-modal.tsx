@@ -9,25 +9,25 @@ import {
   useGetAllRegions,
   useGetDistrictsByRegion,
 } from "../../../config/queries/location/location-querys";
+import { useGetAllClientTypes } from "../../../config/queries/clients/client-type-querys";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onSubmit: (values: CreateClientInput) => void;
   initialValues?: Partial<CreateClientInput> | null;
-  types: ClientType[];
 }
 
-export default function ClientModal({
+export default function ClientFormModal({
   open,
   onClose,
   onSubmit,
   initialValues,
-  types,
 }: Props) {
   const [form] = Form.useForm<CreateClientInput>();
   const { theme } = useThemeContext();
   const isDark = theme === "dark";
+  const { data: types } = useGetAllClientTypes();
 
   useEffect(() => {
     if (initialValues) {
@@ -102,7 +102,7 @@ export default function ClientModal({
             showSearch
             optionFilterProp="label"
           >
-            {(types ?? []).map((type) => (
+            {types?.data.map((type: any) => (
               <Select.Option key={type.id} value={type.id} label={type.name}>
                 {type.name}
               </Select.Option>

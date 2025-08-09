@@ -5,6 +5,7 @@ import {
   Dropdown,
   Form,
   Input,
+  message,
   Space,
   Table,
   Tooltip,
@@ -19,12 +20,11 @@ import {
   type CreateClientInput,
 } from "../../config/queries/clients/clients-querys";
 import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
-import ClientModal from "./ui/clients-form-modal";
-import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
 import { useNavigate } from "react-router-dom";
 import ClientsFilterModal from "./ui/clients-filter-modal";
 import dayjs from "dayjs";
 import { indexColumn } from "../../components/tables/indexColumn";
+import ClientFormModal from "./ui/clients-form-modal";
 
 export default function ClientsPage() {
   const [form] = Form.useForm();
@@ -44,7 +44,6 @@ export default function ClientsPage() {
     ...filters,
   });
 
-  const { data: types } = useGetAllClientTypes();
   const createClient = useCreateClient();
   const updateClient = useUpdateClient();
   const deleteClient = useDeleteClient();
@@ -52,8 +51,10 @@ export default function ClientsPage() {
   const onSubmit = (values: CreateClientInput) => {
     if (editing) {
       updateClient.mutate({ id: editing.id, ...values });
+      message.success("Mijoz yangilandi");
     } else {
       createClient.mutate(values);
+      message.success("Mijoz yaratildi");
     }
     setOpen(false);
     setEditing(null);
@@ -200,7 +201,7 @@ export default function ClientsPage() {
         }}
       />
 
-      <ClientModal
+      <ClientFormModal
         open={open}
         onClose={() => {
           setOpen(false);
@@ -208,7 +209,6 @@ export default function ClientsPage() {
         }}
         onSubmit={onSubmit}
         initialValues={editing || undefined}
-        types={types?.data || []}
       />
     </Card>
   );
