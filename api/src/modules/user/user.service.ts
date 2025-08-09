@@ -111,7 +111,7 @@ export class UserService implements OnModuleInit {
         { id: user.id, role: Role.Admin, refreshTokenVersion },
         env.REFRESH_TOKEN_SECRET,
         {
-          expiresIn: '1d',
+          expiresIn: '7d',
         },
       ),
     ];
