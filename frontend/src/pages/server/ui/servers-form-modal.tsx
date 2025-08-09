@@ -72,14 +72,6 @@ export default function ServerFormModal({
         </Form.Item>
 
         <Form.Item
-          name="ip"
-          label="IP manzili"
-          rules={[{ required: true, message: "Iltimos, IP manzil kiriting" }]}
-        >
-          <Input placeholder="192.168.0.1" />
-        </Form.Item>
-
-        <Form.Item
           name="port"
           label="Port"
           rules={[{ required: true, message: "Iltimos, port kiriting" }]}

@@ -176,6 +176,7 @@ let UserService = class UserService {
                 },
                 skip: (page - 1) * limit,
                 take: limit,
+                include: { UserRole: true },
                 orderBy: { createdAt: 'desc' },
             }),
             this.prisma.user.count({
@@ -197,6 +198,7 @@ let UserService = class UserService {
     async findOne(id) {
         const user = await this.prisma.user.findUnique({
             where: { id, isDeleted: false },
+            include: { UserRole: true },
         });
         if (!user) {
             throw (0, http_error_1.HttpError)({ code: 'User not found' });

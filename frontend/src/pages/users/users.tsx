@@ -69,8 +69,16 @@ export default function Users() {
     indexColumn(page, limit),
     { title: "Ism", dataIndex: "name" },
     { title: "Login", dataIndex: "username" },
-    { title: "Telefon", dataIndex: "phone" },
-    { title: "Rol ID", dataIndex: "roleId" },
+    {
+      title: "Telefon",
+      dataIndex: "phone",
+      render: (text: string) => (text ? text : "-"),
+    },
+    {
+      title: "Role",
+      dataIndex: ["UserRole", "name"],
+      render: (text: string) => (text ? text : "-"),
+    },
     {
       title: "Yaratilgan vaqti",
       dataIndex: "createdAt",
