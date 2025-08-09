@@ -64,8 +64,13 @@ export default function Sales() {
     {
       title: "Narx",
       dataIndex: "price",
-      render: (price: number) =>
-        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+      render: (_: number, record: any) => {
+        const priceToUse = record.is_subscribe
+          ? record.SaleProduct?.price
+          : record.price;
+
+        return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
+      },
     },
     {
       title: "Qarz",

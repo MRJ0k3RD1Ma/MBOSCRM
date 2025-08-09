@@ -259,16 +259,17 @@ export default function SalesFormPage() {
                 );
                 if (selectedProduct) {
                   drawerForm.setFieldsValue({
+                    count: 1,
                     price: selectedProduct.price,
+                    priceCount: selectedProduct.price * 1,
                   });
                 } else {
-                  drawerForm.setFieldsValue({ price: null });
+                  drawerForm.setFieldsValue({
+                    count: null,
+                    price: null,
+                    priceCount: 0,
+                  });
                 }
-                const count = drawerForm.getFieldValue("count") || 0;
-                const priceCount = selectedProduct?.price
-                  ? selectedProduct.price * count
-                  : 0;
-                drawerForm.setFieldsValue({ priceCount });
               }}
             >
               {productsList?.data.map((p) => (
