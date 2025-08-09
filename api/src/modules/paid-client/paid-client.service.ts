@@ -6,7 +6,6 @@ import { HttpError } from 'src/common/exception/http.error';
 import { FindAllQueryPaidClientDto } from './dto/findAll-query-paid-client.dto';
 import { Prisma, SubscribeState } from '@prisma/client';
 import { Cron } from '@nestjs/schedule';
-
 @Injectable()
 export class PaidClientService {
   constructor(private readonly prisma: PrismaService) {}
@@ -41,7 +40,7 @@ export class PaidClientService {
         where: { id: saleId, isDeleted: false },
         include: { SaleProduct: { include: { product: true } } },
       });
-    
+
       if (!sale) {
         throw new HttpError({
           message: `Sale with ID ${saleId} not found or deleted`,
@@ -53,30 +52,80 @@ export class PaidClientService {
           message: `Sizning bu mahsulot bo‘yicha qarzingiz yo‘q`,
         });
       }
-    
-      const remainingDebt = sale.credit; 
-      
-      if (price > remainingDebt) {
+
+      const remainingDebt = sale.credit;
+      console.log("=== To'lov boshlangan ===");
+      console.log('Sale ID:', saleId);
+      console.log('Mijoz ID:', sale.clientId);
+      console.log('Qarzdorlik (credit):', remainingDebt);
+      console.log("To'lov summasi (price):", price);
+
+      if (price >= remainingDebt) {
         const extra = price - remainingDebt;
-    
+
+        console.log(`To'lov summasi qarzdan katta yoki teng. Qarzni yopamiz.`);
+        console.log(
+          `Qarz miqdori: ${remainingDebt}, To'lov: ${price}, Ortiqcha summa: ${extra}`,
+        );
+
         await this.prisma.sale.update({
           where: { id: saleId },
           data: { credit: 0, dept: sale.dept + remainingDebt },
         });
-    
+        console.log(`Sale credit 0 ga yangilandi, dept +${remainingDebt}`);
+
         await this.prisma.client.update({
           where: { id: sale.clientId },
-          data: { balance: { increment: extra } },
+          data: { balance: { decrement: price } },
         });
-    
+        console.log(`Client balansidan ${price} kamaytirildi`);
+
+        // Agar ortiqcha pul bo'lsa, balansga qo'shish
+        if (extra > 0) {
+          await this.prisma.client.update({
+            where: { id: sale.clientId },
+            data: { balance: { increment: extra } },
+          });
+          console.log(`Ortiqcha summa balansga +${extra} qo'shildi`);
+        }
       } else {
+        console.log(`To'lov summasi qarzdan kam. Qarzni qisman to'laymiz.`);
+        console.log(`Qarz miqdori: ${remainingDebt}, To'lov: ${price}`);
+
+        // Qarzni kamaytirish
         await this.prisma.sale.update({
           where: { id: saleId },
           data: { credit: remainingDebt - price, dept: sale.dept + price },
         });
+        console.log(
+          `Sale credit ${remainingDebt} -> ${remainingDebt - price}, dept +${price}`,
+        );
+
+        // Mijoz balansini kamaytirish (to'lov summasi bo'yicha)
+        // Clientni oling
+        const client = await this.prisma.client.findUnique({
+          where: { id: sale.clientId },
+        });
+
+        if (!client) throw new Error('Client not found');
+
+        if ((client.balance ?? 0) < 0) {
+          await this.prisma.client.update({
+            where: { id: sale.clientId },
+            data: { balance: { increment: price } },
+          });
+        } else {
+          await this.prisma.client.update({
+            where: { id: sale.clientId },
+            data: { balance: { decrement: price } },
+          });
+        }
+
+        console.log(`Client balansidan ${price} kamaytirildi`);
       }
+
+      console.log("=== To'lov yakunlandi ===");
     }
-    
 
     if (paymentId) {
       const payment = await this.prisma.payment.findFirst({
@@ -108,56 +157,53 @@ export class PaidClientService {
           message: `Client with ID ${clientId} not found or deleted`,
         });
       }
-
-      await this.prisma.client.update({
-        where: { id: clientId },
-        data: { balance: { increment: price } },
-      });
-
-      await this.checkCredit(client.id);
+      await this.processPayment(client.id, price);
       await this.checkSubscribtions(client.id);
     }
     return paidClient;
   }
-
-  async checkCredit(clientId: number) {
-    const sales = await this.prisma.sale.findMany({
-      where: { credit: { gt: 0 }, clientId },
-    });
+  async processPayment(clientId: number, paymentAmount: number) {
     const client = await this.prisma.client.findUnique({
       where: { id: clientId },
     });
+    if (!client) throw new Error('Client not found');
+    let remainingPayment = paymentAmount;
+    let currentBalance = client.balance ?? 0;
 
-    for (let sale of sales) {
-      if (client.balance == 0) return;
-      if (client.balance < sale.credit) {
-        sale = await this.prisma.sale.update({
-          where: { id: sale.id },
-          data: {
-            credit: sale.credit - client.balance,
-            dept: sale.dept + client.balance,
-          },
-          include: { SaleProduct: { include: { product: true } } },
-        });
-        await this.prisma.client.update({
-          where: { id: client.id },
-          data: { balance: { decrement: sale.dept } },
-        });
-      } else {
-        await this.prisma.client.update({
-          where: { id: client.id },
-          data: { balance: { decrement: sale.credit } },
-        });
-        sale = await this.prisma.sale.update({
-          where: { id: sale.id },
-          data: {
-            credit: 0,
-            dept: sale.dept + sale.credit,
-          },
-          include: { SaleProduct: { include: { product: true } } },
-        });
-      }
+    const sales = await this.prisma.sale.findMany({
+      where: { clientId, credit: { gt: 0 } },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    for (const sale of sales) {
+      if (remainingPayment <= 0) break;
+
+      const payAmount = Math.min(sale.credit, remainingPayment);
+
+      await this.prisma.sale.update({
+        where: { id: sale.id },
+        data: {
+          credit: sale.credit - payAmount,
+          dept: (sale.dept ?? 0) + payAmount,
+          ...(sale.credit - payAmount <= 0 ? { state: 'CLOSED' } : {}),
+        },
+      });
+
+      remainingPayment -= payAmount;
+      currentBalance += payAmount;
     }
+
+    if (remainingPayment > 0) {
+      currentBalance += remainingPayment;
+      remainingPayment = 0;
+    }
+
+    await this.prisma.client.update({
+      where: { id: clientId },
+      data: { balance: currentBalance },
+    });
+
+    return { paidAmount: paymentAmount, newBalance: currentBalance };
   }
 
   async checkSubscribtions(clientId: number) {
