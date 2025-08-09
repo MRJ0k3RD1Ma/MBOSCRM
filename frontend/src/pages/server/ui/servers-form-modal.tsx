@@ -71,14 +71,6 @@ export default function ServerFormModal({
           <Input placeholder="Server nomi" />
         </Form.Item>
 
-        <Form.Item
-          name="port"
-          label="Port"
-          rules={[{ required: true, message: "Iltimos, port kiriting" }]}
-        >
-          <Input placeholder="8080" />
-        </Form.Item>
-
         <Form.Item name="plan" label="Tarif reja">
           <Input placeholder="Masalan: Basic, Premium" />
         </Form.Item>
