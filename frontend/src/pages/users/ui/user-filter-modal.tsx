@@ -2,6 +2,7 @@
 import { Button, Col, Form, Input, InputNumber, Row } from "antd";
 import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
+import PhoneInput from "../../../components/form/phone-input";
 
 type Props = {
   open: boolean;
@@ -67,7 +68,7 @@ export default function UsersFilterModal({
             <Input placeholder="Login" />
           </Form.Item>
           <Form.Item label="Telefon" name="phone">
-            <Input placeholder="Telefon" />
+            <PhoneInput />
           </Form.Item>
           <Form.Item label="Rol ID" name="roleId">
             <InputNumber

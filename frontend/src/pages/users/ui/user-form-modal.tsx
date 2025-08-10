@@ -6,6 +6,7 @@ import type {
 } from "../../../config/queries/users/users-querys";
 import { useThemeContext } from "../../../providers/theme-provider";
 import { useGetAllUserRoles } from "../../../config/queries/user-role/user-role-querys";
+import PhoneInput from "../../../components/form/phone-input";
 
 type Props = {
   open: boolean;
@@ -39,7 +40,7 @@ export default function UserFormDrawer({
       const values = await form.validateFields();
       onSubmit(values);
       form.resetFields();
-    } catch {}
+    } catch { }
   };
 
   return (
@@ -87,8 +88,11 @@ export default function UserFormDrawer({
           </Form.Item>
         )}
 
-        <Form.Item name="phone" label="Telefon">
-          <Input placeholder="+998901234567" />
+        <Form.Item
+          name="phone"
+          label="Telefon"
+        >
+          <PhoneInput />
         </Form.Item>
 
         <Form.Item name="roleId" label="Foydalanuvchi role">
@@ -113,6 +117,6 @@ export default function UserFormDrawer({
           {initialValues ? "Saqlash" : "Qo‘shish"}
         </Button>
       </Form>
-    </Drawer>
+    </Drawer >
   );
 }
