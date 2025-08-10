@@ -78,15 +78,17 @@ export default function UserFormDrawer({
           <Input placeholder="Login" />
         </Form.Item>
 
-        {!initialValues && (
-          <Form.Item
-            name="password"
-            label="Parol"
-            rules={[{ required: true, message: "Parol kiriting" }]}
-          >
-            <Input.Password placeholder="Parol" min={6} />
-          </Form.Item>
-        )}
+        <Form.Item
+          name="password"
+          label="Parol"
+          rules={
+            initialValues
+              ? []
+              : [{ required: true, message: "Parol kiriting" }]
+          }
+        >
+          <Input.Password placeholder="Parol" min={6} />
+        </Form.Item>
 
         <Form.Item
           name="phone"

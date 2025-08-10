@@ -8,14 +8,7 @@ import {
   Spin,
   Tooltip as AntdTooltip,
 } from "antd";
-import {
-  ArrowUpOutlined,
-  ArrowDownOutlined,
-  UserOutlined,
-  FileTextOutlined,
-  FundOutlined,
-  DollarOutlined,
-} from "@ant-design/icons";
+import { Users, FileText, TrendingUp, TrendingDown, DollarSign } from "lucide-react"
 import {
   BarChart,
   Bar,
@@ -42,62 +35,32 @@ function formatMoney(value?: number) {
 }
 
 type StatCardProps = {
-  title: string;
-  value: number | string | undefined;
-  icon?: React.ReactNode;
-  bg?: string;
-  sub?: string | React.ReactNode;
-};
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, bg, sub }) => {
-  return (
-    <Card
-      style={{
-        border: "none",
-        borderRadius: 12,
-        display: "flex",
-        flexDirection: "column",
-        flex: 1,
-        background: bg ?? "linear-gradient(135deg,#0f172a,#111827)",
-        boxShadow: "0 6px 18px rgba(2,6,23,0.6)",
-      }}
-      bodyStyle={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: 16,
-        gap: 12,
-        color: "#fff",
-        height: "100%",
-      }}
-    >
-      <div style={{ minWidth: 0 }}>
-        <Text style={{ color: "rgba(255,255,255,0.85)" }}>{title}</Text>
-        <div style={{ marginTop: 8 }}>
-          <Title
-            level={3}
-            style={{
-              color: "#fff",
-              margin: 0,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {typeof value === "number" ? formatMoney(value) : value ?? "-"}
-          </Title>
-        </div>
-        {sub && (
-          <div style={{ marginTop: 8, color: "rgba(255,255,255,0.85)" }}>
-            {sub}
-          </div>
-        )}
-      </div>
-      <div style={{ fontSize: 28, opacity: 0.95 }}>{icon}</div>
-    </Card>
-  );
-};
+  title: string
+  value: number | string | undefined
+  icon: React.ReactNode
+  bgColor: string
+  textColor?: string
+  subtitle?: string | React.ReactNode
+}
 
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon, bgColor, textColor = "text-white", subtitle }) => {
+  return (
+    <Card className={`${bgColor} !border-none !shadow-lg !hover:shadow-xl !transition-all !duration-300 hover:scale-105`}>
+      <div className="!p-6">
+        <div className="!flex !items-center !justify-between">
+          <div className="!flex-1">
+            <p className={`!text-sm ${textColor} !opacity-90 !mb-2`}>{title}</p>
+            <h3 className={`!text-2xl !font-bold ${textColor} !mb-1`}>
+              {value ?? "-"}
+            </h3>
+            {subtitle && <div className={`!text-sm ${textColor} !opacity-80`}>{subtitle}</div>}
+          </div>
+          <div className={`${textColor} !opacity-90`}>{icon}</div>
+        </div>
+      </div>
+    </Card>
+  )
+}
 export default function Dashboard() {
   const currentYear = dayjs().year();
   const [year, setYear] = useState<number>(currentYear);
@@ -186,14 +149,18 @@ export default function Dashboard() {
 
   return (
     <Card style={{ width: "100%" }}>
-      <Row justify="space-between" align="middle" style={{ marginBottom: 20 }}>
-        <Title level={3} style={{ color: "#fff", margin: 0 }}>
-          Statistika Kompaniya hisob:{" "}
-          {data?.balance
-            ? data?.balance.toLocaleString("uz-UZ") + " so'm"
-            : " 0"}
-        </Title>
-        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+      <div className="w-full flex items-center justify-between">
+        <div className=" gap-3">
+          <h1 className="text-2xl font-bold text-white mb-2">Statistika</h1>
+          <p className="text-slate-300 text-[22px]">
+            Kompaniya hisob:
+            <span style={{ color: (data?.balance ?? 0) < 0 ? "red" : "green" }}>
+              {data?.balance?.toLocaleString("uz-UZ") ?? "0"} so'm
+            </span>
+
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
           <Text style={{ color: "rgba(255,255,255,0.75)" }}>
             Yilni tanlang:
           </Text>
@@ -205,108 +172,56 @@ export default function Dashboard() {
             ))}
           </Select>
         </div>
-      </Row>
+      </div>
+      <div className="!grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <StatCard title="Mijozlar" value={`${stats.clients} dona`} icon={<Users size={32} />} bgColor="!bg-slate-800" />
 
-      <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Mijozlar"
-            value={stats.clients}
-            icon={<UserOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#0f172a,#111827)"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Daromadlar"
-            value={stats.income}
-            icon={<ArrowUpOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#16a34a,#22c55e)"
-            sub={<span style={{ opacity: 0.9 }}>Oylik va yillik daromad</span>}
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Chiqimlar"
-            value={stats.expenses}
-            icon={<ArrowDownOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#b45309,#f59e0b)"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Qarzlar"
-            value={stats.debts}
-            icon={<DollarOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#ef4444,#f97316)"
-          />
-        </Col>
-      </Row>
+        <StatCard title="Daromadlar" value={formatMoney(stats.income)} icon={<TrendingUp size={32} />} bgColor="!bg-green-500" />
 
-      <Row gutter={[16, 16]} style={{ marginTop: 12 }}>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Shartnomalar"
-            value={stats.contracts}
-            icon={<FileTextOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#2563eb,#3b82f6)"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Joriy oy daromadi"
-            value={stats.currentMonthIncome}
-            icon={<FundOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#059669,#10b981)"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Joriy oy chiqimi"
-            value={stats.currentMonthExpenses}
-            icon={<ArrowDownOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#7c3aed,#a855f7)"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <Card
-            style={{
-              border: "none",
-              borderRadius: 12,
-              display: "flex",
-              flexDirection: "column",
-              flex: 1,
-              background: "linear-gradient(135deg,#7c3aed,#a855f7)",
-              boxShadow: "0 6px 18px rgba(2,6,23,0.6)",
-            }}
-            bodyStyle={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: 8,
-              padding: 16,
-              height: "100%",
-              color: "#fff",
-            }}
-          >
-            <Text style={{ color: "rgba(255,255,255,0.9)" }}>Daromadlar</Text>
-            <div>
-              <Title level={4} style={{ color: "#fff", margin: 0 }}>
-                {new Intl.NumberFormat("ru-RU").format(stats.yearlyIncome || 0)}{" "}
-                so'm
-              </Title>
-              <Text style={{ color: "rgba(255,255,255,0.85)" }}>
-                {currentYear - 1} —{" "}
-                {new Intl.NumberFormat("ru-RU").format(
-                  stats.lastYearIncome || 0
-                )}{" "}
-                so'm
-              </Text>
+        <StatCard
+          title="Chiqimlar"
+          value={stats.expenses}
+          icon={<TrendingDown size={32} />}
+          bgColor="!bg-orange-500"
+        />
+
+        <StatCard title="Qarzlar" value={formatMoney(stats.debts)} icon={<TrendingDown size={32} />} bgColor="!bg-red-500" />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard title="Shartnomalar" value={`${stats.contracts} dona`} icon={<FileText size={32} />} bgColor="!bg-blue-500" />
+
+        <StatCard
+          title="oylikdagi daromadlar"
+          value={formatMoney(stats.currentMonthIncome)}
+          icon={<TrendingUp size={32} />}
+          bgColor="!bg-green-500"
+        />
+
+        <StatCard
+          title="oylikdagi chiqimlar"
+          value={formatMoney(stats.currentMonthExpenses)}
+          icon={<TrendingDown size={32} />}
+          bgColor="!bg-purple-500"
+        />
+
+        <StatCard
+          title="Daromadlar"
+          value=""
+          icon={<DollarSign size={32} />}
+          bgColor="!bg-purple-500"
+          subtitle={
+            <div className="space-y-1">
+              <div className="!font-semibold">
+                {currentYear} - yil: {new Intl.NumberFormat("ru-RU").format(stats.yearlyIncome || 0)} so'm
+              </div>
+              <div className="!text-sm !opacity-80">
+                {currentYear - 1} - yil: {new Intl.NumberFormat("ru-RU").format(stats.lastYearIncome || 0)} so'm
+              </div>
             </div>
-          </Card>
-        </Col>
-      </Row>
-
+          }
+        />
+      </div>
       <Row gutter={0} style={{ marginTop: 24 }}>
         <Col span={24} style={{ display: "flex", padding: 0 }}>
           <Card
@@ -439,6 +354,6 @@ export default function Dashboard() {
           </Card>
         </Col>
       </Row>
-    </Card>
+    </Card >
   );
 }

@@ -210,10 +210,10 @@ export default function Supplier() {
             {supplier.phone}
           </Descriptions.Item>
           <Descriptions.Item label="Qo‘shimcha telefon">
-            {supplier.phoneTwo || "—"}
+            {supplier.phoneTwo || "-"}
           </Descriptions.Item>
           <Descriptions.Item label="Izoh">
-            {supplier.description || "—"}
+            {supplier.description || "-"}
           </Descriptions.Item>
           <Descriptions.Item label="Balans">
             {supplier.balance ?? 0}
@@ -224,8 +224,8 @@ export default function Supplier() {
           <Descriptions.Item label="O’zgartirildi">
             {supplier.updatedAt
               ? dayjs(supplier.updatedAt)
-                  .tz("Asia/Tashkent")
-                  .format("YYYY-MM-DD HH:mm:ss")
+                .tz("Asia/Tashkent")
+                .format("YYYY-MM-DD HH:mm:ss")
               : "Noma'lum"}
           </Descriptions.Item>
         </Descriptions>

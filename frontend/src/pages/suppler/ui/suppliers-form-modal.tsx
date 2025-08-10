@@ -82,7 +82,7 @@ export default function SuppliersFormModal({
         </Form.Item>
 
         <Form.Item name="phoneTwo" label="Ikkinchi telefon raqam">
-          <Input placeholder="+998901112233" />
+          <PhoneInput />
         </Form.Item>
 
         <Form.Item name="description" label="Izoh">

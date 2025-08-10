@@ -65,11 +65,14 @@ export default function Sales() {
       title: "Narx",
       dataIndex: "price",
       render: (_: number, record: any) => {
-        const priceToUse = record.SaleProduct[0].is_subscribe
-          ? record.SaleProduct[0].product?.price
+        const firstSaleProduct = record.SaleProduct?.[0];
+        const priceToUse = firstSaleProduct?.is_subscribe
+          ? firstSaleProduct?.product?.price
           : record.price;
 
-        return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
+        return priceToUse
+          ? priceToUse.toLocaleString("uz-UZ") + " so'm"
+          : "0";
       },
     },
     {

@@ -221,6 +221,7 @@ export default function SalesFormPage() {
             <Select
               placeholder="Mijozni tanlang"
               showSearch
+              allowClear
               optionFilterProp="label"
               className="w-full"
             >
@@ -242,11 +243,25 @@ export default function SalesFormPage() {
           <Form.Item
             name="subscribe_begin_date"
             label="Obuna boshlanish sanasi"
-            rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
             <DatePicker className="w-full" format="YYYY-MM-DD" />
           </Form.Item>
+          <Form.Item
+            name="subscription_generate_day"
+            label="To'lov kuni"
+            className="min-w-[200px] grow"
+
+          >
+            <Select placeholder="Kun tanlang" allowClear showSearch optionFilterProp="label">
+              {[...Array(28)].map((_, i) => (
+                <Select.Option key={i + 1} value={i + 1} label={i + 1}>
+                  {i + 1}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
         </div>
       </Form>
 
@@ -485,6 +500,6 @@ export default function SalesFormPage() {
           </Form.Item>
         </Form>
       </Drawer>
-    </Card>
+    </Card >
   );
 }
