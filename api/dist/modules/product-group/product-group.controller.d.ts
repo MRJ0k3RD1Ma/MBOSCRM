@@ -8,10 +8,10 @@ export declare class ProductGroupController {
     constructor(productGroupService: ProductGroupService);
     create(createProductGroupDto: CreateProductGroupDto, req: Request): Promise<{
         name: string;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number;
         modifyId: number;
     }>;
@@ -21,38 +21,38 @@ export declare class ProductGroupController {
         limit: number;
         data: {
             name: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number;
             modifyId: number;
         }[];
     }>;
     findOne(id: string): Promise<{
         name: string;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number;
         modifyId: number;
     }>;
     update(id: string, updateProductGroupDto: UpdateProductGroupDto, req: Request): Promise<{
         name: string;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number;
         modifyId: number;
     }>;
     remove(id: string, req: Request): Promise<{
         name: string;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number;
         modifyId: number;
     }>;
