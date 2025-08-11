@@ -200,7 +200,7 @@ export class StatisticsService {
     const lastYearIncome =
       sumOrZero(lastYearPaidClientAgg, 'price') +
       sumOrZero(lastYearPaidOtherIncomeAgg, 'price');
-    const totalDebts = sumOrZero(saleDebtAgg, 'dept');
+    const totalDebts = sumOrZero(saleDebtAgg, 'credit');
 
     // Monthly bar chart & subscription forecast (12 months)
     const monthlyStats = await Promise.all(
