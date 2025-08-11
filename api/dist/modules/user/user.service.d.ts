@@ -16,10 +16,10 @@ export declare class UserService implements OnModuleInit {
         phone: string | null;
         roleId: number | null;
         chatId: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     login(dto: LoginUserDto): Promise<{
         user: {
@@ -29,10 +29,10 @@ export declare class UserService implements OnModuleInit {
             phone: string | null;
             roleId: number | null;
             chatId: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
         accessToken: string;
         refreshToken: string;
@@ -50,10 +50,10 @@ export declare class UserService implements OnModuleInit {
         data: ({
             UserRole: {
                 name: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
         } & {
             name: string;
@@ -62,19 +62,19 @@ export declare class UserService implements OnModuleInit {
             phone: string | null;
             roleId: number | null;
             chatId: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         })[];
     }>;
     findOne(id: number): Promise<{
         UserRole: {
             name: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
     } & {
         name: string;
@@ -83,10 +83,10 @@ export declare class UserService implements OnModuleInit {
         phone: string | null;
         roleId: number | null;
         chatId: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     update(id: number, dto: UpdateUserDto): Promise<{
         name: string;
@@ -95,10 +95,10 @@ export declare class UserService implements OnModuleInit {
         phone: string | null;
         roleId: number | null;
         chatId: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     remove(id: number): Promise<{
         name: string;
@@ -107,9 +107,9 @@ export declare class UserService implements OnModuleInit {
         phone: string | null;
         roleId: number | null;
         chatId: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
 }

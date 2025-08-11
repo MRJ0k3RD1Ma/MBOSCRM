@@ -6,10 +6,10 @@ export declare class PaidClientService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(createPaidClientDto: CreatePaidClientDto, registerId: number): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -28,10 +28,10 @@ export declare class PaidClientService {
     }>;
     findAll(dto: FindAllQueryPaidClientDto): Promise<({
         Sale: {
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number;
@@ -50,10 +50,10 @@ export declare class PaidClientService {
             description: string | null;
             name: string;
             phone: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -70,10 +70,10 @@ export declare class PaidClientService {
             phone: string | null;
             roleId: number | null;
             chatId: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
         register: {
             name: string;
@@ -82,26 +82,26 @@ export declare class PaidClientService {
             phone: string | null;
             roleId: number | null;
             chatId: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
         Payment: {
             name: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
     } & {
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -112,10 +112,10 @@ export declare class PaidClientService {
     })[]>;
     findOne(id: number): Promise<{
         Sale: {
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number;
@@ -134,10 +134,10 @@ export declare class PaidClientService {
             description: string | null;
             name: string;
             phone: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -149,19 +149,19 @@ export declare class PaidClientService {
         };
         Payment: {
             name: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
     } & {
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -171,10 +171,10 @@ export declare class PaidClientService {
         clientId: number | null;
     }>;
     update(id: number, updatePaidClientDto: UpdatePaidClientDto): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -184,10 +184,10 @@ export declare class PaidClientService {
         clientId: number | null;
     }>;
     remove(id: number): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
