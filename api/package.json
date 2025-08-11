@@ -37,6 +37,7 @@
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "envalid": "^8.0.0",
+    "grammy": "^1.37.0",
     "helmet": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^3.11.5",

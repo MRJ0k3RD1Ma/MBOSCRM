@@ -54,8 +54,17 @@ export class PaidClientService {
           message: `Client with ID ${clientId} not found or deleted`,
         });
       }
+      await this.prisma.setting.update({
+        where: { id: 1 },
+        data: {
+          balance: {
+            increment: price,
+          },
+        },
+      });
       await this.processPayment(client.id, price, saleId);
     }
+
     return paidClient;
   }
 

@@ -18,7 +18,7 @@ import { RefreshUserDto } from './dto/refresh-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from 'src/common/auth/roles/role.enum';
-import { User, UserRole } from '@prisma/client';
+import { Prisma, User, UserRole } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 
 @Injectable()
@@ -175,28 +175,50 @@ export class UserService implements OnModuleInit {
   }
 
   async findAll(dto: FindAllUserQueryDto) {
-    const { limit = 10, page = 1, name } = dto;
+    const { limit = 10, page = 1, name, roleId, username, chatId, phone} = dto;
+
+
+    const where: Prisma.UserWhereInput = {
+      isDeleted: false,
+    };
+
+    if (name) {
+      where.name = {
+        contains: name.trim(),
+        mode: 'insensitive',
+      };
+    }
+    if (roleId) {
+      where.roleId = roleId;
+    }
+    if (username) {
+      where.username = {
+        contains: username.trim(),
+        mode: 'insensitive',
+      };
+    }
+    if (chatId) {
+      where.chatId = {
+        contains: chatId.trim(),
+        mode: 'insensitive',
+      };
+    }
+    if (phone) {
+      where.phone = {
+        contains: phone.trim(),
+        mode: 'insensitive',
+      };
+    }
 
     const [data, total] = await this.prisma.$transaction([
       this.prisma.user.findMany({
-        where: {
-          name: {
-            contains: name?.trim() || '',
-            mode: 'insensitive',
-          },
-          isDeleted: false,
-        },
+        where,
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
       }),
       this.prisma.user.count({
-        where: {
-          name: {
-            contains: name?.trim() || '',
-            mode: 'insensitive',
-          },
-        },
+        where,
       }),
     ]);
 

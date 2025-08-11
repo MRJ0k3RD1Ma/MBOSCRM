@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  Matches,
 } from 'class-validator';
 import { IsName } from 'src/common/dtos/name.dto';
 
@@ -17,7 +18,9 @@ export class CreateSupplierDto {
   @ApiProperty({ example: '+998901234567' })
   @IsNotEmpty()
   @IsString()
-  @IsPhoneNumber('UZ')
+  @Matches(/^\+998(9[0-9]|3[3]|7[1]|8[8]|6[1])[0-9]{7}$/, {
+    message: 'Telefon raqam faqat +998 va to‘g‘ri kod bilan boshlanishi kerak',
+  })
   phone: string;
 
   @IsName(false)
@@ -27,6 +30,8 @@ export class CreateSupplierDto {
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  @IsPhoneNumber('UZ')
+  @Matches(/^\+998(9[0-9]|3[3]|7[1]|8[8]|6[1])[0-9]{7}$/, {
+    message: 'Telefon raqam faqat +998 va to‘g‘ri kod bilan boshlanishi kerak',
+  })
   phoneTwo?: string;
 }

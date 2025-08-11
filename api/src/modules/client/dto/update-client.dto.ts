@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, Matches } from 'class-validator';
 import { IsId } from 'src/common/dtos/id.dto';
 import { IsName } from 'src/common/dtos/name.dto';
 
@@ -22,8 +22,11 @@ export class UpdateClientDto {
   @IsId(false)
   districtId?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ example: '+998901234567' })
   @IsOptional()
+  @Matches(/^\+998(9[0-9]|3[3]|7[1]|8[8]|6[1])[0-9]{7}$/, {
+    message: 'Telefon raqam faqat +998 va to‘g‘ri kod bilan boshlanishi kerak',
+  })
   phone?: string;
 
   @IsId(false)
