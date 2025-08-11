@@ -25,6 +25,12 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateArrivedProductDto.prototype, "productId", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateArrivedProductDto.prototype, "price", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(1),

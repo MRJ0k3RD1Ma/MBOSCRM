@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, Min } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNumber, IsOptional, Min } from 'class-validator';
 import { IsId } from 'src/common/dtos/id.dto';
 
 export class CreateArrivedProductDto {
@@ -8,6 +8,11 @@ export class CreateArrivedProductDto {
 
   @IsId()
   productId: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  price?: number;
 
   @ApiProperty()
   @IsNumber()
