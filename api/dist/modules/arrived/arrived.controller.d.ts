@@ -15,9 +15,9 @@ export declare class ArrivedController {
         price: number;
         supplierId: number;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
         codeId: number | null;
+        waybillNumber: string | null;
         created: Date;
         updated: Date;
     }>;
@@ -26,30 +26,17 @@ export declare class ArrivedController {
         page: number;
         limit: number;
         data: ({
-            supplier: {
-                description: string | null;
-                name: string;
-                phone: string;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                id: number;
-                balance: number;
-                registerId: number | null;
-                modifyId: number | null;
-                phoneTwo: string | null;
-            };
             register: {
                 name: string;
                 username: string;
                 password: string;
                 phone: string | null;
-                roleId: number | null;
-                chatId: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                chatId: string | null;
                 id: number;
+                roleId: number | null;
             };
             ArrivedProduct: {
                 isDeleted: boolean | null;
@@ -64,6 +51,19 @@ export declare class ArrivedController {
                 count: number;
                 priceCount: number | null;
             }[];
+            supplier: {
+                description: string | null;
+                name: string;
+                phone: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+                balance: number;
+                registerId: number | null;
+                modifyId: number | null;
+                phoneTwo: string | null;
+            };
         } & {
             description: string | null;
             isDeleted: boolean | null;
@@ -73,38 +73,25 @@ export declare class ArrivedController {
             price: number;
             supplierId: number;
             date: Date | null;
-            waybillNumber: string | null;
             code: string | null;
             codeId: number | null;
+            waybillNumber: string | null;
             created: Date;
             updated: Date;
         })[];
     }>;
     findOne(id: string): Promise<{
-        supplier: {
-            description: string | null;
-            name: string;
-            phone: string;
-            isDeleted: boolean | null;
-            createdAt: Date;
-            updatedAt: Date;
-            id: number;
-            balance: number;
-            registerId: number | null;
-            modifyId: number | null;
-            phoneTwo: string | null;
-        };
         register: {
             name: string;
             username: string;
             password: string;
             phone: string | null;
-            roleId: number | null;
-            chatId: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            chatId: string | null;
             id: number;
+            roleId: number | null;
         };
         ArrivedProduct: {
             isDeleted: boolean | null;
@@ -119,6 +106,19 @@ export declare class ArrivedController {
             count: number;
             priceCount: number | null;
         }[];
+        supplier: {
+            description: string | null;
+            name: string;
+            phone: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            balance: number;
+            registerId: number | null;
+            modifyId: number | null;
+            phoneTwo: string | null;
+        };
     } & {
         description: string | null;
         isDeleted: boolean | null;
@@ -128,9 +128,9 @@ export declare class ArrivedController {
         price: number;
         supplierId: number;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
         codeId: number | null;
+        waybillNumber: string | null;
         created: Date;
         updated: Date;
     }>;
@@ -143,9 +143,9 @@ export declare class ArrivedController {
         price: number;
         supplierId: number;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
         codeId: number | null;
+        waybillNumber: string | null;
         created: Date;
         updated: Date;
     }>;
@@ -158,9 +158,9 @@ export declare class ArrivedController {
         price: number;
         supplierId: number;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
         codeId: number | null;
+        waybillNumber: string | null;
         created: Date;
         updated: Date;
     }>;

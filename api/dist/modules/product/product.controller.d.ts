@@ -7,7 +7,6 @@ export declare class ProductController {
     private readonly productService;
     constructor(productService: ProductService);
     create(createProductDto: CreateProductDto, req: Request): Promise<{
-        type: import(".prisma/client").$Enums.ProductType;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
@@ -16,22 +15,22 @@ export declare class ProductController {
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
-        groupId: number;
-        unitId: number | null;
+        barcodeId: number | null;
         priceIncome: number;
         reminderFirst: number;
         price: number;
-        barcodeId: number | null;
+        type: import(".prisma/client").$Enums.ProductType;
         countReminder: number;
         countArrived: number;
         countSale: number;
+        groupId: number;
+        unitId: number | null;
     }>;
     findAll(dto: FindAllProductQueryDto): Promise<{
         total: number;
         page: number;
         limit: number;
         data: {
-            type: import(".prisma/client").$Enums.ProductType;
             name: string;
             isDeleted: boolean | null;
             createdAt: Date;
@@ -40,19 +39,19 @@ export declare class ProductController {
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
-            groupId: number;
-            unitId: number | null;
+            barcodeId: number | null;
             priceIncome: number;
             reminderFirst: number;
             price: number;
-            barcodeId: number | null;
+            type: import(".prisma/client").$Enums.ProductType;
             countReminder: number;
             countArrived: number;
             countSale: number;
+            groupId: number;
+            unitId: number | null;
         }[];
     }>;
     findOne(id: string): Promise<{
-        type: import(".prisma/client").$Enums.ProductType;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
@@ -61,18 +60,18 @@ export declare class ProductController {
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
-        groupId: number;
-        unitId: number | null;
+        barcodeId: number | null;
         priceIncome: number;
         reminderFirst: number;
         price: number;
-        barcodeId: number | null;
+        type: import(".prisma/client").$Enums.ProductType;
         countReminder: number;
         countArrived: number;
         countSale: number;
+        groupId: number;
+        unitId: number | null;
     }>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<{
-        type: import(".prisma/client").$Enums.ProductType;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
@@ -81,18 +80,18 @@ export declare class ProductController {
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
-        groupId: number;
-        unitId: number | null;
+        barcodeId: number | null;
         priceIncome: number;
         reminderFirst: number;
         price: number;
-        barcodeId: number | null;
+        type: import(".prisma/client").$Enums.ProductType;
         countReminder: number;
         countArrived: number;
         countSale: number;
+        groupId: number;
+        unitId: number | null;
     }>;
     remove(id: string): Promise<{
-        type: import(".prisma/client").$Enums.ProductType;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
@@ -101,14 +100,15 @@ export declare class ProductController {
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
-        groupId: number;
-        unitId: number | null;
+        barcodeId: number | null;
         priceIncome: number;
         reminderFirst: number;
         price: number;
-        barcodeId: number | null;
+        type: import(".prisma/client").$Enums.ProductType;
         countReminder: number;
         countArrived: number;
         countSale: number;
+        groupId: number;
+        unitId: number | null;
     }>;
 }

@@ -8,6 +8,8 @@ const swagger_1 = require("@nestjs/swagger");
 const config_swagger_1 = require("./common/swagger/config.swagger");
 const httpException_filter_1 = require("./common/filter/httpException.filter");
 const nestjs_api_reference_1 = require("@scalar/nestjs-api-reference");
+const jsonwebtoken_1 = require("jsonwebtoken");
+const role_enum_1 = require("./common/auth/roles/role.enum");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors();
@@ -25,7 +27,28 @@ async function bootstrap() {
     }));
     if (config_1.env.ENV == 'dev') {
         const ApiDocs = swagger_1.SwaggerModule.createDocument(app, config_swagger_1.ApiSwaggerOptions);
-        app.use('/docs', (0, nestjs_api_reference_1.apiReference)({ content: ApiDocs, theme: 'bluePlanet' }));
+        app.use('/docs', (0, nestjs_api_reference_1.apiReference)({
+            content: ApiDocs,
+            theme: 'bluePlanet',
+            defaultHttpClient: {
+                targetKey: 'node',
+                clientKey: 'axios',
+            },
+            persistAuth: true,
+            authentication: {
+                preferredSecurityScheme: 'token',
+                securitySchemes: {
+                    token: {
+                        token: (0, jsonwebtoken_1.sign)({
+                            id: 1,
+                            role: role_enum_1.Role.Admin,
+                            ignoreVersion: true,
+                            tokenVersion: 0,
+                        }, config_1.env.ACCESS_TOKEN_SECRET, {}),
+                    },
+                },
+            },
+        }));
     }
     await app.listen(config_1.env.PORT || 3000);
 }

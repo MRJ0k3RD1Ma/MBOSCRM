@@ -25,8 +25,10 @@ class RolesGuard {
                 (0, http_error_1.HttpError)({ code: 'LOGIN_FAILED' });
             const storedTokenVersion = (0, token_version_store_1.getTokenVersion)(validUser.id);
             const storedRefreshTokenVersion = (0, refresh_token_version_store_1.getRefreshTokenVersion)(validUser.id);
-            if (validUser.tokenVersion !== storedTokenVersion) {
-                (0, http_error_1.HttpError)({ code: 'TOKEN_INVALIDATED', statusCode: 401 });
+            if (validUser.ignoreVersion != true) {
+                if (validUser.tokenVersion !== storedTokenVersion) {
+                    (0, http_error_1.HttpError)({ code: 'TOKEN_INVALIDATED', statusCode: 401 });
+                }
             }
             request.user = {
                 ...validUser,

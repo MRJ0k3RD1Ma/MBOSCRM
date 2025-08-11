@@ -29,24 +29,24 @@ export declare class SupplierController {
                 username: string;
                 password: string;
                 phone: string | null;
-                roleId: number | null;
-                chatId: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                chatId: string | null;
                 id: number;
+                roleId: number | null;
             };
             register: {
                 name: string;
                 username: string;
                 password: string;
                 phone: string | null;
-                roleId: number | null;
-                chatId: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                chatId: string | null;
                 id: number;
+                roleId: number | null;
             };
         } & {
             description: string | null;
@@ -68,24 +68,24 @@ export declare class SupplierController {
             username: string;
             password: string;
             phone: string | null;
-            roleId: number | null;
-            chatId: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            chatId: string | null;
             id: number;
+            roleId: number | null;
         };
         register: {
             name: string;
             username: string;
             password: string;
             phone: string | null;
-            roleId: number | null;
-            chatId: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            chatId: string | null;
             id: number;
+            roleId: number | null;
         };
     } & {
         description: string | null;

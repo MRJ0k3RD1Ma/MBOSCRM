@@ -34,9 +34,10 @@ export class RolesGuard implements CanActivate {
 
       const storedTokenVersion = getTokenVersion(validUser.id);
       const storedRefreshTokenVersion = getRefreshTokenVersion(validUser.id);
-
-      if (validUser.tokenVersion !== storedTokenVersion) {
-        HttpError({ code: 'TOKEN_INVALIDATED', statusCode: 401 });
+      if (validUser.ignoreVersion != true) {
+        if (validUser.tokenVersion !== storedTokenVersion) {
+          HttpError({ code: 'TOKEN_INVALIDATED', statusCode: 401 });
+        }
       }
 
       request.user = {

@@ -6,6 +6,8 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { ApiSwaggerOptions } from './common/swagger/config.swagger';
 import { HttpExceptionFilter } from './common/filter/httpException.filter';
 import { apiReference } from '@scalar/nestjs-api-reference';
+import { sign } from 'jsonwebtoken';
+import { Role } from './common/auth/roles/role.enum';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,7 +31,35 @@ async function bootstrap() {
   if (env.ENV == 'dev') {
     const ApiDocs = SwaggerModule.createDocument(app, ApiSwaggerOptions);
     //themes:  alternate, default, moon, purple, solarized, bluePlanet, saturn, kepler, mars, deepSpace, laserwave, none
-    app.use('/docs', apiReference({ content: ApiDocs, theme: 'bluePlanet' }));
+    app.use(
+      '/docs',
+      apiReference({
+        content: ApiDocs,
+        theme: 'bluePlanet',
+        defaultHttpClient: {
+          targetKey: 'node',
+          clientKey: 'axios',
+        },
+        persistAuth: true,
+        authentication: {
+          preferredSecurityScheme: 'token',
+          securitySchemes: {
+            token: {
+              token: sign(
+                {
+                  id: 1,
+                  role: Role.Admin,
+                  ignoreVersion: true,
+                  tokenVersion: 0,
+                },
+                env.ACCESS_TOKEN_SECRET,
+                {},
+              ),
+            },
+          },
+        },
+      }),
+    );
   }
   await app.listen(env.PORT || 3000);
 }
