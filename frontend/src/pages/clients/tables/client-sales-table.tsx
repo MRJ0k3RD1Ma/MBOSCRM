@@ -4,11 +4,7 @@ import { indexColumn } from "../../../components/tables/indexColumn";
 import { Table } from "antd";
 import { useGetAllSale } from "../../../config/queries/sale/sale-querys";
 
-export default function ClientSalesTable({
-  clientId,
-}: {
-  clientId: number;
-}) {
+export default function ClientSalesTable({ clientId }: { clientId: number }) {
   const [page, setPage] = useState(1);
   const limit = 5;
 
@@ -62,9 +58,7 @@ export default function ClientSalesTable({
       title: "Yaratilgan vaqt",
       dataIndex: "createdAt",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
   ];
 

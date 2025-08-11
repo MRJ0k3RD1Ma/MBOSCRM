@@ -1,6 +1,7 @@
 import { Drawer, Form, Input, Button, DatePicker } from "antd";
 import { useEffect } from "react";
 import { useThemeContext } from "../../../providers/theme-provider";
+import dayjs from "dayjs";
 
 export interface CreateServerInput {
   name: string;
@@ -39,6 +40,11 @@ export default function ServerFormModal({
   const handleFinish = async () => {
     try {
       const values = await form.validateFields();
+      if (values.endDate) {
+        values.endDate = dayjs(values.endDate)
+          .tz("Asia/Tashkent")
+          .format("YYYY-MM-DD");
+      }
       onSubmit(values);
       form.resetFields();
     } catch (err) {
@@ -87,11 +93,7 @@ export default function ServerFormModal({
           label="Tugash sanasi"
           rules={[{ required: true, message: "Tugash sanasini tanlang" }]}
         >
-          <DatePicker
-            showTime
-            style={{ width: "100%" }}
-            format="YYYY-MM-DD HH:mm:ss"
-          />
+          <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
         </Form.Item>
         <Button type="primary" htmlType="submit" block>
           {initialValues ? "Saqlash" : "Qo‘shish"}

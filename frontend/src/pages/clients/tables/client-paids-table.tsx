@@ -20,9 +20,7 @@ export default function ClientPaidsTable({ clientId }: { clientId: number }) {
       title: "To’lov sanasi",
       dataIndex: "paidDate",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     {
       title: "Narxi",
@@ -36,9 +34,7 @@ export default function ClientPaidsTable({ clientId }: { clientId: number }) {
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     { title: "Qabul qiluvchi", dataIndex: ["register", "name"] },
   ];

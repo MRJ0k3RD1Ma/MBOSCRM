@@ -43,9 +43,13 @@ export default function PaidSupplierFormModal({
   }, [initialValues, form]);
 
   const handleFinish = (values: any) => {
+    if (values.paidDate) {
+      values.paidDate = dayjs(values.paidDate)
+        .tz("Asia/Tashkent")
+        .format("YYYY-MM-DD");
+    }
     const formattedValues: PaidSupplierFormValues = {
       ...values,
-      paidDate: values.paidDate.format("YYYY-MM-DD"),
     };
     onSubmit(formattedValues);
     form.resetFields();

@@ -46,10 +46,8 @@ export interface SaleProductResponse {
 }
 
 export interface CreateSaleProductInput {
-  saleId: number;
   productId: number;
   count: number;
-  price: number;
 }
 
 export interface UpdateSaleProductInput {

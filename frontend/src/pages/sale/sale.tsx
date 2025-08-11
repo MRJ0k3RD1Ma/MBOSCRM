@@ -226,14 +226,14 @@ export default function Sale() {
                 {sale?.client?.createdAt
                   ? dayjs(sale.client.createdAt)
                       .tz("Asia/Tashkent")
-                      .format("YYYY-MM-DD HH:mm:ss")
+                      .format("YYYY-MM-DD")
                   : "Noma'lum"}
               </Descriptions.Item>
               <Descriptions.Item label="O'zgartirilgan">
                 {sale?.client?.updatedAt
                   ? dayjs(sale.client.updatedAt)
                       .tz("Asia/Tashkent")
-                      .format("YYYY-MM-DD HH:mm:ss")
+                      .format("YYYY-MM-DD")
                   : "Noma'lum"}
               </Descriptions.Item>
             </Descriptions>

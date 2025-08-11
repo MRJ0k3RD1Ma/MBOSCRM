@@ -6,6 +6,10 @@ import type {
   PaidOther,
 } from "../../../config/queries/paid/paid-other";
 import { useGetAllPaidOtherGroups } from "../../../config/queries/paid/paid-other-group";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const { Option } = Select;
 
@@ -30,7 +34,7 @@ export default function PaidOtherFormModal({
       form.setFieldsValue({
         ...initialValues,
         paidDate: initialValues.paidDate
-          ? dayjs(initialValues.paidDate)
+          ? dayjs(initialValues.paidDate).tz("Asia/Tashkent")
           : undefined,
       });
     } else {
@@ -42,7 +46,7 @@ export default function PaidOtherFormModal({
     onSubmit({
       ...values,
       paidDate: values.paidDate
-        ? values.paidDate.format("YYYY-MM-DD")
+        ? dayjs(values.paidDate).tz("Asia/Tashkent").format("YYYY-MM-DD")
         : undefined,
     });
     form.resetFields();

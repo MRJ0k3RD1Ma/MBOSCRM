@@ -18,7 +18,7 @@ let ArrivedProductService = class ArrivedProductService {
         this.prisma = prisma;
     }
     async create(createArrivedProductDto, registerId) {
-        const { arrivedId, count, productId } = createArrivedProductDto;
+        let { arrivedId, count, productId, price } = createArrivedProductDto;
         if (!arrivedId) {
             throw new http_error_1.HttpError({
                 message: `arrived Id it not defined`,
@@ -40,11 +40,12 @@ let ArrivedProductService = class ArrivedProductService {
                 message: `Product with ID ${productId} not found`,
             });
         }
+        price = product.priceIncome;
         const arrivedproduct = await this.prisma.arrivedProduct.create({
             data: {
                 count,
-                priceCount: product.priceIncome * count,
-                price: product.priceIncome,
+                price,
+                priceCount: price * count,
                 arrivedId,
                 productId,
                 registerId,

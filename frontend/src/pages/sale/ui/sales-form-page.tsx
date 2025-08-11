@@ -71,9 +71,11 @@ export default function SalesFormPage() {
   }, [saleData]);
 
   const onFinish = async (values: any) => {
+    if (values.date) {
+      values.date = dayjs(values.date).tz("Asia/Tashkent").format("YYYY-MM-DD");
+    }
     const payload = {
       ...values,
-      date: values.date.toISOString(),
       products,
     };
 
@@ -251,9 +253,13 @@ export default function SalesFormPage() {
             name="subscription_generate_day"
             label="To'lov kuni"
             className="min-w-[200px] grow"
-
           >
-            <Select placeholder="Kun tanlang" allowClear showSearch optionFilterProp="label">
+            <Select
+              placeholder="Kun tanlang"
+              allowClear
+              showSearch
+              optionFilterProp="label"
+            >
               {[...Array(28)].map((_, i) => (
                 <Select.Option key={i + 1} value={i + 1} label={i + 1}>
                   {i + 1}
@@ -261,7 +267,6 @@ export default function SalesFormPage() {
               ))}
             </Select>
           </Form.Item>
-
         </div>
       </Form>
 
@@ -320,9 +325,12 @@ export default function SalesFormPage() {
               );
 
               const countReminder: number = selectedProduct?.countReminder ?? 0;
+              const isSubscription = selectedProduct?.type === "SUBSCRIPTION";
 
               if (selectedProduct) {
-                if (countReminder > 0) {
+                if (isSubscription) {
+                  setFieldsValue({ count: 1 });
+                } else if (countReminder > 0) {
                   setFieldsValue({ count: 1 });
                 } else {
                   setFieldsValue({ count: null });
@@ -330,7 +338,11 @@ export default function SalesFormPage() {
               }
 
               return (
-                <div className="flex flex-col -mt-[30px]">
+                <div
+                  className={`flex flex-col ${
+                    isSubscription ? "-mt-[8px]" : "-mt-[30px]"
+                  }`}
+                >
                   <div
                     style={{
                       marginBottom: 8,
@@ -338,7 +350,9 @@ export default function SalesFormPage() {
                         selectedProduct?.countReminder === 0 ? "red" : "gray",
                     }}
                   >
-                    {selectedProduct
+                    {isSubscription
+                      ? null
+                      : selectedProduct
                       ? `Qolgan soni: ${countReminder}`
                       : "Mahsulot tanlang"}
                   </div>
@@ -350,7 +364,7 @@ export default function SalesFormPage() {
                       {
                         validator: (_, value) => {
                           if (!selectedProduct) return Promise.resolve();
-                          if (value > countReminder) {
+                          if (!isSubscription && value > countReminder) {
                             return Promise.reject(
                               new Error("Mahsulot yetarli emas")
                             );
@@ -365,7 +379,11 @@ export default function SalesFormPage() {
                       min={1}
                       className="!w-full"
                       placeholder="Soni"
-                      disabled={!selectedProduct || countReminder === 0}
+                      disabled={
+                        !selectedProduct ||
+                        countReminder === 0 ||
+                        isSubscription
+                      }
                       onChange={(value: any) => {
                         const price = getFieldValue("price") || 0;
                         setFieldsValue({
@@ -426,7 +444,22 @@ export default function SalesFormPage() {
         destroyOnClose
         bodyStyle={{ background: isDark ? "#001529" : "#fff" }}
       >
-        <Form layout="vertical" form={drawerForm} onFinish={onDrawerFinish}>
+        <Form
+          layout="vertical"
+          form={drawerForm}
+          onFinish={onDrawerFinish}
+          onValuesChange={(changedValues) => {
+            if (changedValues.productId) {
+              const selectedProduct = productsList?.data.find(
+                (p: any) => p.id === changedValues.productId
+              );
+
+              if (selectedProduct?.type === "SUBSCRIPTION") {
+                drawerForm.setFieldsValue({ count: 1 });
+              }
+            }
+          }}
+        >
           <Form.Item name="id" hidden>
             <Input />
           </Form.Item>
@@ -441,6 +474,16 @@ export default function SalesFormPage() {
               showSearch
               allowClear
               optionFilterProp="label"
+              onChange={(value) => {
+                const prod = productsList?.data.find(
+                  (p: any) => p.id === value
+                );
+                setSelectedProductCountReminder(prod?.countReminder ?? null);
+
+                if (prod?.type === "SUBSCRIPTION") {
+                  drawerForm.setFieldsValue({ count: 1 });
+                }
+              }}
             >
               {productsList?.data.map((p: any) => (
                 <Select.Option key={p.id} value={p.id} label={p.name}>
@@ -451,38 +494,58 @@ export default function SalesFormPage() {
           </Form.Item>
 
           <Form.Item
-            name="count"
-            label={
-              selectedProductCountReminder !== null
-                ? `Soni (qolgan: ${selectedProductCountReminder})`
-                : "Soni"
-            }
-            rules={[
-              { required: true, message: "Soni kiritilishi shart" },
-              () => ({
-                validator(_, value) {
-                  if (
-                    selectedProductCountReminder !== null &&
-                    value > selectedProductCountReminder
-                  ) {
-                    return Promise.reject(
-                      new Error(
-                        `Maksimal miqdor: ${selectedProductCountReminder}`
-                      )
-                    );
-                  }
-                  return Promise.resolve();
-                },
-              }),
-            ]}
-            className="min-w-[200px] grow"
+            shouldUpdate={(prev, curr) => prev.productId !== curr.productId}
+            noStyle
           >
-            <InputNumber
-              min={1}
-              max={selectedProductCountReminder ?? undefined}
-              className="w-full"
-              placeholder="Soni"
-            />
+            {({ getFieldValue }) => {
+              const selectedProduct = productsList?.data.find(
+                (p) => p.id === getFieldValue("productId")
+              );
+              const isSubscription = selectedProduct?.type === "SUBSCRIPTION";
+
+              return (
+                <Form.Item
+                  name="count"
+                  label={
+                    selectedProductCountReminder !== null
+                      ? `Soni (qolgan: ${selectedProductCountReminder})`
+                      : "Soni"
+                  }
+                  rules={[
+                    { required: true, message: "Soni kiritilishi shart" },
+                    () => ({
+                      validator(_, value) {
+                        if (
+                          !isSubscription &&
+                          selectedProductCountReminder !== null &&
+                          value > selectedProductCountReminder
+                        ) {
+                          return Promise.reject(
+                            new Error(
+                              `Maksimal miqdor: ${selectedProductCountReminder}`
+                            )
+                          );
+                        }
+                        return Promise.resolve();
+                      },
+                    }),
+                  ]}
+                  className="min-w-[200px] grow"
+                >
+                  <InputNumber
+                    min={1}
+                    max={
+                      isSubscription
+                        ? 1
+                        : selectedProductCountReminder ?? undefined
+                    }
+                    disabled={isSubscription}
+                    className="w-full"
+                    placeholder="Soni"
+                  />
+                </Form.Item>
+              );
+            }}
           </Form.Item>
 
           <Form.Item
@@ -500,6 +563,6 @@ export default function SalesFormPage() {
           </Form.Item>
         </Form>
       </Drawer>
-    </Card >
+    </Card>
   );
 }

@@ -1,8 +1,13 @@
 import { Drawer, Form, Select, Button, InputNumber, DatePicker } from "antd";
 import { useEffect } from "react";
 import { useThemeContext } from "../../../providers/theme-provider";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import type { PaidClientDto } from "../../../config/queries/clients/paid-client-querys";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 type OptionType = { id: number; name: string; code?: string };
 
@@ -11,7 +16,7 @@ export interface PaidClientFormValues {
   saleId: number;
   paymentId: number;
   price: number;
-  paidDate: dayjs.Dayjs;
+  paidDate: Dayjs | string | null;
 }
 
 interface Props {
@@ -46,8 +51,8 @@ export default function PaidClientFormModal({
       form.setFieldsValue({
         ...initialValues,
         paidDate: initialValues.paidDate
-          ? dayjs(initialValues.paidDate)
-          : undefined,
+          ? dayjs(initialValues.paidDate).tz("Asia/Tashkent")
+          : null,
       });
     } else {
       form.resetFields();
@@ -59,10 +64,15 @@ export default function PaidClientFormModal({
       const values = await form.validateFields();
       const payload: PaidClientDto = {
         ...values,
-        paidDate: values.paidDate.toISOString(),
+        paidDate: values.paidDate
+          ? dayjs(values.paidDate).tz("Asia/Tashkent").format("YYYY-MM-DD")
+          : "",
       };
       onSubmit(payload);
-    } catch {}
+      form.resetFields();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -108,6 +118,7 @@ export default function PaidClientFormModal({
             </Select>
           </Form.Item>
         )}
+
         {saleId === false ? null : saleId ? (
           <Form.Item name="saleId" initialValue={saleId} hidden>
             <input type="hidden" />
@@ -156,11 +167,7 @@ export default function PaidClientFormModal({
           label="To‘lov sanasi"
           rules={[{ required: true, message: "To‘lov sanasini tanlang" }]}
         >
-          <DatePicker
-            showTime
-            style={{ width: "100%" }}
-            placeholder="To‘lov sanasi"
-          />
+          <DatePicker style={{ width: "100%" }} placeholder="To‘lov sanasi" />
         </Form.Item>
 
         <Form.Item

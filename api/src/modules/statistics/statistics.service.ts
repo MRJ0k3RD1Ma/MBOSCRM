@@ -110,7 +110,7 @@ export class StatisticsService {
 
       // total outstanding debts (sum of sale.dept)
       this.prisma.sale.aggregate({
-        _sum: { dept: true },
+        _sum: { credit: true },
         where: { isDeleted: false },
       }),
 
@@ -200,7 +200,7 @@ export class StatisticsService {
     const lastYearIncome =
       sumOrZero(lastYearPaidClientAgg, 'price') +
       sumOrZero(lastYearPaidOtherIncomeAgg, 'price');
-    const totalDebts = sumOrZero(saleDebtAgg, 'dept');
+    const totalDebts = sumOrZero(saleDebtAgg, 'credit');
 
     // Monthly bar chart & subscription forecast (12 months)
     const monthlyStats = await Promise.all(

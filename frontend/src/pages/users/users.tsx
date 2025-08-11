@@ -83,17 +83,13 @@ export default function Users() {
       title: "Yaratilgan vaqti",
       dataIndex: "createdAt",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     {
       title: "Yangilangan vaqti",
       dataIndex: "updatedAt",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     {
       title: "Actions",

@@ -7,6 +7,7 @@ export interface ArrivedProductInput {
   productId: number;
   count: number;
   price: number;
+  priceIncome: number;
   priceCount: number;
 }
 

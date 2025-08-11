@@ -27,8 +27,6 @@ export interface ServerResponse {
 }
 export interface CreateServerInput {
   name: string;
-  ip: string;
-  port: string;
   plan?: string;
   responsible?: string;
   description?: string;
