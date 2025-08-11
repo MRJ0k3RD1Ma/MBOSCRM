@@ -10,7 +10,6 @@ export declare class UserService implements OnModuleInit {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createUserDto: CreateUserDto): Promise<{
-        id: number;
         name: string;
         username: string;
         password: string;
@@ -24,7 +23,6 @@ export declare class UserService implements OnModuleInit {
     }>;
     login(dto: LoginUserDto): Promise<{
         user: {
-            id: number;
             name: string;
             username: string;
             password: string;
@@ -58,7 +56,6 @@ export declare class UserService implements OnModuleInit {
                 id: number;
             };
         } & {
-            id: number;
             name: string;
             username: string;
             password: string;
@@ -80,7 +77,6 @@ export declare class UserService implements OnModuleInit {
             id: number;
         };
     } & {
-        id: number;
         name: string;
         username: string;
         password: string;
@@ -93,7 +89,6 @@ export declare class UserService implements OnModuleInit {
         id: number;
     }>;
     update(id: number, dto: UpdateUserDto): Promise<{
-        id: number;
         name: string;
         username: string;
         password: string;
@@ -106,7 +101,6 @@ export declare class UserService implements OnModuleInit {
         id: number;
     }>;
     remove(id: number): Promise<{
-        id: number;
         name: string;
         username: string;
         password: string;

@@ -74,12 +74,23 @@ let SaleService = class SaleService {
                 message: `Maxsulot soni yetarli emas`,
             });
         }
+        const subscriptions = await this.prisma.product.findMany({
+            where: {
+                id: { in: productIds },
+                type: client_1.ProductType.SUBSCRIPTION,
+            },
+        });
+        let state = client_1.SaleState.CLOSED;
+        if (subscriptions.length > 0) {
+            state = client_1.SaleState.RUNNING;
+        }
         let sale = await this.prisma.sale.create({
             data: {
                 date,
                 subscribe_begin_date,
                 subscribe_generate_day,
                 code: `${new Date().getFullYear() - 2000}-${codeId}`,
+                state,
                 codeId,
                 client: { connect: { id: clientId } },
                 register: { connect: { id: creatorId } },
