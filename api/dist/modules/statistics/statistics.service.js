@@ -76,7 +76,7 @@ let StatisticsService = class StatisticsService {
                 },
             }),
             this.prisma.sale.aggregate({
-                _sum: { dept: true },
+                _sum: { credit: true },
                 where: { isDeleted: false },
             }),
             this.prisma.paidClient.aggregate({
