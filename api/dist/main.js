@@ -29,7 +29,8 @@ async function bootstrap() {
         const ApiDocs = swagger_1.SwaggerModule.createDocument(app, config_swagger_1.ApiSwaggerOptions);
         app.use('/docs', (0, nestjs_api_reference_1.apiReference)({
             content: ApiDocs,
-            theme: 'bluePlanet',
+            theme: 'deepSpace',
+            layout: 'modern',
             defaultHttpClient: {
                 targetKey: 'node',
                 clientKey: 'axios',

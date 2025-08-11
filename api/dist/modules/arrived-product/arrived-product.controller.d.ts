@@ -35,6 +35,7 @@ export declare class ArrivedProductController {
                     modifyId: number | null;
                 };
             } & {
+                type: import(".prisma/client").$Enums.ProductType;
                 name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
@@ -43,28 +44,27 @@ export declare class ArrivedProductController {
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
-                barcodeId: number | null;
+                groupId: number;
+                unitId: number | null;
                 priceIncome: number;
                 reminderFirst: number;
                 price: number;
-                type: import(".prisma/client").$Enums.ProductType;
+                barcodeId: number | null;
                 countReminder: number;
                 countArrived: number;
                 countSale: number;
-                groupId: number;
-                unitId: number | null;
             };
             register: {
                 name: string;
                 username: string;
                 password: string;
                 phone: string | null;
+                roleId: number | null;
+                chatId: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                chatId: string | null;
                 id: number;
-                roleId: number | null;
             };
             Arrived: {
                 supplier: {
@@ -89,9 +89,9 @@ export declare class ArrivedProductController {
                 price: number;
                 supplierId: number;
                 date: Date | null;
+                waybillNumber: string | null;
                 code: string | null;
                 codeId: number | null;
-                waybillNumber: string | null;
                 created: Date;
                 updated: Date;
             };

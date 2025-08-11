@@ -17,8 +17,8 @@ export declare class SaleController {
         date: Date | null;
         code: string | null;
         codeId: number | null;
-        state: import(".prisma/client").$Enums.SaleState;
         clientId: number;
+        state: import(".prisma/client").$Enums.SaleState;
         dept: number;
         credit: number;
         clientName: string | null;
@@ -41,9 +41,9 @@ export declare class SaleController {
                 balance: number;
                 inn: string;
                 address: string | null;
-                typeId: number | null;
                 regionId: number | null;
                 districtId: number | null;
+                typeId: number | null;
                 registerId: number | null;
                 modifyId: number | null;
             };
@@ -52,15 +52,16 @@ export declare class SaleController {
                 username: string;
                 password: string;
                 phone: string | null;
+                roleId: number | null;
+                chatId: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                chatId: string | null;
                 id: number;
-                roleId: number | null;
             };
             SaleProduct: ({
                 product: {
+                    type: import(".prisma/client").$Enums.ProductType;
                     name: string;
                     isDeleted: boolean | null;
                     createdAt: Date;
@@ -69,16 +70,15 @@ export declare class SaleController {
                     registerId: number | null;
                     modifyId: number | null;
                     barcode: string | null;
-                    barcodeId: number | null;
+                    groupId: number;
+                    unitId: number | null;
                     priceIncome: number;
                     reminderFirst: number;
                     price: number;
-                    type: import(".prisma/client").$Enums.ProductType;
+                    barcodeId: number | null;
                     countReminder: number;
                     countArrived: number;
                     countSale: number;
-                    groupId: number;
-                    unitId: number | null;
                 };
             } & {
                 isDeleted: boolean | null;
@@ -99,12 +99,12 @@ export declare class SaleController {
                 username: string;
                 password: string;
                 phone: string | null;
+                roleId: number | null;
+                chatId: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                chatId: string | null;
                 id: number;
-                roleId: number | null;
             };
         } & {
             isDeleted: boolean | null;
@@ -117,8 +117,8 @@ export declare class SaleController {
             date: Date | null;
             code: string | null;
             codeId: number | null;
-            state: import(".prisma/client").$Enums.SaleState;
             clientId: number;
+            state: import(".prisma/client").$Enums.SaleState;
             dept: number;
             credit: number;
             clientName: string | null;
@@ -148,9 +148,9 @@ export declare class SaleController {
             balance: number;
             inn: string;
             address: string | null;
-            typeId: number | null;
             regionId: number | null;
             districtId: number | null;
+            typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
         };
@@ -179,8 +179,8 @@ export declare class SaleController {
         date: Date | null;
         code: string | null;
         codeId: number | null;
-        state: import(".prisma/client").$Enums.SaleState;
         clientId: number;
+        state: import(".prisma/client").$Enums.SaleState;
         dept: number;
         credit: number;
         clientName: string | null;
@@ -198,8 +198,8 @@ export declare class SaleController {
         date: Date | null;
         code: string | null;
         codeId: number | null;
-        state: import(".prisma/client").$Enums.SaleState;
         clientId: number;
+        state: import(".prisma/client").$Enums.SaleState;
         dept: number;
         credit: number;
         clientName: string | null;
@@ -217,8 +217,8 @@ export declare class SaleController {
         date: Date | null;
         code: string | null;
         codeId: number | null;
-        state: import(".prisma/client").$Enums.SaleState;
         clientId: number;
+        state: import(".prisma/client").$Enums.SaleState;
         dept: number;
         credit: number;
         clientName: string | null;

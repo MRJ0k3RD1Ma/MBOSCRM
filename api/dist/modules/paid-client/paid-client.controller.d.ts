@@ -31,8 +31,8 @@ export declare class PaidClientController {
             date: Date | null;
             code: string | null;
             codeId: number | null;
-            state: import(".prisma/client").$Enums.SaleState;
             clientId: number;
+            state: import(".prisma/client").$Enums.SaleState;
             dept: number;
             credit: number;
             clientName: string | null;
@@ -50,9 +50,9 @@ export declare class PaidClientController {
             balance: number;
             inn: string;
             address: string | null;
-            typeId: number | null;
             regionId: number | null;
             districtId: number | null;
+            typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
         };
@@ -61,24 +61,24 @@ export declare class PaidClientController {
             username: string;
             password: string;
             phone: string | null;
+            roleId: number | null;
+            chatId: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            chatId: string | null;
             id: number;
-            roleId: number | null;
         };
         register: {
             name: string;
             username: string;
             password: string;
             phone: string | null;
+            roleId: number | null;
+            chatId: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            chatId: string | null;
             id: number;
-            roleId: number | null;
         };
         Payment: {
             name: string | null;
@@ -115,8 +115,8 @@ export declare class PaidClientController {
             date: Date | null;
             code: string | null;
             codeId: number | null;
-            state: import(".prisma/client").$Enums.SaleState;
             clientId: number;
+            state: import(".prisma/client").$Enums.SaleState;
             dept: number;
             credit: number;
             clientName: string | null;
@@ -134,9 +134,9 @@ export declare class PaidClientController {
             balance: number;
             inn: string;
             address: string | null;
-            typeId: number | null;
             regionId: number | null;
             districtId: number | null;
+            typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
         };

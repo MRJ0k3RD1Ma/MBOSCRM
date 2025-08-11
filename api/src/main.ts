@@ -35,7 +35,8 @@ async function bootstrap() {
       '/docs',
       apiReference({
         content: ApiDocs,
-        theme: 'bluePlanet',
+        theme: 'deepSpace',
+        layout: 'modern',
         defaultHttpClient: {
           targetKey: 'node',
           clientKey: 'axios',

@@ -8,6 +8,7 @@ export declare class SaleProductController {
     constructor(saleProductService: SaleProductService);
     create(createSaleProductDto: CreateSaleProductDto, req: Request): Promise<{
         product: {
+            type: import(".prisma/client").$Enums.ProductType;
             name: string;
             isDeleted: boolean | null;
             createdAt: Date;
@@ -16,16 +17,15 @@ export declare class SaleProductController {
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
-            barcodeId: number | null;
+            groupId: number;
+            unitId: number | null;
             priceIncome: number;
             reminderFirst: number;
             price: number;
-            type: import(".prisma/client").$Enums.ProductType;
+            barcodeId: number | null;
             countReminder: number;
             countArrived: number;
             countSale: number;
-            groupId: number;
-            unitId: number | null;
         };
     } & {
         isDeleted: boolean | null;
@@ -46,30 +46,6 @@ export declare class SaleProductController {
         page: number;
         limit: number;
         data: ({
-            modify: {
-                name: string;
-                username: string;
-                password: string;
-                phone: string | null;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                chatId: string | null;
-                id: number;
-                roleId: number | null;
-            };
-            register: {
-                name: string;
-                username: string;
-                password: string;
-                phone: string | null;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                chatId: string | null;
-                id: number;
-                roleId: number | null;
-            };
             product: {
                 ProductUnit: {
                     name: string;
@@ -81,6 +57,7 @@ export declare class SaleProductController {
                     modifyId: number | null;
                 };
             } & {
+                type: import(".prisma/client").$Enums.ProductType;
                 name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
@@ -89,16 +66,15 @@ export declare class SaleProductController {
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
-                barcodeId: number | null;
+                groupId: number;
+                unitId: number | null;
                 priceIncome: number;
                 reminderFirst: number;
                 price: number;
-                type: import(".prisma/client").$Enums.ProductType;
+                barcodeId: number | null;
                 countReminder: number;
                 countArrived: number;
                 countSale: number;
-                groupId: number;
-                unitId: number | null;
             };
             sale: {
                 isDeleted: boolean | null;
@@ -111,13 +87,37 @@ export declare class SaleProductController {
                 date: Date | null;
                 code: string | null;
                 codeId: number | null;
-                state: import(".prisma/client").$Enums.SaleState;
                 clientId: number;
+                state: import(".prisma/client").$Enums.SaleState;
                 dept: number;
                 credit: number;
                 clientName: string | null;
                 subscribe_begin_date: Date | null;
                 subscribe_generate_day: number | null;
+            };
+            modify: {
+                name: string;
+                username: string;
+                password: string;
+                phone: string | null;
+                roleId: number | null;
+                chatId: string | null;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+            };
+            register: {
+                name: string;
+                username: string;
+                password: string;
+                phone: string | null;
+                roleId: number | null;
+                chatId: string | null;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
             };
         } & {
             isDeleted: boolean | null;
@@ -136,6 +136,7 @@ export declare class SaleProductController {
     }>;
     findOne(id: string): Promise<{
         product: {
+            type: import(".prisma/client").$Enums.ProductType;
             name: string;
             isDeleted: boolean | null;
             createdAt: Date;
@@ -144,16 +145,15 @@ export declare class SaleProductController {
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
-            barcodeId: number | null;
+            groupId: number;
+            unitId: number | null;
             priceIncome: number;
             reminderFirst: number;
             price: number;
-            type: import(".prisma/client").$Enums.ProductType;
+            barcodeId: number | null;
             countReminder: number;
             countArrived: number;
             countSale: number;
-            groupId: number;
-            unitId: number | null;
         };
     } & {
         isDeleted: boolean | null;

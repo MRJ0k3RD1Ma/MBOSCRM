@@ -17,9 +17,9 @@ export declare class ClientController {
         balance: number;
         inn: string;
         address: string | null;
-        typeId: number | null;
         regionId: number | null;
         districtId: number | null;
+        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -43,9 +43,9 @@ export declare class ClientController {
             balance: number;
             inn: string;
             address: string | null;
-            typeId: number | null;
             regionId: number | null;
             districtId: number | null;
+            typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
         })[];
@@ -80,9 +80,9 @@ export declare class ClientController {
         balance: number;
         inn: string;
         address: string | null;
-        typeId: number | null;
         regionId: number | null;
         districtId: number | null;
+        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -97,9 +97,9 @@ export declare class ClientController {
         balance: number;
         inn: string;
         address: string | null;
-        typeId: number | null;
         regionId: number | null;
         districtId: number | null;
+        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -114,9 +114,9 @@ export declare class ClientController {
         balance: number;
         inn: string;
         address: string | null;
-        typeId: number | null;
         regionId: number | null;
         districtId: number | null;
+        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
     }>;
