@@ -79,9 +79,11 @@ export default function ArrivedFormPage() {
         price: priceIncome,
       })
     );
+    if (values.date) {
+      values.date = dayjs(values.date).tz("Asia/Tashkent").format("YYYY-MM-DD");
+    }
     const payload = {
       ...values,
-      date: values.date.toISOString(),
       products: cleanedProducts,
     };
 

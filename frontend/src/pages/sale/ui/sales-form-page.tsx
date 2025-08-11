@@ -71,9 +71,11 @@ export default function SalesFormPage() {
   }, [saleData]);
 
   const onFinish = async (values: any) => {
+    if (values.date) {
+      values.date = dayjs(values.date).tz("Asia/Tashkent").format("YYYY-MM-DD");
+    }
     const payload = {
       ...values,
-      date: values.date.toISOString(),
       products,
     };
 

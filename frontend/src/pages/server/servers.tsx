@@ -54,9 +54,7 @@ export default function Servers() {
       title: "Tugash sanasi",
       dataIndex: "endDate",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     { title: "Tugashi", dataIndex: "state" },
     {
