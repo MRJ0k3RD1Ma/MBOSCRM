@@ -70,45 +70,45 @@ export default function ClientInfos({
         <Descriptions.Item label="Ismi">{data.name || "—"}</Descriptions.Item>
         <Descriptions.Item label="INN">{data.inn || "—"}</Descriptions.Item>
         <Descriptions.Item label="Telefon">
-          {data.phone || "—"}
+          {data?.phone || "—"}
         </Descriptions.Item>
         <Descriptions.Item label="Balans">
-          {data.balance ? data.balance.toLocaleString("uz-UZ") + " so'm" : "0"}
+          {data?.balance ? data.balance.toLocaleString("uz-UZ") + " so'm" : "0"}
         </Descriptions.Item>
         <Descriptions.Item label="Manzil">
-          {data.address || "—"}
+          {data?.address || "—"}
         </Descriptions.Item>
         <Descriptions.Item label="Viloyat">
-          {data.Region.name || "—"}
+          {data?.Region?.name || "—"}
         </Descriptions.Item>
         <Descriptions.Item label="Tuman">
-          {data.District.name || "—"}
+          {data?.District?.name || "—"}
         </Descriptions.Item>
         <Descriptions.Item label="Tavsif">
-          {data.description || "—"}
+          {data?.description || "—"}
         </Descriptions.Item>
         <Descriptions.Item label="Mijoz turi">
           {types?.data.find((t) => t.id === data.typeId)?.name || "—"}
         </Descriptions.Item>
         <Descriptions.Item label="Yaratilgan">
-          {data.createdAt
+          {data?.createdAt
             ? dayjs(data.createdAt)
                 .tz("Asia/Tashkent")
                 .format("YYYY-MM-DD HH:mm:ss")
             : "Noma'lum"}
         </Descriptions.Item>
         <Descriptions.Item label="O'zgartirilgan">
-          {data.updatedAt
+          {data?.updatedAt
             ? dayjs(data.updatedAt)
                 .tz("Asia/Tashkent")
                 .format("YYYY-MM-DD HH:mm:ss")
             : "Noma'lum"}
         </Descriptions.Item>
         <Descriptions.Item label="Kiritdi">
-          {data.registerId || "—"}
+          {data?.registerId || "—"}
         </Descriptions.Item>
         <Descriptions.Item label="O’zgartirdi">
-          {data.modifyId || "—"}
+          {data?.modifyId || "—"}
         </Descriptions.Item>
       </Descriptions>
     </Card>
