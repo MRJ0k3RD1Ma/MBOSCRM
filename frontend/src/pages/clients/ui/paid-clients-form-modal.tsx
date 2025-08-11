@@ -146,11 +146,11 @@ export default function PaidClientFormModal({
 
         <Form.Item
           name="paymentId"
-          label="To‘lov"
-          rules={[{ required: true, message: "Iltimos to‘lovni tanlang" }]}
+          label="To‘lov turi"
+          rules={[{ required: true, message: "Iltimos to‘lov turini tanlang" }]}
         >
           <Select
-            placeholder="To‘lovni tanlang"
+            placeholder="To‘lov turini tanlang"
             showSearch
             optionFilterProp="label"
           >

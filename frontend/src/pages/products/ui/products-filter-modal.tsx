@@ -72,7 +72,7 @@ export default function ProductsFilterModal({
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="Guruh ID" name="groupId">
+            <Form.Item label="Guruh" name="groupId">
               <Select placeholder="Tanlang" showSearch optionFilterProp="label">
                 {groupData?.data.map((item) => (
                   <Select.Option
@@ -87,7 +87,7 @@ export default function ProductsFilterModal({
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="Birlik ID" name="unitId">
+            <Form.Item label="Birlik" name="unitId">
               <Select placeholder="Tanlang" showSearch optionFilterProp="label">
                 {unitsData?.data.map((item) => (
                   <Select.Option
@@ -102,8 +102,11 @@ export default function ProductsFilterModal({
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="Narxi (dan)" name="minPrice">
-              <InputNumber style={{ width: "100%" }} placeholder="10000" />
+            <Form.Item label="Minimal narxi" name="minPrice">
+              <InputNumber
+                style={{ width: "100%" }}
+                placeholder="Minimal narxi"
+              />
             </Form.Item>
           </Col>
           <Col span={6}>

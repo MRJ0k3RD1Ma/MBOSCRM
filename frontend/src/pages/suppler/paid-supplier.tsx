@@ -73,7 +73,7 @@ export default function PaidSuppliers() {
   const columns = [
     indexColumn(page, limit),
     {
-      title: "Ta'minotchi",
+      title: "Yetkazuvchi",
       dataIndex: "supplierId",
       render: (supplierId: number) =>
         suppliersData?.data.find((u) => u.id === supplierId)?.name || "–",

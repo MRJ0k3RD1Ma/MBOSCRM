@@ -65,18 +65,16 @@ export default function SalesFormPage() {
     if (saleData) {
       form.setFieldsValue({
         ...saleData,
-        date: dayjs(saleData.date),
+        date: saleData.date,
       });
     }
   }, [saleData]);
 
   const onFinish = async (values: any) => {
-    if (values.date) {
-      values.date = dayjs(values.date).tz("Asia/Tashkent").format("YYYY-MM-DD");
-    }
     const payload = {
       ...values,
       products,
+      date: values.date,
     };
 
     if (isEdit) {

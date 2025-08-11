@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Card, Descriptions, Spin, Typography } from "antd";
 import { useGetSubscribeById } from "../../config/queries/subscribe/subscribe-querys";
 import dayjs from "dayjs";
@@ -37,7 +37,9 @@ export default function Subscribe() {
 
   return (
     <div className="p-6 space-y-6">
-      <Title level={3}>Subscribe ID: {data.id}</Title>
+      <Title level={3}>
+        Obuna: <Link to={`/sale/${sale.id}`}>#{sale.code}</Link>{" "}
+      </Title>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card title="Obuna ma'lumotlari" className="w-full">

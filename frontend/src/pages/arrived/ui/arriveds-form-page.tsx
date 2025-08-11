@@ -228,12 +228,12 @@ export default function ArrivedFormPage() {
 
           <Form.Item
             name="waybillNumber"
-            label="Waybill raqami"
+            label="Nakladnoy raqami"
             rules={[{ required: true }]}
             style={{ flex: 1 }}
             className="min-w-[200px] grow !w-full"
           >
-            <Input placeholder="Waybill raqamini yozing" className="w-full" />
+            <Input placeholder="Nakladnoy raqamini yozing" className="w-full" />
           </Form.Item>
 
           <Form.Item
@@ -314,6 +314,7 @@ export default function ArrivedFormPage() {
 
           <Form.Item
             name="count"
+            label="Soni"
             rules={[{ required: true }]}
             className="min-w-[100px] max-w-[150px] grow"
           >
@@ -333,6 +334,7 @@ export default function ArrivedFormPage() {
 
           <Form.Item
             name="priceIncome"
+            label="Narxi"
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
@@ -348,7 +350,11 @@ export default function ArrivedFormPage() {
               }}
             />
           </Form.Item>
-          <Form.Item name="priceCount" className="min-w-[200px] grow">
+          <Form.Item
+            name="priceCount"
+            label="Umumiy narxi"
+            className="min-w-[200px] grow"
+          >
             <InputNumber disabled className="!w-full" placeholder="Jami narx" />
           </Form.Item>
           <Form.Item style={{ flexShrink: 0 }}>
