@@ -75,7 +75,9 @@ export default function Server() {
       name: server?.name,
       responsible: server?.responsible,
       plan: server?.plan,
-      endDate: server?.endDate ? dayjs(server.endDate) : null,
+      endDate: server?.endDate
+        ? dayjs(server.endDate).tz("Asia/Tashkent").format("YYYY-MM-DD")
+        : null,
     });
   };
 
@@ -86,7 +88,7 @@ export default function Server() {
         {
           ...values,
           id: serverId,
-          endDate: values.endDate.format("YYYY-MM-DD"),
+          endDate: values.endDate.format("YYYY-MM-DD").tz("Asia/Tashkent"),
         },
         {
           onSuccess: () => {
@@ -106,7 +108,7 @@ export default function Server() {
       createPaidServerMutation.mutate(
         {
           ...values,
-          endDate: values.endDate.format("YYYY-MM-DD"),
+          endDate: values.endDate.format("YYYY-MM-DD").tz("Asia/Tashkent"),
           serverId,
           price: +values.price,
         },
@@ -135,9 +137,7 @@ export default function Server() {
       title: "Sanasi",
       dataIndex: "createdAt",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     {
       title: "Izoh",

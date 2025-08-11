@@ -40,10 +40,10 @@ export default function PaidSupplierFilterUI({
       const filters = {
         ...values,
         minPaidDate: values.minPaidDate
-          ? dayjs(values.minPaidDate).format("YYYY-MM-DD")
+          ? dayjs(values.minPaidDate).tz("Asia/Tashkent").format("YYYY-MM-DD")
           : undefined,
         maxPaidDate: values.maxPaidDate
-          ? dayjs(values.maxPaidDate).format("YYYY-MM-DD")
+          ? dayjs(values.maxPaidDate).tz("Asia/Tashkent").format("YYYY-MM-DD")
           : undefined,
       };
       onApply(filters);
