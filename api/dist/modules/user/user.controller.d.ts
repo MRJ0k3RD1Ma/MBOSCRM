@@ -9,6 +9,7 @@ export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
     create(createUserDto: CreateUserDto): Promise<{
+        id: number;
         name: string;
         username: string;
         password: string;
@@ -22,6 +23,7 @@ export declare class UserController {
     }>;
     login(loginUserDto: LoginUserDto): Promise<{
         user: {
+            id: number;
             name: string;
             username: string;
             password: string;
@@ -55,6 +57,7 @@ export declare class UserController {
                 id: number;
             };
         } & {
+            id: number;
             name: string;
             username: string;
             password: string;
@@ -79,6 +82,7 @@ export declare class UserController {
             id: number;
         };
     } & {
+        id: number;
         name: string;
         username: string;
         password: string;
@@ -91,6 +95,7 @@ export declare class UserController {
         id: number;
     }>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<{
+        id: number;
         name: string;
         username: string;
         password: string;
@@ -103,6 +108,7 @@ export declare class UserController {
         id: number;
     }>;
     remove(id: string): Promise<{
+        id: number;
         name: string;
         username: string;
         password: string;

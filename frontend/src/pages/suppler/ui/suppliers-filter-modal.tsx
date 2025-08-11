@@ -1,6 +1,7 @@
-import { Form, Input, Button,  Row, Col } from "antd";
+import { Form, Input, Button, Row, Col } from "antd";
 import { useToken } from "antd/es/theme/internal";
 import { useEffect } from "react";
+import PhoneInput from "../../../components/form/phone-input";
 
 type Props = {
   open: boolean;
@@ -58,8 +59,11 @@ export default function SuppliersFilterModal({
         <Form.Item label="Izoh" name="description">
           <Input placeholder="Izoh" allowClear />
         </Form.Item>
-        <Form.Item label="Telefon" name="phone">
-          <Input placeholder="Telefon raqami" allowClear />
+        <Form.Item
+          name="phone"
+          label="Telefon"
+        >
+          <PhoneInput />
         </Form.Item>
 
         <Row justify="end" gutter={12}>

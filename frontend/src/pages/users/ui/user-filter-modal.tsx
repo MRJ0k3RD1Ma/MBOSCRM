@@ -1,7 +1,8 @@
-// src/pages/users/ui/user-filter-modal.tsx
-import { Button, Col, Form, Input, InputNumber, Row } from "antd";
+import { Button, Col, Form, Input, Row, Select } from "antd";
 import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
+import PhoneInput from "../../../components/form/phone-input";
+import { useGetAllUserRoles } from "../../../config/queries/user-role/user-role-querys";
 
 type Props = {
   open: boolean;
@@ -18,6 +19,7 @@ export default function UsersFilterModal({
 }: Props) {
   const [form] = Form.useForm();
   const [, token] = useToken();
+  const { data: userRolesList } = useGetAllUserRoles();
 
   useEffect(() => {
     if (open) {
@@ -63,18 +65,25 @@ export default function UsersFilterModal({
           <Form.Item label="Ism" name="name">
             <Input placeholder="Ism" />
           </Form.Item>
-          <Form.Item label="Login" name="username">
-            <Input placeholder="Login" />
+          <Form.Item label="Username" name="username">
+            <Input placeholder="Username" />
           </Form.Item>
           <Form.Item label="Telefon" name="phone">
-            <Input placeholder="Telefon" />
+            <PhoneInput />
           </Form.Item>
-          <Form.Item label="Rol ID" name="roleId">
-            <InputNumber
-              style={{ width: "100%" }}
-              placeholder="Rol ID"
-              min={1}
-            />
+          <Form.Item label="Faydalanuvch role" name="roleId">
+            <Select
+              placeholder="Tanglang"
+              showSearch
+              allowClear
+              optionFilterProp="label"
+            >
+              {userRolesList?.data.map((p: any) => (
+                <Select.Option key={p.id} value={p.id} label={p.name}>
+                  {p.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item label="Telegram Chat ID" name="chatId">
             <Input placeholder="Chat ID" />
