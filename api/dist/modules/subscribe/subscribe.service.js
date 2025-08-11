@@ -34,7 +34,11 @@ let SubscribeService = class SubscribeService {
             const subscribe = await this.prisma.subscribe.findFirst({
                 where: {
                     saleId: subscribeSale.saleId,
-                    paying_date: { gt: new Date() },
+                    paying_date: {
+                        gt: (0, dayjs_1.default)(new Date())
+                            .set('day', subscribeSale.sale.subscribe_generate_day + 1)
+                            .toDate(),
+                    },
                 },
             });
             if (!subscribe) {
@@ -44,7 +48,10 @@ let SubscribeService = class SubscribeService {
                     price: subscribeSale.product.price,
                     saleId: subscribeSale.saleId,
                     state: client_1.SubscribeState.NOTPAYING,
-                    payingDate: (0, dayjs_1.default)(new Date()).add(1, 'month').toDate(),
+                    payingDate: (0, dayjs_1.default)(new Date())
+                        .add(1, 'month')
+                        .set('day', subscribeSale.sale.subscribe_generate_day)
+                        .toDate(),
                 });
             }
         }
@@ -192,7 +199,7 @@ let SubscribeService = class SubscribeService {
 };
 exports.SubscribeService = SubscribeService;
 __decorate([
-    (0, schedule_1.Cron)('* * 0 * * *'),
+    (0, schedule_1.Cron)('* * 8 * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

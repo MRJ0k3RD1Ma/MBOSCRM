@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 export class SubscribeService {
   constructor(private readonly prisma: PrismaService) {}
 
-  @Cron('* * 0 * * *')
+  @Cron('* * 8 * * *')
   async cron() {
     const subscribeSales = await this.prisma.saleProduct.findMany({
       where: {
@@ -27,7 +27,11 @@ export class SubscribeService {
         where: {
           saleId: subscribeSale.saleId,
 
-          paying_date: { gt: new Date() },
+          paying_date: {
+            gt: dayjs(new Date())
+              .set('day', subscribeSale.sale.subscribe_generate_day + 1)
+              .toDate(),
+          },
         },
       });
 
@@ -38,7 +42,10 @@ export class SubscribeService {
           price: subscribeSale.product.price,
           saleId: subscribeSale.saleId,
           state: SubscribeState.NOTPAYING,
-          payingDate: dayjs(new Date()).add(1, 'month').toDate(),
+          payingDate: dayjs(new Date())
+            .add(1, 'month')
+            .set('day', subscribeSale.sale.subscribe_generate_day)
+            .toDate(),
         });
       }
     }
