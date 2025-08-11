@@ -72,10 +72,17 @@ export default function ArrivedFormPage() {
   }, [arrivedData]);
 
   const onFinish = async (values: any) => {
+    const cleanedProducts = products.map(
+      ({ productId, count, priceIncome }) => ({
+        productId,
+        count,
+        price: priceIncome,
+      })
+    );
     const payload = {
       ...values,
       date: values.date.toISOString(),
-      products,
+      products: cleanedProducts,
     };
 
     if (isEdit) {
@@ -141,9 +148,9 @@ export default function ArrivedFormPage() {
     },
     {
       title: "Narxi",
-      dataIndex: "price",
-      render: (price: number) =>
-        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+      dataIndex: isEdit ? "price" : "priceIncome",
+      render: (priceIncome: number) =>
+        priceIncome ? priceIncome.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
       title: "Umumiy narxi",
@@ -283,13 +290,13 @@ export default function ArrivedFormPage() {
                 if (selectedProduct) {
                   drawerForm.setFieldsValue({
                     count: 1,
-                    price: selectedProduct.price,
-                    priceCount: selectedProduct.price * 1,
+                    priceIncome: selectedProduct.priceIncome,
+                    priceCount: selectedProduct.priceIncome * 1,
                   });
                 } else {
                   drawerForm.setFieldsValue({
                     count: null,
-                    price: null,
+                    priceIncome: null,
                     priceCount: 0,
                   });
                 }
@@ -313,16 +320,17 @@ export default function ArrivedFormPage() {
               className="!w-full"
               placeholder="Soni"
               onChange={(value: any) => {
-                const price = drawerForm.getFieldValue("price") || 0;
+                const priceIncome =
+                  drawerForm.getFieldValue("priceIncome") || 0;
                 drawerForm.setFieldsValue({
-                  priceCount: price * value,
+                  priceCount: priceIncome * value,
                 });
               }}
             />
           </Form.Item>
 
           <Form.Item
-            name="price"
+            name="priceIncome"
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
@@ -353,7 +361,7 @@ export default function ArrivedFormPage() {
         rowKey={(record: any) =>
           isEdit
             ? record.id
-            : `${record.productId}-${record.price}-${record.count}`
+            : `${record.productId}-${record.priceIncome}-${record.count}`
         }
         dataSource={productDataSource}
         columns={columns}
