@@ -13,7 +13,7 @@ export interface Product {
   priceIncome: number;
   reminderFirst: number;
   price: number;
-  type: "DEVICE" | "SERVICE" | "SERVICE";
+  type: "DEVICE" | "SERVICE" | "SUBSCRIPTION";
   countReminder: number;
   countArrived: number;
   countSale: number;
