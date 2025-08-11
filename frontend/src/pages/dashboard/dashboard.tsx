@@ -8,7 +8,13 @@ import {
   Spin,
   Tooltip as AntdTooltip,
 } from "antd";
-import { Users, FileText, TrendingUp, TrendingDown, DollarSign } from "lucide-react"
+import {
+  Users,
+  FileText,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+} from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -35,32 +41,59 @@ function formatMoney(value?: number) {
 }
 
 type StatCardProps = {
-  title: string
-  value: number | string | undefined
-  icon: React.ReactNode
-  bgColor: string
-  textColor?: string
-  subtitle?: string | React.ReactNode
-}
+  title: string;
+  value: number | string | undefined;
+  icon: React.ReactNode;
+  textColor?: string;
+  subtitle?: string | React.ReactNode;
+  bgColor: string;
+};
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, bgColor, textColor = "text-white", subtitle }) => {
+const StatCard: React.FC<StatCardProps> = ({
+  title,
+  value,
+  icon,
+  textColor = "text-white",
+  subtitle,
+  bgColor,
+}) => {
   return (
-    <Card className={`${bgColor} !border-none !shadow-lg !hover:shadow-xl !transition-all !duration-300 hover:scale-105`}>
-      <div className="!p-6">
-        <div className="!flex !items-center !justify-between">
-          <div className="!flex-1">
-            <p className={`!text-sm ${textColor} !opacity-90 !mb-2`}>{title}</p>
-            <h3 className={`!text-2xl !font-bold ${textColor} !mb-1`}>
-              {value ?? "-"}
-            </h3>
-            {subtitle && <div className={`!text-sm ${textColor} !opacity-80`}>{subtitle}</div>}
-          </div>
-          <div className={`${textColor} !opacity-90`}>{icon}</div>
+    <Card
+      className={`!border !border-white/20 !shadow-lg !hover:shadow-xl !transition-all !duration-300 hover:scale-[1.03]
+        !bg-white/10 !backdrop-blur-xl !rounded-2xl`}
+      bodyStyle={{
+        padding: "16px",
+      }}
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <p
+            className={`text-sm ${textColor} opacity-90 mb-1`}
+            style={{ fontWeight: 500 }}
+          >
+            {title}
+          </p>
+          <h3 className={`text-2xl font-bold ${textColor} mb-1`}>
+            {value ?? "-"}
+          </h3>
+          {subtitle && (
+            <div className={`text-sm ${textColor} opacity-80`}>{subtitle}</div>
+          )}
+        </div>
+        <div
+          className={`!p-3 !rounded-full ${bgColor} !backdrop-blur-sm flex items-center justify-center`}
+          style={{
+            minWidth: "50px",
+            minHeight: "50px",
+          }}
+        >
+          {icon}
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};
+
 export default function Dashboard() {
   const currentYear = dayjs().year();
   const [year, setYear] = useState<number>(currentYear);
@@ -149,16 +182,15 @@ export default function Dashboard() {
 
   return (
     <Card style={{ width: "100%" }}>
-      <div className="w-full flex items-center justify-between">
-        <div className=" gap-3">
-          <h1 className="text-2xl font-bold text-white mb-2">Statistika</h1>
-          <p className="text-slate-300 text-[22px]">
+      <div className="w-full flex items-center justify-between mb-2">
+        <div className="gap-3">
+          <h1 className="text-2xl font-bold text-white">Statistika</h1>
+          {/* <p className="text-slate-300 text-[22px]">
             Kompaniya hisob:
             <span style={{ color: (data?.balance ?? 0) < 0 ? "red" : "green" }}>
               {data?.balance?.toLocaleString("uz-UZ") ?? "0"} so'm
             </span>
-
-          </p>
+          </p> */}
         </div>
         <div className="flex items-center gap-3">
           <Text style={{ color: "rgba(255,255,255,0.75)" }}>
@@ -174,49 +206,75 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="!grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <StatCard title="Mijozlar" value={`${stats.clients} dona`} icon={<Users size={32} />} bgColor="!bg-slate-800" />
+        <StatCard
+          title="Mijozlar"
+          value={`${stats.clients} dona`}
+          icon={<Users size={32} />}
+          bgColor="!bg-[#001529]"
+        />
 
-        <StatCard title="Daromadlar" value={formatMoney(stats.income)} icon={<TrendingUp size={32} />} bgColor="!bg-green-500" />
+        <StatCard
+          title="Daromadlar"
+          value={formatMoney(stats.income)}
+          icon={<TrendingUp size={32} />}
+          bgColor="bg-[#0EAF69]"
+        />
 
         <StatCard
           title="Chiqimlar"
-          value={stats.expenses}
+          value={formatMoney(stats.expenses)}
           icon={<TrendingDown size={32} />}
-          bgColor="!bg-orange-500"
+          bgColor="bg-[#F59E0B]"
         />
 
-        <StatCard title="Qarzlar" value={formatMoney(stats.debts)} icon={<TrendingDown size={32} />} bgColor="!bg-red-500" />
+        <StatCard
+          title="Qarzlar"
+          value={formatMoney(stats.debts)}
+          icon={<TrendingDown size={32} />}
+          bgColor="!bg-[#EF4444]"
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="Shartnomalar" value={`${stats.contracts} dona`} icon={<FileText size={32} />} bgColor="!bg-blue-500" />
+        <StatCard
+          title="Shartnomalar"
+          value={`${stats.contracts} dona`}
+          icon={<FileText size={32} />}
+          bgColor="!bg-[#3B82F6]"
+        />
 
         <StatCard
           title="oylikdagi daromadlar"
           value={formatMoney(stats.currentMonthIncome)}
           icon={<TrendingUp size={32} />}
-          bgColor="!bg-green-500"
+          bgColor="bg-[#4CAF50]"
         />
 
         <StatCard
           title="oylikdagi chiqimlar"
           value={formatMoney(stats.currentMonthExpenses)}
           icon={<TrendingDown size={32} />}
-          bgColor="!bg-purple-500"
+          bgColor="bg-[#F59E0B]"
         />
 
         <StatCard
           title="Daromadlar"
           value=""
           icon={<DollarSign size={32} />}
-          bgColor="!bg-purple-500"
+          bgColor="bg-[#4CAF50]"
           subtitle={
             <div className="space-y-1">
-              <div className="!font-semibold">
-                {currentYear} - yil: {new Intl.NumberFormat("ru-RU").format(stats.yearlyIncome || 0)} so'm
+              <div className="!font-semibold text-xl">
+                {currentYear} - yil:{" "}
+                {new Intl.NumberFormat("ru-RU").format(stats.yearlyIncome || 0)}{" "}
+                so'm
               </div>
               <div className="!text-sm !opacity-80">
-                {currentYear - 1} - yil: {new Intl.NumberFormat("ru-RU").format(stats.lastYearIncome || 0)} so'm
+                {currentYear - 1} - yil:{" "}
+                {new Intl.NumberFormat("ru-RU").format(
+                  stats.lastYearIncome || 0
+                )}{" "}
+                so'm
               </div>
             </div>
           }
@@ -354,6 +412,6 @@ export default function Dashboard() {
           </Card>
         </Col>
       </Row>
-    </Card >
+    </Card>
   );
 }
