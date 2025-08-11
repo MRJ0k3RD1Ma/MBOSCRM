@@ -4,7 +4,7 @@ import { UpdateSaleDto } from './dto/update-sale.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
-import { Prisma, ProductType } from '@prisma/client';
+import { Prisma, ProductType, SaleState } from '@prisma/client';
 import { SaleProductService } from '../sale-product/sale-product.service';
 import { env } from 'src/common/config';
 
@@ -85,12 +85,24 @@ export class SaleService {
       });
     }
 
+    const subscriptions = await this.prisma.product.findMany({
+      where: {
+        id: { in: productIds },
+        type: ProductType.SUBSCRIPTION,
+      },
+    });
+    let state: SaleState = SaleState.CLOSED;
+    if (subscriptions.length > 0) {
+      state = SaleState.RUNNING;
+    }
+
     let sale = await this.prisma.sale.create({
       data: {
         date,
         subscribe_begin_date,
         subscribe_generate_day,
         code: `${new Date().getFullYear() - 2000}-${codeId}`,
+        state,
         codeId,
         client: { connect: { id: clientId } },
         register: { connect: { id: creatorId } },
@@ -126,11 +138,6 @@ export class SaleService {
           include: { SaleProduct: { include: { product: true } } },
         });
 
-        await tx.setting.update({
-          where: { id: 1 },
-          data: { balance: { increment: client.balance } },
-        });
-
         await tx.client.update({
           where: { id: client.id },
           data: { balance: newBalance },
@@ -146,11 +153,6 @@ export class SaleService {
             dept: totalPrice,
           },
           include: { SaleProduct: { include: { product: true } } },
-        });
-
-        await tx.setting.update({
-          where: { id: 1 },
-          data: { balance: { increment: totalPrice } },
         });
 
         await tx.client.update({

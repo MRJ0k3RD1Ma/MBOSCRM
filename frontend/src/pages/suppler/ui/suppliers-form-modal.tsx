@@ -1,6 +1,7 @@
-import { Drawer, Form, Input, Button, InputNumber } from "antd";
+import { Drawer, Form, Input, Button } from "antd";
 import { useEffect } from "react";
 import { useThemeContext } from "../../../providers/theme-provider";
+import PhoneInput from "../../../components/form/phone-input";
 
 export interface CreateSupplierInput {
   name: string;
@@ -37,7 +38,7 @@ export default function SuppliersFormModal({
     try {
       const values = await form.validateFields();
       onSubmit(values);
-    } catch {}
+    } catch { }
   };
   const { theme } = useThemeContext();
   const isDark = theme === "dark";
@@ -71,27 +72,21 @@ export default function SuppliersFormModal({
 
         <Form.Item
           name="phone"
-          label="Telefon raqam"
-          rules={[{ required: true, message: "Telefon raqamini kiriting" }]}
+          label="Telefon"
+          rules={[
+            { required: true, message: "Telefon raqam kiriting" },
+            { pattern: /^\+998\d{9}$/, message: "Telefon raqam formati: +998XXXXXXXXX" },
+          ]}
         >
-          <Input placeholder="+998901234567" />
+          <PhoneInput />
         </Form.Item>
 
         <Form.Item name="phoneTwo" label="Ikkinchi telefon raqam">
-          <Input placeholder="+998901112233" />
+          <PhoneInput />
         </Form.Item>
 
         <Form.Item name="description" label="Izoh">
           <Input.TextArea placeholder="Qo‘shimcha izoh..." rows={3} />
-        </Form.Item>
-
-        <Form.Item name="balance" label="Balans">
-          <InputNumber
-            style={{ width: "100%" }}
-            placeholder="0"
-            min={0}
-            step={1000}
-          />
         </Form.Item>
 
         <Button type="primary" htmlType="submit" block>

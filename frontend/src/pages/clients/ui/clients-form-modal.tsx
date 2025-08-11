@@ -7,6 +7,7 @@ import {
   useGetDistrictsByRegion,
 } from "../../../config/queries/location/location-querys";
 import { useGetAllClientTypes } from "../../../config/queries/clients/client-type-querys";
+import PhoneInput from "../../../components/form/phone-input";
 
 interface Props {
   open: boolean;
@@ -43,7 +44,7 @@ export default function ClientFormModal({
     try {
       const values = await form.validateFields();
       onSubmit(values);
-    } catch {}
+    } catch { }
   };
 
   return (
@@ -84,11 +85,13 @@ export default function ClientFormModal({
         <Form.Item
           name="phone"
           label="Telefon"
-          rules={[{ required: true, message: "Telefon raqam kiriting" }]}
+          rules={[
+            { required: true, message: "Telefon raqam kiriting" },
+            { pattern: /^\+998\d{9}$/, message: "Telefon raqam formati: +998XXXXXXXXX" },
+          ]}
         >
-          <Input placeholder="+998901234567" />
+          <PhoneInput />
         </Form.Item>
-
         <Form.Item
           name="typeId"
           label="Client turi"

@@ -1,0 +1,200 @@
+import { SaleProductService } from './sale-product.service';
+import { CreateSaleProductDto } from './dto/create-sale-product.dto';
+import { UpdateSaleProductDto } from './dto/update-sale-product.dto';
+import { Request } from 'express';
+import { FindAllSaleProductQueryDto } from './dto/findAll-sale-product-query.dto';
+export declare class SaleProductController {
+    private readonly saleProductService;
+    constructor(saleProductService: SaleProductService);
+    create(createSaleProductDto: CreateSaleProductDto, req: Request): Promise<{
+        product: {
+            price: number;
+            id: number;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            registerId: number | null;
+            modifyId: number | null;
+            name: string;
+            barcode: string | null;
+            barcodeId: number | null;
+            groupId: number;
+            unitId: number | null;
+            priceIncome: number;
+            reminderFirst: number;
+            type: import(".prisma/client").$Enums.ProductType;
+            countReminder: number;
+            countArrived: number;
+            countSale: number;
+        };
+    } & {
+        price: number | null;
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date | null;
+        updatedAt: Date | null;
+        registerId: number | null;
+        modifyId: number | null;
+        saleId: number | null;
+        productId: number | null;
+        count: number | null;
+        priceCount: number | null;
+        is_subscribe: boolean | null;
+    }>;
+    findAll(dto: FindAllSaleProductQueryDto): Promise<{
+        total: number;
+        page: number;
+        limit: number;
+        data: ({
+            register: {
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                name: string;
+                phone: string | null;
+                username: string;
+                password: string;
+                roleId: number | null;
+                chatId: string | null;
+            };
+            sale: {
+                price: number;
+                state: import(".prisma/client").$Enums.SaleState;
+                id: number;
+                date: Date | null;
+                code: string | null;
+                codeId: number | null;
+                clientId: number;
+                dept: number;
+                credit: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                registerId: number | null;
+                modifyId: number | null;
+                clientName: string | null;
+                subscribe_begin_date: Date | null;
+                subscribe_generate_day: number | null;
+            };
+            modify: {
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                name: string;
+                phone: string | null;
+                username: string;
+                password: string;
+                roleId: number | null;
+                chatId: string | null;
+            };
+            product: {
+                ProductUnit: {
+                    id: number;
+                    isDeleted: boolean | null;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    registerId: number | null;
+                    modifyId: number | null;
+                    name: string;
+                };
+            } & {
+                price: number;
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                registerId: number | null;
+                modifyId: number | null;
+                name: string;
+                barcode: string | null;
+                barcodeId: number | null;
+                groupId: number;
+                unitId: number | null;
+                priceIncome: number;
+                reminderFirst: number;
+                type: import(".prisma/client").$Enums.ProductType;
+                countReminder: number;
+                countArrived: number;
+                countSale: number;
+            };
+        } & {
+            price: number | null;
+            id: number;
+            isDeleted: boolean | null;
+            createdAt: Date | null;
+            updatedAt: Date | null;
+            registerId: number | null;
+            modifyId: number | null;
+            saleId: number | null;
+            productId: number | null;
+            count: number | null;
+            priceCount: number | null;
+            is_subscribe: boolean | null;
+        })[];
+    }>;
+    findOne(id: string): Promise<{
+        product: {
+            price: number;
+            id: number;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            registerId: number | null;
+            modifyId: number | null;
+            name: string;
+            barcode: string | null;
+            barcodeId: number | null;
+            groupId: number;
+            unitId: number | null;
+            priceIncome: number;
+            reminderFirst: number;
+            type: import(".prisma/client").$Enums.ProductType;
+            countReminder: number;
+            countArrived: number;
+            countSale: number;
+        };
+    } & {
+        price: number | null;
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date | null;
+        updatedAt: Date | null;
+        registerId: number | null;
+        modifyId: number | null;
+        saleId: number | null;
+        productId: number | null;
+        count: number | null;
+        priceCount: number | null;
+        is_subscribe: boolean | null;
+    }>;
+    update(id: string, updateSaleProductDto: UpdateSaleProductDto, req: Request): Promise<{
+        price: number | null;
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date | null;
+        updatedAt: Date | null;
+        registerId: number | null;
+        modifyId: number | null;
+        saleId: number | null;
+        productId: number | null;
+        count: number | null;
+        priceCount: number | null;
+        is_subscribe: boolean | null;
+    }>;
+    remove(id: string, req: Request): Promise<{
+        price: number | null;
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date | null;
+        updatedAt: Date | null;
+        registerId: number | null;
+        modifyId: number | null;
+        saleId: number | null;
+        productId: number | null;
+        count: number | null;
+        priceCount: number | null;
+        is_subscribe: boolean | null;
+    }>;
+}

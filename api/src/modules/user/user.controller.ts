@@ -77,7 +77,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  @DecoratorWrapper('Delete User', true, [Role.User])
+  @DecoratorWrapper('Delete User', true, [Role.Admin])
   remove(@Param('id', ParseIntPipe) id: string) {
     return this.userService.remove(+id);
   }

@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from 'src/common/auth/roles/role.enum';
 import { StatisticsService } from './statistics.service';
@@ -9,7 +9,7 @@ export class StatisticsController {
 
   @Get()
   @DecoratorWrapper('Get Statistics', true, [Role.Admin])
-  findOne() {
-    return this.statisticsService.getStatistics();
+  findOne(@Query('year', ParseIntPipe) year: number) {
+    return this.statisticsService.getStatistics(year);
   }
 }

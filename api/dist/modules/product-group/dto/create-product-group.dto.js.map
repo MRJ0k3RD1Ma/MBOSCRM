@@ -1,0 +1,1 @@
+{"version":3,"file":"create-product-group.dto.js","sourceRoot":"","sources":["../../../../src/modules/product-group/dto/create-product-group.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAC9C,qDAA2C;AAE3C,MAAa,qBAAqB;CAOjC;AAPD,sDAOC;AADC;IALC,IAAA,qBAAW,EAAC;QACX,OAAO,EAAE,aAAa;QACtB,WAAW,EAAE,oBAAoB;KAClC,CAAC;IACD,IAAA,0BAAQ,GAAE;;mDACE"}

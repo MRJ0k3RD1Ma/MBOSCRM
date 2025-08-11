@@ -9,13 +9,12 @@ import {
   Tooltip as AntdTooltip,
 } from "antd";
 import {
-  ArrowUpOutlined,
-  ArrowDownOutlined,
-  UserOutlined,
-  FileTextOutlined,
-  FundOutlined,
-  DollarOutlined,
-} from "@ant-design/icons";
+  Users,
+  FileText,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+} from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -33,6 +32,7 @@ import {
   useGetStatistics,
   type StatisticsResponse,
 } from "../../config/queries/statistics/statistics-querys";
+import { useThemeContext } from "../../providers/theme-provider";
 
 const { Title, Text } = Typography;
 
@@ -44,61 +44,63 @@ function formatMoney(value?: number) {
 type StatCardProps = {
   title: string;
   value: number | string | undefined;
-  icon?: React.ReactNode;
-  bg?: string;
-  sub?: string | React.ReactNode;
+  icon: React.ReactNode;
+  textColor?: string;
+  subtitle?: string | React.ReactNode;
+  bgColor: string;
+  isDark: boolean;
 };
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, bg, sub }) => {
+
+const StatCard: React.FC<StatCardProps> = ({
+  title,
+  value,
+  icon,
+  textColor,
+  subtitle,
+  bgColor,
+  isDark,
+}) => {
   return (
     <Card
-      style={{
-        border: "none",
-        borderRadius: 12,
-        display: "flex",
-        flexDirection: "column",
-        flex: 1,
-        background: bg ?? "linear-gradient(135deg,#0f172a,#111827)",
-        boxShadow: "0 6px 18px rgba(2,6,23,0.6)",
-      }}
+      className={`!border ${
+        isDark ? "!border-white/20 !bg-white/10" : "!border-gray-200 !bg-white"
+      } !shadow-lg !hover:shadow-xl !transition-all !duration-300 hover:scale-[1.03] !backdrop-blur-xl !rounded-2xl`}
       bodyStyle={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: 16,
-        gap: 12,
-        color: "#fff",
-        height: "100%",
+        padding: "16px",
       }}
     >
-      <div style={{ minWidth: 0 }}>
-        <Text style={{ color: "rgba(255,255,255,0.85)" }}>{title}</Text>
-        <div style={{ marginTop: 8 }}>
-          <Title
-            level={3}
-            style={{
-              color: "#fff",
-              margin: 0,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <p
+            className={`text-sm ${textColor} opacity-90 mb-1`}
+            style={{ fontWeight: 500 }}
           >
-            {typeof value === "number" ? formatMoney(value) : value ?? "-"}
-          </Title>
+            {title}
+          </p>
+          <h3 className={`text-2xl font-bold ${textColor} mb-1`}>
+            {value ?? "-"}
+          </h3>
+          {subtitle && (
+            <div className={`text-sm ${textColor} opacity-80`}>{subtitle}</div>
+          )}
         </div>
-        {sub && (
-          <div style={{ marginTop: 8, color: "rgba(255,255,255,0.85)" }}>
-            {sub}
-          </div>
-        )}
+        <div
+          className={`!p-3 !rounded-full ${bgColor} !backdrop-blur-sm flex items-center justify-center`}
+          style={{
+            minWidth: "50px",
+            minHeight: "50px",
+          }}
+        >
+          {icon}
+        </div>
       </div>
-      <div style={{ fontSize: 28, opacity: 0.95 }}>{icon}</div>
     </Card>
   );
 };
 
 export default function Dashboard() {
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
   const currentYear = dayjs().year();
   const [year, setYear] = useState<number>(currentYear);
 
@@ -184,19 +186,22 @@ export default function Dashboard() {
   const moneyTooltip = (v: any) =>
     v == null ? "-" : new Intl.NumberFormat("ru-RU").format(v) + " so'm";
 
+  const titleColor = isDark ? "" : "text-gray-800";
+  const subtitleColor = isDark ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.65)";
+  const chartTextColor = isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.65)";
+  const chartGridColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+  const cardTitleColor = isDark ? "#fff" : "rgba(0,0,0,0.85)";
+  const cardBgColor = isDark ? "rgba(255,255,255,0.02)" : "#fff";
+  const cardBorderColor = isDark ? "rgba(255,255,255,0.1)" : "#f0f0f0";
+
   return (
     <Card style={{ width: "100%" }}>
-      <Row justify="space-between" align="middle" style={{ marginBottom: 20 }}>
-        <Title level={3} style={{ color: "#fff", margin: 0 }}>
-          Statistika Kompaniya hisob:{" "}
-          {data?.balance
-            ? data?.balance.toLocaleString("uz-UZ") + " so'm"
-            : " 0"}
-        </Title>
-        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <Text style={{ color: "rgba(255,255,255,0.75)" }}>
-            Yilni tanlang:
-          </Text>
+      <div className="w-full flex items-center justify-between mb-6">
+        <div className="gap-3">
+          <h1 className={`text-2xl font-bold ${titleColor}`}>Statistika</h1>
+        </div>
+        <div className="flex items-center gap-3">
+          <Text style={{ color: subtitleColor }}>Yilni tanlang:</Text>
           <Select value={year} onChange={onYearChange} style={{ width: 120 }}>
             {years.map((y) => (
               <Select.Option key={y} value={y}>
@@ -205,114 +210,102 @@ export default function Dashboard() {
             ))}
           </Select>
         </div>
-      </Row>
+      </div>
 
-      <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Mijozlar"
-            value={stats.clients}
-            icon={<UserOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#0f172a,#111827)"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Daromadlar"
-            value={stats.income}
-            icon={<ArrowUpOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#16a34a,#22c55e)"
-            sub={<span style={{ opacity: 0.9 }}>Oylik va yillik daromad</span>}
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Chiqimlar"
-            value={stats.expenses}
-            icon={<ArrowDownOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#b45309,#f59e0b)"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Qarzlar"
-            value={stats.debts}
-            icon={<DollarOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#ef4444,#f97316)"
-          />
-        </Col>
-      </Row>
+      {/* Stat cards */}
+      <div className="!grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <StatCard
+          title="Mijozlar"
+          value={`${stats.clients} dona`}
+          icon={<Users size={32} color="white" />}
+          bgColor="!bg-[#001529]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+        <StatCard
+          title="Daromadlar"
+          value={formatMoney(stats.income)}
+          icon={<TrendingUp size={32} color="white" />}
+          bgColor="!bg-[#0EAF69]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+        <StatCard
+          title="Chiqimlar"
+          value={formatMoney(stats.expenses)}
+          icon={<TrendingDown size={32} color="white" />}
+          bgColor="!bg-[#F59E0B]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+        <StatCard
+          title="Qarzlar"
+          value={formatMoney(stats.debts)}
+          icon={<TrendingDown size={32} color="white" />}
+          bgColor="!bg-[#EF4444]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+      </div>
 
-      <Row gutter={[16, 16]} style={{ marginTop: 12 }}>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Shartnomalar"
-            value={stats.contracts}
-            icon={<FileTextOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#2563eb,#3b82f6)"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Joriy oy daromadi"
-            value={stats.currentMonthIncome}
-            icon={<FundOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#059669,#10b981)"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <StatCard
-            title="Joriy oy chiqimi"
-            value={stats.currentMonthExpenses}
-            icon={<ArrowDownOutlined style={{ fontSize: 22 }} />}
-            bg="linear-gradient(135deg,#7c3aed,#a855f7)"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} style={{ display: "flex" }}>
-          <Card
-            style={{
-              border: "none",
-              borderRadius: 12,
-              display: "flex",
-              flexDirection: "column",
-              flex: 1,
-              background: "linear-gradient(135deg,#7c3aed,#a855f7)",
-              boxShadow: "0 6px 18px rgba(2,6,23,0.6)",
-            }}
-            bodyStyle={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: 8,
-              padding: 16,
-              height: "100%",
-              color: "#fff",
-            }}
-          >
-            <Text style={{ color: "rgba(255,255,255,0.9)" }}>Daromadlar</Text>
-            <div>
-              <Title level={4} style={{ color: "#fff", margin: 0 }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Shartnomalar"
+          value={`${stats.contracts} dona`}
+          icon={<FileText size={32} color="white" />}
+          bgColor="!bg-[#3B82F6]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+        <StatCard
+          title="Oylikdagi daromadlar"
+          value={formatMoney(stats.currentMonthIncome)}
+          icon={<TrendingUp size={32} color="white" />}
+          bgColor="!bg-[#4CAF50]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+        <StatCard
+          title="Oylikdagi chiqimlar"
+          value={formatMoney(stats.currentMonthExpenses)}
+          icon={<TrendingDown size={32} color="white" />}
+          bgColor="!bg-[#F59E0B]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+        <StatCard
+          title="Daromadlar"
+          value=""
+          isDark={isDark}
+          textColor={titleColor}
+          icon={<DollarSign size={32} color="white" />}
+          bgColor="!bg-[#4CAF50]"
+          subtitle={
+            <div className="space-y-1">
+              <div className="!font-semibold text-xl">
+                {currentYear} - yil:{" "}
                 {new Intl.NumberFormat("ru-RU").format(stats.yearlyIncome || 0)}{" "}
                 so'm
-              </Title>
-              <Text style={{ color: "rgba(255,255,255,0.85)" }}>
-                {currentYear - 1} —{" "}
+              </div>
+              <div className="!text-sm !opacity-80">
+                {currentYear - 1} - yil:{" "}
                 {new Intl.NumberFormat("ru-RU").format(
                   stats.lastYearIncome || 0
                 )}{" "}
                 so'm
-              </Text>
+              </div>
             </div>
-          </Card>
-        </Col>
-      </Row>
-
+          }
+        />
+      </div>
       <Row gutter={0} style={{ marginTop: 24 }}>
         <Col span={24} style={{ display: "flex", padding: 0 }}>
           <Card
             style={{
               width: "100%",
               borderRadius: 12,
+              backgroundColor: cardBgColor,
+              borderColor: cardBorderColor,
               padding: 0,
               display: "flex",
               flexDirection: "column",
@@ -334,7 +327,7 @@ export default function Dashboard() {
                 marginBottom: 8,
               }}
             >
-              <Title level={5} style={{ margin: 0, color: "#fff" }}>
+              <Title level={5} style={{ margin: 0, color: cardTitleColor }}>
                 Oylik: Tushum / Chiqim / Qarzdorlik
               </Title>
               <AntdTooltip title="Har bir ustun oylik qiymatni ko'rsatadi">
@@ -342,35 +335,64 @@ export default function Dashboard() {
               </AntdTooltip>
             </div>
 
-            <div style={{ flex: 1, minHeight: 360 }}>
+            <div
+              style={{ flex: 1, minHeight: 360 }}
+              className="!overflow-hidden"
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={monthlyData}>
-                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.06} />
-                  <XAxis dataKey="monthLabel" stroke="rgba(255,255,255,0.6)" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke={chartGridColor}
+                  />
+                  <XAxis
+                    dataKey="monthLabel"
+                    stroke={chartTextColor}
+                    fontSize={12}
+                  />
                   <YAxis
+                    stroke={chartTextColor}
+                    fontSize={12}
                     tickFormatter={(v) =>
                       v ? `${Math.round(v / 1000)}k` : "0"
                     }
                   />
-                  <Tooltip formatter={(v: any) => moneyTooltip(v)} />
-                  <Legend />
+                  <Tooltip
+                    formatter={(v: any) => moneyTooltip(v)}
+                    contentStyle={{
+                      backgroundColor: isDark
+                        ? "rgba(0,0,0,0.8)"
+                        : "rgba(255,255,255,0.95)",
+                      border: `1px solid ${
+                        isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                      }`,
+                      borderRadius: "8px",
+                      color: isDark ? "#fff" : "#000",
+                    }}
+                  />
+                  <Legend
+                    wrapperStyle={{
+                      color: chartTextColor,
+                      fontSize: "12px",
+                    }}
+                  />
                   <Bar
                     dataKey="tushum"
                     name="Tushum"
                     fill="#22c55e"
-                    radius={[6, 6, 0, 0]}
+                    radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="chiqim"
                     name="Chiqim"
                     fill="#f59e0b"
-                    radius={[6, 6, 0, 0]}
+                    radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="qarzdorlik"
                     name="Qarzdorlik"
                     fill="#ef4444"
-                    radius={[6, 6, 0, 0]}
+                    radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
               </ResponsiveContainer>
@@ -378,11 +400,20 @@ export default function Dashboard() {
           </Card>
         </Col>
 
-        <Col span={24} style={{ display: "flex", padding: 0, marginTop: 24 }}>
+        <Col
+          span={24}
+          style={{
+            display: "flex",
+            padding: 0,
+            marginTop: 24,
+          }}
+        >
           <Card
             style={{
               width: "100%",
               borderRadius: 12,
+              backgroundColor: cardBgColor,
+              borderColor: cardBorderColor,
               padding: 0,
               display: "flex",
               flexDirection: "column",
@@ -401,37 +432,66 @@ export default function Dashboard() {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                marginBottom: 8,
+                marginBottom: 16,
               }}
             >
-              <Title level={5} style={{ margin: 0, color: "#fff" }}>
+              <Title level={5} style={{ margin: 0, color: cardTitleColor }}>
                 Kutilayotgan tushumlar
               </Title>
               <AntdTooltip title="Subscription forecast (oylik kutilayotgan tushumlar)">
-                <Text type="secondary">Forecast</Text>
+                <Text style={{ color: subtitleColor }}>Forecast</Text>
               </AntdTooltip>
             </div>
 
-            <div style={{ flex: 1, minHeight: 360 }}>
+            <div
+              style={{ flex: 1, minHeight: 360 }}
+              className="!overflow-hidden"
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={forecastData}>
-                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.06} />
-                  <XAxis dataKey="monthLabel" stroke="rgba(255,255,255,0.6)" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke={chartGridColor}
+                  />
+                  <XAxis
+                    dataKey="monthLabel"
+                    stroke={chartTextColor}
+                    fontSize={12}
+                  />
                   <YAxis
+                    stroke={chartTextColor}
+                    fontSize={12}
                     tickFormatter={(v) =>
                       v ? `${Math.round(v / 1000)}k` : "0"
                     }
                   />
-                  <Tooltip formatter={(v: any) => moneyTooltip(v)} />
-                  <Legend />
+                  <Tooltip
+                    formatter={(v: any) => moneyTooltip(v)}
+                    contentStyle={{
+                      backgroundColor: isDark
+                        ? "rgba(0,0,0,0.8)"
+                        : "rgba(255,255,255,0.95)",
+                      border: `1px solid ${
+                        isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                      }`,
+                      borderRadius: "8px",
+                      color: isDark ? "#fff" : "#000",
+                    }}
+                  />
+                  <Legend
+                    wrapperStyle={{
+                      color: chartTextColor,
+                      fontSize: "12px",
+                    }}
+                  />
                   <Line
                     type="monotone"
                     dataKey="expected"
                     name="Kutilayotgan tushum"
                     stroke="#3b82f6"
                     strokeWidth={3}
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
+                    dot={{ r: 4, fill: "#3b82f6" }}
+                    activeDot={{ r: 6, fill: "#3b82f6" }}
                   />
                 </LineChart>
               </ResponsiveContainer>

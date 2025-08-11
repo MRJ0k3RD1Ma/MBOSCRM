@@ -46,8 +46,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         : {
             colorPrimary: "#1677ff",
             colorBgContainer: "#ffffff",
-            colorBgLayout: "#f0f2f5",
-            colorText: "#000000",
+            colorBgLayout: "#f9fafb",
+            colorText: "#1f2937",
+            borderRadius: 8,
+            fontSize: 14,
           },
     components:
       theme === "dark"
@@ -69,11 +71,25 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
           }
         : {
             Layout: {
-              bodyBg: "#ffffff",
+              headerBg: "#ffffff",
+              bodyBg: "#f9fafb",
+              footerBg: "#f1f5f9",
+            },
+            Drawer: {
+              colorText: "#1f2937",
+              colorBgContainer: "#ffffff",
             },
             Table: {
               headerBg: "#f1f5f9",
-              headerColor: "#000000",
+              headerColor: "#1f2937",
+              rowHoverBg: "#f9fafb",
+            },
+            Card: {
+              colorBgContainer: "#ffffff",
+              headerBg: "#f9fafb",
+            },
+            Button: {
+              borderRadius: 6,
             },
           },
   };

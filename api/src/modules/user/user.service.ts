@@ -111,7 +111,7 @@ export class UserService implements OnModuleInit {
         { id: user.id, role: Role.Admin, refreshTokenVersion },
         env.REFRESH_TOKEN_SECRET,
         {
-          expiresIn: '1d',
+          expiresIn: '7d',
         },
       ),
     ];
@@ -215,6 +215,7 @@ export class UserService implements OnModuleInit {
         where,
         skip: (page - 1) * limit,
         take: limit,
+        include: { UserRole: true },
         orderBy: { createdAt: 'desc' },
       }),
       this.prisma.user.count({
@@ -233,6 +234,7 @@ export class UserService implements OnModuleInit {
   async findOne(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id, isDeleted: false },
+      include: { UserRole: true },
     });
     if (!user) {
       throw HttpError({ code: 'User not found' });

@@ -70,9 +70,21 @@ export default function Suppliers() {
   const columns = [
     indexColumn(page, limit),
     { title: "Nomi", dataIndex: "name" },
-    { title: "Telefon", dataIndex: "phone" },
-    { title: "Qo‘shimcha telefon", dataIndex: "phoneTwo" },
-    { title: "Izoh", dataIndex: "description" },
+    {
+      title: "Telefon",
+      dataIndex: "phone",
+      render: (text: string) => (text ? text : "-"),
+    },
+    {
+      title: "Qo‘shimcha telefon",
+      dataIndex: "phoneTwo",
+      render: (text: string) => (text ? text : "-"),
+    },
+    {
+      title: "Izoh",
+      dataIndex: "description",
+      render: (text: string) => (text ? text : "-"),
+    },
     {
       title: "Balans",
       dataIndex: "balance",

@@ -44,6 +44,9 @@ export default function SalesFormPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  const [selectedProductCountReminder, setSelectedProductCountReminder] =
+    useState<number | null>(null);
+
   const { data: clients } = useGetAllClients();
   const { data: productsList } = useGetAllProducts();
   const { data: saleData } = useGetSaleById(Number(id), isEdit);
@@ -122,6 +125,7 @@ export default function SalesFormPage() {
       }
 
       drawerForm.resetFields();
+      setSelectedProductCountReminder(null);
       setDrawerOpen(false);
     } catch (error) {
       message.error("Mahsulot kiritishda xatolik yuz berdi");
@@ -165,6 +169,12 @@ export default function SalesFormPage() {
               size="small"
               onClick={() => {
                 drawerForm.setFieldsValue(record);
+                const prod = productsList?.data.find(
+                  (p: any) => p.id === record.productId
+                ) as any;
+                setSelectedProductCountReminder(
+                  prod?.countReminder ?? record?.countReminder ?? null
+                );
                 setDrawerOpen(true);
               }}
             >
@@ -211,6 +221,7 @@ export default function SalesFormPage() {
             <Select
               placeholder="Mijozni tanlang"
               showSearch
+              allowClear
               optionFilterProp="label"
               className="w-full"
             >
@@ -232,15 +243,30 @@ export default function SalesFormPage() {
           <Form.Item
             name="subscribe_begin_date"
             label="Obuna boshlanish sanasi"
-            rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
             <DatePicker className="w-full" format="YYYY-MM-DD" />
           </Form.Item>
+          <Form.Item
+            name="subscription_generate_day"
+            label="To'lov kuni"
+            className="min-w-[200px] grow"
+
+          >
+            <Select placeholder="Kun tanlang" allowClear showSearch optionFilterProp="label">
+              {[...Array(28)].map((_, i) => (
+                <Select.Option key={i + 1} value={i + 1} label={i + 1}>
+                  {i + 1}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
         </div>
       </Form>
 
       <Title level={4}>Mahsulotlar</Title>
+
       <Form form={drawerForm} onFinish={onDrawerFinish}>
         <div className="flex gap-4">
           <Form.Item
@@ -255,24 +281,28 @@ export default function SalesFormPage() {
               allowClear
               onChange={(value) => {
                 const selectedProduct = productsList?.data.find(
-                  (p) => p.id === value
-                );
+                  (p: any) => p.id === value
+                ) as any;
                 if (selectedProduct) {
                   drawerForm.setFieldsValue({
                     count: 1,
                     price: selectedProduct.price,
                     priceCount: selectedProduct.price * 1,
                   });
+                  setSelectedProductCountReminder(
+                    selectedProduct.countReminder ?? null
+                  );
                 } else {
                   drawerForm.setFieldsValue({
                     count: null,
                     price: null,
                     priceCount: 0,
                   });
+                  setSelectedProductCountReminder(null);
                 }
               }}
             >
-              {productsList?.data.map((p) => (
+              {productsList?.data.map((p: any) => (
                 <Select.Option key={p.id} value={p.id} label={p.name}>
                   {p.name}
                 </Select.Option>
@@ -281,22 +311,72 @@ export default function SalesFormPage() {
           </Form.Item>
 
           <Form.Item
-            name="count"
-            rules={[{ required: true }]}
-            className="min-w-[100px] max-w-[150px] grow"
+            shouldUpdate={(prev, curr) => prev.productId !== curr.productId}
+            noStyle
           >
-            <InputNumber
-              min={1}
-              className="!w-full"
-              placeholder="Soni"
-              defaultValue={1}
-              onChange={(value: any) => {
-                const price = drawerForm.getFieldValue("price") || 0;
-                drawerForm.setFieldsValue({
-                  priceCount: price * value,
-                });
-              }}
-            />
+            {({ getFieldValue, setFieldsValue }) => {
+              const selectedProduct = productsList?.data.find(
+                (p) => p.id === getFieldValue("productId")
+              );
+
+              const countReminder: number = selectedProduct?.countReminder ?? 0;
+
+              if (selectedProduct) {
+                if (countReminder > 0) {
+                  setFieldsValue({ count: 1 });
+                } else {
+                  setFieldsValue({ count: null });
+                }
+              }
+
+              return (
+                <div className="flex flex-col -mt-[30px]">
+                  <div
+                    style={{
+                      marginBottom: 8,
+                      color:
+                        selectedProduct?.countReminder === 0 ? "red" : "gray",
+                    }}
+                  >
+                    {selectedProduct
+                      ? `Qolgan soni: ${countReminder}`
+                      : "Mahsulot tanlang"}
+                  </div>
+
+                  <Form.Item
+                    name="count"
+                    rules={[
+                      { required: true, message: "Soni kiriting" },
+                      {
+                        validator: (_, value) => {
+                          if (!selectedProduct) return Promise.resolve();
+                          if (value > countReminder) {
+                            return Promise.reject(
+                              new Error("Mahsulot yetarli emas")
+                            );
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                    className="min-w-[100px] max-w-[150px] grow"
+                  >
+                    <InputNumber
+                      min={1}
+                      className="!w-full"
+                      placeholder="Soni"
+                      disabled={!selectedProduct || countReminder === 0}
+                      onChange={(value: any) => {
+                        const price = getFieldValue("price") || 0;
+                        setFieldsValue({
+                          priceCount: price * (value || 0),
+                        });
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+              );
+            }}
           </Form.Item>
 
           <Form.Item
@@ -326,18 +406,21 @@ export default function SalesFormPage() {
           </Form.Item>
         </div>
       </Form>
+
       <Table
         rowKey={(r) => (isEdit ? r.id : `${r.productId}-${r.count}-${r.price}`)}
         dataSource={productDataSource}
         columns={columns}
         pagination={false}
       />
+
       <Drawer
         open={drawerOpen}
         title="Mahsulot tahrirlash"
         onClose={() => {
           drawerForm.resetFields();
           setDrawerOpen(false);
+          setSelectedProductCountReminder(null);
         }}
         width={400}
         destroyOnClose
@@ -353,8 +436,13 @@ export default function SalesFormPage() {
             label="Mahsulot"
             rules={[{ required: true }]}
           >
-            <Select placeholder="Tanlang" showSearch optionFilterProp="label">
-              {productsList?.data.map((p) => (
+            <Select
+              placeholder="Tanlang"
+              showSearch
+              allowClear
+              optionFilterProp="label"
+            >
+              {productsList?.data.map((p: any) => (
                 <Select.Option key={p.id} value={p.id} label={p.name}>
                   {p.name}
                 </Select.Option>
@@ -364,11 +452,37 @@ export default function SalesFormPage() {
 
           <Form.Item
             name="count"
-            label="Soni"
-            rules={[{ required: true }]}
+            label={
+              selectedProductCountReminder !== null
+                ? `Soni (qolgan: ${selectedProductCountReminder})`
+                : "Soni"
+            }
+            rules={[
+              { required: true, message: "Soni kiritilishi shart" },
+              () => ({
+                validator(_, value) {
+                  if (
+                    selectedProductCountReminder !== null &&
+                    value > selectedProductCountReminder
+                  ) {
+                    return Promise.reject(
+                      new Error(
+                        `Maksimal miqdor: ${selectedProductCountReminder}`
+                      )
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              }),
+            ]}
             className="min-w-[200px] grow"
           >
-            <InputNumber min={1} className="w-full" placeholder="Soni" />
+            <InputNumber
+              min={1}
+              max={selectedProductCountReminder ?? undefined}
+              className="w-full"
+              placeholder="Soni"
+            />
           </Form.Item>
 
           <Form.Item
@@ -386,6 +500,6 @@ export default function SalesFormPage() {
           </Form.Item>
         </Form>
       </Drawer>
-    </Card>
+    </Card >
   );
 }

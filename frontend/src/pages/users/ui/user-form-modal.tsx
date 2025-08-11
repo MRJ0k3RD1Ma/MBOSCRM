@@ -1,10 +1,12 @@
-import { Drawer, Form, Input, InputNumber, Button } from "antd";
+import { Drawer, Form, Input, Button, Select } from "antd";
 import { useEffect } from "react";
 import type {
   CreateUserInput,
   User,
 } from "../../../config/queries/users/users-querys";
 import { useThemeContext } from "../../../providers/theme-provider";
+import { useGetAllUserRoles } from "../../../config/queries/user-role/user-role-querys";
+import PhoneInput from "../../../components/form/phone-input";
 
 type Props = {
   open: boolean;
@@ -22,6 +24,7 @@ export default function UserFormDrawer({
   const [form] = Form.useForm<CreateUserInput>();
   const { theme } = useThemeContext();
   const isDark = theme === "dark";
+  const { data: userRolesList } = useGetAllUserRoles();
 
   useEffect(() => {
     if (initialValues) {
@@ -37,9 +40,7 @@ export default function UserFormDrawer({
       const values = await form.validateFields();
       onSubmit(values);
       form.resetFields();
-    } catch {
-      // validation error
-    }
+    } catch { }
   };
 
   return (
@@ -77,22 +78,38 @@ export default function UserFormDrawer({
           <Input placeholder="Login" />
         </Form.Item>
 
-        {!initialValues && (
-          <Form.Item
-            name="password"
-            label="Parol"
-            rules={[{ required: true, message: "Parol kiriting" }]}
-          >
-            <Input.Password placeholder="Parol" />
-          </Form.Item>
-        )}
-
-        <Form.Item name="phone" label="Telefon">
-          <Input placeholder="+998901234567" />
+        <Form.Item
+          name="password"
+          label="Parol"
+          rules={
+            initialValues
+              ? []
+              : [{ required: true, message: "Parol kiriting" }]
+          }
+        >
+          <Input.Password placeholder="Parol" min={6} />
         </Form.Item>
 
-        <Form.Item name="roleId" label="Rol ID">
-          <InputNumber style={{ width: "100%" }} placeholder="Rol ID" min={1} />
+        <Form.Item
+          name="phone"
+          label="Telefon"
+        >
+          <PhoneInput />
+        </Form.Item>
+
+        <Form.Item name="roleId" label="Foydalanuvchi role">
+          <Select
+            placeholder="Tanglang"
+            showSearch
+            allowClear
+            optionFilterProp="label"
+          >
+            {userRolesList?.data.map((p: any) => (
+              <Select.Option key={p.id} value={p.id} label={p.name}>
+                {p.name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item name="chatId" label="Telegram Chat ID">
@@ -102,6 +119,6 @@ export default function UserFormDrawer({
           {initialValues ? "Saqlash" : "Qo‘shish"}
         </Button>
       </Form>
-    </Drawer>
+    </Drawer >
   );
 }

@@ -91,6 +91,10 @@ export class PaidClientService {
       });
       sales = [prioritySale, ...sales];
     }
+    await this.prisma.setting.update({
+      where: { id: 1 },
+      data: { balance: { increment: paymentAmount } },
+    });
 
     for (const sale of sales) {
       if (remainingPayment <= 0) break;
