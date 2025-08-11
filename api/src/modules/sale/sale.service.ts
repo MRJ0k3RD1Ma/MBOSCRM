@@ -138,11 +138,6 @@ export class SaleService {
           include: { SaleProduct: { include: { product: true } } },
         });
 
-        await tx.setting.update({
-          where: { id: 1 },
-          data: { balance: { increment: client.balance } },
-        });
-
         await tx.client.update({
           where: { id: client.id },
           data: { balance: newBalance },
@@ -158,11 +153,6 @@ export class SaleService {
             dept: totalPrice,
           },
           include: { SaleProduct: { include: { product: true } } },
-        });
-
-        await tx.setting.update({
-          where: { id: 1 },
-          data: { balance: { increment: totalPrice } },
         });
 
         await tx.client.update({
