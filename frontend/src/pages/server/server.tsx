@@ -108,7 +108,9 @@ export default function Server() {
       createPaidServerMutation.mutate(
         {
           ...values,
-          endDate: values.endDate.format("YYYY-MM-DD").tz("Asia/Tashkent"),
+          endDate: dayjs(values.endDate)
+            .tz("Asia/Tashkent")
+            .format("YYYY-MM-DD"),
           serverId,
           price: +values.price,
         },

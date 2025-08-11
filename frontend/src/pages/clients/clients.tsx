@@ -86,9 +86,7 @@ export default function ClientsPage() {
       title: "So'ngi o'zgarish",
       dataIndex: "updatedAt",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     {
       title: "Actions",
