@@ -110,7 +110,7 @@ export class StatisticsService {
 
       // total outstanding debts (sum of sale.dept)
       this.prisma.sale.aggregate({
-        _sum: { dept: true },
+        _sum: { credit: true },
         where: { isDeleted: false },
       }),
 
