@@ -13,7 +13,8 @@ export class ArrivedProductService {
     createArrivedProductDto: CreateArrivedProductDto,
     registerId: number,
   ) {
-    const { arrivedId, count, productId, price } = createArrivedProductDto;
+    // eslint-disable-next-line prefer-const
+    let { arrivedId, count, productId, price } = createArrivedProductDto;
 
     if (!arrivedId) {
       throw new HttpError({
@@ -38,6 +39,8 @@ export class ArrivedProductService {
         message: `Product with ID ${productId} not found`,
       });
     }
+
+    price = product.priceIncome;
 
     const arrivedproduct = await this.prisma.arrivedProduct.create({
       data: {

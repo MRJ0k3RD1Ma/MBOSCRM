@@ -73,6 +73,7 @@ let ArrivedService = class ArrivedService {
             const arrivedProduct = await this.arrivedProductService.create({
                 arrivedId: arrived.id,
                 count: product.count,
+                price: product.price,
                 productId: product.productId,
             }, creatorId);
             totalPrice += arrivedProduct.priceCount;

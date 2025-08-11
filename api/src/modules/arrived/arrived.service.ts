@@ -80,6 +80,7 @@ export class ArrivedService {
         {
           arrivedId: arrived.id,
           count: product.count,
+          price: product.price,
           productId: product.productId,
         },
         creatorId,
