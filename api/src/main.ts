@@ -5,6 +5,7 @@ import { env } from './common/config';
 import { SwaggerModule } from '@nestjs/swagger';
 import { ApiSwaggerOptions } from './common/swagger/config.swagger';
 import { HttpExceptionFilter } from './common/filter/httpException.filter';
+import { apiReference } from '@scalar/nestjs-api-reference';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -27,9 +28,8 @@ async function bootstrap() {
 
   if (env.ENV == 'dev') {
     const ApiDocs = SwaggerModule.createDocument(app, ApiSwaggerOptions);
-    SwaggerModule.setup('docs', app, ApiDocs, {
-      customCssUrl: './public/swagger.css',
-    });
+    //themes:  alternate, default, moon, purple, solarized, bluePlanet, saturn, kepler, mars, deepSpace, laserwave, none
+    app.use('/docs', apiReference({ content: ApiDocs, theme: 'bluePlanet' }));
   }
   await app.listen(env.PORT || 3000);
 }

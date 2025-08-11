@@ -7,6 +7,7 @@ const config_1 = require("./common/config");
 const swagger_1 = require("@nestjs/swagger");
 const config_swagger_1 = require("./common/swagger/config.swagger");
 const httpException_filter_1 = require("./common/filter/httpException.filter");
+const nestjs_api_reference_1 = require("@scalar/nestjs-api-reference");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors();
@@ -24,9 +25,7 @@ async function bootstrap() {
     }));
     if (config_1.env.ENV == 'dev') {
         const ApiDocs = swagger_1.SwaggerModule.createDocument(app, config_swagger_1.ApiSwaggerOptions);
-        swagger_1.SwaggerModule.setup('docs', app, ApiDocs, {
-            customCssUrl: './public/swagger.css',
-        });
+        app.use('/docs', (0, nestjs_api_reference_1.apiReference)({ content: ApiDocs, theme: 'bluePlanet' }));
     }
     await app.listen(config_1.env.PORT || 3000);
 }
