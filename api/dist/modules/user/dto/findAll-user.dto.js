@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FindAllUserQueryDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
 class FindAllUserQueryDto extends pagination_dto_1.PaginationDto {
@@ -22,4 +23,29 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], FindAllUserQueryDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '+998910123456' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], FindAllUserQueryDto.prototype, "phone", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 'admin' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], FindAllUserQueryDto.prototype, "username", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 'active' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], FindAllUserQueryDto.prototype, "roleId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 'true' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], FindAllUserQueryDto.prototype, "chatId", void 0);
 //# sourceMappingURL=findAll-user.dto.js.map

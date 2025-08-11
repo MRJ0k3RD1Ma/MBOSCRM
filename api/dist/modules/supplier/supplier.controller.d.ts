@@ -10,10 +10,10 @@ export declare class SupplierController {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         registerId: number | null;
         modifyId: number | null;
@@ -26,36 +26,36 @@ export declare class SupplierController {
         data: ({
             modify: {
                 name: string;
-                username: string;
-                password: string;
                 phone: string | null;
+                username: string;
                 roleId: number | null;
                 chatId: string | null;
+                password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             register: {
                 name: string;
-                username: string;
-                password: string;
                 phone: string | null;
+                username: string;
                 roleId: number | null;
                 chatId: string | null;
+                password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
         } & {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             registerId: number | null;
             modifyId: number | null;
@@ -65,36 +65,36 @@ export declare class SupplierController {
     findOne(id: string): Promise<{
         modify: {
             name: string;
-            username: string;
-            password: string;
             phone: string | null;
+            username: string;
             roleId: number | null;
             chatId: string | null;
+            password: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
         };
         register: {
             name: string;
-            username: string;
-            password: string;
             phone: string | null;
+            username: string;
             roleId: number | null;
             chatId: string | null;
+            password: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
         };
     } & {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         registerId: number | null;
         modifyId: number | null;
@@ -104,10 +104,10 @@ export declare class SupplierController {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         registerId: number | null;
         modifyId: number | null;
@@ -117,10 +117,10 @@ export declare class SupplierController {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         registerId: number | null;
         modifyId: number | null;

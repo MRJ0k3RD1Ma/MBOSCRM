@@ -43,8 +43,8 @@ let ArrivedProductService = class ArrivedProductService {
         const arrivedproduct = await this.prisma.arrivedProduct.create({
             data: {
                 count,
-                priceCount: product.price * count,
-                price: product.price,
+                priceCount: product.priceIncome * count,
+                price: product.priceIncome,
                 arrivedId,
                 productId,
                 registerId,

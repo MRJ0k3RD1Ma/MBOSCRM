@@ -42,8 +42,11 @@ __decorate([
     __metadata("design:type", Number)
 ], UpdateClientDto.prototype, "districtId", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
+    (0, swagger_1.ApiPropertyOptional)({ example: '+998901234567' }),
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.Matches)(/^\+998(9[0-9]|3[3]|7[1]|8[8]|6[1])[0-9]{7}$/, {
+        message: 'Telefon raqam faqat +998 va to‘g‘ri kod bilan boshlanishi kerak',
+    }),
     __metadata("design:type", String)
 ], UpdateClientDto.prototype, "phone", void 0);
 __decorate([

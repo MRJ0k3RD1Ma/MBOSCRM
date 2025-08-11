@@ -164,28 +164,47 @@ let UserService = class UserService {
         return { message: 'Logged out successfully' };
     }
     async findAll(dto) {
-        const { limit = 10, page = 1, name } = dto;
+        const { limit = 10, page = 1, name, roleId, username, chatId, phone } = dto;
+        const where = {
+            isDeleted: false,
+        };
+        if (name) {
+            where.name = {
+                contains: name.trim(),
+                mode: 'insensitive',
+            };
+        }
+        if (roleId) {
+            where.roleId = roleId;
+        }
+        if (username) {
+            where.username = {
+                contains: username.trim(),
+                mode: 'insensitive',
+            };
+        }
+        if (chatId) {
+            where.chatId = {
+                contains: chatId.trim(),
+                mode: 'insensitive',
+            };
+        }
+        if (phone) {
+            where.phone = {
+                contains: phone.trim(),
+                mode: 'insensitive',
+            };
+        }
         const [data, total] = await this.prisma.$transaction([
             this.prisma.user.findMany({
-                where: {
-                    name: {
-                        contains: name?.trim() || '',
-                        mode: 'insensitive',
-                    },
-                    isDeleted: false,
-                },
+                where,
                 skip: (page - 1) * limit,
                 take: limit,
                 include: { UserRole: true },
                 orderBy: { createdAt: 'desc' },
             }),
             this.prisma.user.count({
-                where: {
-                    name: {
-                        contains: name?.trim() || '',
-                        mode: 'insensitive',
-                    },
-                },
+                where,
             }),
         ]);
         return {

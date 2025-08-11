@@ -7,10 +7,10 @@ export declare class PaidSupplierController {
     private readonly paidsupplierService;
     constructor(paidsupplierService: PaidSupplierService);
     create(createPaidSupplierDto: CreatePaidSupplierDto, req: Request): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -25,43 +25,43 @@ export declare class PaidSupplierController {
         data: ({
             modify: {
                 name: string;
-                username: string;
-                password: string;
                 phone: string | null;
+                username: string;
                 roleId: number | null;
                 chatId: string | null;
+                password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             register: {
                 name: string;
-                username: string;
-                password: string;
                 phone: string | null;
+                username: string;
                 roleId: number | null;
                 chatId: string | null;
+                password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             Payment: {
                 name: string | null;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 icon: string | null;
             };
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
@@ -73,43 +73,43 @@ export declare class PaidSupplierController {
     findOne(id: string): Promise<{
         modify: {
             name: string;
-            username: string;
-            password: string;
             phone: string | null;
+            username: string;
             roleId: number | null;
             chatId: string | null;
+            password: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
         };
         register: {
             name: string;
-            username: string;
-            password: string;
             phone: string | null;
+            username: string;
             roleId: number | null;
             chatId: string | null;
+            password: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
         };
         Payment: {
             name: string | null;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
     } & {
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -118,10 +118,10 @@ export declare class PaidSupplierController {
         paymentId: number | null;
     }>;
     update(id: string, updatePaidSupplierDto: UpdatePaidSupplierDto): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -130,10 +130,10 @@ export declare class PaidSupplierController {
         paymentId: number | null;
     }>;
     remove(id: string, req: Request): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;

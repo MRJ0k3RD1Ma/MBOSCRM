@@ -8,8 +8,8 @@ export declare class ArrivedController {
     constructor(arrivedService: ArrivedService);
     create(createArrivedDto: CreateArrivedDto, req: Request): Promise<{
         description: string | null;
-        isDeleted: boolean | null;
         id: number;
+        isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -30,10 +30,10 @@ export declare class ArrivedController {
                 description: string | null;
                 name: string;
                 phone: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 balance: number;
                 registerId: number | null;
                 modifyId: number | null;
@@ -41,21 +41,21 @@ export declare class ArrivedController {
             };
             register: {
                 name: string;
-                username: string;
-                password: string;
                 phone: string | null;
+                username: string;
                 roleId: number | null;
                 chatId: string | null;
+                password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             ArrivedProduct: {
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number | null;
@@ -66,8 +66,8 @@ export declare class ArrivedController {
             }[];
         } & {
             description: string | null;
-            isDeleted: boolean | null;
             id: number;
+            isDeleted: boolean | null;
             registerId: number | null;
             modifyId: number | null;
             price: number;
@@ -85,10 +85,10 @@ export declare class ArrivedController {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             registerId: number | null;
             modifyId: number | null;
@@ -96,21 +96,21 @@ export declare class ArrivedController {
         };
         register: {
             name: string;
-            username: string;
-            password: string;
             phone: string | null;
+            username: string;
             roleId: number | null;
             chatId: string | null;
+            password: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
         };
         ArrivedProduct: {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
@@ -121,8 +121,8 @@ export declare class ArrivedController {
         }[];
     } & {
         description: string | null;
-        isDeleted: boolean | null;
         id: number;
+        isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -136,8 +136,8 @@ export declare class ArrivedController {
     }>;
     update(id: string, updateArrivedDto: UpdateArrivedDto): Promise<{
         description: string | null;
-        isDeleted: boolean | null;
         id: number;
+        isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -151,8 +151,8 @@ export declare class ArrivedController {
     }>;
     remove(id: string): Promise<{
         description: string | null;
-        isDeleted: boolean | null;
         id: number;
+        isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;

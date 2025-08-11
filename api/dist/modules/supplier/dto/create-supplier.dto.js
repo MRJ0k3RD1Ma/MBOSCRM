@@ -26,7 +26,9 @@ __decorate([
     (0, swagger_1.ApiProperty)({ example: '+998901234567' }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsPhoneNumber)('UZ'),
+    (0, class_validator_1.Matches)(/^\+998(9[0-9]|3[3]|7[1]|8[8]|6[1])[0-9]{7}$/, {
+        message: 'Telefon raqam faqat +998 va to‘g‘ri kod bilan boshlanishi kerak',
+    }),
     __metadata("design:type", String)
 ], CreateSupplierDto.prototype, "phone", void 0);
 __decorate([
@@ -38,7 +40,9 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsPhoneNumber)('UZ'),
+    (0, class_validator_1.Matches)(/^\+998(9[0-9]|3[3]|7[1]|8[8]|6[1])[0-9]{7}$/, {
+        message: 'Telefon raqam faqat +998 va to‘g‘ri kod bilan boshlanishi kerak',
+    }),
     __metadata("design:type", String)
 ], CreateSupplierDto.prototype, "phoneTwo", void 0);
 //# sourceMappingURL=create-supplier.dto.js.map
