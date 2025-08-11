@@ -94,9 +94,7 @@ export default function Supplier() {
       title: "Sana",
       dataIndex: "date",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     {
       title: "Umumiy narxi",
@@ -116,9 +114,7 @@ export default function Supplier() {
       title: "To'lov sanasi",
       dataIndex: "paidDate",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     { title: "To'lov turi", dataIndex: ["Payment", "name"] },
     {
@@ -224,8 +220,8 @@ export default function Supplier() {
           <Descriptions.Item label="O’zgartirildi">
             {supplier.updatedAt
               ? dayjs(supplier.updatedAt)
-                .tz("Asia/Tashkent")
-                .format("YYYY-MM-DD HH:mm:ss")
+                  .tz("Asia/Tashkent")
+                  .format("YYYY-MM-DD")
               : "Noma'lum"}
           </Descriptions.Item>
         </Descriptions>

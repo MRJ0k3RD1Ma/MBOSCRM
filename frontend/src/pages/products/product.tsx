@@ -92,9 +92,7 @@ export default function Product() {
       title: "Sana",
       dataIndex: "createdAt",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     {
       title: "Narxi",
@@ -132,9 +130,7 @@ export default function Product() {
       title: "Sana",
       dataIndex: "createdAt",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
     {
       title: "Narxi",
@@ -251,14 +247,14 @@ export default function Product() {
             {product.createdAt
               ? dayjs(product.createdAt)
                   .tz("Asia/Tashkent")
-                  .format("YYYY-MM-DD HH:mm:ss")
+                  .format("YYYY-MM-DD")
               : "Noma'lum"}
           </Descriptions.Item>
           <Descriptions.Item label="O'zgartirilgan">
             {product.updatedAt
               ? dayjs(product.updatedAt)
                   .tz("Asia/Tashkent")
-                  .format("YYYY-MM-DD HH:mm:ss")
+                  .format("YYYY-MM-DD")
               : "Noma'lum"}
           </Descriptions.Item>
         </Descriptions>

@@ -56,9 +56,7 @@ export default function ClientSubscribesNotpayingTable({
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text: string) =>
-        text
-          ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm:ss")
-          : "—",
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },
   ];
 

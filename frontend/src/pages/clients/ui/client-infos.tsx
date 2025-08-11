@@ -92,16 +92,12 @@ export default function ClientInfos({
         </Descriptions.Item>
         <Descriptions.Item label="Yaratilgan">
           {data?.createdAt
-            ? dayjs(data.createdAt)
-                .tz("Asia/Tashkent")
-                .format("YYYY-MM-DD HH:mm:ss")
+            ? dayjs(data.createdAt).tz("Asia/Tashkent").format("YYYY-MM-DD")
             : "Noma'lum"}
         </Descriptions.Item>
         <Descriptions.Item label="O'zgartirilgan">
           {data?.updatedAt
-            ? dayjs(data.updatedAt)
-                .tz("Asia/Tashkent")
-                .format("YYYY-MM-DD HH:mm:ss")
+            ? dayjs(data.updatedAt).tz("Asia/Tashkent").format("YYYY-MM-DD")
             : "Noma'lum"}
         </Descriptions.Item>
         <Descriptions.Item label="Kiritdi">
