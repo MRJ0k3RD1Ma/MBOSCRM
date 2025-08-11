@@ -77,6 +77,12 @@ let ArrivedService = class ArrivedService {
             }, creatorId);
             totalPrice += arrivedProduct.priceCount;
         }
+        await this.prisma.setting.update({
+            where: { id: 1 },
+            data: {
+                balance: { decrement: totalPrice },
+            },
+        });
         arrived = await this.prisma.arrived.update({
             where: { id: arrived.id },
             data: { price: totalPrice },
