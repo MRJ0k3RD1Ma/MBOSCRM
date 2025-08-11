@@ -5,4 +5,5 @@ export declare class CreatePaidOtherDto {
     description: string;
     paidDate?: Date;
     price?: number;
+    paymentId?: number;
 }
