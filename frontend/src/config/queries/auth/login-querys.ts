@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { notification } from "antd";
+import { message } from "antd";
 import { authEndpoints } from "../../endpoint";
 import { api } from "../..";
 import axiosPrivate from "../../api";
 import { TokenManager } from "../../token-manager";
 
-type LoginInput = {
-  name: string;
+export type LoginInput = {
+  username: string;
   password: string;
 };
 
@@ -40,16 +40,11 @@ export const useAdminLogin = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries();
-      notification.success({
-        message: "Muvaffaqiyatli tizimga kirildi",
-        placement: "bottomRight",
-      });
+      message.success("Muvaffaqiyatli tizimga kirildi");
     },
     onError: (error: Error) => {
-      notification.error({
-        message: `Login xatoligi: ${error.message}`,
-        placement: "bottomRight",
-      });
+      message.error(`Bunday foydalanuvchi mavjud emas`);
+      console.log(error.message);
     },
   });
 };
@@ -89,17 +84,11 @@ export const useAdminLogout = () => {
     },
     onSuccess: () => {
       queryClient.clear();
-      notification.success({
-        message: "Tizimdan muvaffaqiyatli chiqildi",
-        placement: "bottomRight",
-      });
+      message.success("Tizimdan muvaffaqiyatli chiqildi");
     },
     onError: (error: Error) => {
       queryClient.clear();
-      notification.error({
-        message: `Logout xatoligi: ${error.message}`,
-        placement: "bottomRight",
-      });
+      message.error(`Logout xatoligi: ${error.message}`);
     },
   });
 };
