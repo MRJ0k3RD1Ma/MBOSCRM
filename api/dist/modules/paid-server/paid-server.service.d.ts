@@ -6,98 +6,98 @@ export declare class PaidServerService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(createPaidServerDto: CreatePaidServerDto): Promise<{
-        description: string | null;
+        id: number;
+        serverId: number;
+        endDate: Date;
+        paymentTypeId: number;
+        price: number;
+        description: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
-        serverId: number;
-        paymentTypeId: number;
-        endDate: Date;
     }>;
     findAll(dto: FindAllQueryPaidServerDto): Promise<({
-        server: {
-            name: string;
-            id: number;
-        };
         paymentType: {
-            name: string | null;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
+            name: string | null;
             icon: string | null;
         };
+        server: {
+            id: number;
+            name: string;
+        };
     } & {
-        description: string | null;
+        id: number;
+        serverId: number;
+        endDate: Date;
+        paymentTypeId: number;
+        price: number;
+        description: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
-        serverId: number;
-        paymentTypeId: number;
-        endDate: Date;
     })[]>;
     findOne(id: number): Promise<{
-        server: {
-            name: string;
-            id: number;
-        };
         paymentType: {
-            name: string | null;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
+            name: string | null;
             icon: string | null;
         };
+        server: {
+            id: number;
+            name: string;
+        };
     } & {
-        description: string | null;
+        id: number;
+        serverId: number;
+        endDate: Date;
+        paymentTypeId: number;
+        price: number;
+        description: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
-        serverId: number;
-        paymentTypeId: number;
-        endDate: Date;
     }>;
     update(id: number, updatePaidServerDto: UpdatePaidServerDto): Promise<{
-        description: string | null;
+        id: number;
+        serverId: number;
+        endDate: Date;
+        paymentTypeId: number;
+        price: number;
+        description: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
-        serverId: number;
-        paymentTypeId: number;
-        endDate: Date;
     }>;
     remove(id: number): Promise<{
-        description: string | null;
+        id: number;
+        serverId: number;
+        endDate: Date;
+        paymentTypeId: number;
+        price: number;
+        description: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
-        serverId: number;
-        paymentTypeId: number;
-        endDate: Date;
     }>;
 }
