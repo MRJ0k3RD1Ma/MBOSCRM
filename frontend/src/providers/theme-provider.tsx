@@ -60,7 +60,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
             },
             Drawer: {
               colorText: "#e2e8f0",
-              colorBgContainer: "#001529",
+              colorBgElevated: "#001529",
             },
             Table: {
               headerBg: "#1e293b",

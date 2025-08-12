@@ -1,7 +1,6 @@
 import { Drawer, Form, Input, Select, Button } from "antd";
 import { useEffect } from "react";
 import type { CreateClientInput } from "../../../config/queries/clients/clients-querys";
-import { useThemeContext } from "../../../providers/theme-provider";
 import {
   useGetAllRegions,
   useGetDistrictsByRegion,
@@ -23,8 +22,7 @@ export default function ClientFormModal({
   initialValues,
 }: Props) {
   const [form] = Form.useForm<CreateClientInput>();
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
+
   const { data: types } = useGetAllClientTypes();
 
   useEffect(() => {
@@ -57,9 +55,6 @@ export default function ClientFormModal({
       open={open}
       destroyOnClose
       width={400}
-      bodyStyle={{
-        background: isDark ? "#001529" : "#ffffff",
-      }}
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item

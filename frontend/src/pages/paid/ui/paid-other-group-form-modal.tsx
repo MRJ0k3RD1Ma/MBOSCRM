@@ -1,4 +1,4 @@
-import { Form, Input, Modal } from "antd";
+import { Drawer, Form, Input, Button } from "antd";
 import { useEffect } from "react";
 import {
   useCreatePaidOtherGroup,
@@ -11,7 +11,7 @@ type Props = {
   selected: any;
 };
 
-export default function PaidOtherGroupFormModal({
+export default function PaidOtherGroupFormDrawer({
   open,
   onClose,
   selected,
@@ -41,14 +41,11 @@ export default function PaidOtherGroupFormModal({
   };
 
   return (
-    <Modal
+    <Drawer
       open={open}
-      onCancel={onClose}
-      onOk={() => form.submit()}
-      confirmLoading={create.isPending || update.isPending}
-      title={selected ? "Tahrirlash" : "Yangi mijoz turi"}
-      okText={selected ? "Saqlash" : "Qo‘shish"}
-      cancelText="Bekor qilish"
+      onClose={onClose}
+      title={selected ? "Tahrirlash" : "Yangi to‘lov guruhi"}
+      width={400}
     >
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item
@@ -58,7 +55,14 @@ export default function PaidOtherGroupFormModal({
         >
           <Input placeholder="Masalan: Kameralar uchun to'lov guruhi" />
         </Form.Item>
+        <Button
+          type="primary"
+          onClick={() => form.submit()}
+          loading={create.isPending || update.isPending}
+        >
+          {selected ? "Saqlash" : "Qo‘shish"}
+        </Button>
       </Form>
-    </Modal>
+    </Drawer>
   );
 }

@@ -4,7 +4,6 @@ import type {
   CreateUserInput,
   User,
 } from "../../../config/queries/users/users-querys";
-import { useThemeContext } from "../../../providers/theme-provider";
 import { useGetAllUserRoles } from "../../../config/queries/user-role/user-role-querys";
 import PhoneInput from "../../../components/form/phone-input";
 
@@ -22,8 +21,6 @@ export default function UserFormDrawer({
   initialValues,
 }: Props) {
   const [form] = Form.useForm<CreateUserInput>();
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
   const { data: userRolesList } = useGetAllUserRoles();
 
   useEffect(() => {
@@ -57,9 +54,6 @@ export default function UserFormDrawer({
       }}
       destroyOnClose
       width={400}
-      bodyStyle={{
-        background: isDark ? "#001529" : "#ffffff",
-      }}
     >
       <Form form={form} layout="vertical">
         <Form.Item

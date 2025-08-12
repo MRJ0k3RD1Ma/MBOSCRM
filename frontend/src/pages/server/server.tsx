@@ -6,7 +6,7 @@ import {
   Table,
   Popconfirm,
   message,
-  Modal,
+  Drawer,
   Form,
   Input,
   DatePicker,
@@ -46,8 +46,8 @@ export default function Server() {
   const createPaidServerMutation = useCreatePaidServer();
   const { data: payments } = useGetAllPayments({ page: 1, limit: 1000 });
 
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
+  const [isPaymentDrawerOpen, setIsPaymentDrawerOpen] = useState(false);
   const [form] = Form.useForm();
   const [paymentForm] = Form.useForm();
 
@@ -61,7 +61,7 @@ export default function Server() {
   };
 
   const handlePayment = () => {
-    setIsPaymentModalOpen(true);
+    setIsPaymentDrawerOpen(true);
     paymentForm.resetFields();
     paymentForm.setFieldsValue({
       serverId,
@@ -70,13 +70,13 @@ export default function Server() {
   };
 
   const handleEdit = () => {
-    setIsEditModalOpen(true);
+    setIsEditDrawerOpen(true);
     form.setFieldsValue({
       name: server?.name,
       responsible: server?.responsible,
       plan: server?.plan,
       endDate: server?.endDate
-        ? dayjs(server.endDate).tz("Asia/Tashkent").format("YYYY-MM-DD")
+        ? dayjs(server.endDate).tz("Asia/Tashkent")
         : null,
     });
   };
@@ -93,7 +93,7 @@ export default function Server() {
         {
           onSuccess: () => {
             message.success("Server yangilandi");
-            setIsEditModalOpen(false);
+            setIsEditDrawerOpen(false);
           },
         }
       );
@@ -115,7 +115,7 @@ export default function Server() {
           price: +values.price,
         },
         {
-          onSuccess: () => setIsPaymentModalOpen(false),
+          onSuccess: () => setIsPaymentDrawerOpen(false),
         }
       );
     } catch (error) {
@@ -198,13 +198,11 @@ export default function Server() {
         />
       </Card>
 
-      <Modal
+      <Drawer
         title="Serverni tahrirlash"
-        open={isEditModalOpen}
-        onCancel={() => setIsEditModalOpen(false)}
-        onOk={handleEditSubmit}
-        okText="Saqlash"
-        cancelText="Bekor qilish"
+        open={isEditDrawerOpen}
+        onClose={() => setIsEditDrawerOpen(false)}
+        width={480}
       >
         <Form layout="vertical" form={form}>
           <Form.Item
@@ -230,16 +228,17 @@ export default function Server() {
           >
             <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
           </Form.Item>
+          <Button type="primary" block onClick={handleEditSubmit}>
+            Saqlash
+          </Button>
         </Form>
-      </Modal>
+      </Drawer>
 
-      <Modal
+      <Drawer
         title="To‘lov qilish"
-        open={isPaymentModalOpen}
-        onCancel={() => setIsPaymentModalOpen(false)}
-        onOk={handlePaymentSubmit}
-        okText="Qo‘shish"
-        cancelText="Bekor qilish"
+        open={isPaymentDrawerOpen}
+        onClose={() => setIsPaymentDrawerOpen(false)}
+        width={480}
       >
         <Form layout="vertical" form={paymentForm}>
           <Form.Item
@@ -280,7 +279,10 @@ export default function Server() {
             <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
           </Form.Item>
         </Form>
-      </Modal>
+        <Button type="primary" block onClick={handlePaymentSubmit}>
+          Qo'shish
+        </Button>
+      </Drawer>
     </div>
   );
 }

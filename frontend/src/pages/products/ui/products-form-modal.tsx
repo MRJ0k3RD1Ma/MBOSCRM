@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import type { CreateProductInput } from "../../../config/queries/products/products-querys";
 import type { ProductUnit } from "../../../config/queries/products/product-unit-querys";
 import type { ProductGroup } from "../../../config/queries/products/product-gorup-querys";
-import { useThemeContext } from "../../../providers/theme-provider";
 
 interface Props {
   open: boolean;
@@ -52,8 +51,6 @@ export default function ProductsModal({
       onSubmit(values);
     } catch {}
   };
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
 
   return (
     <Drawer
@@ -65,9 +62,6 @@ export default function ProductsModal({
       open={open}
       destroyOnClose
       width={720}
-      bodyStyle={{
-        background: isDark ? "#001529" : "#ffffff",
-      }}
     >
       <Form
         layout="vertical"

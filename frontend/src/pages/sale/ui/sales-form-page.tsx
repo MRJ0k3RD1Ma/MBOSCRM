@@ -14,7 +14,6 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useThemeContext } from "../../../providers/theme-provider";
 import { useGetAllClients } from "../../../config/queries/clients/clients-querys";
 import { useGetAllProducts } from "../../../config/queries/products/products-querys";
 import {
@@ -28,6 +27,7 @@ import {
   useGetAllSaleProduct,
   useUpdateSaleProduct,
 } from "../../../config/queries/sale/sale-product-querys";
+import dayjs from "dayjs";
 
 const { Title } = Typography;
 
@@ -37,8 +37,6 @@ export default function SalesFormPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
 
   const [products, setProducts] = useState<any[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -64,7 +62,10 @@ export default function SalesFormPage() {
     if (saleData) {
       form.setFieldsValue({
         ...saleData,
-        date: saleData.date,
+        date: saleData.date ? dayjs(saleData.date) : null,
+        subscribe_begin_date: saleData.subscribe_begin_date
+          ? dayjs(saleData.subscribe_begin_date)
+          : null,
       });
     }
   }, [saleData]);
@@ -439,7 +440,6 @@ export default function SalesFormPage() {
         }}
         width={400}
         destroyOnClose
-        bodyStyle={{ background: isDark ? "#001529" : "#fff" }}
       >
         <Form
           layout="vertical"

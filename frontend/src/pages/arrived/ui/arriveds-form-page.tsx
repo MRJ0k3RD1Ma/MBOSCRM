@@ -29,7 +29,6 @@ import {
   useGetAllArrivedProduct,
   useUpdateArrivedProduct,
 } from "../../../config/queries/arrived/arrived-product-querys";
-import { useThemeContext } from "../../../providers/theme-provider";
 
 const { Title } = Typography;
 
@@ -39,8 +38,6 @@ export default function ArrivedFormPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
 
   const [products, setProducts] = useState<ArrivedProductInput[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -383,9 +380,6 @@ export default function ArrivedFormPage() {
         }}
         width={400}
         destroyOnClose
-        bodyStyle={{
-          background: isDark ? "#001529" : "#ffffff",
-        }}
       >
         <Form layout="vertical" form={drawerForm} onFinish={onDrawerFinish}>
           <Form.Item name="id" hidden>

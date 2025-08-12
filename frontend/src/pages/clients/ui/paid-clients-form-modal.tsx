@@ -1,6 +1,5 @@
 import { Drawer, Form, Select, Button, InputNumber, DatePicker } from "antd";
 import { useEffect } from "react";
-import { useThemeContext } from "../../../providers/theme-provider";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -43,8 +42,6 @@ export default function PaidClientFormModal({
   saleId,
 }: Props) {
   const [form] = Form.useForm<PaidClientFormValues>();
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
 
   useEffect(() => {
     if (initialValues) {
@@ -85,9 +82,6 @@ export default function PaidClientFormModal({
       open={open}
       destroyOnClose
       width={400}
-      bodyStyle={{
-        background: isDark ? "#001529" : "#ffffff",
-      }}
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         {clientId ? (

@@ -1,4 +1,12 @@
-import { Modal, Form, Input, InputNumber, DatePicker, Select } from "antd";
+import {
+  Drawer,
+  Form,
+  Input,
+  InputNumber,
+  DatePicker,
+  Select,
+  Button,
+} from "antd";
 import { useEffect } from "react";
 import dayjs from "dayjs";
 import type {
@@ -8,6 +16,7 @@ import type {
 import { useGetAllPaidOtherGroups } from "../../../config/queries/paid/paid-other-group";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -20,7 +29,7 @@ type Props = {
   initialValues?: PaidOther;
 };
 
-export default function PaidOtherFormModal({
+export default function PaidOtherFormDrawer({
   open,
   onClose,
   onSubmit,
@@ -53,13 +62,12 @@ export default function PaidOtherFormModal({
   };
 
   return (
-    <Modal
+    <Drawer
       title={initialValues ? "Tahrirlash" : "Yangi boshqa to‘lov qo‘shish"}
+      placement="right"
+      width={480}
+      onClose={onClose}
       open={open}
-      onCancel={onClose}
-      onOk={() => form.submit()}
-      okText="Saqlash"
-      cancelText="Bekor qilish"
       destroyOnClose
     >
       <Form
@@ -70,7 +78,7 @@ export default function PaidOtherFormModal({
       >
         <Form.Item
           name="groupId"
-          label="Guruhn"
+          label="Guruh"
           rules={[{ required: true, message: "Guruhni tanlang" }]}
         >
           <Select
@@ -116,7 +124,10 @@ export default function PaidOtherFormModal({
         <Form.Item name="description" label="Izoh">
           <Input.TextArea rows={3} placeholder="Qo‘shimcha ma’lumot" />
         </Form.Item>
+        <Button type="primary" onClick={() => form.submit()}>
+          Saqlash
+        </Button>
       </Form>
-    </Modal>
+    </Drawer>
   );
 }
