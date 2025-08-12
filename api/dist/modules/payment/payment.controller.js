@@ -52,7 +52,7 @@ __decorate([
 ], PaymentController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, decorator_auth_1.DecoratorWrapper)('Get all payments'),
+    (0, decorator_auth_1.DecoratorWrapper)('Get all payments', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [findAll_payment_query_dto_1.FindAllPaymentQueryDto]),
@@ -60,7 +60,7 @@ __decorate([
 ], PaymentController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, decorator_auth_1.DecoratorWrapper)('Get payment by id'),
+    (0, decorator_auth_1.DecoratorWrapper)('Get payment by id', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

@@ -27,13 +27,13 @@ export class ProductUnitController {
   }
 
   @Get()
-  @DecoratorWrapper('Get all product units')
+  @DecoratorWrapper('Get all product units', true, [Role.Admin])
   findAll(@Query() dto: FindAllProductUnitQueryDto) {
     return this.productUnitService.findAll(dto);
   }
 
   @Get(':id')
-  @DecoratorWrapper('Get product unit by id')
+  @DecoratorWrapper('Get product unit by id', true, [Role.Admin])
   findOne(@Param('id', ParseIntPipe) id: string) {
     return this.productUnitService.findOne(+id);
   }
