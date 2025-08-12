@@ -53,6 +53,7 @@ export interface Sale {
   updatedAt: string;
   registerId: number;
   modifyId: number;
+  subscribe_begin_date: string;
   SaleProduct: SaleProduct[];
   client: Client;
 }

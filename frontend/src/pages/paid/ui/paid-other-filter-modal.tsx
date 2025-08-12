@@ -76,12 +76,12 @@ export default function PaidOtherFilterModal({
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
           }}
         >
-          <Form.Item name="groupId" label="Guruh ID">
+          <Form.Item name="groupId" label="Guruh">
             <Input placeholder="Guruh ID" />
           </Form.Item>
 
           <Form.Item name="type" label="Turi">
-            <Select allowClear>
+            <Select allowClear placeholder={"turini tanglang"}>
               <Option value="INCOME">Kirim</Option>
               <Option value="OUTCOME">Chiqim</Option>
             </Select>

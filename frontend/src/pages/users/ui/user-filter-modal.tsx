@@ -62,8 +62,8 @@ export default function UsersFilterModal({
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
           }}
         >
-          <Form.Item label="Ism" name="name">
-            <Input placeholder="Ism" />
+          <Form.Item label="Nomi" name="name">
+            <Input placeholder="Nomi" />
           </Form.Item>
           <Form.Item label="Username" name="username">
             <Input placeholder="Username" />

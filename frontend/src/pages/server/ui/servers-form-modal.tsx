@@ -1,6 +1,5 @@
 import { Drawer, Form, Input, Button, DatePicker } from "antd";
 import { useEffect } from "react";
-import { useThemeContext } from "../../../providers/theme-provider";
 import dayjs from "dayjs";
 
 export interface CreateServerInput {
@@ -26,8 +25,6 @@ export default function ServerFormModal({
   initialValues,
 }: Props) {
   const [form] = Form.useForm<any>();
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
 
   useEffect(() => {
     if (initialValues) {
@@ -62,9 +59,6 @@ export default function ServerFormModal({
       open={open}
       destroyOnClose
       width={400}
-      bodyStyle={{
-        background: isDark ? "#001529" : "#ffffff",
-      }}
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item

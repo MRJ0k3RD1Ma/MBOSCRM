@@ -7,10 +7,10 @@ export declare class ArrivedProductController {
     private readonly arrivedproductService;
     constructor(arrivedproductService: ArrivedProductService);
     create(createArrivedProductDto: CreateArrivedProductDto, req: Request): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -27,20 +27,20 @@ export declare class ArrivedProductController {
             Product: {
                 ProductUnit: {
                     name: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                 };
             } & {
                 type: import(".prisma/client").$Enums.ProductType;
                 name: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
@@ -61,20 +61,20 @@ export declare class ArrivedProductController {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             Arrived: {
                 supplier: {
                     description: string | null;
                     name: string;
                     phone: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     balance: number;
                     registerId: number | null;
                     modifyId: number | null;
@@ -82,8 +82,8 @@ export declare class ArrivedProductController {
                 };
             } & {
                 description: string | null;
-                isDeleted: boolean | null;
                 id: number;
+                isDeleted: boolean | null;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number;
@@ -96,10 +96,10 @@ export declare class ArrivedProductController {
                 updated: Date;
             };
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
@@ -110,10 +110,10 @@ export declare class ArrivedProductController {
         })[];
     }>;
     findOne(id: string): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -123,10 +123,10 @@ export declare class ArrivedProductController {
         priceCount: number | null;
     }>;
     update(id: string, updateArrivedProductDto: UpdateArrivedProductDto): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -136,10 +136,10 @@ export declare class ArrivedProductController {
         priceCount: number | null;
     }>;
     remove(id: string): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;

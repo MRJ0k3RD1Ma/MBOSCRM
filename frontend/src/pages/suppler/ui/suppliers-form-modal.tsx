@@ -1,6 +1,5 @@
 import { Drawer, Form, Input, Button } from "antd";
 import { useEffect } from "react";
-import { useThemeContext } from "../../../providers/theme-provider";
 import PhoneInput from "../../../components/form/phone-input";
 
 export interface CreateSupplierInput {
@@ -38,10 +37,8 @@ export default function SuppliersFormModal({
     try {
       const values = await form.validateFields();
       onSubmit(values);
-    } catch { }
+    } catch {}
   };
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
 
   return (
     <Drawer
@@ -57,9 +54,6 @@ export default function SuppliersFormModal({
       open={open}
       destroyOnClose
       width={400}
-      bodyStyle={{
-        background: isDark ? "#001529" : "#ffffff",
-      }}
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item
@@ -75,7 +69,10 @@ export default function SuppliersFormModal({
           label="Telefon"
           rules={[
             { required: true, message: "Telefon raqam kiriting" },
-            { pattern: /^\+998\d{9}$/, message: "Telefon raqam formati: +998XXXXXXXXX" },
+            {
+              pattern: /^\+998\d{9}$/,
+              message: "Telefon raqam formati: +998XXXXXXXXX",
+            },
           ]}
         >
           <PhoneInput />

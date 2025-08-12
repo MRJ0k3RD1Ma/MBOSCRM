@@ -239,7 +239,7 @@ export default function Dashboard() {
           isDark={isDark}
         />
         <StatCard
-          title="Qarzlar"
+          title="Qarzdorlik"
           value={formatMoney(stats.debts)}
           icon={<TrendingDown size={32} color="white" />}
           bgColor="!bg-[#EF4444]"
@@ -274,7 +274,7 @@ export default function Dashboard() {
           isDark={isDark}
         />
         <StatCard
-          title="Daromadlar"
+          title="Solishtirma daromadlar"
           value=""
           isDark={isDark}
           textColor={titleColor}
@@ -438,9 +438,6 @@ export default function Dashboard() {
               <Title level={5} style={{ margin: 0, color: cardTitleColor }}>
                 Kutilayotgan tushumlar
               </Title>
-              <AntdTooltip title="Subscription forecast (oylik kutilayotgan tushumlar)">
-                <Text style={{ color: subtitleColor }}>Forecast</Text>
-              </AntdTooltip>
             </div>
 
             <div

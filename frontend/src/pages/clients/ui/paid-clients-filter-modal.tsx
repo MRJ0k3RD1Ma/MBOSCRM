@@ -81,11 +81,11 @@ export default function PaidClientFilter({
           <Form.Item label="Mijoz nomi" name="clientName">
             <Input placeholder="Mijoz nomi" />
           </Form.Item>
-          <Form.Item label="Sale kodi" name="saleCode">
-            <Input placeholder="Sale kodi" />
+          <Form.Item label="Sotuv kodi" name="saleCode">
+            <Input placeholder="Sotuv kodi" />
           </Form.Item>
-          <Form.Item label="To‘lov ID" name="paymentId">
-            <Input placeholder="To‘lov ID" />
+          <Form.Item label="To‘lov turi" name="paymentId">
+            <Input placeholder="To‘lov turi" />
           </Form.Item>
           <Form.Item label="To‘lov sanasi" name="payingDate">
             <RangePicker
