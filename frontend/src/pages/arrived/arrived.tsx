@@ -103,7 +103,7 @@ export default function Arrived() {
             {arrived?.date ? dayjs(arrived.date).format("YYYY-MM-DD") : "-"}
           </Descriptions.Item>
           <Descriptions.Item label="Kod">{arrived?.code}</Descriptions.Item>
-          <Descriptions.Item label="Waybill">
+          <Descriptions.Item label="Nakladnoy">
             {arrived?.waybillNumber}
           </Descriptions.Item>
           <Descriptions.Item label="Ta'minotchi">

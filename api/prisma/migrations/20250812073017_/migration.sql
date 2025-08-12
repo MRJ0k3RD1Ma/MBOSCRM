@@ -346,6 +346,7 @@ CREATE TABLE "PaidOther" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "registerId" INTEGER,
     "modifyId" INTEGER,
+    "paymentId" INTEGER NOT NULL,
 
     CONSTRAINT "PaidOther_pkey" PRIMARY KEY ("id")
 );
@@ -604,6 +605,9 @@ ALTER TABLE "PaidOther" ADD CONSTRAINT "PaidOther_registerId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "PaidOther" ADD CONSTRAINT "PaidOther_modifyId_fkey" FOREIGN KEY ("modifyId") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PaidOther" ADD CONSTRAINT "PaidOther_paymentId_fkey" FOREIGN KEY ("paymentId") REFERENCES "payment"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PaidOtherGroup" ADD CONSTRAINT "PaidOtherGroup_registerId_fkey" FOREIGN KEY ("registerId") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;

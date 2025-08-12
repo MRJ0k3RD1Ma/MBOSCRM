@@ -44,12 +44,12 @@ export default function ClientFormModal({
     try {
       const values = await form.validateFields();
       onSubmit(values);
-    } catch { }
+    } catch {}
   };
 
   return (
     <Drawer
-      title={initialValues ? "Clientni tahrirlash" : "Yangi Client"}
+      title={initialValues ? "Mijozni tahrirlash" : "Yangi Mijoz"}
       onClose={() => {
         form.resetFields();
         onClose();
@@ -64,10 +64,10 @@ export default function ClientFormModal({
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item
           name="name"
-          label="Ismi"
-          rules={[{ required: true, message: "Iltimos ismni kiriting" }]}
+          label="Nomi"
+          rules={[{ required: true, message: "Iltimos nomi kiriting" }]}
         >
-          <Input placeholder="Client ismi" />
+          <Input placeholder="Mijoz nomi" />
         </Form.Item>
 
         <Form.Item
@@ -77,28 +77,26 @@ export default function ClientFormModal({
         >
           <Input placeholder="123456789" />
         </Form.Item>
-
-        <Form.Item name="address" label="Manzil">
-          <Input placeholder="Client manzili" />
-        </Form.Item>
-
         <Form.Item
           name="phone"
           label="Telefon"
           rules={[
             { required: true, message: "Telefon raqam kiriting" },
-            { pattern: /^\+998\d{9}$/, message: "Telefon raqam formati: +998XXXXXXXXX" },
+            {
+              pattern: /^\+998\d{9}$/,
+              message: "Telefon raqam formati: +998XXXXXXXXX",
+            },
           ]}
         >
           <PhoneInput />
         </Form.Item>
         <Form.Item
           name="typeId"
-          label="Client turi"
-          rules={[{ required: true, message: "Client turini tanlang" }]}
+          label="Mijoz turi"
+          rules={[{ required: true, message: "Mijoz turini tanlang" }]}
         >
           <Select
-            placeholder="Client turini tanlang"
+            placeholder="Mijoz turini tanlang"
             showSearch
             optionFilterProp="label"
           >
@@ -148,7 +146,9 @@ export default function ClientFormModal({
             ))}
           </Select>
         </Form.Item>
-
+        <Form.Item name="address" label="Manzil">
+          <Input placeholder="Mijoz manzili" />
+        </Form.Item>
         <Form.Item name="description" label="Izoh">
           <Input.TextArea rows={3} placeholder="Qo‘shimcha izoh..." />
         </Form.Item>

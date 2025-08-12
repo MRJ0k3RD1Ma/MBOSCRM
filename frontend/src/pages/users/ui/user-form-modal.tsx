@@ -40,7 +40,7 @@ export default function UserFormDrawer({
       const values = await form.validateFields();
       onSubmit(values);
       form.resetFields();
-    } catch { }
+    } catch {}
   };
 
   return (
@@ -64,15 +64,15 @@ export default function UserFormDrawer({
       <Form form={form} layout="vertical">
         <Form.Item
           name="name"
-          label="Ism"
-          rules={[{ required: true, message: "Ismni kiriting" }]}
+          label="Nomi"
+          rules={[{ required: true, message: "Nomini kiriting" }]}
         >
-          <Input placeholder="Ism" />
+          <Input placeholder="Nomi" />
         </Form.Item>
 
         <Form.Item
           name="username"
-          label="Login"
+          label="Username"
           rules={[{ required: true, message: "Login kiriting" }]}
         >
           <Input placeholder="Login" />
@@ -82,18 +82,13 @@ export default function UserFormDrawer({
           name="password"
           label="Parol"
           rules={
-            initialValues
-              ? []
-              : [{ required: true, message: "Parol kiriting" }]
+            initialValues ? [] : [{ required: true, message: "Parol kiriting" }]
           }
         >
           <Input.Password placeholder="Parol" min={6} />
         </Form.Item>
 
-        <Form.Item
-          name="phone"
-          label="Telefon"
-        >
+        <Form.Item name="phone" label="Telefon">
           <PhoneInput />
         </Form.Item>
 
@@ -113,12 +108,12 @@ export default function UserFormDrawer({
         </Form.Item>
 
         <Form.Item name="chatId" label="Telegram Chat ID">
-          <Input placeholder="Telegram Chat ID" />
+          <Input placeholder="Telegram Chat ID" type="number" />
         </Form.Item>
         <Button type="primary" htmlType="submit" onClick={handleSubmit} block>
           {initialValues ? "Saqlash" : "Qo‘shish"}
         </Button>
       </Form>
-    </Drawer >
+    </Drawer>
   );
 }

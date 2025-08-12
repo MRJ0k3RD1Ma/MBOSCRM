@@ -174,7 +174,11 @@ export default function ProductsModal({
           </Col>
 
           <Col span={12}>
-            <Form.Item name="type" label="Turi">
+            <Form.Item
+              name="type"
+              label="Turi"
+              rules={[{ required: true, message: "Mahsulot turini tanlang" }]}
+            >
               <Select placeholder="Mahsulot turi">
                 <Select.Option value="DEVICE">Qurilma</Select.Option>
                 <Select.Option value="SERVICE">Xizmat</Select.Option>

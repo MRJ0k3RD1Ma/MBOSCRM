@@ -13,7 +13,6 @@ import {
   message,
 } from "antd";
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useThemeContext } from "../../../providers/theme-provider";
 import { useGetAllClients } from "../../../config/queries/clients/clients-querys";

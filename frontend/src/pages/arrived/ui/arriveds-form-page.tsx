@@ -229,7 +229,6 @@ export default function ArrivedFormPage() {
           <Form.Item
             name="waybillNumber"
             label="Nakladnoy raqami"
-            rules={[{ required: true }]}
             style={{ flex: 1 }}
             className="min-w-[200px] grow !w-full"
           >
@@ -333,7 +332,7 @@ export default function ArrivedFormPage() {
           </Form.Item>
 
           <Form.Item
-            name="priceIncome"
+            name={isEdit ? "price" : "priceIncome"}
             label="Narxi"
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
@@ -402,6 +401,7 @@ export default function ArrivedFormPage() {
               placeholder="Mahsulot tanlang"
               showSearch
               optionFilterProp="label"
+              disabled
             >
               {productsList?.data.map((p) => (
                 <Select.Option key={p.id} value={p.id} label={p.name}>

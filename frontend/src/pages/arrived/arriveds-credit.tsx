@@ -35,7 +35,7 @@ export default function ArrivedsCredit() {
     { title: "Nomi", dataIndex: "name", key: "name" },
     { title: "Shtrix kodi", dataIndex: "barcode", key: "barcode" },
     {
-      title: "Guruh ID",
+      title: "Guruhi",
       dataIndex: "groupId",
       key: "groupId",
       render: (groupId: number) =>
