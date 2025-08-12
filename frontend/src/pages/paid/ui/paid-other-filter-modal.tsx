@@ -2,6 +2,8 @@ import { Button, Col, Form, Input, DatePicker, Select, Row } from "antd";
 import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
 import dayjs from "dayjs";
+import { useGetAllPaidOtherGroups } from "../../../config/queries/paid/paid-other-group";
+import { useGetAllPayments } from "../../../config/queries/payment/payment-querys";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -21,6 +23,8 @@ export default function PaidOtherFilterModal({
 }: Props) {
   const [form] = Form.useForm();
   const [, token] = useToken();
+  const { data: groupData } = useGetAllPaidOtherGroups();
+  const { data: paymentData } = useGetAllPayments({ page: 1, limit: 1000 });
 
   useEffect(() => {
     if (open) {
@@ -77,9 +81,33 @@ export default function PaidOtherFilterModal({
           }}
         >
           <Form.Item name="groupId" label="Guruh">
-            <Input placeholder="Guruh ID" />
+            <Select
+              placeholder="Guruhni tanlang"
+              showSearch
+              allowClear
+              optionFilterProp="label"
+            >
+              {groupData?.data.map((p: { id: number; name: string }) => (
+                <Select.Option key={p.id} value={p.id} label={p.name}>
+                  {p.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
-
+          <Form.Item name="paymentId" label="To'lov turi">
+            <Select
+              placeholder="To'lov turini tanlang"
+              showSearch
+              allowClear
+              optionFilterProp="label"
+            >
+              {paymentData?.data.map((p: { id: number; name: string }) => (
+                <Select.Option key={p.id} value={p.id} label={p.name}>
+                  {p.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
           <Form.Item name="type" label="Turi">
             <Select allowClear placeholder={"turini tanglang"}>
               <Option value="INCOME">Kirim</Option>

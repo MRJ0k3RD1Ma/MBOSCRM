@@ -13,7 +13,6 @@ import {
   Select,
 } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import dayjs from "dayjs";
 import { useState } from "react";
 
 import {
@@ -27,8 +26,12 @@ import {
 } from "../../config/queries/server/paid-servers-querys";
 import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
 import { indexColumn } from "../../components/tables/indexColumn";
-
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import dayjs from "dayjs";
 export default function Server() {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   const { id } = useParams();
   const navigate = useNavigate();
   const serverId = Number(id);
@@ -60,15 +63,6 @@ export default function Server() {
     });
   };
 
-  const handlePayment = () => {
-    setIsPaymentDrawerOpen(true);
-    paymentForm.resetFields();
-    paymentForm.setFieldsValue({
-      serverId,
-      endDate: dayjs(),
-    });
-  };
-
   const handleEdit = () => {
     setIsEditDrawerOpen(true);
     form.setFieldsValue({
@@ -81,46 +75,54 @@ export default function Server() {
     });
   };
 
-  const handleEditSubmit = async () => {
-    try {
-      const values = await form.validateFields();
+  const handleEditSubmit = () => {
+    form.validateFields().then((values) => {
       updateMutation.mutate(
         {
           ...values,
           id: serverId,
-          endDate: values.endDate.format("YYYY-MM-DD").tz("Asia/Tashkent"),
+          endDate: dayjs(values.endDate)
+            .tz("Asia/Tashkent")
+            .format("YYYY-MM-DD"),
         },
         {
           onSuccess: () => {
-            message.success("Server yangilandi");
             setIsEditDrawerOpen(false);
           },
         }
       );
-    } catch (error) {
-      console.error("Validation error", error);
-    }
+    });
   };
 
-  const handlePaymentSubmit = async () => {
-    try {
-      const values = await paymentForm.validateFields();
+  const handlePayment = () => {
+    setIsPaymentDrawerOpen(true);
+    paymentForm.resetFields();
+    paymentForm.setFieldsValue({
+      paymentTypeId: undefined,
+      price: undefined,
+      description: "",
+      endDate: dayjs().tz("Asia/Tashkent"),
+    });
+  };
+
+  const handlePaymentSubmit = () => {
+    paymentForm.validateFields().then((values) => {
       createPaidServerMutation.mutate(
         {
           ...values,
+          serverId,
+          price: +values.price,
           endDate: dayjs(values.endDate)
             .tz("Asia/Tashkent")
             .format("YYYY-MM-DD"),
-          serverId,
-          price: +values.price,
         },
         {
-          onSuccess: () => setIsPaymentDrawerOpen(false),
+          onSuccess: () => {
+            setIsPaymentDrawerOpen(false);
+          },
         }
       );
-    } catch (error) {
-      console.error("Validation error", error);
-    }
+    });
   };
 
   const columns = [

@@ -268,11 +268,14 @@ export default function ArrivedFormPage() {
           </Form.Item>
         </div>
       </Form>
-      <Title level={4}>Mahsulotlar</Title>
-      <Form form={drawerForm} onFinish={onDrawerFinish}>
+      <Title level={4} className="!mb-6">
+        Mahsulotlar
+      </Title>
+      <Form form={drawerForm} onFinish={onDrawerFinish} layout="vertical">
         <div className="flex gap-4">
           <Form.Item
             name="productId"
+            label="Mahsulot"
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >

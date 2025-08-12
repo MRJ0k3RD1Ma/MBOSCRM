@@ -1,24 +1,22 @@
-import { useState } from "react";
-import { Button, Card, Input, Space, Table } from "antd";
-import { FilterOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-
+import { useState } from "react";
+import { Button, Card, Select, Space, Table } from "antd";
+import { FilterOutlined } from "@ant-design/icons";
 import { useGetAllPaidServers } from "../../config/queries/server/paid-servers-querys";
 import PaidServersFilterModal from "./ui/paid-servers-filter-modal";
 import { indexColumn } from "../../components/tables/indexColumn";
+import { useGetAllServers } from "../../config/queries/server/servers-querys";
 
 export default function PaidServer() {
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [search, setSearch] = useState("");
+  const { data: serverData } = useGetAllServers();
 
   const { data, isLoading } = useGetAllPaidServers({
     page,
     limit,
-    ...(search ? { name: search } : {}),
-
     ...filters,
   });
 
@@ -55,21 +53,28 @@ export default function PaidServer() {
           width: "100%",
           marginBottom: 16,
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
         <>
-          <Input.Search
-            placeholder="Server nomi bo‘yicha qidirish"
+          <Select
+            placeholder="Serverni tanlang"
+            showSearch
             allowClear
-            enterButton
-            onSearch={(val) => {
-              setSearch(val);
+            optionFilterProp="label"
+            style={{ minWidth: 200 }}
+            value={filters.serverId}
+            onChange={(value) => {
+              setFilters((prev) => ({ ...prev, serverId: value }));
               setPage(1);
             }}
-            style={{ maxWidth: 300 }}
-          />
+          >
+            {serverData?.data.map((p) => (
+              <Select.Option key={p.id} value={p.id} label={p.name}>
+                {p.name}
+              </Select.Option>
+            ))}
+          </Select>
           <Button
             icon={<FilterOutlined />}
             onClick={() => setFilterModalOpen(!filterModalOpen)}

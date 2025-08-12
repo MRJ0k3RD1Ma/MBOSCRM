@@ -1,7 +1,8 @@
-import { Button, Col, DatePicker, Form, Input, Row } from "antd";
+import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
 import dayjs from "dayjs";
+import { useGetAllPayments } from "../../../config/queries/payment/payment-querys";
 
 const { RangePicker } = DatePicker;
 
@@ -20,6 +21,7 @@ export default function PaidClientFilter({
 }: Props) {
   const [form] = Form.useForm();
   const [, token] = useToken();
+  const { data: paymentsData } = useGetAllPayments({ page: 1, limit: 1000 });
 
   useEffect(() => {
     if (open) {
@@ -85,7 +87,18 @@ export default function PaidClientFilter({
             <Input placeholder="Sotuv kodi" />
           </Form.Item>
           <Form.Item label="To‘lov turi" name="paymentId">
-            <Input placeholder="To‘lov turi" />
+            <Select
+              placeholder="To'lov turini tanlang"
+              showSearch
+              allowClear
+              optionFilterProp="label"
+            >
+              {paymentsData?.data.map((p: { id: number; name: string }) => (
+                <Select.Option key={p.id} value={p.id} label={p.name}>
+                  {p.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item label="To‘lov sanasi" name="payingDate">
             <RangePicker

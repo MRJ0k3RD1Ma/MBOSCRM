@@ -61,11 +61,7 @@ export default function PaidServersFilterModal({
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
           }}
         >
-          <Form.Item
-            label="To‘lov turi "
-            name="paymentTypeId"
-            rules={[{ required: true, message: "To‘lov turi  ni kiriting" }]}
-          >
+          <Form.Item label="To‘lov turi " name="paymentId">
             <Select
               placeholder="To‘lovni tanlang"
               showSearch
@@ -78,10 +74,7 @@ export default function PaidServersFilterModal({
               ))}
             </Select>
           </Form.Item>
-          <Form.Item label="Narxi" name="price">
-            <Input type="number" placeholder="Narx" />
-          </Form.Item>
-          <Form.Item label="Sanasi" name="createdAt">
+          <Form.Item label="Sanasi" name="fromDate">
             <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
           </Form.Item>
           <Form.Item label="Izoh" name="description">
