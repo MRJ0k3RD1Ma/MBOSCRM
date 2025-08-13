@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateArrivedProductDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const id_dto_1 = require("../../../common/dtos/id.dto");
 class UpdateArrivedProductDto {
 }
 exports.UpdateArrivedProductDto = UpdateArrivedProductDto;
@@ -28,4 +29,8 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], UpdateArrivedProductDto.prototype, "price", void 0);
+__decorate([
+    (0, id_dto_1.IsId)(false),
+    __metadata("design:type", Number)
+], UpdateArrivedProductDto.prototype, "productId", void 0);
 //# sourceMappingURL=update-arrived-product.dto.js.map

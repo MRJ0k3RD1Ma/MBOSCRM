@@ -10,8 +10,8 @@ export declare class ArrivedService {
     onModuleInit(): Promise<void>;
     create(createArrivedDto: CreateArrivedDto, creatorId: number): Promise<{
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -32,10 +32,10 @@ export declare class ArrivedService {
                 description: string | null;
                 name: string;
                 phone: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 balance: number;
                 registerId: number | null;
                 modifyId: number | null;
@@ -48,16 +48,16 @@ export declare class ArrivedService {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
             ArrivedProduct: {
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number | null;
@@ -68,8 +68,8 @@ export declare class ArrivedService {
             }[];
         } & {
             description: string | null;
-            id: number;
             isDeleted: boolean | null;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number;
@@ -87,10 +87,10 @@ export declare class ArrivedService {
             description: string | null;
             name: string;
             phone: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             balance: number;
             registerId: number | null;
             modifyId: number | null;
@@ -103,16 +103,16 @@ export declare class ArrivedService {
             roleId: number | null;
             chatId: string | null;
             password: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
         ArrivedProduct: {
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
@@ -123,8 +123,8 @@ export declare class ArrivedService {
         }[];
     } & {
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -136,10 +136,82 @@ export declare class ArrivedService {
         created: Date;
         updated: Date;
     }>;
-    update(id: number, updateArrivedDto: UpdateArrivedDto): Promise<{
+    update(id: number, updateArrivedDto: UpdateArrivedDto, modifyId: number): Promise<{
+        supplier: {
+            description: string | null;
+            name: string;
+            phone: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            balance: number;
+            registerId: number | null;
+            modifyId: number | null;
+            phoneTwo: string | null;
+        };
+        modify: {
+            name: string;
+            phone: string | null;
+            username: string;
+            roleId: number | null;
+            chatId: string | null;
+            password: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+        };
+        register: {
+            name: string;
+            phone: string | null;
+            username: string;
+            roleId: number | null;
+            chatId: string | null;
+            password: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+        };
+        ArrivedProduct: ({
+            Product: {
+                type: import(".prisma/client").$Enums.ProductType;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+                registerId: number | null;
+                modifyId: number | null;
+                barcode: string | null;
+                groupId: number;
+                unitId: number | null;
+                priceIncome: number;
+                reminderFirst: number;
+                price: number;
+                barcodeId: number | null;
+                countReminder: number;
+                countArrived: number;
+                countSale: number;
+            };
+        } & {
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            registerId: number | null;
+            modifyId: number | null;
+            price: number | null;
+            arrivedId: number | null;
+            productId: number | null;
+            count: number;
+            priceCount: number | null;
+        })[];
+    } & {
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -153,8 +225,8 @@ export declare class ArrivedService {
     }>;
     remove(id: number): Promise<{
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;

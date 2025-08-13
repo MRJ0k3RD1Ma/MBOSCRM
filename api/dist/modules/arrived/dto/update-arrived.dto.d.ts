@@ -1,9 +1,8 @@
+import { UpdateArrivedProductDto } from "src/modules/arrived-product/dto/update-arrived-product.dto";
 export declare class UpdateArrivedDto {
     date?: Date;
-    code?: string;
-    codeId?: number;
     waybillNumber?: string;
     supplierId?: number;
     description?: string;
-    price?: number;
+    products: UpdateArrivedProductDto[];
 }

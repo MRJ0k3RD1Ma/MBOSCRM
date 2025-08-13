@@ -18,26 +18,14 @@ class UpdateArrivedDto {
 }
 exports.UpdateArrivedDto = UpdateArrivedDto;
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-29T12:12:44.882Z' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-29T12:12:44.882Z" }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
 ], UpdateArrivedDto.prototype, "date", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'ARR-001' }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], UpdateArrivedDto.prototype, "code", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 1 }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    __metadata("design:type", Number)
-], UpdateArrivedDto.prototype, "codeId", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'WB123456' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: "WB123456" }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
@@ -49,15 +37,22 @@ __decorate([
     __metadata("design:type", Number)
 ], UpdateArrivedDto.prototype, "supplierId", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'Qisqacha izoh' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: "Qisqacha izoh" }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateArrivedDto.prototype, "description", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 150000 }),
+    (0, swagger_1.ApiPropertyOptional)({
+        example: [
+            {
+                productId: 1,
+                count: 1,
+            },
+        ],
+    }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], UpdateArrivedDto.prototype, "price", void 0);
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    __metadata("design:type", Array)
+], UpdateArrivedDto.prototype, "products", void 0);
 //# sourceMappingURL=update-arrived.dto.js.map

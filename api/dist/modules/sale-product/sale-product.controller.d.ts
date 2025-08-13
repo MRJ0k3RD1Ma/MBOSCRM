@@ -10,10 +10,10 @@ export declare class SaleProductController {
         product: {
             type: import(".prisma/client").$Enums.ProductType;
             name: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -28,10 +28,10 @@ export declare class SaleProductController {
             countSale: number;
         };
     } & {
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date | null;
         updatedAt: Date | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -49,20 +49,20 @@ export declare class SaleProductController {
             product: {
                 ProductUnit: {
                     name: string;
-                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
+                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                 };
             } & {
                 type: import(".prisma/client").$Enums.ProductType;
                 name: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
@@ -77,10 +77,10 @@ export declare class SaleProductController {
                 countSale: number;
             };
             sale: {
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number;
@@ -102,10 +102,10 @@ export declare class SaleProductController {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
             register: {
                 name: string;
@@ -114,16 +114,16 @@ export declare class SaleProductController {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
         } & {
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date | null;
             updatedAt: Date | null;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
@@ -138,10 +138,10 @@ export declare class SaleProductController {
         product: {
             type: import(".prisma/client").$Enums.ProductType;
             name: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -156,10 +156,10 @@ export declare class SaleProductController {
             countSale: number;
         };
     } & {
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date | null;
         updatedAt: Date | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -170,10 +170,10 @@ export declare class SaleProductController {
         is_subscribe: boolean | null;
     }>;
     update(id: string, updateSaleProductDto: UpdateSaleProductDto, req: Request): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date | null;
         updatedAt: Date | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -184,10 +184,10 @@ export declare class SaleProductController {
         is_subscribe: boolean | null;
     }>;
     remove(id: string, req: Request): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date | null;
         updatedAt: Date | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;

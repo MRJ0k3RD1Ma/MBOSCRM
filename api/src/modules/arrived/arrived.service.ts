@@ -174,7 +174,11 @@ export class ArrivedService {
 		return arrived;
 	}
 
-	async update(id: number, updateArrivedDto: UpdateArrivedDto) {
+	async update(
+		id: number,
+		updateArrivedDto: UpdateArrivedDto,
+		modifyId: number,
+	) {
 		const arrived = await this.prisma.arrived.findFirst({
 			where: {
 				id,
@@ -186,16 +190,55 @@ export class ArrivedService {
 				message: `Arrived with ID ${id} not found`,
 			});
 		}
+
+		let totalPrice = 0;
+		for (let product of updateArrivedDto.products) {
+			const currentArrivedProdcut = await this.prisma.arrivedProduct.findFirst({
+				where: { arrivedId: arrived.id, productId: product.productId },
+			});
+			let arrivedProduct: any;
+			if (currentArrivedProdcut) {
+				arrivedProduct = await this.arrivedProductService.update(
+					currentArrivedProdcut.id,
+					{
+						count: product.count || currentArrivedProdcut.count,
+						price: product.price || currentArrivedProdcut.price,
+						productId: product.productId || currentArrivedProdcut.productId,
+					},
+				);
+			} else {
+				arrivedProduct = await this.arrivedProductService.create(
+					{
+						count: product.count || currentArrivedProdcut.count,
+						price: product.price || currentArrivedProdcut.price,
+						productId: product.productId || currentArrivedProdcut.productId,
+					},
+					modifyId,
+				);
+			}
+			totalPrice += arrivedProduct.priceCount;
+		}
+		await this.prisma.arrivedProduct.deleteMany({
+			where: {
+				arrivedId: arrived.id,
+				productId: { notIn: updateArrivedDto.products.map((v) => v.productId) },
+			},
+		});
+
 		return this.prisma.arrived.update({
 			where: { id },
 			data: {
 				date: updateArrivedDto.date ?? arrived.date,
-				code: updateArrivedDto.code ?? arrived.code,
-				codeId: updateArrivedDto.codeId ?? arrived.codeId,
 				waybillNumber: updateArrivedDto.waybillNumber ?? arrived.waybillNumber,
 				supplierId: updateArrivedDto.supplierId ?? arrived.supplierId,
 				description: updateArrivedDto.description ?? arrived.description,
-				price: updateArrivedDto.price ?? arrived.price,
+				price: totalPrice,
+			},
+			include: {
+				ArrivedProduct: { include: { Product: true } },
+				modify: true,
+				register: true,
+				supplier: true,
 			},
 		});
 	}

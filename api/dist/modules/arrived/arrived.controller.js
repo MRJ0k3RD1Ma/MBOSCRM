@@ -34,8 +34,8 @@ let ArrivedController = class ArrivedController {
     findOne(id) {
         return this.arrivedService.findOne(+id);
     }
-    update(id, updateArrivedDto) {
-        return this.arrivedService.update(+id, updateArrivedDto);
+    update(id, updateArrivedDto, req) {
+        return this.arrivedService.update(+id, updateArrivedDto, req.user.id);
     }
     remove(id) {
         return this.arrivedService.remove(+id);
@@ -72,8 +72,9 @@ __decorate([
     (0, decorator_auth_1.DecoratorWrapper)('update Arrived', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_arrived_dto_1.UpdateArrivedDto]),
+    __metadata("design:paramtypes", [String, update_arrived_dto_1.UpdateArrivedDto, Object]),
     __metadata("design:returntype", void 0)
 ], ArrivedController.prototype, "update", null);
 __decorate([
