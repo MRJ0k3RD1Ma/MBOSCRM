@@ -53,18 +53,23 @@ export default function SuppliersFilterModal({
       }}
     >
       <Form form={form} layout="vertical" initialValues={initialValues}>
-        <Form.Item label="Nomi" name="name">
-          <Input placeholder="Yetkazib beruvchi nomi" allowClear />
-        </Form.Item>
-        <Form.Item label="Izoh" name="description">
-          <Input placeholder="Izoh" allowClear />
-        </Form.Item>
-        <Form.Item
-          name="phone"
-          label="Telefon"
-        >
-          <PhoneInput />
-        </Form.Item>
+        <Row gutter={12}>
+          <Col span={8}>
+            <Form.Item label="Nomi" name="name">
+              <Input placeholder="Yetkazib beruvchi nomi" allowClear />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="Izoh" name="description">
+              <Input placeholder="Izoh" allowClear />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item name="phone" label="Telefon">
+              <PhoneInput />
+            </Form.Item>
+          </Col>
+        </Row>
 
         <Row justify="end" gutter={12}>
           <Col>

@@ -1,4 +1,4 @@
-import { Form, Input, Modal } from "antd";
+import { Drawer, Form, Input, Button } from "antd";
 import { useEffect } from "react";
 import {
   useCreateProductUnit,
@@ -11,7 +11,7 @@ type Props = {
   selected: any;
 };
 
-export default function ProductUnitFormModal({
+export default function ProductUnitFormDrawer({
   open,
   onClose,
   selected,
@@ -37,19 +37,15 @@ export default function ProductUnitFormModal({
       }
       onClose();
       form.resetFields();
-    } catch {
-    }
+    } catch {}
   };
 
   return (
-    <Modal
+    <Drawer
       open={open}
-      onCancel={onClose}
-      onOk={() => form.submit()}
-      confirmLoading={create.isPending || update.isPending}
+      onClose={onClose}
       title={selected ? "Tahrirlash" : "Yangi birlik"}
-      okText={selected ? "Saqlash" : "Qo‘shish"}
-      cancelText="Bekor qilish"
+      width={400}
     >
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item
@@ -59,7 +55,15 @@ export default function ProductUnitFormModal({
         >
           <Input placeholder="Masalan: dona, kg, litr" />
         </Form.Item>
+        <Button
+          type="primary"
+          block
+          onClick={() => form.submit()}
+          loading={create.isPending || update.isPending}
+        >
+          {selected ? "Saqlash" : "Qo‘shish"}
+        </Button>
       </Form>
-    </Modal>
+    </Drawer>
   );
 }

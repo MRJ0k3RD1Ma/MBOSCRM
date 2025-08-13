@@ -4,6 +4,7 @@ import {
   Card,
   Dropdown,
   Form,
+  Select,
   Space,
   Table,
   Tooltip,
@@ -23,6 +24,7 @@ import {
 import PaidOtherFilterModal from "./ui/paid-other-filter-modal";
 import PaidOtherFormModal from "./ui/paid-other-form-modal";
 import { indexColumn } from "../../components/tables/indexColumn";
+import { useGetAllPaidOtherGroups } from "../../config/queries/paid/paid-other-group";
 
 export default function PaidOtherPage() {
   const [form] = Form.useForm();
@@ -32,6 +34,7 @@ export default function PaidOtherPage() {
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
+  const { data: groupData } = useGetAllPaidOtherGroups();
 
   const { data, isLoading } = useGetAllPaidOthers({
     page,
@@ -133,13 +136,32 @@ export default function PaidOtherPage() {
           alignItems: "center",
         }}
       >
-        <Button
-          icon={<FilterOutlined />}
-          onClick={() => setFilterModalOpen(!filterModalOpen)}
-        >
-          Filter
-        </Button>
-
+        <Space>
+          <Select
+            placeholder="Guruhni tanlang"
+            showSearch
+            allowClear
+            optionFilterProp="label"
+            style={{ minWidth: 200 }}
+            value={filters.serverId}
+            onChange={(value) => {
+              setFilters((prev) => ({ ...prev, serverId: value }));
+              setPage(1);
+            }}
+          >
+            {groupData?.data.map((p: { id: number; name: string }) => (
+              <Select.Option key={p.id} value={p.id} label={p.name}>
+                {p.name}
+              </Select.Option>
+            ))}
+          </Select>
+          <Button
+            icon={<FilterOutlined />}
+            onClick={() => setFilterModalOpen(!filterModalOpen)}
+          >
+            Filter
+          </Button>
+        </Space>
         <Button
           type="primary"
           icon={<PlusOutlined />}

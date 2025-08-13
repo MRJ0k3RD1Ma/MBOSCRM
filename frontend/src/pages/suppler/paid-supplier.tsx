@@ -4,6 +4,7 @@ import {
   Card,
   Dropdown,
   Form,
+  Select,
   Space,
   Table,
   Tooltip,
@@ -73,7 +74,7 @@ export default function PaidSuppliers() {
   const columns = [
     indexColumn(page, limit),
     {
-      title: "Ta'minotchi",
+      title: "Yetkazuvchi",
       dataIndex: "supplierId",
       render: (supplierId: number) =>
         suppliersData?.data.find((u) => u.id === supplierId)?.name || "–",
@@ -138,13 +139,32 @@ export default function PaidSuppliers() {
           alignItems: "center",
         }}
       >
-        <Button
-          icon={<FilterOutlined />}
-          onClick={() => setFilterModalOpen(!filterModalOpen)}
-        >
-          Filter
-        </Button>
-
+        <Space>
+          <Select
+            placeholder="To'lov turini tanlang"
+            showSearch
+            allowClear
+            optionFilterProp="label"
+            style={{ minWidth: 200 }}
+            value={filters.paymentId}
+            onChange={(value) => {
+              setFilters((prev) => ({ ...prev, paymentId: value }));
+              setPage(1);
+            }}
+          >
+            {paymentsData?.data.map((p: { id: number; name: string }) => (
+              <Select.Option key={p.id} value={p.id} label={p.name}>
+                {p.name}
+              </Select.Option>
+            ))}
+          </Select>
+          <Button
+            icon={<FilterOutlined />}
+            onClick={() => setFilterModalOpen(!filterModalOpen)}
+          >
+            Filter
+          </Button>
+        </Space>
         <Button
           type="primary"
           icon={<PlusOutlined />}

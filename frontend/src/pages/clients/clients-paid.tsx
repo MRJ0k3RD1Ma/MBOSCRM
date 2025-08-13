@@ -83,20 +83,20 @@ export default function ClientsPaid() {
   const columns = [
     indexColumn(page, limit),
     {
-      title: "Client ID",
+      title: "Mijoz",
       dataIndex: "clientId",
       render: (clientId: number) =>
         clients?.data.find((u) => u.id === clientId)?.name || "–",
     },
 
     {
-      title: "Sale ID",
+      title: "Sotuv",
       dataIndex: "saleId",
       render: (saleId: number) =>
         sales?.data.find((u) => u.id === saleId)?.code || "–",
     },
     {
-      title: "Payment ID",
+      title: "To'lov turi",
       dataIndex: "paymentId",
       render: (paymentId: number) =>
         payments?.data.find((u) => u.id === paymentId)?.name || "–",

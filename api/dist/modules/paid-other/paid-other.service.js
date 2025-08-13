@@ -18,7 +18,15 @@ let PaidOtherService = class PaidOtherService {
         this.prisma = prisma;
     }
     async create(createPaidOtherDto) {
-        const { description, groupId, paidDate, price, type } = createPaidOtherDto;
+        const { description, groupId, paidDate, price, type, paymentId } = createPaidOtherDto;
+        const paymentMethod = await this.prisma.payment.findFirst({
+            where: { id: paymentId, isDeleted: false },
+        });
+        if (!paymentMethod) {
+            throw new http_error_1.HttpError({
+                message: `Payment with ID ${paymentId} not found or deleted`,
+            });
+        }
         if (groupId) {
             const group = await this.prisma.paidOtherGroup.findFirst({
                 where: { id: groupId, isDeleted: false },
@@ -36,6 +44,7 @@ let PaidOtherService = class PaidOtherService {
                 paidDate,
                 price,
                 type,
+                paymentId,
             },
         });
         if (type === 'OUTCOME') {
@@ -82,6 +91,7 @@ let PaidOtherService = class PaidOtherService {
             where,
             include: {
                 group: true,
+                Payment: true,
             },
         });
     }
@@ -90,6 +100,7 @@ let PaidOtherService = class PaidOtherService {
             where: { id, isDeleted: false },
             include: {
                 group: true,
+                Payment: true,
             },
         });
         if (!paidOther) {
@@ -118,6 +129,16 @@ let PaidOtherService = class PaidOtherService {
                 });
             }
         }
+        if (updatePaidOtherDto.paymentId) {
+            const paymentMethod = await this.prisma.payment.findFirst({
+                where: { id: updatePaidOtherDto.paymentId, isDeleted: false },
+            });
+            if (!paymentMethod) {
+                throw new http_error_1.HttpError({
+                    message: `Payment with ID ${updatePaidOtherDto.paymentId} not found or deleted`,
+                });
+            }
+        }
         return this.prisma.paidOther.update({
             where: { id },
             data: {
@@ -126,6 +147,7 @@ let PaidOtherService = class PaidOtherService {
                 paidDate: updatePaidOtherDto.paidDate ?? paidOther.paidDate,
                 price: updatePaidOtherDto.price ?? paidOther.price,
                 type: updatePaidOtherDto.type ?? paidOther.type,
+                paymentId: updatePaidOtherDto.paymentId ?? paidOther.paymentId,
             },
         });
     }

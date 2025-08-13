@@ -217,6 +217,13 @@ export default function Supplier() {
           <Descriptions.Item label="Kiritdi">
             {supplier.register?.name || "-"}
           </Descriptions.Item>
+          <Descriptions.Item label="Yaratildi">
+            {supplier.createdAt
+              ? dayjs(supplier.createdAt)
+                  .tz("Asia/Tashkent")
+                  .format("YYYY-MM-DD")
+              : "Noma'lum"}
+          </Descriptions.Item>
           <Descriptions.Item label="O’zgartirildi">
             {supplier.updatedAt
               ? dayjs(supplier.updatedAt)

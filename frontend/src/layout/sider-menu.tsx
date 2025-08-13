@@ -211,12 +211,12 @@ const menuItems = [
     children: [
       {
         key: "/users",
-        label: "Foydalanuvchilar ro’yhati",
+        label: "Foydalanuvchilar ro'yhati",
         icon: <TeamOutlined />,
       },
       {
         key: "/paid-other-group",
-        label: "Boshqa xarajatlar Guruh",
+        label: "Boshqa xarajat guruhlari",
         icon: <ContainerOutlined />,
       },
       // {

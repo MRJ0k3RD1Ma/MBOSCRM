@@ -33,4 +33,9 @@ export class CreatePaidOtherDto {
   @IsOptional()
   @IsNumber()
   price?: number;
+
+  @ApiProperty({ example: 1, description: 'Payment method ID' })
+  @IsNumber()
+  @Type(() => Number)
+  paymentId?: number;
 }

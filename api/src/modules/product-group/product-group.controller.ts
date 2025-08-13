@@ -35,13 +35,13 @@ export class ProductGroupController {
   }
 
   @Get()
-  @DecoratorWrapper('Get all product groups')
+  @DecoratorWrapper('Get all product groups', true, [Role.Admin])
   findAll(@Query() dto: FindAllProductGroupQueryDto) {
     return this.productGroupService.findAll(dto);
   }
 
   @Get(':id')
-  @DecoratorWrapper('Get product group by id')
+  @DecoratorWrapper('Get product group by id', true, [Role.Admin])
   findOne(@Param('id', ParseIntPipe) id: string) {
     return this.productGroupService.findOne(+id);
   }

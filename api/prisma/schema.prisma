@@ -363,7 +363,7 @@ model PaidServer {
   paymentType   Payment  @relation(fields: [paymentTypeId], references: [id])
   server        Server   @relation(fields: [serverId], references: [id])
   price         Float
-  description   String
+  description   String?
   isDeleted     Boolean? @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now()) @updatedAt
@@ -432,6 +432,7 @@ model Payment {
   PaidSupplier PaidSupplier[]
   PaidClient   PaidClient[]
   PaidServer   PaidServer[]
+  PaidOther    PaidOther[]    @relation("Payment_PaidOther")
 
   @@map("payment")
 }
@@ -452,8 +453,11 @@ model PaidOther {
   registerId Int?
   modifyId   Int?
 
-  register User? @relation("PaidOther_registerId", fields: [registerId], references: [id])
-  modify   User? @relation("PaidOther_modifyId", fields: [modifyId], references: [id])
+  register User?    @relation("PaidOther_registerId", fields: [registerId], references: [id])
+  modify   User?    @relation("PaidOther_modifyId", fields: [modifyId], references: [id])
+  Payment  Payment @relation("Payment_PaidOther", fields: [paymentId], references: [id])
+
+  paymentId Int
 }
 
 model PaidOtherGroup {

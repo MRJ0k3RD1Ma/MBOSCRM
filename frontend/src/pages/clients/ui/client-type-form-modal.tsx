@@ -1,4 +1,4 @@
-import { Form, Input, Modal } from "antd";
+import { Drawer, Form, Input, Button } from "antd";
 import { useEffect } from "react";
 import {
   useCreateClientType,
@@ -11,7 +11,7 @@ type Props = {
   selected: any;
 };
 
-export default function ClientTypeFormModal({
+export default function ClientTypeFormDrawer({
   open,
   onClose,
   selected,
@@ -37,20 +37,16 @@ export default function ClientTypeFormModal({
       }
       onClose();
       form.resetFields();
-    } catch {
-      // Error handled in query
-    }
+    } catch {}
   };
 
   return (
-    <Modal
-      open={open}
-      onCancel={onClose}
-      onOk={() => form.submit()}
-      confirmLoading={create.isPending || update.isPending}
+    <Drawer
       title={selected ? "Tahrirlash" : "Yangi mijoz turi"}
-      okText={selected ? "Saqlash" : "Qo‘shish"}
-      cancelText="Bekor qilish"
+      placement="right"
+      width={400}
+      onClose={onClose}
+      open={open}
     >
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item
@@ -60,7 +56,15 @@ export default function ClientTypeFormModal({
         >
           <Input placeholder="Masalan: Yuridik shaxs" />
         </Form.Item>
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          loading={create.isPending || update.isPending}
+        >
+          {selected ? "Saqlash" : "Qo‘shish"}
+        </Button>
       </Form>
-    </Modal>
+    </Drawer>
   );
 }

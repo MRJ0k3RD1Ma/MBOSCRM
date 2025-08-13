@@ -46,4 +46,10 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreatePaidOtherDto.prototype, "price", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 1, description: 'Payment method ID' }),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], CreatePaidOtherDto.prototype, "paymentId", void 0);
 //# sourceMappingURL=create-paid-other.dto.js.map

@@ -67,7 +67,7 @@ export default function Users() {
 
   const columns = [
     indexColumn(page, limit),
-    { title: "Ism", dataIndex: "name" },
+    { title: "Nomi", dataIndex: "name" },
     { title: "Username", dataIndex: "username" },
     {
       title: "Telefon",

@@ -1,4 +1,4 @@
-import { Button, Col, Form, InputNumber, Row, Select } from "antd";
+import { Button, Col, DatePicker, Form, Row, Select } from "antd";
 import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
 import { useGetAllArrived } from "../../../config/queries/arrived/arrived-qureys";
@@ -66,34 +66,22 @@ export default function ArrivedProductsFilterModal({
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
           }}
         >
-          <Form.Item label="Minimal narx" name="minPrice">
-            <InputNumber
-              style={{ width: "100%" }}
-              min={0}
-              placeholder="Minimal narx"
-            />
-          </Form.Item>
-          <Form.Item label="Maksimal narx" name="maxPrice">
-            <InputNumber
-              style={{ width: "100%" }}
-              min={0}
-              placeholder="Maksimal narx"
-            />
-          </Form.Item>
-
-          <Form.Item label="Kirim" name="arrivedId">
+          <Form.Item label="Kod" name="code">
             <Select
               allowClear
-              placeholder="Kirimni tanlang"
+              placeholder="Kodni tanlang"
               options={
                 arriveds?.data?.map((a: any) => ({
-                  label: `${a.code || "ID:" + a.id} - ${a.date}`,
+                  label: a.code,
                   value: a.id,
                 })) || []
               }
               showSearch
               optionFilterProp="label"
             />
+          </Form.Item>
+          <Form.Item label="Sana" name="date">
+            <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
           </Form.Item>
 
           <Form.Item label="Yetkazib beruvchi" name="supplierId">

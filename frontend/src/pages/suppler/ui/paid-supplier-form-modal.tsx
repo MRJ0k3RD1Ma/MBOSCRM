@@ -1,7 +1,6 @@
 import { Form, InputNumber, Drawer, DatePicker, Select, Button } from "antd";
 import { useEffect } from "react";
 import dayjs from "dayjs";
-import { useThemeContext } from "../../../providers/theme-provider";
 
 type PaidSupplierFormValues = {
   paidDate: string;
@@ -55,32 +54,12 @@ export default function PaidSupplierFormModal({
     form.resetFields();
     onClose();
   };
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
-
   return (
     <Drawer
       title={initialValues ? "To‘lovni tahrirlash" : "Yangi to‘lov qo‘shish"}
       open={open}
       onClose={onClose}
       width={400}
-      bodyStyle={{
-        background: isDark ? "#001529" : "#ffffff",
-      }}
-      footer={
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            gap: "8px",
-          }}
-        >
-          <Button onClick={onClose}>Bekor qilish</Button>
-          <Button type="primary" onClick={() => form.submit()}>
-            Saqlash
-          </Button>
-        </div>
-      }
     >
       <Form layout="vertical" form={form} onFinish={handleFinish}>
         {supplierId ? (
@@ -145,6 +124,9 @@ export default function PaidSupplierFormModal({
         >
           <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
         </Form.Item>
+        <Button type="primary" htmlType="submit" block>
+          Saqlash
+        </Button>
       </Form>
     </Drawer>
   );

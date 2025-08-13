@@ -1,4 +1,4 @@
-import { Form, Input, Modal } from "antd";
+import { Drawer, Form, Input, Button } from "antd";
 import { useEffect } from "react";
 import PhoneInput from "../../../components/form/phone-input";
 
@@ -17,10 +17,9 @@ type Props = {
   initialValues?: SupplierFormValues | null;
 };
 
-export default function SupplierFormModal({
+export default function SupplierFormDrawer({
   open,
   onClose,
-  onSubmit,
   initialValues,
 }: Props) {
   const [form] = Form.useForm<SupplierFormValues>();
@@ -33,25 +32,16 @@ export default function SupplierFormModal({
     }
   }, [initialValues, form]);
 
-  const handleOk = () => {
-    form.validateFields().then((values) => {
-      onSubmit(values);
-      onClose();
-    });
-  };
-
   return (
-    <Modal
+    <Drawer
       open={open}
       title={
         initialValues
           ? "Yetkazib beruvchini tahrirlash"
           : "Yangi yetkazib beruvchi"
       }
-      onCancel={onClose}
-      onOk={handleOk}
-      okText="Saqlash"
-      cancelText="Bekor qilish"
+      width={480}
+      onClose={onClose}
     >
       <Form layout="vertical" form={form}>
         <Form.Item
@@ -67,7 +57,10 @@ export default function SupplierFormModal({
           label="Telefon"
           rules={[
             { required: true, message: "Telefon raqam kiriting" },
-            { pattern: /^\+998\d{9}$/, message: "Telefon raqam formati: +998XXXXXXXXX" },
+            {
+              pattern: /^\+998\d{9}$/,
+              message: "Telefon raqam formati: +998XXXXXXXXX",
+            },
           ]}
         >
           <PhoneInput />
@@ -80,7 +73,10 @@ export default function SupplierFormModal({
         <Form.Item label="Izoh" name="description">
           <Input.TextArea placeholder="Qo‘shimcha ma'lumotlar..." rows={3} />
         </Form.Item>
+        <Button type="primary" htmlType="submit" block>
+          Saqlash
+        </Button>
       </Form>
-    </Modal>
+    </Drawer>
   );
 }

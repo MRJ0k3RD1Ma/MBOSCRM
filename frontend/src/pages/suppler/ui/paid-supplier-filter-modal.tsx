@@ -11,7 +11,7 @@ type Props = {
   suppliers: { id: number; name: string }[];
   payments: { id: number; name: string }[];
 };
-
+const { RangePicker } = DatePicker;
 export default function PaidSupplierFilterUI({
   open,
   onClose,
@@ -26,12 +26,10 @@ export default function PaidSupplierFilterUI({
   useEffect(() => {
     form.setFieldsValue({
       ...initialValues,
-      minPaidDate: initialValues.minPaidDate
-        ? dayjs(initialValues.minPaidDate)
-        : null,
-      maxPaidDate: initialValues.maxPaidDate
-        ? dayjs(initialValues.maxPaidDate)
-        : null,
+      paidDateRange:
+        initialValues.minPaidDate && initialValues.maxPaidDate
+          ? [dayjs(initialValues.minPaidDate), dayjs(initialValues.maxPaidDate)]
+          : [],
     });
   }, [initialValues]);
 
@@ -39,13 +37,20 @@ export default function PaidSupplierFilterUI({
     form.validateFields().then((values) => {
       const filters = {
         ...values,
-        minPaidDate: values.minPaidDate
-          ? dayjs(values.minPaidDate).tz("Asia/Tashkent").format("YYYY-MM-DD")
-          : undefined,
-        maxPaidDate: values.maxPaidDate
-          ? dayjs(values.maxPaidDate).tz("Asia/Tashkent").format("YYYY-MM-DD")
-          : undefined,
+        minPaidDate:
+          values.paidDateRange && values.paidDateRange[0]
+            ? dayjs(values.paidDateRange[0])
+                .tz("Asia/Tashkent")
+                .format("YYYY-MM-DD")
+            : undefined,
+        maxPaidDate:
+          values.paidDateRange && values.paidDateRange[1]
+            ? dayjs(values.paidDateRange[1])
+                .tz("Asia/Tashkent")
+                .format("YYYY-MM-DD")
+            : undefined,
       };
+      delete filters.paidDateRange;
       onApply(filters);
       onClose();
     });
@@ -102,13 +107,12 @@ export default function PaidSupplierFilterUI({
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="Minimal to‘lov sanasi" name="minPaidDate">
-              <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="Maksimal to‘lov sanasi" name="maxPaidDate">
-              <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
+            <Form.Item label="To‘lov sanasi oralig‘i" name="paidDateRange">
+              <RangePicker
+                style={{ width: "100%" }}
+                format="YYYY-MM-DD"
+                allowClear
+              />
             </Form.Item>
           </Col>
         </Row>

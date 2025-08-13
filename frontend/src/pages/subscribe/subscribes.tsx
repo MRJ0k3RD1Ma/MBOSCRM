@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Card, Input, Space, Table, Tag } from "antd";
+import { Button, Card, Input, Select, Space, Table, Tag } from "antd";
 import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { indexColumn } from "../../components/tables/indexColumn";
+import { useGetAllClients } from "../../config/queries/clients/clients-querys";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -18,14 +19,13 @@ export default function Subscribes() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const { data: clients } = useGetAllClients({ page: 1, limit: 100 });
 
   const { data, isLoading } = useGetAllSubscribes({
     page,
     limit,
-    ...(search ? { clientName: search } : {}),
     ...filters,
   });
 
@@ -76,16 +76,28 @@ export default function Subscribes() {
         }}
       >
         <Space>
-          <Input.Search
-            placeholder="Mijoz bo‘yicha qidirish"
+          <Select
+            placeholder="Mijozni tanlang"
+            showSearch
             allowClear
-            enterButton
-            onSearch={(val) => {
-              setSearch(val);
+            optionFilterProp="label"
+            style={{ minWidth: 200 }}
+            value={filters.clientId}
+            onChange={(value) => {
+              setFilters((prev) => ({ ...prev, clientId: value }));
               setPage(1);
             }}
-            style={{ maxWidth: 300 }}
-          />
+          >
+            {clients?.data?.map((client) => (
+              <Select.Option
+                key={client.id}
+                value={client.id}
+                label={client.name}
+              >
+                {client.name}
+              </Select.Option>
+            ))}
+          </Select>
           <Button
             icon={<FilterOutlined />}
             onClick={() => setFilterModalOpen(!filterModalOpen)}

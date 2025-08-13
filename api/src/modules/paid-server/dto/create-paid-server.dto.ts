@@ -10,7 +10,7 @@ export class CreatePaidServerDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
 
   @IsId()
   paymentTypeId: number;

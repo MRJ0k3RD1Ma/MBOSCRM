@@ -51,7 +51,7 @@ __decorate([
 ], ProductUnitController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, decorator_auth_1.DecoratorWrapper)('Get all product units'),
+    (0, decorator_auth_1.DecoratorWrapper)('Get all product units', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [findAll_product_unit_query_dto_1.FindAllProductUnitQueryDto]),
@@ -59,7 +59,7 @@ __decorate([
 ], ProductUnitController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, decorator_auth_1.DecoratorWrapper)('Get product unit by id'),
+    (0, decorator_auth_1.DecoratorWrapper)('Get product unit by id', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

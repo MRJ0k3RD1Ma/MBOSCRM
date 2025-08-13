@@ -10,7 +10,16 @@ import { Prisma } from '@prisma/client';
 export class PaidOtherService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createPaidOtherDto: CreatePaidOtherDto) {
-    const { description, groupId, paidDate, price, type } = createPaidOtherDto;
+    const { description, groupId, paidDate, price, type, paymentId } =
+      createPaidOtherDto;
+    const paymentMethod = await this.prisma.payment.findFirst({
+      where: { id: paymentId, isDeleted: false },
+    });
+    if (!paymentMethod) {
+      throw new HttpError({
+        message: `Payment with ID ${paymentId} not found or deleted`,
+      });
+    }
 
     if (groupId) {
       const group = await this.prisma.paidOtherGroup.findFirst({
@@ -30,6 +39,7 @@ export class PaidOtherService {
         paidDate,
         price,
         type,
+        paymentId,
       },
     });
 
@@ -86,6 +96,7 @@ export class PaidOtherService {
       where,
       include: {
         group: true,
+        Payment: true,
       },
     });
   }
@@ -95,6 +106,7 @@ export class PaidOtherService {
       where: { id, isDeleted: false },
       include: {
         group: true,
+        Payment: true,
       },
     });
     if (!paidOther) {
@@ -125,6 +137,17 @@ export class PaidOtherService {
       }
     }
 
+    if (updatePaidOtherDto.paymentId) {
+      const paymentMethod = await this.prisma.payment.findFirst({
+        where: { id: updatePaidOtherDto.paymentId, isDeleted: false },
+      });
+      if (!paymentMethod) {
+        throw new HttpError({
+          message: `Payment with ID ${updatePaidOtherDto.paymentId} not found or deleted`,
+        });
+      }
+    }
+
     return this.prisma.paidOther.update({
       where: { id },
       data: {
@@ -133,6 +156,7 @@ export class PaidOtherService {
         paidDate: updatePaidOtherDto.paidDate ?? paidOther.paidDate,
         price: updatePaidOtherDto.price ?? paidOther.price,
         type: updatePaidOtherDto.type ?? paidOther.type,
+        paymentId: updatePaidOtherDto.paymentId ?? paidOther.paymentId,
       },
     });
   }

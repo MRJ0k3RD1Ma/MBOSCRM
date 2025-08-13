@@ -25,9 +25,9 @@ export default function ClientsOverPaid() {
 
   const columns = [
     indexColumn(page, limit),
-    { title: "Name", dataIndex: "name" },
+    { title: "Nomi", dataIndex: "name" },
     { title: "INN", dataIndex: "inn" },
-    { title: "Phone", dataIndex: "phone" },
+    { title: "Telefon", dataIndex: "phone" },
     { title: "Mijoz turi", dataIndex: ["ClientType", "name"] },
     {
       title: "Balans",

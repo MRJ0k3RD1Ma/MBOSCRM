@@ -29,7 +29,6 @@ import {
   useGetAllArrivedProduct,
   useUpdateArrivedProduct,
 } from "../../../config/queries/arrived/arrived-product-querys";
-import { useThemeContext } from "../../../providers/theme-provider";
 
 const { Title } = Typography;
 
@@ -39,8 +38,6 @@ export default function ArrivedFormPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
 
   const [products, setProducts] = useState<ArrivedProductInput[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -228,12 +225,11 @@ export default function ArrivedFormPage() {
 
           <Form.Item
             name="waybillNumber"
-            label="Waybill raqami"
-            rules={[{ required: true }]}
+            label="Nakladnoy raqami"
             style={{ flex: 1 }}
             className="min-w-[200px] grow !w-full"
           >
-            <Input placeholder="Waybill raqamini yozing" className="w-full" />
+            <Input placeholder="Nakladnoy raqamini yozing" className="w-full" />
           </Form.Item>
 
           <Form.Item
@@ -272,11 +268,14 @@ export default function ArrivedFormPage() {
           </Form.Item>
         </div>
       </Form>
-      <Title level={4}>Mahsulotlar</Title>
-      <Form form={drawerForm} onFinish={onDrawerFinish}>
+      <Title level={4} className="!mb-6">
+        Mahsulotlar
+      </Title>
+      <Form form={drawerForm} onFinish={onDrawerFinish} layout="vertical">
         <div className="flex gap-4">
           <Form.Item
             name="productId"
+            label="Mahsulot"
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
@@ -314,6 +313,7 @@ export default function ArrivedFormPage() {
 
           <Form.Item
             name="count"
+            label="Soni"
             rules={[{ required: true }]}
             className="min-w-[100px] max-w-[150px] grow"
           >
@@ -332,7 +332,8 @@ export default function ArrivedFormPage() {
           </Form.Item>
 
           <Form.Item
-            name="priceIncome"
+            name={isEdit ? "price" : "priceIncome"}
+            label="Narxi"
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
@@ -348,7 +349,11 @@ export default function ArrivedFormPage() {
               }}
             />
           </Form.Item>
-          <Form.Item name="priceCount" className="min-w-[200px] grow">
+          <Form.Item
+            name="priceCount"
+            label="Umumiy narxi"
+            className="min-w-[200px] grow"
+          >
             <InputNumber disabled className="!w-full" placeholder="Jami narx" />
           </Form.Item>
           <Form.Item style={{ flexShrink: 0 }}>
@@ -378,9 +383,6 @@ export default function ArrivedFormPage() {
         }}
         width={400}
         destroyOnClose
-        bodyStyle={{
-          background: isDark ? "#001529" : "#ffffff",
-        }}
       >
         <Form layout="vertical" form={drawerForm} onFinish={onDrawerFinish}>
           <Form.Item name="id" hidden>
@@ -396,6 +398,7 @@ export default function ArrivedFormPage() {
               placeholder="Mahsulot tanlang"
               showSearch
               optionFilterProp="label"
+              disabled
             >
               {productsList?.data.map((p) => (
                 <Select.Option key={p.id} value={p.id} label={p.name}>

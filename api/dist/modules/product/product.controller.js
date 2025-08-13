@@ -54,7 +54,7 @@ __decorate([
 ], ProductController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, decorator_auth_1.DecoratorWrapper)('Get all products'),
+    (0, decorator_auth_1.DecoratorWrapper)('Get all products', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [findAll_product_dto_1.FindAllProductQueryDto]),
@@ -62,7 +62,7 @@ __decorate([
 ], ProductController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, decorator_auth_1.DecoratorWrapper)('Get product by id'),
+    (0, decorator_auth_1.DecoratorWrapper)('Get product by id', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

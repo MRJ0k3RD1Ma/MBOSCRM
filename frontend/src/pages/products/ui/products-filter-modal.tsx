@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, InputNumber, Row, Select } from "antd";
+import { Button, Col, Form, Input, Row, Select } from "antd";
 import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
 import { useGetAllProductUnits } from "../../../config/queries/products/product-unit-querys";
@@ -72,7 +72,7 @@ export default function ProductsFilterModal({
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="Guruh ID" name="groupId">
+            <Form.Item label="Guruhi" name="groupId">
               <Select placeholder="Tanlang" showSearch optionFilterProp="label">
                 {groupData?.data.map((item) => (
                   <Select.Option
@@ -87,7 +87,7 @@ export default function ProductsFilterModal({
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="Birlik ID" name="unitId">
+            <Form.Item label="Birlik" name="unitId">
               <Select placeholder="Tanlang" showSearch optionFilterProp="label">
                 {unitsData?.data.map((item) => (
                   <Select.Option
@@ -101,16 +101,19 @@ export default function ProductsFilterModal({
               </Select>
             </Form.Item>
           </Col>
-          <Col span={6}>
-            <Form.Item label="Narxi (dan)" name="minPrice">
-              <InputNumber style={{ width: "100%" }} placeholder="10000" />
+          {/* <Col span={6}>
+            <Form.Item label="Minimal narxi" name="minPrice">
+              <InputNumber
+                style={{ width: "100%" }}
+                placeholder="Minimal narxi"
+              />
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item label="Minimal Soni" name="minCount">
               <InputNumber style={{ width: "100%" }} placeholder="5" />
             </Form.Item>
-          </Col>
+          </Col> */}
           {reminder ? (
             <Col span={6}>
               <Form.Item label="Turi" name="type">

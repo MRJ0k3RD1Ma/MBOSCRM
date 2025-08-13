@@ -75,7 +75,7 @@ export default function ProductsPage() {
     { title: "Nomi", dataIndex: "name", key: "name" },
     { title: "Shtrix kodi", dataIndex: "barcode", key: "barcode" },
     {
-      title: "Guruh ID",
+      title: "Guruhi",
       dataIndex: "groupId",
       key: "groupId",
       render: (groupId: number) =>
@@ -97,7 +97,23 @@ export default function ProductsPage() {
       render: (price: number) =>
         price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
     },
-    { title: "Turi", dataIndex: "type", key: "type" },
+    {
+      title: "Turi",
+      dataIndex: "type",
+      key: "type",
+      render: (value: string) => {
+        switch (value) {
+          case "DEVICE":
+            return "Qurilma";
+          case "SUBSCRIPTION":
+            return "Obuna";
+          case "SERVICE":
+            return "Xizmat";
+          default:
+            return value;
+        }
+      },
+    },
     {
       title: "Amallar",
       key: "actions",
