@@ -248,7 +248,7 @@ export default function SalesFormPage() {
             <DatePicker className="w-full" format="YYYY-MM-DD" />
           </Form.Item>
           <Form.Item
-            name="subscription_generate_day"
+            name="subscribe_generate_day"
             label="To'lov kuni"
             className="min-w-[200px] grow"
           >
