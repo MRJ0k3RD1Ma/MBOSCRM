@@ -55,7 +55,7 @@ export class PaidSupplierService {
 			data: { balance: { decrement: price } },
 		});
 		await this.prisma.supplier.update({
-			where: { id: createPaidSupplierDto.price },
+			where: { id: supplierId },
 			data: { balance: { increment: price } },
 		});
 		const paidsupplier = await this.prisma.paidSupplier.create({
