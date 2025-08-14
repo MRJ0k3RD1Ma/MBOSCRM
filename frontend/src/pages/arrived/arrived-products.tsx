@@ -26,6 +26,10 @@ export default function ArrivedProducts() {
   const columns = [
     indexColumn(page, 10),
     {
+      title: "Yetkazib beruvchi",
+      dataIndex: ["Arrived", "supplier", ["name"]],
+    },
+    {
       title: "Sana",
       dataIndex: "createdAt",
       render: (date: string) => dayjs(date).format("YYYY-MM-DD"),

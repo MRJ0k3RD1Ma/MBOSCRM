@@ -9,10 +9,10 @@ export declare class ProductService {
     create(createProductDto: CreateProductDto, creatorId: number): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -33,10 +33,10 @@ export declare class ProductService {
         data: {
             type: import(".prisma/client").$Enums.ProductType;
             name: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -54,10 +54,10 @@ export declare class ProductService {
     findOne(id: number): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -74,10 +74,10 @@ export declare class ProductService {
     update(id: number, dto: UpdateProductDto): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -94,10 +94,10 @@ export declare class ProductService {
     remove(id: number): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;

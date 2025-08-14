@@ -16,6 +16,7 @@ import type {
 import { useGetAllPaidOtherGroups } from "../../../config/queries/paid/paid-other-group";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { useGetAllPayments } from "../../../config/queries/payment/payment-querys";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -37,6 +38,7 @@ export default function PaidOtherFormDrawer({
 }: Props) {
   const [form] = Form.useForm();
   const { data } = useGetAllPaidOtherGroups();
+  const { data: paymentData } = useGetAllPayments({ page: 1, limit: 1000 });
 
   useEffect(() => {
     if (initialValues) {
@@ -93,7 +95,20 @@ export default function PaidOtherFormDrawer({
             ))}
           </Select>
         </Form.Item>
-
+        <Form.Item name="paymentId" label="To'lov turi">
+          <Select
+            placeholder="To'lov turini tanlang"
+            showSearch
+            allowClear
+            optionFilterProp="label"
+          >
+            {paymentData?.data.map((p: { id: number; name: string }) => (
+              <Select.Option key={p.id} value={p.id} label={p.name}>
+                {p.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
         <Form.Item
           name="type"
           label="Turi"

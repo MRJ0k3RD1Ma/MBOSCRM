@@ -6,11 +6,11 @@ export declare class PaidServerController {
     private readonly paidServerService;
     constructor(paidServerService: PaidServerService);
     create(createPaidServerDto: CreatePaidServerDto): Promise<{
-        description: string | null;
+        description: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -25,20 +25,20 @@ export declare class PaidServerController {
         };
         paymentType: {
             name: string | null;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
     } & {
-        description: string | null;
+        description: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -53,20 +53,20 @@ export declare class PaidServerController {
         };
         paymentType: {
             name: string | null;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
     } & {
-        description: string | null;
+        description: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -75,11 +75,11 @@ export declare class PaidServerController {
         endDate: Date;
     }>;
     update(id: string, updatePaidServerDto: UpdatePaidServerDto): Promise<{
-        description: string | null;
+        description: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -88,11 +88,11 @@ export declare class PaidServerController {
         endDate: Date;
     }>;
     remove(id: string): Promise<{
-        description: string | null;
+        description: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
