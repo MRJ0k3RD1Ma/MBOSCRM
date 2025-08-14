@@ -356,7 +356,7 @@ export default function ArrivedFormPage() {
           >
             <InputNumber disabled className="!w-full" placeholder="Jami narx" />
           </Form.Item>
-          <Form.Item style={{ flexShrink: 0 }}>
+          <Form.Item style={{ flexShrink: 0 }} label>
             <Button htmlType="submit" type="primary">
               +
             </Button>

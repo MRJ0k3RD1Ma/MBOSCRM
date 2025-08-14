@@ -7,10 +7,10 @@ export declare class SubscribeService {
     constructor(prisma: PrismaService);
     cron(): Promise<void>;
     create(createSubscribeDto: CreateSubscribeDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         saleId: number | null;
         clientId: number;
@@ -27,10 +27,10 @@ export declare class SubscribeService {
                 description: string | null;
                 name: string;
                 phone: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 balance: number;
                 inn: string;
                 address: string | null;
@@ -44,19 +44,19 @@ export declare class SubscribeService {
                 PaidClient: ({
                     Payment: {
                         name: string | null;
+                        id: number;
                         isDeleted: boolean | null;
                         createdAt: Date;
                         updatedAt: Date;
-                        id: number;
                         registerId: number | null;
                         modifyId: number | null;
                         icon: string | null;
                     };
                 } & {
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                     price: number | null;
@@ -66,10 +66,10 @@ export declare class SubscribeService {
                     clientId: number | null;
                 })[];
             } & {
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number;
@@ -85,10 +85,10 @@ export declare class SubscribeService {
                 subscribe_generate_day: number | null;
             };
         } & {
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             price: number;
             saleId: number | null;
             clientId: number;
@@ -102,10 +102,10 @@ export declare class SubscribeService {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -116,10 +116,10 @@ export declare class SubscribeService {
             modifyId: number | null;
         };
         sale: {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number;
@@ -135,10 +135,10 @@ export declare class SubscribeService {
             subscribe_generate_day: number | null;
         };
     } & {
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         saleId: number | null;
         clientId: number;
@@ -147,10 +147,10 @@ export declare class SubscribeService {
         paying_date: Date;
     }>;
     update(id: number, updateSubscribeDto: UpdateSubscribeDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         saleId: number | null;
         clientId: number;
@@ -159,10 +159,10 @@ export declare class SubscribeService {
         paying_date: Date;
     }>;
     remove(id: number): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         saleId: number | null;
         clientId: number;

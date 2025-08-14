@@ -11,10 +11,10 @@ export declare class ClientService implements OnModuleInit {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         inn: string;
         address: string | null;
@@ -37,10 +37,10 @@ export declare class ClientService implements OnModuleInit {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -63,10 +63,10 @@ export declare class ClientService implements OnModuleInit {
         };
         ClientType: {
             name: string;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             modifyId: number | null;
             creatorId: number | null;
         };
@@ -74,10 +74,10 @@ export declare class ClientService implements OnModuleInit {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         inn: string;
         address: string | null;
@@ -91,10 +91,10 @@ export declare class ClientService implements OnModuleInit {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         inn: string;
         address: string | null;
@@ -108,10 +108,10 @@ export declare class ClientService implements OnModuleInit {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         inn: string;
         address: string | null;

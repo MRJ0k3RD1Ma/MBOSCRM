@@ -7,10 +7,10 @@ export declare class ClientTypeController {
     constructor(clientTypeService: ClientTypeService);
     create(createClientTypeDto: CreateClientTypeDto): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;
@@ -20,38 +20,38 @@ export declare class ClientTypeController {
         limit: number;
         data: {
             name: string;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             modifyId: number | null;
             creatorId: number | null;
         }[];
     }>;
     findOne(id: string): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;
     update(id: string, updateClientTypeDto: UpdateClientTypeDto): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;
     remove(id: string): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;

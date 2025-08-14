@@ -7,7 +7,6 @@ type SupplierFormValues = {
   phone: string;
   phoneTwo?: string;
   description?: string;
-  balance?: number;
 };
 
 type Props = {
@@ -20,6 +19,7 @@ type Props = {
 export default function SupplierFormDrawer({
   open,
   onClose,
+  onSubmit,
   initialValues,
 }: Props) {
   const [form] = Form.useForm<SupplierFormValues>();
@@ -32,6 +32,12 @@ export default function SupplierFormDrawer({
     }
   }, [initialValues, form]);
 
+  const handleFinish = (values: SupplierFormValues) => {
+    onSubmit(values);
+    form.resetFields();
+    onClose();
+  };
+
   return (
     <Drawer
       open={open}
@@ -43,7 +49,7 @@ export default function SupplierFormDrawer({
       width={480}
       onClose={onClose}
     >
-      <Form layout="vertical" form={form}>
+      <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item
           label="Nomi"
           name="name"
