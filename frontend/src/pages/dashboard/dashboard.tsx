@@ -212,7 +212,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Stat cards */}
       <div className="!grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <StatCard
           title="Mijozlar"
@@ -283,12 +282,12 @@ export default function Dashboard() {
           subtitle={
             <div className="space-y-1">
               <div className="!font-semibold text-xl">
-                {currentYear} - yil:{" "}
+                {year} - yil:{" "}
                 {new Intl.NumberFormat("ru-RU").format(stats.yearlyIncome || 0)}{" "}
                 so'm
               </div>
               <div className="!text-sm !opacity-80">
-                {currentYear - 1} - yil:{" "}
+                {year - 1} - yil:{" "}
                 {new Intl.NumberFormat("ru-RU").format(
                   stats.lastYearIncome || 0
                 )}{" "}

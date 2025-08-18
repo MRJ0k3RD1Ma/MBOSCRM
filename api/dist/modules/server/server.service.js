@@ -186,7 +186,7 @@ let ServerService = ServerService_1 = class ServerService {
 };
 exports.ServerService = ServerService;
 __decorate([
-    (0, schedule_1.Cron)('* * 8 * * *'),
+    (0, schedule_1.Cron)('0 0 8 * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
