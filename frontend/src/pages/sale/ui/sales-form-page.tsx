@@ -312,7 +312,40 @@ export default function SalesFormPage() {
               ))}
             </Select>
           </Form.Item>
+          <Form.Item
+            shouldUpdate={(prev, curr) => prev.productId !== curr.productId}
+            noStyle
+          >
+            {({ getFieldValue, setFieldsValue }) => {
+              const selectedProduct = productsList?.data.find(
+                (p) => p.id === getFieldValue("productId")
+              );
 
+              const countReminder: number = selectedProduct?.countReminder ?? 0;
+              const isSubscription = selectedProduct?.type === "SUBSCRIPTION";
+
+              if (selectedProduct) {
+                if (isSubscription) {
+                  setFieldsValue({ count: 1 });
+                } else if (countReminder > 0) {
+                  setFieldsValue({ count: 1 });
+                } else {
+                  setFieldsValue({ count: null });
+                }
+              }
+
+              return (
+                <Form.Item label="Qoldiq">
+                  <InputNumber
+                    value={countReminder}
+                    placeholder="Qoldiq"
+                    disabled
+                    className="!w-full"
+                  />
+                </Form.Item>
+              );
+            }}
+          </Form.Item>
           <Form.Item
             shouldUpdate={(prev, curr) => prev.productId !== curr.productId}
             noStyle
@@ -339,33 +372,33 @@ export default function SalesFormPage() {
                 <div>
                   <div
                     style={{
-                      marginBottom: 8,
                       color:
                         selectedProduct?.countReminder === 0 ? "red" : "gray",
                     }}
                   >
-                    {isSubscription
+                    {/* {isSubscription
                       ? null
                       : selectedProduct
                       ? `Qolgan soni: ${countReminder}`
-                      : "Mahsulot tanlang"}
+                      : "Mahsulot tanlang"} */}
                   </div>
 
                   <Form.Item
                     name="count"
+                    label={"Soni"}
                     rules={[
                       { required: true, message: "Soni kiriting" },
-                      {
-                        validator: (_, value) => {
-                          if (!selectedProduct) return Promise.resolve();
-                          if (!isSubscription && value > countReminder) {
-                            return Promise.reject(
-                              new Error("Mahsulot yetarli emas")
-                            );
-                          }
-                          return Promise.resolve();
-                        },
-                      },
+                      // {
+                      //   validator: (_, value) => {
+                      //     if (!selectedProduct) return Promise.resolve();
+                      //     if (!isSubscription && value > countReminder) {
+                      //       return Promise.reject(
+                      //         new Error("Mahsulot yetarli emas")
+                      //       );
+                      //     }
+                      //     return Promise.resolve();
+                      //   },
+                      // },
                     ]}
                     className="min-w-[100px] max-w-[150px] grow"
                   >
@@ -373,11 +406,6 @@ export default function SalesFormPage() {
                       min={1}
                       className="!w-full"
                       placeholder="Soni"
-                      disabled={
-                        !selectedProduct ||
-                        countReminder === 0 ||
-                        isSubscription
-                      }
                       onChange={(value: any) => {
                         const price = getFieldValue("price") || 0;
                         setFieldsValue({
