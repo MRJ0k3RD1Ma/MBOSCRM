@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Select,
   Space,
   Table,
@@ -40,6 +41,7 @@ export default function SalesFormPage() {
 
   const [products, setProducts] = useState<any[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const [selectedProductCountReminder, setSelectedProductCountReminder] =
     useState<number | null>(null);
@@ -205,9 +207,6 @@ export default function SalesFormPage() {
     <Card>
       <div className="w-full flex justify-between items-center mb-4">
         <Title level={4}>{isEdit ? "Sotuvni tahrirlash" : "Yangi sotuv"}</Title>
-        <Button type="primary" onClick={() => form.submit()}>
-          {isEdit ? "Yangilash" : "Saqlash"}
-        </Button>
       </div>
 
       <Form layout="vertical" form={form} onFinish={onFinish}>
@@ -270,10 +269,11 @@ export default function SalesFormPage() {
 
       <Title level={4}>Mahsulotlar</Title>
 
-      <Form form={drawerForm} onFinish={onDrawerFinish}>
+      <Form form={drawerForm} onFinish={onDrawerFinish} layout="vertical">
         <div className="flex gap-4">
           <Form.Item
             name="productId"
+            label="Mahsulot"
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
@@ -336,11 +336,7 @@ export default function SalesFormPage() {
               }
 
               return (
-                <div
-                  className={`flex flex-col ${
-                    isSubscription ? "-mt-[8px]" : "-mt-[30px]"
-                  }`}
-                >
+                <div>
                   <div
                     style={{
                       marginBottom: 8,
@@ -397,6 +393,7 @@ export default function SalesFormPage() {
 
           <Form.Item
             name="price"
+            label="Narxi"
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
@@ -412,10 +409,14 @@ export default function SalesFormPage() {
               }}
             />
           </Form.Item>
-          <Form.Item name="priceCount" className="min-w-[200px] grow">
+          <Form.Item
+            name="priceCount"
+            label="Umumiy narxi"
+            className="min-w-[200px] grow"
+          >
             <InputNumber disabled className="!w-full" placeholder="Jami narx" />
           </Form.Item>
-          <Form.Item style={{ flexShrink: 0 }}>
+          <Form.Item style={{ flexShrink: 0 }} label>
             <Button htmlType="submit" type="primary">
               +
             </Button>
@@ -560,6 +561,26 @@ export default function SalesFormPage() {
           </Form.Item>
         </Form>
       </Drawer>
+      <Space className="mt-4 w-full flex justify-end">
+        <Modal
+          title="Tasdiqlash"
+          open={open}
+          onOk={() => form.submit()}
+          onCancel={() => setOpen(false)}
+          okText="Ha"
+          cancelText="Yo'q"
+        >
+          Rostdan ushbu mahsulotlarni qabul qilmoqchimisiz?
+        </Modal>
+        <Button
+          type="primary"
+          className="w-44 p-2.5"
+          htmlType="button"
+          onClick={() => setOpen(true)}
+        >
+          {isEdit ? "Yangilash" : "Saqlash"}
+        </Button>
+      </Space>
     </Card>
   );
 }

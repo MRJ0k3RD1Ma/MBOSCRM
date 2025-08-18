@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Select,
   Space,
   Table,
@@ -38,6 +39,7 @@ export default function ArrivedFormPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
+  const [open, setOpen] = useState(false);
 
   const [products, setProducts] = useState<ArrivedProductInput[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -196,15 +198,7 @@ export default function ArrivedFormPage() {
         <Title level={4}>
           {isEdit ? "Kirimni tahrirlash" : "Yangi kirim qo‘shish"}
         </Title>
-        <div>
-          <Button
-            type="primary"
-            htmlType="submit"
-            onClick={() => form.submit()}
-          >
-            {isEdit ? "Yangilash" : "Saqlash"}
-          </Button>
-        </div>
+        <div></div>
       </div>
 
       <Form form={form} layout="vertical" onFinish={onFinish}>
@@ -439,6 +433,26 @@ export default function ArrivedFormPage() {
           </Form.Item>
         </Form>
       </Drawer>
+      <Space className="mt-4 w-full flex justify-end">
+        <Modal
+          title="Tasdiqlash"
+          open={open}
+          onOk={() => form.submit()}
+          onCancel={() => setOpen(false)}
+          okText="Ha"
+          cancelText="Yo'q"
+        >
+          Rostdan ushbu mahsulotlarni skladga qo'shmoqchimisiz?
+        </Modal>
+        <Button
+          type="primary"
+          className="w-44 p-2.5"
+          htmlType="button"
+          onClick={() => setOpen(true)}
+        >
+          {isEdit ? "Yangilash" : "Saqlash"}
+        </Button>
+      </Space>
     </Card>
   );
 }

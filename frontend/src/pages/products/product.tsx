@@ -230,7 +230,7 @@ export default function Product() {
             {product.price || "-"}
           </Descriptions.Item>
           <Descriptions.Item label="Skladdagi qoldiq va birligi">
-            {product.countReminder}{" "}
+            {product.reminderFirst}{" "}
             {productUnitId?.data.find((p) => p.id === product.unitId)?.name ||
               "-"}
           </Descriptions.Item>
