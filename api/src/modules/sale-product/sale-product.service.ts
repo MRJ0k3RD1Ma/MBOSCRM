@@ -33,15 +33,6 @@ export class SaleProductService {
       });
     }
 
-    if (
-      product.countReminder < createSaleProductDto.count &&
-      product.type === 'DEVICE'
-    ) {
-      throw new HttpError({
-        message: `Maxsulot soni yetarli emas`,
-      });
-    }
-
     const isSubscription = product.type == ProductType.SUBSCRIPTION;
     let priceCount = product.price * createSaleProductDto.count;
 
