@@ -41,12 +41,6 @@ let SaleProductService = class SaleProductService {
                 message: `Product with ID ${createSaleProductDto.productId} not found`,
             });
         }
-        if (product.countReminder < createSaleProductDto.count &&
-            product.type === 'DEVICE') {
-            throw new http_error_1.HttpError({
-                message: `Maxsulot soni yetarli emas`,
-            });
-        }
         const isSubscription = product.type == client_1.ProductType.SUBSCRIPTION;
         let priceCount = product.price * createSaleProductDto.count;
         if (isSubscription) {

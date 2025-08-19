@@ -142,25 +142,31 @@ export default function Dashboard() {
 
   const forecastRaw = data?.charts?.subscriptionForecast || [];
   const forecastData = useMemo(() => {
-    return forecastRaw.map((val: number, idx: number) => ({
-      month: idx + 1,
-      monthLabel:
-        [
-          "Yan",
-          "Fev",
-          "Mar",
-          "Apr",
-          "May",
-          "Iyun",
-          "Iyul",
-          "Avg",
-          "Sen",
-          "Okt",
-          "Noy",
-          "Dek",
-        ][idx] || String(idx + 1),
-      expected: val,
-    }));
+    let lastVal = 0;
+    return forecastRaw.map((val: number, idx: number) => {
+      if (val && val > 0) {
+        lastVal = val; // agar shu oyda to‘lov boshlansa, keyingi oylar ham shu qiymat
+      }
+      return {
+        month: idx + 1,
+        monthLabel:
+          [
+            "Yan",
+            "Fev",
+            "Mar",
+            "Apr",
+            "May",
+            "Iyun",
+            "Iyul",
+            "Avg",
+            "Sen",
+            "Okt",
+            "Noy",
+            "Dek",
+          ][idx] || String(idx + 1),
+        expected: lastVal,
+      };
+    });
   }, [forecastRaw]);
 
   if (isLoading) {
