@@ -230,9 +230,12 @@ export default function Product() {
             {product.price || "-"}
           </Descriptions.Item>
           <Descriptions.Item label="Skladdagi qoldiq va birligi">
-            {product.reminderFirst}{" "}
+            {product.countReminder}{" "}
             {productUnitId?.data.find((p) => p.id === product.unitId)?.name ||
               "-"}
+          </Descriptions.Item>
+          <Descriptions.Item label="Skladdagi birinchi qoldiq">
+            {product.reminderFirst || "-"}
           </Descriptions.Item>
           <Descriptions.Item label="Umumiy sotilgan soni">
             {product.countSale || "-"}

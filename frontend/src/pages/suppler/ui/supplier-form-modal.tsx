@@ -34,10 +34,11 @@ export default function SupplierFormDrawer({
 
   const handleFinish = (values: SupplierFormValues) => {
     onSubmit(values);
-    form.resetFields();
+    if (!initialValues) {
+      form.resetFields();
+    }
     onClose();
   };
-
   return (
     <Drawer
       open={open}
