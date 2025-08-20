@@ -14,8 +14,8 @@ export declare class SubscribeService {
         price: number;
         saleId: number | null;
         clientId: number;
-        paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
+        paid: number;
         paying_date: Date;
     }>;
     findAll(dto: FindAllSubscribeQueryDto): Promise<{
@@ -77,9 +77,9 @@ export declare class SubscribeService {
                 code: string | null;
                 codeId: number | null;
                 clientId: number;
-                state: import(".prisma/client").$Enums.SaleState;
                 dept: number;
                 credit: number;
+                state: import(".prisma/client").$Enums.SaleState;
                 clientName: string | null;
                 subscribe_begin_date: Date | null;
                 subscribe_generate_day: number | null;
@@ -92,8 +92,8 @@ export declare class SubscribeService {
             price: number;
             saleId: number | null;
             clientId: number;
-            paid: number;
             state: import(".prisma/client").$Enums.SubscribeState;
+            paid: number;
             paying_date: Date;
         })[];
     }>;
@@ -127,9 +127,9 @@ export declare class SubscribeService {
             code: string | null;
             codeId: number | null;
             clientId: number;
-            state: import(".prisma/client").$Enums.SaleState;
             dept: number;
             credit: number;
+            state: import(".prisma/client").$Enums.SaleState;
             clientName: string | null;
             subscribe_begin_date: Date | null;
             subscribe_generate_day: number | null;
@@ -142,8 +142,8 @@ export declare class SubscribeService {
         price: number;
         saleId: number | null;
         clientId: number;
-        paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
+        paid: number;
         paying_date: Date;
     }>;
     update(id: number, updateSubscribeDto: UpdateSubscribeDto): Promise<{
@@ -154,8 +154,8 @@ export declare class SubscribeService {
         price: number;
         saleId: number | null;
         clientId: number;
-        paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
+        paid: number;
         paying_date: Date;
     }>;
     remove(id: number): Promise<{
@@ -166,8 +166,8 @@ export declare class SubscribeService {
         price: number;
         saleId: number | null;
         clientId: number;
-        paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
+        paid: number;
         paying_date: Date;
     }>;
 }

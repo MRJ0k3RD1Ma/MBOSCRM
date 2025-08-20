@@ -8,21 +8,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SaleProductService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const http_error_1 = require("../../common/exception/http.error");
 const client_1 = require("@prisma/client");
-const subscribe_service_1 = require("../subscribe/subscribe.service");
-const dayjs_1 = __importDefault(require("dayjs"));
 let SaleProductService = class SaleProductService {
-    constructor(prisma, subscribeService) {
+    constructor(prisma) {
         this.prisma = prisma;
-        this.subscribeService = subscribeService;
     }
     async create(createSaleProductDto, creatorId) {
         const sale = await this.prisma.sale.findFirst({
@@ -42,7 +36,7 @@ let SaleProductService = class SaleProductService {
             });
         }
         if (product.countReminder < createSaleProductDto.count &&
-            product.type === 'DEVICE') {
+            product.type === "DEVICE") {
             throw new http_error_1.HttpError({
                 message: `Maxsulot soni yetarli emas`,
             });
@@ -65,17 +59,7 @@ let SaleProductService = class SaleProductService {
             },
             include: { product: true },
         });
-        if (saleProduct.is_subscribe) {
-            await this.subscribeService.create({
-                clientId: sale.clientId,
-                paid: 0,
-                price: saleProduct.product.price,
-                saleId: sale.id,
-                state: client_1.SubscribeState.NOTPAYING,
-                payingDate: (0, dayjs_1.default)(new Date()).add(1, 'month').toDate(),
-            });
-        }
-        if (product.type == 'DEVICE') {
+        if (product.type == "DEVICE") {
             await this.prisma.product.update({
                 where: { id: product.id },
                 data: {
@@ -120,7 +104,7 @@ let SaleProductService = class SaleProductService {
                     register: true,
                 },
                 orderBy: {
-                    createdAt: 'desc',
+                    createdAt: "desc",
                 },
             }),
             this.prisma.saleProduct.count({ where }),
@@ -176,7 +160,7 @@ let SaleProductService = class SaleProductService {
         const finalCount = updateSaleProductDto.count ?? saleProduct.count;
         const totalPriceCount = finalPrice * finalCount;
         const isSubscribe = product
-            ? product.type === 'SUBSCRIPTION' || product.type === 'SERVICE'
+            ? product.type === "SUBSCRIPTION" || product.type === "SERVICE"
             : saleProduct.is_subscribe;
         return this.prisma.saleProduct.update({
             where: { id },
@@ -207,7 +191,6 @@ let SaleProductService = class SaleProductService {
 exports.SaleProductService = SaleProductService;
 exports.SaleProductService = SaleProductService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        subscribe_service_1.SubscribeService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], SaleProductService);
 //# sourceMappingURL=sale-product.service.js.map

@@ -1,12 +1,10 @@
-import { CreateSaleProductDto } from './dto/create-sale-product.dto';
-import { UpdateSaleProductDto } from './dto/update-sale-product.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { FindAllSaleProductQueryDto } from './dto/findAll-sale-product-query.dto';
-import { SubscribeService } from '../subscribe/subscribe.service';
+import { CreateSaleProductDto } from "./dto/create-sale-product.dto";
+import { UpdateSaleProductDto } from "./dto/update-sale-product.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { FindAllSaleProductQueryDto } from "./dto/findAll-sale-product-query.dto";
 export declare class SaleProductService {
     private readonly prisma;
-    private readonly subscribeService;
-    constructor(prisma: PrismaService, subscribeService: SubscribeService);
+    constructor(prisma: PrismaService);
     create(createSaleProductDto: CreateSaleProductDto, creatorId: number): Promise<{
         product: {
             type: import(".prisma/client").$Enums.ProductType;
@@ -89,9 +87,9 @@ export declare class SaleProductService {
                 code: string | null;
                 codeId: number | null;
                 clientId: number;
-                state: import(".prisma/client").$Enums.SaleState;
                 dept: number;
                 credit: number;
+                state: import(".prisma/client").$Enums.SaleState;
                 clientName: string | null;
                 subscribe_begin_date: Date | null;
                 subscribe_generate_day: number | null;

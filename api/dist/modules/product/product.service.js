@@ -21,7 +21,7 @@ let ProductService = class ProductService {
         this.prisma = prisma;
     }
     async onModuleInit() {
-        if (config_1.env.ENV != 'prod') {
+        if (config_1.env.ENV != "prod") {
             const count = await this.prisma.product.count();
             const requiredCount = 5;
             if (count < requiredCount) {
@@ -45,17 +45,17 @@ let ProductService = class ProductService {
             where: { id: groupId, isDeleted: false },
         });
         if (!creatorId) {
-            throw (0, http_error_1.HttpError)({ message: 'Creator not found' });
+            throw (0, http_error_1.HttpError)({ message: "Creator not found" });
         }
         if (!existingGroup) {
-            throw (0, http_error_1.HttpError)({ message: 'Group not found' });
+            throw (0, http_error_1.HttpError)({ message: "Group not found" });
         }
         if (createProductDto.unitId) {
             const existingUnit = await this.prisma.productUnit.findFirst({
                 where: { id: unitId, isDeleted: false },
             });
             if (!existingUnit) {
-                throw (0, http_error_1.HttpError)({ message: 'ProductUnit not found' });
+                throw (0, http_error_1.HttpError)({ message: "ProductUnit not found" });
             }
         }
         let barcodeId = 0;
@@ -63,7 +63,7 @@ let ProductService = class ProductService {
             const max = await this.prisma.product.findMany({
                 where: { barcodeId: { not: null } },
                 take: 1,
-                orderBy: { barcodeId: 'desc' },
+                orderBy: { barcodeId: "desc" },
             });
             barcodeId = (max[0]?.barcodeId || 1_000_000) + 1;
             const product = await this.prisma.product.create({
@@ -76,7 +76,7 @@ let ProductService = class ProductService {
                     reminderFirst,
                     price,
                     type,
-                    countReminder: 0,
+                    countReminder: reminderFirst,
                     countArrived: 0,
                     countSale: 0,
                     registerId: creatorId,
@@ -110,8 +110,8 @@ let ProductService = class ProductService {
             this.prisma.product.findMany({
                 where: {
                     name: {
-                        contains: name?.trim() || '',
-                        mode: 'insensitive',
+                        contains: name?.trim() || "",
+                        mode: "insensitive",
                     },
                     type: { equals: type },
                     barcode: { contains: barcode },
@@ -123,13 +123,13 @@ let ProductService = class ProductService {
                 },
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { createdAt: 'desc' },
+                orderBy: { createdAt: "desc" },
             }),
             this.prisma.product.count({
                 where: {
                     name: {
-                        contains: name?.trim() || '',
-                        mode: 'insensitive',
+                        contains: name?.trim() || "",
+                        mode: "insensitive",
                     },
                 },
             }),
@@ -149,7 +149,7 @@ let ProductService = class ProductService {
             },
         });
         if (!product) {
-            throw new http_error_1.HttpError({ code: 'Product not found' });
+            throw new http_error_1.HttpError({ code: "Product not found" });
         }
         return product;
     }
@@ -195,17 +195,17 @@ let ProductService = class ProductService {
         }
         const updateData = {};
         const fields = [
-            'name',
-            'barcode',
-            'groupId',
-            'unitId',
-            'priceIncome',
-            'reminderFirst',
-            'price',
-            'type',
-            'countReminder',
-            'countArrived',
-            'countSale',
+            "name",
+            "barcode",
+            "groupId",
+            "unitId",
+            "priceIncome",
+            "reminderFirst",
+            "price",
+            "type",
+            "countReminder",
+            "countArrived",
+            "countSale",
         ];
         for (const field of fields) {
             if (dto[field] !== undefined) {
@@ -223,7 +223,7 @@ let ProductService = class ProductService {
             where: { id, isDeleted: false },
         });
         if (!product) {
-            throw new http_error_1.HttpError({ code: 'Product not found' });
+            throw new http_error_1.HttpError({ code: "Product not found" });
         }
         return this.prisma.product.update({
             where: { id },
