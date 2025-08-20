@@ -68,18 +68,6 @@ let SaleService = class SaleService {
         });
         const codeId = (maxCode?.codeId || 0) + 1;
         const productIds = products.map((product) => product.productId);
-        const notReminderProducts = await this.prisma.product.findMany({
-            where: {
-                id: { in: productIds },
-                countReminder: { lte: 0 },
-                type: client_1.ProductType.DEVICE,
-            },
-        });
-        if (notReminderProducts.length > 0) {
-            throw new http_error_1.HttpError({
-                message: `Maxsulot soni yetarli emas`,
-            });
-        }
         const subscriptions = await this.prisma.product.findMany({
             where: {
                 id: { in: productIds },

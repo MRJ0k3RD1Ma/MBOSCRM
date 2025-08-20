@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Select,
   Space,
   Table,
@@ -40,6 +41,7 @@ export default function SalesFormPage() {
 
   const [products, setProducts] = useState<any[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const [selectedProductCountReminder, setSelectedProductCountReminder] =
     useState<number | null>(null);
@@ -205,9 +207,6 @@ export default function SalesFormPage() {
     <Card>
       <div className="w-full flex justify-between items-center mb-4">
         <Title level={4}>{isEdit ? "Sotuvni tahrirlash" : "Yangi sotuv"}</Title>
-        <Button type="primary" onClick={() => form.submit()}>
-          {isEdit ? "Yangilash" : "Saqlash"}
-        </Button>
       </div>
 
       <Form layout="vertical" form={form} onFinish={onFinish}>
@@ -270,10 +269,11 @@ export default function SalesFormPage() {
 
       <Title level={4}>Mahsulotlar</Title>
 
-      <Form form={drawerForm} onFinish={onDrawerFinish}>
+      <Form form={drawerForm} onFinish={onDrawerFinish} layout="vertical">
         <div className="flex gap-4">
           <Form.Item
             name="productId"
+            label="Mahsulot"
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
@@ -312,7 +312,6 @@ export default function SalesFormPage() {
               ))}
             </Select>
           </Form.Item>
-
           <Form.Item
             shouldUpdate={(prev, curr) => prev.productId !== curr.productId}
             noStyle
@@ -336,40 +335,70 @@ export default function SalesFormPage() {
               }
 
               return (
-                <div
-                  className={`flex flex-col ${
-                    isSubscription ? "-mt-[8px]" : "-mt-[30px]"
-                  }`}
-                >
+                <Form.Item label="Qoldiq">
+                  <InputNumber
+                    value={countReminder}
+                    placeholder="Qoldiq"
+                    disabled
+                    className="!w-full"
+                  />
+                </Form.Item>
+              );
+            }}
+          </Form.Item>
+          <Form.Item
+            shouldUpdate={(prev, curr) => prev.productId !== curr.productId}
+            noStyle
+          >
+            {({ getFieldValue, setFieldsValue }) => {
+              const selectedProduct = productsList?.data.find(
+                (p) => p.id === getFieldValue("productId")
+              );
+
+              const countReminder: number = selectedProduct?.countReminder ?? 0;
+              const isSubscription = selectedProduct?.type === "SUBSCRIPTION";
+
+              if (selectedProduct) {
+                if (isSubscription) {
+                  setFieldsValue({ count: 1 });
+                } else if (countReminder > 0) {
+                  setFieldsValue({ count: 1 });
+                } else {
+                  setFieldsValue({ count: null });
+                }
+              }
+
+              return (
+                <div>
                   <div
                     style={{
-                      marginBottom: 8,
                       color:
                         selectedProduct?.countReminder === 0 ? "red" : "gray",
                     }}
                   >
-                    {isSubscription
+                    {/* {isSubscription
                       ? null
                       : selectedProduct
                       ? `Qolgan soni: ${countReminder}`
-                      : "Mahsulot tanlang"}
+                      : "Mahsulot tanlang"} */}
                   </div>
 
                   <Form.Item
                     name="count"
+                    label={"Soni"}
                     rules={[
                       { required: true, message: "Soni kiriting" },
-                      {
-                        validator: (_, value) => {
-                          if (!selectedProduct) return Promise.resolve();
-                          if (!isSubscription && value > countReminder) {
-                            return Promise.reject(
-                              new Error("Mahsulot yetarli emas")
-                            );
-                          }
-                          return Promise.resolve();
-                        },
-                      },
+                      // {
+                      //   validator: (_, value) => {
+                      //     if (!selectedProduct) return Promise.resolve();
+                      //     if (!isSubscription && value > countReminder) {
+                      //       return Promise.reject(
+                      //         new Error("Mahsulot yetarli emas")
+                      //       );
+                      //     }
+                      //     return Promise.resolve();
+                      //   },
+                      // },
                     ]}
                     className="min-w-[100px] max-w-[150px] grow"
                   >
@@ -377,11 +406,6 @@ export default function SalesFormPage() {
                       min={1}
                       className="!w-full"
                       placeholder="Soni"
-                      disabled={
-                        !selectedProduct ||
-                        countReminder === 0 ||
-                        isSubscription
-                      }
                       onChange={(value: any) => {
                         const price = getFieldValue("price") || 0;
                         setFieldsValue({
@@ -397,6 +421,7 @@ export default function SalesFormPage() {
 
           <Form.Item
             name="price"
+            label="Narxi"
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
@@ -412,10 +437,14 @@ export default function SalesFormPage() {
               }}
             />
           </Form.Item>
-          <Form.Item name="priceCount" className="min-w-[200px] grow">
+          <Form.Item
+            name="priceCount"
+            label="Umumiy narxi"
+            className="min-w-[200px] grow"
+          >
             <InputNumber disabled className="!w-full" placeholder="Jami narx" />
           </Form.Item>
-          <Form.Item style={{ flexShrink: 0 }}>
+          <Form.Item style={{ flexShrink: 0 }} label>
             <Button htmlType="submit" type="primary">
               +
             </Button>
@@ -560,6 +589,26 @@ export default function SalesFormPage() {
           </Form.Item>
         </Form>
       </Drawer>
+      <Space className="mt-4 w-full flex justify-end">
+        <Modal
+          title="Tasdiqlash"
+          open={open}
+          onOk={() => form.submit()}
+          onCancel={() => setOpen(false)}
+          okText="Ha"
+          cancelText="Yo'q"
+        >
+          Rostdan ushbu mahsulotlarni qabul qilmoqchimisiz?
+        </Modal>
+        <Button
+          type="primary"
+          className="w-44 p-2.5"
+          htmlType="button"
+          onClick={() => setOpen(true)}
+        >
+          {isEdit ? "Yangilash" : "Saqlash"}
+        </Button>
+      </Space>
     </Card>
   );
 }

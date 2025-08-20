@@ -66,6 +66,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
               headerBg: "#1e293b",
               headerColor: "#e2e8f0",
             },
+            Modal: {
+              contentBg: "#0f172a",
+              headerBg: "#0f172a",
+              titleColor: "#e2e8f0",
+              colorText: "#e2e8f0",
+            },
           }
         : {
             Layout: {
@@ -74,6 +80,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
             Table: {
               headerBg: "#f1f5f9",
               headerColor: "#000000",
+            },
+            Modal: {
+              contentBg: "#ffffff",
+              headerBg: "#ffffff",
+              titleColor: "#000000",
+              colorText: "#000000",
             },
           },
   };
