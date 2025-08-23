@@ -37,6 +37,7 @@ let ServerService = ServerService_1 = class ServerService {
             where: {
                 endDate: {
                     lt: (0, dayjs_1.default)(now).add(7, 'days').toDate(),
+                    gt: now,
                 },
                 state: {
                     not: client_1.ServerState.CLOSED,
@@ -45,7 +46,8 @@ let ServerService = ServerService_1 = class ServerService {
         });
         if (sevenDaysLeftServers?.length > 0) {
             for (const server of sevenDaysLeftServers) {
-                const leftDays = (0, dayjs_1.default)(server.endDate).diff(now, 'days') + 1;
+                const leftDays = (0, dayjs_1.default)(server.endDate).diff(now, 'day') + 1;
+                console.log(leftDays);
                 const users = [];
                 users.push(...(await this.prisma.user.findMany({
                     where: { UserRole: { name: 'superadmin' } },
@@ -59,7 +61,7 @@ let ServerService = ServerService_1 = class ServerService {
                     if (!user.chatId)
                         continue;
                     try {
-                        if (leftDays !== 0) {
+                        if (leftDays >= 1) {
                             await this.bot.api.sendMessage(user.chatId, `${server.name} serverining muddati ${leftDays} kun qoldi (${(0, dayjs_1.default)(server.endDate).format('DD/MM/YYYY')}) sana.
 Tarif: ${server.plan}
 Mas'ul shaxs: ${server.responsible}`);
@@ -207,7 +209,7 @@ Mas'ul shaxs: ${server.responsible}`);
 };
 exports.ServerService = ServerService;
 __decorate([
-    (0, schedule_1.Cron)('0 10 10 * * *'),
+    (0, schedule_1.Cron)('0 0 3 * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

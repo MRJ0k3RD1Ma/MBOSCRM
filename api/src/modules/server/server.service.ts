@@ -18,7 +18,7 @@ export class ServerService {
     @InjectBot() private readonly bot: Bot<Context>,
   ) {}
 
-  @Cron('0 10 10 * * *')
+  @Cron('0 0 3 * * *')
   async handleExpiredServers() {
     this.logger.log('Checking expired servers...');
 
@@ -28,6 +28,7 @@ export class ServerService {
       where: {
         endDate: {
           lt: dayjs(now).add(7, 'days').toDate(),
+          gt: now,
         },
         state: {
           not: ServerState.CLOSED,
@@ -36,7 +37,8 @@ export class ServerService {
     });
     if (sevenDaysLeftServers?.length > 0) {
       for (const server of sevenDaysLeftServers) {
-        const leftDays = dayjs(server.endDate).diff(now, 'days') + 1;
+        const leftDays = dayjs(server.endDate).diff(now, 'day') + 1;
+        console.log(leftDays);
         const users = [];
         users.push(
           ...(await this.prisma.user.findMany({
@@ -53,7 +55,7 @@ export class ServerService {
         for (const user of users) {
           if (!user.chatId) continue;
           try {
-            if (leftDays !== 0) {
+            if (leftDays >= 1) {
               await this.bot.api.sendMessage(
                 user.chatId,
                 `${server.name} serverining muddati ${leftDays} kun qoldi (${dayjs(server.endDate).format('DD/MM/YYYY')}) sana.
