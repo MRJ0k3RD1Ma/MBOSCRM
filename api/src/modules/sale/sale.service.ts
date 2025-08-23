@@ -131,7 +131,7 @@ export class SaleService {
           await this.subscribeService.create({
             clientId: sale.clientId,
             paid: 0,
-            price: saleProduct.product.price,
+            price: saleProduct.price * saleProduct.count,
             saleId: sale.id,
             state: SubscribeState.NOTPAYING,
             payingDate: dayjs(new Date()).add(-i, 'months').toDate(),

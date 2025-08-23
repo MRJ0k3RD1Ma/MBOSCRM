@@ -38,8 +38,8 @@ export class SubscribeService {
       if (!subscribe) {
         this.create({
           clientId: subscribeSale.sale.clientId,
-          paid: subscribeSale.product.price,
-          price: subscribeSale.product.price,
+          paid: 0,
+          price: subscribeSale.price * subscribeSale.count,
           saleId: subscribeSale.saleId,
           state: SubscribeState.NOTPAYING,
           payingDate: dayjs(new Date())
