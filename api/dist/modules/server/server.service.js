@@ -45,7 +45,7 @@ let ServerService = ServerService_1 = class ServerService {
         });
         if (sevenDaysLeftServers?.length > 0) {
             for (const server of sevenDaysLeftServers) {
-                const leftDays = (0, dayjs_1.default)(server.endDate).diff(now, 'days');
+                const leftDays = (0, dayjs_1.default)(server.endDate).diff(now, 'days') + 1;
                 const users = [];
                 users.push(...(await this.prisma.user.findMany({
                     where: { UserRole: { name: 'superadmin' } },
@@ -59,7 +59,11 @@ let ServerService = ServerService_1 = class ServerService {
                     if (!user.chatId)
                         continue;
                     try {
-                        await this.bot.api.sendMessage(user.chatId, `${server.name} serveri yopilishiga ${Math.abs((0, dayjs_1.default)(now).diff(server.endDate, 'days'))} kun qoldi`);
+                        if (leftDays !== 0) {
+                            await this.bot.api.sendMessage(user.chatId, `${server.name} serverining muddati ${leftDays} kun qoldi (${(0, dayjs_1.default)(server.endDate).format('DD/MM/YYYY')}) sana.
+Tarif: ${server.plan}
+Mas'ul shaxs: ${server.responsible}`);
+                        }
                     }
                     catch { }
                 }
@@ -81,6 +85,23 @@ let ServerService = ServerService_1 = class ServerService {
                 where: { id: server.id },
                 data: { state: client_1.ServerState.CLOSED },
             });
+            const users = [];
+            users.push(...(await this.prisma.user.findMany({
+                where: { UserRole: { name: 'superadmin' } },
+            })));
+            users.push(...(await this.prisma.user.findMany({
+                where: { UserRole: { name: 'admin' } },
+            })));
+            for (const user of users) {
+                if (!user.chatId)
+                    continue;
+                try {
+                    await this.bot.api.sendMessage(user.chatId, `${server.name} serveri o'chdi.
+Tarif: ${server.plan}
+Mas'ul shaxs: ${server.responsible}`);
+                }
+                catch { }
+            }
         }
         this.logger.log('Expired server statuses updated.');
     }
@@ -186,7 +207,7 @@ let ServerService = ServerService_1 = class ServerService {
 };
 exports.ServerService = ServerService;
 __decorate([
-    (0, schedule_1.Cron)('0 0 8 * * *'),
+    (0, schedule_1.Cron)('0 0 3 * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

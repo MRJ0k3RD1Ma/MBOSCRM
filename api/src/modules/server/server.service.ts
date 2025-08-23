@@ -18,7 +18,7 @@ export class ServerService {
     @InjectBot() private readonly bot: Bot<Context>,
   ) {}
 
-  @Cron('0 0 8 * * *')
+  @Cron('0 0 3 * * *')
   async handleExpiredServers() {
     this.logger.log('Checking expired servers...');
 
@@ -36,7 +36,7 @@ export class ServerService {
     });
     if (sevenDaysLeftServers?.length > 0) {
       for (const server of sevenDaysLeftServers) {
-        const leftDays = dayjs(server.endDate).diff(now, 'days');
+        const leftDays = dayjs(server.endDate).diff(now, 'days') + 1;
         const users = [];
         users.push(
           ...(await this.prisma.user.findMany({
@@ -53,10 +53,14 @@ export class ServerService {
         for (const user of users) {
           if (!user.chatId) continue;
           try {
-            await this.bot.api.sendMessage(
-              user.chatId,
-              `${server.name} serveri yopilishiga ${Math.abs(dayjs(now).diff(server.endDate, 'days'))} kun qoldi`,
-            );
+            if (leftDays !== 0) {
+              await this.bot.api.sendMessage(
+                user.chatId,
+                `${server.name} serverining muddati ${leftDays} kun qoldi (${dayjs(server.endDate).format('DD/MM/YYYY')}) sana.
+Tarif: ${server.plan}
+Mas'ul shaxs: ${server.responsible}`,
+              );
+            }
           } catch {}
         }
       }
@@ -79,6 +83,29 @@ export class ServerService {
         where: { id: server.id },
         data: { state: ServerState.CLOSED },
       });
+
+      const users = [];
+      users.push(
+        ...(await this.prisma.user.findMany({
+          where: { UserRole: { name: 'superadmin' } },
+        })),
+      );
+      users.push(
+        ...(await this.prisma.user.findMany({
+          where: { UserRole: { name: 'admin' } },
+        })),
+      );
+      for (const user of users) {
+        if (!user.chatId) continue;
+        try {
+          await this.bot.api.sendMessage(
+            user.chatId,
+            `${server.name} serveri o'chdi.
+Tarif: ${server.plan}
+Mas'ul shaxs: ${server.responsible}`,
+          );
+        } catch {}
+      }
     }
 
     this.logger.log('Expired server statuses updated.');

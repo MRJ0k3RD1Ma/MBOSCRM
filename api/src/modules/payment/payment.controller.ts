@@ -29,13 +29,13 @@ export class PaymentController {
   }
 
   @Get()
-  @DecoratorWrapper('Get all payments',true, [Role.Admin])
+  @DecoratorWrapper('Get all payments', true, [Role.Admin])
   findAll(@Query() dto: FindAllPaymentQueryDto) {
     return this.paymentService.findAll(dto);
   }
 
   @Get(':id')
-  @DecoratorWrapper('Get payment by id',true, [Role.Admin])
+  @DecoratorWrapper('Get payment by id', true, [Role.Admin])
   findOne(@Param('id', ParseIntPipe) id: string) {
     return this.paymentService.findOne(+id);
   }

@@ -46,9 +46,9 @@ export class ArrivedController {
   update(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateArrivedDto: UpdateArrivedDto,
-    @Req() req: Request
+    @Req() req: Request,
   ) {
-    return this.arrivedService.update(+id, updateArrivedDto,req.user.id);
+    return this.arrivedService.update(+id, updateArrivedDto, req.user.id);
   }
 
   @Delete(':id')

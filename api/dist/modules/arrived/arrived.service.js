@@ -21,7 +21,7 @@ let ArrivedService = class ArrivedService {
         this.arrivedProductService = arrivedProductService;
     }
     async onModuleInit() {
-        if (config_1.env.ENV != "prod") {
+        if (config_1.env.ENV != 'prod') {
             const count = await this.prisma.arrived.count();
             const requiredCount = 5;
             if (count < requiredCount) {
@@ -29,7 +29,7 @@ let ArrivedService = class ArrivedService {
                     await this.create({
                         supplierId: 1,
                         date: new Date(),
-                        description: "description asdfghj",
+                        description: 'description asdfghj',
                         products: [{ count: 1, productId: 1 }],
                     }, 1);
                 }
@@ -53,7 +53,7 @@ let ArrivedService = class ArrivedService {
                     gt: new Date(new Date().getFullYear(), 0),
                 },
             },
-            orderBy: { codeId: "desc" },
+            orderBy: { codeId: 'desc' },
         });
         const codeId = (maxCode?.codeId || 0) + 1;
         let arrived = await this.prisma.arrived.create({
@@ -100,7 +100,7 @@ let ArrivedService = class ArrivedService {
         if (code) {
             where.code = {
                 startsWith: code,
-                mode: "insensitive",
+                mode: 'insensitive',
             };
         }
         if (minPrice || maxPrice) {
@@ -122,7 +122,7 @@ let ArrivedService = class ArrivedService {
                 take: limit,
                 include: { ArrivedProduct: true, register: true, supplier: true },
                 orderBy: {
-                    date: "desc",
+                    date: 'desc',
                 },
             }),
             this.prisma.arrived.count({ where }),

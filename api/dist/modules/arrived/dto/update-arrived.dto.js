@@ -18,14 +18,14 @@ class UpdateArrivedDto {
 }
 exports.UpdateArrivedDto = UpdateArrivedDto;
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-29T12:12:44.882Z" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-29T12:12:44.882Z' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
 ], UpdateArrivedDto.prototype, "date", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "WB123456" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 'WB123456' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
@@ -37,7 +37,7 @@ __decorate([
     __metadata("design:type", Number)
 ], UpdateArrivedDto.prototype, "supplierId", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "Qisqacha izoh" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 'Qisqacha izoh' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)

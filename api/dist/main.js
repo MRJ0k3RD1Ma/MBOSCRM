@@ -13,34 +13,34 @@ const role_enum_1 = require("./common/auth/roles/role.enum");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors();
-    app.setGlobalPrefix("/api");
+    app.setGlobalPrefix('/api');
     app.useGlobalFilters(new httpException_filter_1.HttpExceptionFilter());
     app.useGlobalPipes(new common_1.ValidationPipe({
         transform: true,
         exceptionFactory: (errors) => {
             const messages = errors.map((err) => {
                 const constraints = Object.values(err.constraints || {});
-                return `${err.property}: ${constraints.join(", ")}`;
+                return `${err.property}: ${constraints.join(', ')}`;
             });
-            return new common_1.BadRequestException(messages.join(" | "));
+            return new common_1.BadRequestException(messages.join(' | '));
         },
     }));
-    if (config_1.env.ENV == "dev") {
+    if (config_1.env.ENV == 'dev') {
         const ApiDocs = swagger_1.SwaggerModule.createDocument(app, config_swagger_1.ApiSwaggerOptions);
-        swagger_1.SwaggerModule.setup("docs", app, ApiDocs, {
-            customCssUrl: "./public/swagger.css",
+        swagger_1.SwaggerModule.setup('docs', app, ApiDocs, {
+            customCssUrl: './public/swagger.css',
         });
-        app.use("/ui", (0, nestjs_api_reference_1.apiReference)({
+        app.use('/ui', (0, nestjs_api_reference_1.apiReference)({
             content: ApiDocs,
-            theme: "deepSpace",
-            layout: "modern",
+            theme: 'deepSpace',
+            layout: 'modern',
             defaultHttpClient: {
-                targetKey: "node",
-                clientKey: "axios",
+                targetKey: 'node',
+                clientKey: 'axios',
             },
             persistAuth: true,
             authentication: {
-                preferredSecurityScheme: "token",
+                preferredSecurityScheme: 'token',
                 securitySchemes: {
                     token: {
                         token: (0, jsonwebtoken_1.sign)({

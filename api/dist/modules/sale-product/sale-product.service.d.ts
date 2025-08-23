@@ -1,7 +1,7 @@
-import { CreateSaleProductDto } from "./dto/create-sale-product.dto";
-import { UpdateSaleProductDto } from "./dto/update-sale-product.dto";
-import { PrismaService } from "../prisma/prisma.service";
-import { FindAllSaleProductQueryDto } from "./dto/findAll-sale-product-query.dto";
+import { CreateSaleProductDto } from './dto/create-sale-product.dto';
+import { UpdateSaleProductDto } from './dto/update-sale-product.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { FindAllSaleProductQueryDto } from './dto/findAll-sale-product-query.dto';
 export declare class SaleProductService {
     private readonly prisma;
     constructor(prisma: PrismaService);
