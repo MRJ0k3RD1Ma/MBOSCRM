@@ -44,8 +44,8 @@ let SubscribeService = class SubscribeService {
             if (!subscribe) {
                 this.create({
                     clientId: subscribeSale.sale.clientId,
-                    paid: subscribeSale.product.price,
-                    price: subscribeSale.product.price,
+                    paid: 0,
+                    price: subscribeSale.price * subscribeSale.count,
                     saleId: subscribeSale.saleId,
                     state: client_1.SubscribeState.NOTPAYING,
                     payingDate: (0, dayjs_1.default)(new Date())
