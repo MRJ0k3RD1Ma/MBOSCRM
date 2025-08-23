@@ -18,7 +18,7 @@ export class ServerService {
     @InjectBot() private readonly bot: Bot<Context>,
   ) {}
 
-  @Cron('0 0 3 * * *')
+  @Cron('0 10 10 * * *')
   async handleExpiredServers() {
     this.logger.log('Checking expired servers...');
 

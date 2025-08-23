@@ -207,7 +207,7 @@ Mas'ul shaxs: ${server.responsible}`);
 };
 exports.ServerService = ServerService;
 __decorate([
-    (0, schedule_1.Cron)('0 0 3 * * *'),
+    (0, schedule_1.Cron)('0 10 10 * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
