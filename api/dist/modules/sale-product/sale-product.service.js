@@ -42,7 +42,7 @@ let SaleProductService = class SaleProductService {
             });
         }
         const isSubscription = product.type == client_1.ProductType.SUBSCRIPTION;
-        let priceCount = (createSaleProductDto.price ?? product.price) *
+        let priceCount = (createSaleProductDto.price || product.price) *
             createSaleProductDto.count;
         if (isSubscription) {
             priceCount = 0;
@@ -52,7 +52,7 @@ let SaleProductService = class SaleProductService {
                 saleId: createSaleProductDto.saleId,
                 productId: createSaleProductDto.productId,
                 count: createSaleProductDto.count,
-                price: createSaleProductDto.price ?? product.price,
+                price: createSaleProductDto.price || product.price,
                 priceCount,
                 is_subscribe: isSubscription,
                 registerId: creatorId,

@@ -39,7 +39,7 @@ export class SaleProductService {
 
 		const isSubscription = product.type == ProductType.SUBSCRIPTION;
 		let priceCount =
-			(createSaleProductDto.price ?? product.price) *
+			(createSaleProductDto.price || product.price) *
 			createSaleProductDto.count;
 
 		if (isSubscription) {
@@ -51,7 +51,7 @@ export class SaleProductService {
 				saleId: createSaleProductDto.saleId,
 				productId: createSaleProductDto.productId,
 				count: createSaleProductDto.count,
-				price: createSaleProductDto.price ?? product.price,
+				price: createSaleProductDto.price || product.price,
 				priceCount,
 				is_subscribe: isSubscription,
 				registerId: creatorId,

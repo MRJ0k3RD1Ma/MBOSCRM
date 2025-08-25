@@ -28,7 +28,7 @@ let SaleService = class SaleService {
         this.subscribeService = subscribeService;
     }
     async onModuleInit() {
-        if (config_1.env.ENV != 'prod') {
+        if (config_1.env.ENV != "prod") {
             const count = await this.prisma.sale.count();
             const requiredCount = 1;
             const client = await this.prisma.client.findFirst({
@@ -64,7 +64,7 @@ let SaleService = class SaleService {
                     gt: new Date(new Date().getFullYear(), 0),
                 },
             },
-            orderBy: { codeId: 'desc' },
+            orderBy: { codeId: "desc" },
         });
         const codeId = (maxCode?.codeId || 0) + 1;
         const productIds = products.map((product) => product.productId);
@@ -108,12 +108,13 @@ let SaleService = class SaleService {
             const saleProduct = await this.saleProductService.create({
                 saleId: sale.id,
                 count: product.count,
+                price: product.price,
                 productId: product.productId,
             }, creatorId);
-            if (saleProduct.product.type === 'SUBSCRIPTION') {
+            if (saleProduct.product.type === "SUBSCRIPTION") {
                 const monthsPast = -(0, dayjs_1.default)(sale.subscribe_begin_date)
-                    .set('days', sale.subscribe_generate_day)
-                    .diff(new Date(), 'months');
+                    .set("days", sale.subscribe_generate_day)
+                    .diff(new Date(), "months");
                 for (let i = monthsPast; i + 1 > 0; i--) {
                     await this.subscribeService.create({
                         clientId: sale.clientId,
@@ -121,7 +122,7 @@ let SaleService = class SaleService {
                         price: saleProduct.price * saleProduct.count,
                         saleId: sale.id,
                         state: client_1.SubscribeState.NOTPAYING,
-                        payingDate: (0, dayjs_1.default)(new Date()).add(-i, 'months').toDate(),
+                        payingDate: (0, dayjs_1.default)(new Date()).add(-i, "months").toDate(),
                     });
                 }
             }
@@ -184,7 +185,7 @@ let SaleService = class SaleService {
         if (code) {
             where.code = {
                 startsWith: code,
-                mode: 'insensitive',
+                mode: "insensitive",
             };
         }
         if (minPrice || maxPrice) {
@@ -211,7 +212,7 @@ let SaleService = class SaleService {
                     client: true,
                 },
                 orderBy: {
-                    date: 'desc',
+                    date: "desc",
                 },
             }),
             this.prisma.sale.count({ where }),
