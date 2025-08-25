@@ -4,6 +4,7 @@ import { useToken } from "antd/es/theme/internal";
 import { useGetAllArrived } from "../../../config/queries/arrived/arrived-qureys";
 import { useGetAllSuppliers } from "../../../config/queries/supplier/supplier-querys";
 import { useGetAllProducts } from "../../../config/queries/products/products-querys";
+import dayjs from "dayjs";
 
 type Props = {
   open: boolean;
@@ -27,13 +28,22 @@ export default function ArrivedProductsFilterModal({
 
   useEffect(() => {
     if (open) {
-      form.setFieldsValue(initialValues);
+      form.setFieldsValue({
+        ...initialValues,
+        date: initialValues.date
+          ? dayjs(initialValues.date).startOf("day")
+          : null,
+      });
     }
   }, [open]);
 
   const handleSubmit = () => {
     form.validateFields().then((values) => {
-      onApply(values);
+      const filters = {
+        ...values,
+        date: values.date ? values.date.format("YYYY-MM-DD") : undefined,
+      };
+      onApply(filters);
       onClose();
     });
   };

@@ -3,6 +3,12 @@ import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
 import { useGetAllClients } from "../../../config/queries/clients/clients-querys";
 import { useGetAllSale } from "../../../config/queries/sale/sale-querys";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 type Props = {
   open: boolean;
@@ -27,7 +33,16 @@ export default function SubscribesFilterModal({
 
   useEffect(() => {
     if (open) {
-      form.setFieldsValue(initialValues);
+      form.setFieldsValue({
+        ...initialValues,
+        dateRange:
+          initialValues.fromDate && initialValues.toDate
+            ? [
+                dayjs(initialValues.fromDate).tz("Asia/Tashkent"),
+                dayjs(initialValues.toDate).tz("Asia/Tashkent"),
+              ]
+            : undefined,
+      });
     }
   }, [open]);
 
@@ -36,8 +51,20 @@ export default function SubscribesFilterModal({
       const { dateRange, ...rest } = values;
       const filters = {
         ...rest,
-        ...(dateRange?.[0] ? { fromDate: dateRange[0].toISOString() } : {}),
-        ...(dateRange?.[1] ? { toDate: dateRange[1].toISOString() } : {}),
+        ...(dateRange?.[0]
+          ? {
+              fromDate: dayjs(dateRange[0])
+                .tz("Asia/Tashkent")
+                .format("YYYY-MM-DD"),
+            }
+          : {}),
+        ...(dateRange?.[1]
+          ? {
+              toDate: dayjs(dateRange[1])
+                .tz("Asia/Tashkent")
+                .format("YYYY-MM-DD"),
+            }
+          : {}),
       };
       onApply(filters);
       onClose();
@@ -75,6 +102,7 @@ export default function SubscribesFilterModal({
           <Form.Item label="Minimal narx" name="minPrice">
             <InputNumber style={{ width: "100%" }} min={0} placeholder="0" />
           </Form.Item>
+
           <Form.Item label="Maksimal narx" name="maxPrice">
             <InputNumber
               style={{ width: "100%" }}
@@ -82,8 +110,9 @@ export default function SubscribesFilterModal({
               placeholder="10000"
             />
           </Form.Item>
+
           <Form.Item label="Sana oralig‘i" name="dateRange">
-            <RangePicker style={{ width: "100%" }} />
+            <RangePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
           </Form.Item>
 
           <Form.Item label="Mijoz" name="clientId">
@@ -122,8 +151,8 @@ export default function SubscribesFilterModal({
 
           <Form.Item label="Holat" name="state">
             <Select allowClear placeholder="Tanlang">
-              <Select.Option value="PAID">To'langan </Select.Option>
-              <Select.Option value="NOTPAYING">To'lanmagan </Select.Option>
+              <Select.Option value="PAID">To'langan</Select.Option>
+              <Select.Option value="NOTPAYING">To'lanmagan</Select.Option>
             </Select>
           </Form.Item>
         </div>

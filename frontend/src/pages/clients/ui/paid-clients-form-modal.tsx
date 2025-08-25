@@ -15,7 +15,7 @@ export interface PaidClientFormValues {
   saleId: number;
   paymentId: number;
   price: number;
-  paidDate: Dayjs | string | null;
+  paidDate: Dayjs | null;
 }
 
 interface Props {
@@ -48,7 +48,7 @@ export default function PaidClientFormModal({
       form.setFieldsValue({
         ...initialValues,
         paidDate: initialValues.paidDate
-          ? dayjs(initialValues.paidDate).tz("Asia/Tashkent")
+          ? dayjs(initialValues.paidDate).startOf("day")
           : null,
       });
     } else {
@@ -61,9 +61,7 @@ export default function PaidClientFormModal({
       const values = await form.validateFields();
       const payload: PaidClientDto = {
         ...values,
-        paidDate: values.paidDate
-          ? dayjs(values.paidDate).tz("Asia/Tashkent").format("YYYY-MM-DD")
-          : "",
+        paidDate: values.paidDate ? values.paidDate.format("YYYY-MM-DD") : "",
       };
       onSubmit(payload);
       form.resetFields();
@@ -118,7 +116,7 @@ export default function PaidClientFormModal({
             <input type="hidden" />
           </Form.Item>
         ) : (
-          <Form.Item name="saleId" label="Savdo">
+          <Form.Item name="saleId" label="Savdo" hidden>
             <Select
               placeholder="Savdoni tanlang"
               showSearch
@@ -127,6 +125,7 @@ export default function PaidClientFormModal({
             >
               {sales.map((sale: any) => (
                 <Select.Option
+                  hidden
                   key={sale.id}
                   value={sale.id}
                   label={sale.code || `ID: ${sale.id}`}
@@ -161,7 +160,11 @@ export default function PaidClientFormModal({
           label="To‘lov sanasi"
           rules={[{ required: true, message: "To‘lov sanasini tanlang" }]}
         >
-          <DatePicker style={{ width: "100%" }} placeholder="To‘lov sanasi" />
+          <DatePicker
+            style={{ width: "100%" }}
+            placeholder="To‘lov sanasi"
+            format="YYYY-MM-DD"
+          />
         </Form.Item>
 
         <Form.Item

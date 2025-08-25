@@ -119,6 +119,21 @@ export default function Dashboard() {
   };
 
   const monthlyRaw = data?.charts?.monthlyStats || [];
+  const monthNames = [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+  ];
+
   const monthlyData = useMemo(() => {
     const monthNames = [
       "Yan",
@@ -168,6 +183,7 @@ export default function Dashboard() {
       };
     });
   }, [forecastRaw]);
+  const currentMonthName = monthNames[dayjs().month()];
 
   if (isLoading) {
     return (
@@ -243,41 +259,7 @@ export default function Dashboard() {
           textColor={titleColor}
           isDark={isDark}
         />
-        <StatCard
-          title="Qarzdorlik"
-          value={formatMoney(stats.debts)}
-          icon={<TrendingDown size={32} color="white" />}
-          bgColor="!bg-[#EF4444]"
-          textColor={titleColor}
-          isDark={isDark}
-        />
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          title="Shartnomalar"
-          value={`${stats.contracts} dona`}
-          icon={<FileText size={32} color="white" />}
-          bgColor="!bg-[#3B82F6]"
-          textColor={titleColor}
-          isDark={isDark}
-        />
-        <StatCard
-          title="Oylikdagi daromadlar"
-          value={formatMoney(stats.currentMonthIncome)}
-          icon={<TrendingUp size={32} color="white" />}
-          bgColor="!bg-[#4CAF50]"
-          textColor={titleColor}
-          isDark={isDark}
-        />
-        <StatCard
-          title="Oylikdagi chiqimlar"
-          value={formatMoney(stats.currentMonthExpenses)}
-          icon={<TrendingDown size={32} color="white" />}
-          bgColor="!bg-[#F59E0B]"
-          textColor={titleColor}
-          isDark={isDark}
-        />
         <StatCard
           title="Solishtirma daromadlar"
           value=""
@@ -301,6 +283,43 @@ export default function Dashboard() {
               </div>
             </div>
           }
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Aktiv obunalar"
+          value={`${stats.contracts} dona`}
+          icon={<FileText size={32} color="white" />}
+          bgColor="!bg-[#3B82F6]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+        <StatCard
+          title={`${currentMonthName}dagi daromadlar`}
+          value={formatMoney(stats.currentMonthIncome)}
+          icon={<TrendingUp size={32} color="white" />}
+          bgColor="!bg-[#4CAF50]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+
+        <StatCard
+          title={`${currentMonthName}dagi chiqimlar`}
+          value={formatMoney(stats.currentMonthExpenses)}
+          icon={<TrendingDown size={32} color="white" />}
+          bgColor="!bg-[#F59E0B]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+
+        <StatCard
+          title="Qarzdorlik"
+          value={formatMoney(stats.debts)}
+          icon={<TrendingDown size={32} color="white" />}
+          bgColor="!bg-[#EF4444]"
+          textColor={titleColor}
+          isDark={isDark}
         />
       </div>
       <Row gutter={0} style={{ marginTop: 24 }}>

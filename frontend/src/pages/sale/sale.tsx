@@ -105,12 +105,8 @@ export default function Sale() {
     {
       title: "Jami narx",
       dataIndex: "priceCount",
-      render: (_: number, record: any) => {
-        const priceToUse = record.is_subscribe
-          ? record.product?.price * (record.count || 0)
-          : record.priceCount;
-
-        return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
+      render: (record: any) => {
+        return record ? record.toLocaleString("uz-UZ") + " so'm" : "0";
       },
     },
   ];

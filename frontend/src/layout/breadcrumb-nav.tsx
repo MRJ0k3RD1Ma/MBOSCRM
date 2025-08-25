@@ -10,7 +10,7 @@ const nameMap: Record<string, string> = {
   "price-curant": "Prayskurant",
   "paid-clients": "Mijoz to‘lovlari",
   "paid-suppliers": "Yetkazuvchilarga to‘langanlar",
-  "paid-other": "Boshqa xarajatlar",
+  "paid-other": "Boshqa to‘lovlar",
   "paid-server": "Server xarajatlari",
   "arrived/create": "Mahsulot qabul qilish",
   arriveds: "Skladga qabul qilingan mahsulotlar",

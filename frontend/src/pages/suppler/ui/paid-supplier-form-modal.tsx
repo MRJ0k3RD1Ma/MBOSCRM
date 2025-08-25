@@ -34,7 +34,9 @@ export default function PaidSupplierFormModal({
     if (initialValues) {
       form.setFieldsValue({
         ...initialValues,
-        paidDate: dayjs(initialValues.paidDate),
+        paidDate: initialValues.paidDate
+          ? dayjs(initialValues.paidDate).tz("Asia/Tashkent")
+          : null,
       });
     } else {
       form.resetFields();
@@ -47,13 +49,11 @@ export default function PaidSupplierFormModal({
         .tz("Asia/Tashkent")
         .format("YYYY-MM-DD");
     }
-    const formattedValues: PaidSupplierFormValues = {
-      ...values,
-    };
-    onSubmit(formattedValues);
+    onSubmit(values as PaidSupplierFormValues);
     form.resetFields();
     onClose();
   };
+  
   return (
     <Drawer
       title={initialValues ? "To‘lovni tahrirlash" : "Yangi to‘lov qo‘shish"}

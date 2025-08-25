@@ -1,7 +1,12 @@
 import { Button, Col, DatePicker, Form, Row, Select } from "antd";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { useEffect } from "react";
 import useToken from "antd/es/theme/useToken";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 type Props = {
   open: boolean;
@@ -11,7 +16,9 @@ type Props = {
   suppliers: { id: number; name: string }[];
   payments: { id: number; name: string }[];
 };
+
 const { RangePicker } = DatePicker;
+
 export default function PaidSupplierFilterUI({
   open,
   onClose,
@@ -28,7 +35,10 @@ export default function PaidSupplierFilterUI({
       ...initialValues,
       paidDateRange:
         initialValues.minPaidDate && initialValues.maxPaidDate
-          ? [dayjs(initialValues.minPaidDate), dayjs(initialValues.maxPaidDate)]
+          ? [
+              dayjs(initialValues.minPaidDate).tz("Asia/Tashkent"),
+              dayjs(initialValues.maxPaidDate).tz("Asia/Tashkent"),
+            ]
           : [],
     });
   }, [initialValues]);
@@ -37,18 +47,16 @@ export default function PaidSupplierFilterUI({
     form.validateFields().then((values) => {
       const filters = {
         ...values,
-        minPaidDate:
-          values.paidDateRange && values.paidDateRange[0]
-            ? dayjs(values.paidDateRange[0])
-                .tz("Asia/Tashkent")
-                .format("YYYY-MM-DD")
-            : undefined,
-        maxPaidDate:
-          values.paidDateRange && values.paidDateRange[1]
-            ? dayjs(values.paidDateRange[1])
-                .tz("Asia/Tashkent")
-                .format("YYYY-MM-DD")
-            : undefined,
+        minPaidDate: values.paidDateRange?.[0]
+          ? dayjs(values.paidDateRange[0])
+              .tz("Asia/Tashkent")
+              .format("YYYY-MM-DD")
+          : undefined,
+        maxPaidDate: values.paidDateRange?.[1]
+          ? dayjs(values.paidDateRange[1])
+              .tz("Asia/Tashkent")
+              .format("YYYY-MM-DD")
+          : undefined,
       };
       delete filters.paidDateRange;
       onApply(filters);

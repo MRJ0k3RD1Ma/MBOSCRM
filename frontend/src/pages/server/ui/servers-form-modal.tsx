@@ -1,6 +1,11 @@
 import { Drawer, Form, Input, Button, DatePicker } from "antd";
 import { useEffect } from "react";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export interface CreateServerInput {
   name: string;
@@ -28,7 +33,10 @@ export default function ServerFormModal({
 
   useEffect(() => {
     if (initialValues) {
-      form.setFieldsValue(initialValues);
+      form.setFieldsValue({
+        ...initialValues,
+        endDate: initialValues.endDate ? dayjs(initialValues.endDate) : null,
+      });
     } else {
       form.resetFields();
     }
@@ -82,6 +90,7 @@ export default function ServerFormModal({
         <Form.Item name="description" label="Izoh">
           <Input.TextArea rows={3} placeholder="Qo‘shimcha izoh..." />
         </Form.Item>
+
         <Form.Item
           name="endDate"
           label="Tugash sanasi"
@@ -89,6 +98,7 @@ export default function ServerFormModal({
         >
           <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
         </Form.Item>
+
         <Button type="primary" htmlType="submit" block>
           {initialValues ? "Saqlash" : "Qo‘shish"}
         </Button>
