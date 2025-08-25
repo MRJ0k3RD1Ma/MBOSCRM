@@ -5,7 +5,6 @@ import { PrismaService } from "../prisma/prisma.service";
 export class StatisticsService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	// Place this inside the service where `this.prisma` is available.
 	async getStatistics(year: number = new Date().getFullYear()) {
 		if (year == 0) year = new Date().getFullYear();
 		const today = new Date();
@@ -30,20 +29,15 @@ export class StatisticsService {
 		const startOfLastYear = new Date(year - 1, 0, 1);
 		const endOfLastYear = new Date(year - 1, 11, 31, 23, 59, 59, 999);
 
-		// Helper to safely read aggregate sums
 		const sumOrZero = (agg: any, field: string) =>
 			(agg && agg._sum && (agg._sum[field] ?? 0)) || 0;
 
-		// Basic counts & settings
 		const [settings, totalClients, totalSales] = await Promise.all([
 			this.prisma.setting.findUnique({ where: { id: 1 } }),
 			this.prisma.client.count({ where: { isDeleted: false } }), // "Mijozlar"
 			this.prisma.sale.count({ where: { isDeleted: false } }), // "Shartnomalar" (use Sale)
 		]);
 
-		// Yearly totals (income / expense sources)
-		// ASSUMPTION: Incoming money = PaidClient.price + PaidOther.price (type = INCOME)
-		//            Expenses = PaidSupplier.price + Arrived.price + PaidServer.price + PaidOther.price (type = OUTCOME)
 		const [
 			paidClientYearAgg,
 			paidOtherIncomeYearAgg,
@@ -61,7 +55,6 @@ export class StatisticsService {
 			lastYearPaidClientAgg,
 			lastYearPaidOtherIncomeAgg,
 		] = await Promise.all([
-			// yearly income pieces
 			this.prisma.paidClient.aggregate({
 				_sum: { price: true },
 				where: {
@@ -78,7 +71,6 @@ export class StatisticsService {
 				},
 			}),
 
-			// yearly expense pieces
 			this.prisma.paidSupplier.aggregate({
 				_sum: { price: true },
 				where: {
@@ -109,13 +101,11 @@ export class StatisticsService {
 				},
 			}),
 
-			// total outstanding debts (sum of sale.dept)
 			this.prisma.sale.aggregate({
 				_sum: { credit: true },
 				where: { isDeleted: false },
 			}),
 
-			// current month pieces (for daily top-right cards)
 			this.prisma.paidClient.aggregate({
 				_sum: { price: true },
 				where: {
@@ -161,7 +151,6 @@ export class StatisticsService {
 				},
 			}),
 
-			// last year's income (for YoY comparison)
 			this.prisma.paidClient.aggregate({
 				_sum: { price: true },
 				where: {
@@ -203,14 +192,12 @@ export class StatisticsService {
 			sumOrZero(lastYearPaidOtherIncomeAgg, "price");
 		const totalDebts = sumOrZero(saleDebtAgg, "credit");
 
-		// Monthly bar chart & subscription forecast (12 months)
 		const monthlyStats = await Promise.all(
 			Array.from({ length: 12 }, (_, i) => {
 				const mStart = new Date(year, i, 1);
 				const mEnd = new Date(year, i + 1, 0, 23, 59, 59, 999);
 
 				return Promise.all([
-					// income pieces for month
 					this.prisma.paidClient.aggregate({
 						_sum: { price: true },
 						where: { paidDate: { gte: mStart, lte: mEnd }, isDeleted: false },
@@ -224,7 +211,6 @@ export class StatisticsService {
 						},
 					}),
 
-					// expense pieces for month
 					this.prisma.paidSupplier.aggregate({
 						_sum: { price: true },
 						where: { paidDate: { gte: mStart, lte: mEnd }, isDeleted: false },
@@ -246,13 +232,11 @@ export class StatisticsService {
 						},
 					}),
 
-					// debts created this month (sum of sale.dept where sale.createdAt in month)
 					this.prisma.sale.aggregate({
-						_sum: { dept: true },
+						_sum: { credit: true },
 						where: { createdAt: { gte: mStart, lte: mEnd }, isDeleted: false },
 					}),
 
-					// subscription expected for month: sum(price) - sum(paid)
 					this.prisma.subscribe.aggregate({
 						_sum: { price: true, paid: true },
 						where: {
@@ -269,25 +253,26 @@ export class StatisticsService {
 							sumOrZero(arr, "price") +
 							sumOrZero(pserv, "price") +
 							sumOrZero(poOut, "price");
-						const debtMonth = sumOrZero(saleDebtMonth, "dept");
 
 						const subPrice = sumOrZero(subAgg, "price");
 						const subPaid = sumOrZero(subAgg, "paid");
 						const expectedSubscription = Math.max(0, subPrice - subPaid);
+
+						const debtMonth =
+							sumOrZero(saleDebtMonth, "credit") + (subPrice - subPaid);
 
 						return {
 							month: i + 1,
 							tushum: incomeMonth,
 							chiqim: expenseMonth,
 							qarzdorlik: debtMonth,
-							expectedSubscription, // helpful for debugging / local charting
+							expectedSubscription,
 						};
 					},
 				);
 			}),
 		);
 
-		// Build the subscription forecast array (blue line chart)
 		const subscriptionForecast = monthlyStats.map(
 			(m) => m.expectedSubscription,
 		);
@@ -296,7 +281,7 @@ export class StatisticsService {
 			balance: settings?.balance ?? 0,
 			totals: {
 				clients: totalClients,
-				contracts: totalSales, // SHARTNOMALAR -> Sale count
+				contracts: totalSales,
 				income: yearlyIncome,
 				expenses: yearlyExpenses,
 				debts: totalDebts,
@@ -306,8 +291,8 @@ export class StatisticsService {
 				lastYearIncome,
 			},
 			charts: {
-				monthlyStats, // array of 12 objects {month, tushum, chiqim, qarzdorlik, expectedSubscription}
-				subscriptionForecast, // array of 12 numbers (expected subscription income per month)
+				monthlyStats,
+				subscriptionForecast,
 			},
 		};
 	}

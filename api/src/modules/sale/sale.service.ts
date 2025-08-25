@@ -131,10 +131,11 @@ export class SaleService {
 				for (let i = monthsPast; i + 1 > 0; i--) {
 					await this.subscribeService.create({
 						clientId: sale.clientId,
-						paid: 0,
-						price: saleProduct.price * saleProduct.count,
+						paid: i === monthsPast ? saleProduct.price * saleProduct.count : 0,
+						price: saleProduct.priceCount,
 						saleId: sale.id,
-						state: SubscribeState.NOTPAYING,
+						state:
+							i === monthsPast ? SubscribeState.PAID : SubscribeState.NOTPAYING,
 						payingDate: dayjs(new Date()).add(-i, "months").toDate(),
 					});
 				}

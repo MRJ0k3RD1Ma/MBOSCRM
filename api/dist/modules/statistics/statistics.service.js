@@ -193,7 +193,7 @@ let StatisticsService = class StatisticsService {
                     },
                 }),
                 this.prisma.sale.aggregate({
-                    _sum: { dept: true },
+                    _sum: { credit: true },
                     where: { createdAt: { gte: mStart, lte: mEnd }, isDeleted: false },
                 }),
                 this.prisma.subscribe.aggregate({
@@ -209,10 +209,10 @@ let StatisticsService = class StatisticsService {
                     sumOrZero(arr, "price") +
                     sumOrZero(pserv, "price") +
                     sumOrZero(poOut, "price");
-                const debtMonth = sumOrZero(saleDebtMonth, "dept");
                 const subPrice = sumOrZero(subAgg, "price");
                 const subPaid = sumOrZero(subAgg, "paid");
                 const expectedSubscription = Math.max(0, subPrice - subPaid);
+                const debtMonth = sumOrZero(saleDebtMonth, "credit") + (subPrice - subPaid);
                 return {
                     month: i + 1,
                     tushum: incomeMonth,

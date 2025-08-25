@@ -118,10 +118,10 @@ let SaleService = class SaleService {
                 for (let i = monthsPast; i + 1 > 0; i--) {
                     await this.subscribeService.create({
                         clientId: sale.clientId,
-                        paid: 0,
-                        price: saleProduct.price * saleProduct.count,
+                        paid: i === monthsPast ? saleProduct.price * saleProduct.count : 0,
+                        price: saleProduct.priceCount,
                         saleId: sale.id,
-                        state: client_1.SubscribeState.NOTPAYING,
+                        state: i === monthsPast ? client_1.SubscribeState.PAID : client_1.SubscribeState.NOTPAYING,
                         payingDate: (0, dayjs_1.default)(new Date()).add(-i, "months").toDate(),
                     });
                 }
