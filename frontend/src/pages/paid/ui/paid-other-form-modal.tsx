@@ -45,8 +45,8 @@ export default function PaidOtherFormDrawer({
       form.setFieldsValue({
         ...initialValues,
         paidDate: initialValues.paidDate
-          ? dayjs(initialValues.paidDate).tz("Asia/Tashkent")
-          : undefined,
+          ? dayjs(initialValues.paidDate).startOf("day")
+          : null,
       });
     } else {
       form.resetFields();
@@ -57,7 +57,7 @@ export default function PaidOtherFormDrawer({
     onSubmit({
       ...values,
       paidDate: values.paidDate
-        ? dayjs(values.paidDate).tz("Asia/Tashkent").format("YYYY-MM-DD")
+        ? values.paidDate.format("YYYY-MM-DD")
         : undefined,
     });
     form.resetFields();
@@ -133,7 +133,7 @@ export default function PaidOtherFormDrawer({
           label="To‘langan sana"
           rules={[{ required: true, message: "Sanani tanlang" }]}
         >
-          <DatePicker style={{ width: "100%" }} />
+          <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
         </Form.Item>
 
         <Form.Item name="description" label="Izoh">

@@ -9,6 +9,7 @@ import {
   Modal,
   Select,
   Space,
+  Switch,
   Table,
   Typography,
   message,
@@ -57,16 +58,16 @@ export default function SalesFormPage() {
   const createSaleProduct = useCreateSaleProduct();
   const updateSaleProduct = useUpdateSaleProduct();
   const deleteSaleProduct = useDeleteSaleProduct();
-
+  const [isPriceEditable, setIsPriceEditable] = useState(false);
   const productDataSource = isEdit ? saleProductsData?.data || [] : products;
 
   useEffect(() => {
     if (saleData) {
       form.setFieldsValue({
         ...saleData,
-        date: saleData.date ? dayjs(saleData.date) : null,
+        date: saleData.date ? dayjs(saleData.date).startOf("day") : null,
         subscribe_begin_date: saleData.subscribe_begin_date
-          ? dayjs(saleData.subscribe_begin_date)
+          ? dayjs(saleData.subscribe_begin_date).startOf("day")
           : null,
       });
     }
@@ -76,7 +77,10 @@ export default function SalesFormPage() {
     const payload = {
       ...values,
       products,
-      date: values.date,
+      date: values.date ? values.date.format("YYYY-MM-DD") : null,
+      subscribe_begin_date: values.subscribe_begin_date
+        ? values.subscribe_begin_date.format("YYYY-MM-DD")
+        : null,
     };
 
     if (isEdit) {
@@ -375,31 +379,12 @@ export default function SalesFormPage() {
                       color:
                         selectedProduct?.countReminder === 0 ? "red" : "gray",
                     }}
-                  >
-                    {/* {isSubscription
-                      ? null
-                      : selectedProduct
-                      ? `Qolgan soni: ${countReminder}`
-                      : "Mahsulot tanlang"} */}
-                  </div>
+                  ></div>
 
                   <Form.Item
                     name="count"
                     label={"Soni"}
-                    rules={[
-                      { required: true, message: "Soni kiriting" },
-                      // {
-                      //   validator: (_, value) => {
-                      //     if (!selectedProduct) return Promise.resolve();
-                      //     if (!isSubscription && value > countReminder) {
-                      //       return Promise.reject(
-                      //         new Error("Mahsulot yetarli emas")
-                      //       );
-                      //     }
-                      //     return Promise.resolve();
-                      //   },
-                      // },
-                    ]}
+                    rules={[{ required: true, message: "Soni kiriting" }]}
                     className="min-w-[100px] max-w-[150px] grow"
                   >
                     <InputNumber
@@ -422,13 +407,14 @@ export default function SalesFormPage() {
           <Form.Item
             name="price"
             label="Narxi"
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: "Narx kiritilishi shart" }]}
             className="min-w-[200px] grow"
           >
             <InputNumber
               min={0}
               className="!w-full"
               placeholder="Narxi"
+              disabled={!isPriceEditable}
               onChange={(value: any) => {
                 const count = drawerForm.getFieldValue("count") || 0;
                 drawerForm.setFieldsValue({
@@ -443,6 +429,13 @@ export default function SalesFormPage() {
             className="min-w-[200px] grow"
           >
             <InputNumber disabled className="!w-full" placeholder="Jami narx" />
+          </Form.Item>
+          <Form.Item label="Narxni o‘zgartirish" valuePropName="checked">
+            <Switch
+              defaultChecked
+              checked={isPriceEditable}
+              onChange={(e) => setIsPriceEditable(e)}
+            />
           </Form.Item>
           <Form.Item style={{ flexShrink: 0 }} label>
             <Button htmlType="submit" type="primary">

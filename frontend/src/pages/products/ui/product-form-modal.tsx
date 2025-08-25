@@ -116,12 +116,13 @@ export default function ProductFormDrawer({
               <InputNumber style={{ width: "100%" }} placeholder="10000" />
             </Form.Item>
           </Col>
-
-          <Col span={12}>
-            <Form.Item label="Boshlang‘ich qoldiq" name="reminderFirst">
-              <InputNumber style={{ width: "100%" }} placeholder="50" />
-            </Form.Item>
-          </Col>
+          {initialValues ? null : (
+            <Col span={12}>
+              <Form.Item label="Boshlang‘ich qoldiq" name="reminderFirst">
+                <InputNumber style={{ width: "100%" }} placeholder="50" />
+              </Form.Item>
+            </Col>
+          )}
 
           <Col span={12}>
             <Form.Item label="Turi" name="type" rules={[{ required: true }]}>

@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { Card, Descriptions, Spin, Typography } from "antd";
+import { Card, Descriptions, Spin, Typography, Table } from "antd";
 import { useGetSubscribeById } from "../../config/queries/subscribe/subscribe-querys";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -35,10 +35,36 @@ export default function Subscribe() {
     format = "YYYY-MM-DD HH:mm"
   ) => (date ? dayjs.utc(date).tz("Asia/Tashkent").format(format) : "-");
 
+  const productColumns = [
+    { title: "ID", dataIndex: "id", key: "id" },
+    {
+      title: "Mahsulot nomi",
+      dataIndex: ["product", "name"],
+      key: "name",
+    },
+    {
+      title: "Soni",
+      dataIndex: "count",
+      key: "count",
+    },
+    {
+      title: "Narxi",
+      dataIndex: "price",
+      key: "price",
+      render: (price: number) => `${price.toLocaleString("uz-UZ")} so'm`,
+    },
+    {
+      title: "Umumiy narx",
+      key: "total",
+      render: (record: any) =>
+        `${(record.count * record.price).toLocaleString("uz-UZ")} so'm`,
+    },
+  ];
+
   return (
     <div className="p-6 space-y-6">
       <Title level={3}>
-        Obuna: <Link to={`/sale/${sale.id}`}>#{sale.code}</Link>{" "}
+        Obuna: <Link to={`/sale/${sale.id}`}>#{sale.code}</Link>
       </Title>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -95,6 +121,17 @@ export default function Subscribe() {
           </Card>
         )}
       </div>
+
+      {sale?.SaleProduct?.length > 0 && (
+        <Card title="Sotuvdagi mahsulotlar">
+          <Table
+            columns={productColumns}
+            dataSource={sale.SaleProduct}
+            rowKey="id"
+            pagination={false}
+          />
+        </Card>
+      )}
     </div>
   );
 }
