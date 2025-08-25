@@ -13,7 +13,7 @@ import {
   Typography,
   message,
 } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import { useGetAllSuppliers } from "../../../config/queries/supplier/supplier-querys";
 import { useGetAllProducts } from "../../../config/queries/products/products-querys";
