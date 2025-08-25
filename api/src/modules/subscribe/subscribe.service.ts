@@ -168,7 +168,20 @@ export class SubscribeService {
 				id,
 				isDeleted: false,
 			},
-			include: { sale: true, client: true },
+			include: {
+				client: true,
+				sale: {
+					include: {
+						PaidClient: {
+							include: { Payment: true },
+						},
+						SaleProduct: {
+							include: { product: true },
+							where: { product: { type: ProductType.SUBSCRIPTION } },
+						},
+					},
+				},
+			},
 		});
 		if (!subscribe) {
 			throw new HttpError({

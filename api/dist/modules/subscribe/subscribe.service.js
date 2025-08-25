@@ -151,7 +151,20 @@ let SubscribeService = class SubscribeService {
                 id,
                 isDeleted: false,
             },
-            include: { sale: true, client: true },
+            include: {
+                client: true,
+                sale: {
+                    include: {
+                        PaidClient: {
+                            include: { Payment: true },
+                        },
+                        SaleProduct: {
+                            include: { product: true },
+                            where: { product: { type: client_1.ProductType.SUBSCRIPTION } },
+                        },
+                    },
+                },
+            },
         });
         if (!subscribe) {
             throw new http_error_1.HttpError({
