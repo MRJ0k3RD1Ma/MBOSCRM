@@ -1,7 +1,7 @@
-import { CreateSubscribeDto } from './dto/create-subscribe.dto';
-import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { FindAllSubscribeQueryDto } from './dto/findAll-subscribe-query.dto';
+import { CreateSubscribeDto } from "./dto/create-subscribe.dto";
+import { UpdateSubscribeDto } from "./dto/update-subscribe.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { FindAllSubscribeQueryDto } from "./dto/findAll-subscribe-query.dto";
 export declare class SubscribeService {
     private readonly prisma;
     constructor(prisma: PrismaService);
@@ -64,6 +64,41 @@ export declare class SubscribeService {
                     paymentId: number | null;
                     saleId: number | null;
                     clientId: number | null;
+                })[];
+                SaleProduct: ({
+                    product: {
+                        type: import(".prisma/client").$Enums.ProductType;
+                        name: string;
+                        isDeleted: boolean | null;
+                        createdAt: Date;
+                        updatedAt: Date;
+                        id: number;
+                        registerId: number | null;
+                        modifyId: number | null;
+                        barcode: string | null;
+                        groupId: number;
+                        unitId: number | null;
+                        priceIncome: number;
+                        reminderFirst: number;
+                        price: number;
+                        barcodeId: number | null;
+                        countReminder: number;
+                        countArrived: number;
+                        countSale: number;
+                    };
+                } & {
+                    isDeleted: boolean | null;
+                    createdAt: Date | null;
+                    updatedAt: Date | null;
+                    id: number;
+                    registerId: number | null;
+                    modifyId: number | null;
+                    price: number | null;
+                    productId: number | null;
+                    count: number | null;
+                    priceCount: number | null;
+                    saleId: number | null;
+                    is_subscribe: boolean | null;
                 })[];
             } & {
                 isDeleted: boolean | null;
