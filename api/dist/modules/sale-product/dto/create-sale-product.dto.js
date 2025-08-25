@@ -28,6 +28,12 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateSaleProductDto.prototype, "productId", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 10000 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateSaleProductDto.prototype, "price", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ example: 2 }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),

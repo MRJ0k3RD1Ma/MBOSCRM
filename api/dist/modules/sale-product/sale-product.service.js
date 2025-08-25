@@ -36,13 +36,14 @@ let SaleProductService = class SaleProductService {
             });
         }
         if (product.countReminder < createSaleProductDto.count &&
-            product.type === 'DEVICE') {
+            product.type === "DEVICE") {
             throw new http_error_1.HttpError({
                 message: `Maxsulot soni yetarli emas`,
             });
         }
         const isSubscription = product.type == client_1.ProductType.SUBSCRIPTION;
-        let priceCount = product.price * createSaleProductDto.count;
+        let priceCount = (createSaleProductDto.price ?? product.price) *
+            createSaleProductDto.count;
         if (isSubscription) {
             priceCount = 0;
         }
@@ -51,7 +52,7 @@ let SaleProductService = class SaleProductService {
                 saleId: createSaleProductDto.saleId,
                 productId: createSaleProductDto.productId,
                 count: createSaleProductDto.count,
-                price: product.price,
+                price: createSaleProductDto.price ?? product.price,
                 priceCount,
                 is_subscribe: isSubscription,
                 registerId: creatorId,
@@ -59,7 +60,7 @@ let SaleProductService = class SaleProductService {
             },
             include: { product: true },
         });
-        if (product.type == 'DEVICE') {
+        if (product.type == "DEVICE") {
             await this.prisma.product.update({
                 where: { id: product.id },
                 data: {
@@ -104,7 +105,7 @@ let SaleProductService = class SaleProductService {
                     register: true,
                 },
                 orderBy: {
-                    createdAt: 'desc',
+                    createdAt: "desc",
                 },
             }),
             this.prisma.saleProduct.count({ where }),
@@ -156,11 +157,11 @@ let SaleProductService = class SaleProductService {
                 });
             }
         }
-        const finalPrice = product.price ?? saleProduct.price;
+        const finalPrice = product.price ?? updateSaleProductDto.price ?? saleProduct.price;
         const finalCount = updateSaleProductDto.count ?? saleProduct.count;
         const totalPriceCount = finalPrice * finalCount;
         const isSubscribe = product
-            ? product.type === 'SUBSCRIPTION' || product.type === 'SERVICE'
+            ? product.type === "SUBSCRIPTION" || product.type === "SERVICE"
             : saleProduct.is_subscribe;
         return this.prisma.saleProduct.update({
             where: { id },

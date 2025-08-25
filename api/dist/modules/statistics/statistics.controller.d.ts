@@ -2,7 +2,7 @@ import { StatisticsService } from './statistics.service';
 export declare class StatisticsController {
     private readonly statisticsService;
     constructor(statisticsService: StatisticsService);
-    findOne(year: number): Promise<{
+    findOne(year?: number): Promise<{
         balance: number;
         totals: {
             clients: number;
