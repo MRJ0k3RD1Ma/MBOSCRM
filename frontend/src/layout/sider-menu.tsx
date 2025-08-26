@@ -81,12 +81,12 @@ const menuItems = [
       },
       {
         key: "/paid-suppliers",
-        label: "Yetkazuvchilarga to’langanlar",
+        label: "Yetkazuvchilarga to'langanlar",
         icon: <TeamOutlined />,
       },
       {
         key: "/paid-other",
-        label: "Boshqa xarajatlar",
+        label: "Boshqa to'lovlar",
         icon: <ContainerOutlined />,
       },
       {
@@ -194,7 +194,7 @@ const menuItems = [
       },
       {
         key: "/supplier-credit",
-        label: "Qarzdorlar",
+        label: "Mavjud qarzdorlik",
         icon: <CreditCardOutlined />,
       },
       {
@@ -286,12 +286,12 @@ export default function SiderMenu({ collapsed, setCollapsed }: Props) {
       theme="dark"
       width={290}
       style={{
-      position: "fixed",
-    height: "100vh",
-    left: 0,
-    zIndex: 100,
-    display: "flex",
-    flexDirection: "column",
+        position: "fixed",
+        height: "100vh",
+        left: 0,
+        zIndex: 100,
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <div className="flex items-center justify-center py-4 px-3">

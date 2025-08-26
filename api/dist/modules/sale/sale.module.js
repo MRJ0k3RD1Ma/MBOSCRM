@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const sale_service_1 = require("./sale.service");
 const sale_controller_1 = require("./sale.controller");
 const sale_product_module_1 = require("../sale-product/sale-product.module");
+const subscribe_module_1 = require("../subscribe/subscribe.module");
 let SaleModule = class SaleModule {
 };
 exports.SaleModule = SaleModule;
@@ -18,7 +19,7 @@ exports.SaleModule = SaleModule = __decorate([
     (0, common_1.Module)({
         controllers: [sale_controller_1.SaleController],
         providers: [sale_service_1.SaleService],
-        imports: [sale_product_module_1.SaleProductModule],
+        imports: [sale_product_module_1.SaleProductModule, subscribe_module_1.SubscribeModule],
     })
 ], SaleModule);
 //# sourceMappingURL=sale.module.js.map

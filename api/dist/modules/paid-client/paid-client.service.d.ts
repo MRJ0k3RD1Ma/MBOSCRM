@@ -39,9 +39,9 @@ export declare class PaidClientService {
             code: string | null;
             codeId: number | null;
             clientId: number;
-            state: import(".prisma/client").$Enums.SaleState;
             dept: number;
             credit: number;
+            state: import(".prisma/client").$Enums.SaleState;
             clientName: string | null;
             subscribe_begin_date: Date | null;
             subscribe_generate_day: number | null;
@@ -123,9 +123,9 @@ export declare class PaidClientService {
             code: string | null;
             codeId: number | null;
             clientId: number;
-            state: import(".prisma/client").$Enums.SaleState;
             dept: number;
             credit: number;
+            state: import(".prisma/client").$Enums.SaleState;
             clientName: string | null;
             subscribe_begin_date: Date | null;
             subscribe_generate_day: number | null;

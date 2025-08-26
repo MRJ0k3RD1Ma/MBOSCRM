@@ -175,8 +175,7 @@ export class UserService implements OnModuleInit {
   }
 
   async findAll(dto: FindAllUserQueryDto) {
-    const { limit = 10, page = 1, name, roleId, username, chatId, phone} = dto;
-
+    const { limit = 10, page = 1, name, roleId, username, chatId, phone } = dto;
 
     const where: Prisma.UserWhereInput = {
       isDeleted: false,

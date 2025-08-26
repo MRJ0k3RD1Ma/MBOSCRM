@@ -2,7 +2,12 @@ import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { useGetAllPayments } from "../../../config/queries/payment/payment-querys";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const { RangePicker } = DatePicker;
 
@@ -30,8 +35,8 @@ export default function PaidClientFilter({
         payingDate:
           initialValues.payingDateFrom && initialValues.payingDateTo
             ? [
-                dayjs(initialValues.payingDateFrom),
-                dayjs(initialValues.payingDateTo),
+                dayjs(initialValues.payingDateFrom).tz("Asia/Tashkent"),
+                dayjs(initialValues.payingDateTo).tz("Asia/Tashkent"),
               ]
             : undefined,
       };
@@ -43,8 +48,12 @@ export default function PaidClientFilter({
     form.validateFields().then((values) => {
       const filters = {
         ...values,
-        payingDateFrom: values.payingDate?.[0]?.toISOString(),
-        payingDateTo: values.payingDate?.[1]?.toISOString(),
+        payingDateFrom: values.payingDate?.[0]
+          ? dayjs(values.payingDate[0]).tz("Asia/Tashkent").format("YYYY-MM-DD")
+          : undefined,
+        payingDateTo: values.payingDate?.[1]
+          ? dayjs(values.payingDate[1]).tz("Asia/Tashkent").format("YYYY-MM-DD")
+          : undefined,
       };
       delete filters.payingDate;
       onApply(filters);
@@ -83,9 +92,11 @@ export default function PaidClientFilter({
           <Form.Item label="Mijoz nomi" name="clientName">
             <Input placeholder="Mijoz nomi" />
           </Form.Item>
+
           <Form.Item label="Sotuv kodi" name="saleCode">
             <Input placeholder="Sotuv kodi" />
           </Form.Item>
+
           <Form.Item label="To‘lov turi" name="paymentId">
             <Select
               placeholder="To'lov turini tanlang"
@@ -100,6 +111,7 @@ export default function PaidClientFilter({
               ))}
             </Select>
           </Form.Item>
+
           <Form.Item label="To‘lov sanasi" name="payingDate">
             <RangePicker
               placeholder={["Boshlanish sanasi", "Tugash sanasi"]}

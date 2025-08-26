@@ -13,7 +13,7 @@ import {
   Typography,
   message,
 } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import { useGetAllSuppliers } from "../../../config/queries/supplier/supplier-querys";
 import { useGetAllProducts } from "../../../config/queries/products/products-querys";
@@ -60,15 +60,13 @@ export default function ArrivedFormPage() {
 
   const productDataSource = isEdit ? arrivedProductsData?.data || [] : products;
 
-  useEffect(() => {
-    if (arrivedData) {
-      const patched = {
-        ...arrivedData,
-        date: dayjs(arrivedData.date),
-      };
-      form.setFieldsValue(patched);
-    }
-  }, [arrivedData]);
+  if (arrivedData) {
+    const patched = {
+      ...arrivedData,
+      date: arrivedData.date ? dayjs(arrivedData.date).startOf("day") : null,
+    };
+    form.setFieldsValue(patched);
+  }
 
   const onFinish = async (values: any) => {
     const cleanedProducts = products.map(
@@ -79,8 +77,9 @@ export default function ArrivedFormPage() {
       })
     );
     if (values.date) {
-      values.date = dayjs(values.date).tz("Asia/Tashkent").format("YYYY-MM-DD");
+      values.date = values.date.format("YYYY-MM-DD");
     }
+
     const payload = {
       ...values,
       products: cleanedProducts,

@@ -38,6 +38,21 @@ export default function Subscribes() {
         dayjs.utc(date).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm"),
     },
     {
+      title: "Shartnoma raqami",
+      dataIndex: "sale",
+      render: (sale: any) => (
+        <a
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/sale/${sale.id}`);
+          }}
+          style={{ color: "#1677ff", cursor: "pointer" }}
+        >
+          {"#" + sale?.code || "Noma'lum"}
+        </a>
+      ),
+    },
+    {
       title: "Mijoz",
       dataIndex: "client",
       render: (client: any) => client?.name || "Noma'lum",
@@ -46,6 +61,17 @@ export default function Subscribes() {
       title: "Sotuv",
       dataIndex: "sale",
       render: (sale: any) => sale?.id || "-",
+    },
+    {
+      title: "Sotuvdagi mahsulotlar",
+      render: (_: any, record: any) => {
+        if (!record?.sale?.SaleProduct?.length) return "-";
+
+        return record.sale.SaleProduct.map((item: any) => {
+          const name = item?.product?.name || "";
+          return name.length > 7 ? name.slice(0, 7) + "..." : name;
+        }).join(", ");
+      },
     },
     {
       title: "Narx",
@@ -58,7 +84,7 @@ export default function Subscribes() {
       title: "Holat",
       dataIndex: "state",
       render: (state: string) => {
-        const color = state === "PAYING" ? "green" : "red";
+        const color = state === "PAID" && "PAYING" ? "green" : "red";
         return <Tag color={color}>{state}</Tag>;
       },
     },

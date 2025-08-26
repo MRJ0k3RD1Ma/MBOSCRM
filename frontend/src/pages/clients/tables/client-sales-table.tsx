@@ -25,8 +25,9 @@ export default function ClientSalesTable({ clientId }: { clientId: number }) {
       title: "To’ladi",
       dataIndex: "dept",
       render: (_: number, record: any) => {
-        const priceToUse = record.SaleProduct[0].is_subscribe
-          ? record.SaleProduct[0].product?.dept
+        const saleProduct = record.SaleProduct?.[0];
+        const priceToUse = saleProduct?.is_subscribe
+          ? saleProduct.product?.dept
           : record.dept;
 
         return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
@@ -36,8 +37,9 @@ export default function ClientSalesTable({ clientId }: { clientId: number }) {
       title: "Narxi",
       dataIndex: "price",
       render: (_: number, record: any) => {
-        const priceToUse = record.SaleProduct[0].is_subscribe
-          ? record.SaleProduct[0].product?.price
+        const saleProduct = record.SaleProduct?.[0];
+        const priceToUse = saleProduct?.is_subscribe
+          ? saleProduct.product?.price
           : record.price;
 
         return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
@@ -52,7 +54,10 @@ export default function ClientSalesTable({ clientId }: { clientId: number }) {
     {
       title: "Obunami",
       dataIndex: ["SaleProduct", "0", "is_subscribe"],
-      render: (is_subscribe: boolean) => (is_subscribe ? "Ha" : "Yo'q"),
+      render: (_: any, record: any) => {
+        const saleProduct = record.SaleProduct?.[0];
+        return saleProduct?.is_subscribe ? "Ha" : "Yo'q";
+      },
     },
     {
       title: "Yaratilgan vaqt",

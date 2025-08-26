@@ -9,7 +9,7 @@ export class StatisticsController {
 
   @Get()
   @DecoratorWrapper('Get Statistics', true, [Role.Admin])
-  findOne(@Query('year', ParseIntPipe) year: number) {
+  findOne(@Query('year', ParseIntPipe) year?: number) {
     return this.statisticsService.getStatistics(year);
   }
 }

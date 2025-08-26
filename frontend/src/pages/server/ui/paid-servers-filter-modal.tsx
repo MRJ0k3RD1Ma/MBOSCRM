@@ -2,6 +2,7 @@ import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
 import { useGetAllPayments } from "../../../config/queries/payment/payment-querys";
+import dayjs from "dayjs";
 
 type Props = {
   open: boolean;
@@ -22,13 +23,23 @@ export default function PaidServersFilterModal({
 
   useEffect(() => {
     if (open) {
-      form.setFieldsValue(initialValues);
+      form.setFieldsValue({
+        ...initialValues,
+        fromDate: initialValues?.fromDate
+          ? dayjs(initialValues.fromDate)
+          : null,
+      });
     }
-  }, [open]);
+  }, [open, initialValues, form]);
 
   const handleSubmit = () => {
     form.validateFields().then((values) => {
-      onApply(values);
+      onApply({
+        ...values,
+        fromDate: values.fromDate
+          ? values.fromDate.format("YYYY-MM-DD")
+          : undefined,
+      });
       onClose();
     });
   };

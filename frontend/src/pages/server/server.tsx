@@ -69,9 +69,7 @@ export default function Server() {
       name: server?.name,
       responsible: server?.responsible,
       plan: server?.plan,
-      endDate: server?.endDate
-        ? dayjs(server.endDate).tz("Asia/Tashkent")
-        : null,
+      endDate: server?.endDate ? dayjs(server.endDate).startOf("day") : null,
     });
   };
 
@@ -81,9 +79,9 @@ export default function Server() {
         {
           ...values,
           id: serverId,
-          endDate: dayjs(values.endDate)
-            .tz("Asia/Tashkent")
-            .format("YYYY-MM-DD"),
+          endDate: values.endDate
+            ? values.endDate.format("YYYY-MM-DD")
+            : undefined,
         },
         {
           onSuccess: () => {
@@ -101,7 +99,7 @@ export default function Server() {
       paymentTypeId: undefined,
       price: undefined,
       description: "",
-      endDate: dayjs().tz("Asia/Tashkent"),
+      endDate: dayjs().startOf("day"),
     });
   };
 
@@ -112,9 +110,9 @@ export default function Server() {
           ...values,
           serverId,
           price: +values.price,
-          endDate: dayjs(values.endDate)
-            .tz("Asia/Tashkent")
-            .format("YYYY-MM-DD"),
+          endDate: values.endDate
+            ? values.endDate.format("YYYY-MM-DD")
+            : undefined,
         },
         {
           onSuccess: () => {

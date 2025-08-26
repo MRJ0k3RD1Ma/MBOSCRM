@@ -46,7 +46,7 @@ export default function PriceCurant() {
       render: (_: any, row: Product) => {
         const unitName =
           unitsData?.data.find((u) => u.id === row.unitId)?.name || "";
-        return `${row.reminderFirst} , ${unitName}`;
+        return `${row.countReminder} , ${unitName}`;
       },
     },
     {

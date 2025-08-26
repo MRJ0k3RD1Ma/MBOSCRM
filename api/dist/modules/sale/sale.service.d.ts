@@ -1,12 +1,14 @@
-import { CreateSaleDto } from './dto/create-sale.dto';
-import { UpdateSaleDto } from './dto/update-sale.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
-import { SaleProductService } from '../sale-product/sale-product.service';
+import { CreateSaleDto } from "./dto/create-sale.dto";
+import { UpdateSaleDto } from "./dto/update-sale.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { FindAllSaleQueryDto } from "./dto/findAll-sale-query.dto";
+import { SaleProductService } from "../sale-product/sale-product.service";
+import { SubscribeService } from "../subscribe/subscribe.service";
 export declare class SaleService {
     private readonly prisma;
     private readonly saleProductService;
-    constructor(prisma: PrismaService, saleProductService: SaleProductService);
+    private readonly subscribeService;
+    constructor(prisma: PrismaService, saleProductService: SaleProductService, subscribeService: SubscribeService);
     onModuleInit(): Promise<void>;
     create(createSaleDto: CreateSaleDto, creatorId: number): Promise<{
         isDeleted: boolean | null;
@@ -20,9 +22,9 @@ export declare class SaleService {
         code: string | null;
         codeId: number | null;
         clientId: number;
-        state: import(".prisma/client").$Enums.SaleState;
         dept: number;
         credit: number;
+        state: import(".prisma/client").$Enums.SaleState;
         clientName: string | null;
         subscribe_begin_date: Date | null;
         subscribe_generate_day: number | null;
@@ -120,9 +122,9 @@ export declare class SaleService {
             code: string | null;
             codeId: number | null;
             clientId: number;
-            state: import(".prisma/client").$Enums.SaleState;
             dept: number;
             credit: number;
+            state: import(".prisma/client").$Enums.SaleState;
             clientName: string | null;
             subscribe_begin_date: Date | null;
             subscribe_generate_day: number | null;
@@ -182,9 +184,9 @@ export declare class SaleService {
         code: string | null;
         codeId: number | null;
         clientId: number;
-        state: import(".prisma/client").$Enums.SaleState;
         dept: number;
         credit: number;
+        state: import(".prisma/client").$Enums.SaleState;
         clientName: string | null;
         subscribe_begin_date: Date | null;
         subscribe_generate_day: number | null;
@@ -201,9 +203,9 @@ export declare class SaleService {
         code: string | null;
         codeId: number | null;
         clientId: number;
-        state: import(".prisma/client").$Enums.SaleState;
         dept: number;
         credit: number;
+        state: import(".prisma/client").$Enums.SaleState;
         clientName: string | null;
         subscribe_begin_date: Date | null;
         subscribe_generate_day: number | null;
@@ -220,9 +222,9 @@ export declare class SaleService {
         code: string | null;
         codeId: number | null;
         clientId: number;
-        state: import(".prisma/client").$Enums.SaleState;
         dept: number;
         credit: number;
+        state: import(".prisma/client").$Enums.SaleState;
         clientName: string | null;
         subscribe_begin_date: Date | null;
         subscribe_generate_day: number | null;
