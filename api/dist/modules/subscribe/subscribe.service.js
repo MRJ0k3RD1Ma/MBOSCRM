@@ -128,10 +128,6 @@ let SubscribeService = class SubscribeService {
                             PaidClient: {
                                 include: { Payment: true },
                             },
-                            SaleProduct: {
-                                include: { product: true },
-                                where: { product: { type: client_1.ProductType.SUBSCRIPTION } },
-                            },
                         },
                     },
                 },
