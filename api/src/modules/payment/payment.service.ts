@@ -49,7 +49,7 @@ export class PaymentService {
         },
         skip: (page - 1) * limit,
         take: limit,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { id: 'desc' },
       }),
       this.prisma.payment.count({
         where: {

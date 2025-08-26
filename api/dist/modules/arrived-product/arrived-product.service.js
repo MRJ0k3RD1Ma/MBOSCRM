@@ -94,6 +94,9 @@ let ArrivedProductService = class ArrivedProductService {
                     Product: { include: { ProductUnit: true } },
                     register: true,
                 },
+                orderBy: {
+                    id: 'desc',
+                },
             }),
             this.prisma.arrivedProduct.count({ where }),
         ]);

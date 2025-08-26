@@ -146,6 +146,7 @@ export class SubscribeService {
             },
           },
         },
+        orderBy: { id: 'desc' },
       }),
       this.prisma.subscribe.count({ where }),
     ]);

@@ -140,6 +140,7 @@ export class ServerService {
     data = data.map((server) => {
       server.daysLeft = dayjs(server.endDate).diff(new Date(), 'day');
       return server;
+      
     });
 
     return {

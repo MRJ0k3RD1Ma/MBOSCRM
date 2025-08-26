@@ -122,7 +122,7 @@ let ArrivedService = class ArrivedService {
                 take: limit,
                 include: { ArrivedProduct: true, register: true, supplier: true },
                 orderBy: {
-                    date: "desc",
+                    id: "desc",
                 },
             }),
             this.prisma.arrived.count({ where }),

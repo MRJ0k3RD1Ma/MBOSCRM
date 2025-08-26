@@ -78,6 +78,7 @@ let PaidServerService = class PaidServerService {
                 paymentType: true,
                 server: { select: { id: true, name: true } },
             },
+            orderBy: { id: 'desc' },
         });
     }
     async findOne(id) {

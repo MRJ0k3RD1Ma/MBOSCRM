@@ -60,7 +60,7 @@ let ProductGroupService = class ProductGroupService {
                 },
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { createdAt: 'desc' },
+                orderBy: { id: 'desc' },
             }),
             this.prisma.productGroup.count({
                 where: {

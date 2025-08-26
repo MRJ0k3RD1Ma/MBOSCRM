@@ -201,7 +201,7 @@ let UserService = class UserService {
                 skip: (page - 1) * limit,
                 take: limit,
                 include: { UserRole: true },
-                orderBy: { createdAt: 'desc' },
+                orderBy: { id: 'desc' },
             }),
             this.prisma.user.count({
                 where,
