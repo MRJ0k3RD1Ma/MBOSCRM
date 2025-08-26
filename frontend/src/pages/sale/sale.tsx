@@ -95,11 +95,9 @@ export default function Sale() {
       title: "Narxi",
       dataIndex: "price",
       render: (_: number, record: any) => {
-        const priceToUse = record.is_subscribe
-          ? record.product?.price
-          : record.price;
-
-        return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
+        return record.price
+          ? record.price.toLocaleString("uz-UZ") + " so'm"
+          : "0";
       },
     },
     {
