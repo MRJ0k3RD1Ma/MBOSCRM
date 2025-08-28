@@ -47,8 +47,8 @@ export default function SalesFormPage() {
   const [selectedProductCountReminder, setSelectedProductCountReminder] =
     useState<number | null>(null);
 
-  const { data: clients } = useGetAllClients();
-  const { data: productsList } = useGetAllProducts();
+  const { data: clients } = useGetAllClients({ page: 1, limit: 1000 });
+  const { data: productsList } = useGetAllProducts({ page: 1, limit: 1000 });
   const { data: saleData } = useGetSaleById(Number(id), isEdit);
   const { data: saleProductsData } = useGetAllSaleProduct({
     saleId: isEdit ? Number(id) : undefined,
