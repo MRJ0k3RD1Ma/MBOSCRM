@@ -120,7 +120,7 @@ let SaleService = class SaleService {
                 for (let i = monthsPast; i + 1 > 0; i--) {
                     await this.subscribeService.create({
                         clientId: sale.clientId,
-                        paid: i === monthsPast ? saleProduct.price * saleProduct.count : 0,
+                        paid: i === monthsPast ? saleProduct.priceCount : 0,
                         price: saleProduct.priceCount,
                         saleId: sale.id,
                         state: i === monthsPast ? client_1.SubscribeState.PAID : client_1.SubscribeState.NOTPAYING,
@@ -271,7 +271,7 @@ let SaleService = class SaleService {
                 id,
                 isDeleted: false,
             },
-            include: { SaleProduct: true },
+            include: { SaleProduct: { where: { isDeleted: false } } },
         });
         if (!sale) {
             throw new http_error_1.HttpError({
