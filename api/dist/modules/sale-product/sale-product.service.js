@@ -57,6 +57,14 @@ let SaleProductService = class SaleProductService {
             },
             include: { product: true },
         });
+        await this.prisma.sale.update({
+            where: { id: sale.id },
+            data: {
+                price: { increment: priceCount },
+                credit: { increment: priceCount },
+                state: client_1.SaleState.RUNNING,
+            },
+        });
         if (product.type == "DEVICE") {
             await this.prisma.product.update({
                 where: { id: product.id },

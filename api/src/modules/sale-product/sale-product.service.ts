@@ -4,7 +4,7 @@ import { UpdateSaleProductDto } from "./dto/update-sale-product.dto";
 import { PrismaService } from "../prisma/prisma.service";
 import { HttpError } from "src/common/exception/http.error";
 import { FindAllSaleProductQueryDto } from "./dto/findAll-sale-product-query.dto";
-import { Prisma, ProductType } from "@prisma/client";
+import { Prisma, ProductType, SaleState } from "@prisma/client";
 
 @Injectable()
 export class SaleProductService {
@@ -54,6 +54,15 @@ export class SaleProductService {
 				modifyId: creatorId,
 			},
 			include: { product: true },
+		});
+
+		await this.prisma.sale.update({
+			where: { id: sale.id },
+			data: {
+				price: { increment: priceCount },
+				credit: { increment: priceCount },
+				state: SaleState.RUNNING,
+			},
 		});
 
 		if (product.type == "DEVICE") {

@@ -96,6 +96,9 @@ let SaleService = class SaleService {
                 subscribe_begin_date,
                 subscribe_generate_day,
                 code: `${new Date().getFullYear() - 2000}-${codeId}`,
+                price: 0,
+                credit: 0,
+                dept: 0,
                 state,
                 codeId,
                 client: { connect: { id: clientId } },
@@ -103,7 +106,6 @@ let SaleService = class SaleService {
                 modifier: { connect: { id: creatorId } },
             },
         });
-        let totalPrice = 0;
         for (const product of products) {
             const saleProduct = await this.saleProductService.create({
                 saleId: sale.id,
@@ -126,8 +128,9 @@ let SaleService = class SaleService {
                     });
                 }
             }
-            totalPrice += saleProduct.priceCount;
         }
+        sale = await this.prisma.sale.findUnique({ where: { id: sale.id } });
+        const totalPrice = sale.price;
         await this.prisma.$transaction(async (tx) => {
             const client = await tx.client.findFirst({ where: { id: clientId } });
             if (client.balance < totalPrice) {
@@ -136,8 +139,7 @@ let SaleService = class SaleService {
                 sale = await tx.sale.update({
                     where: { id: sale.id },
                     data: {
-                        price: totalPrice,
-                        credit: totalPrice - paidAmount,
+                        credit: sale.price - paidAmount,
                         dept: paidAmount,
                     },
                     include: { SaleProduct: { include: { product: true } } },
@@ -275,7 +277,11 @@ let SaleService = class SaleService {
                 message: `Sale with ID ${id} not found`,
             });
         }
-        return this.prisma.sale.update({
+        await this.prisma.client.update({
+            where: { id: sale.clientId },
+            data: { balance: { increment: sale.dept } },
+        });
+        return await this.prisma.sale.update({
             where: { id },
             data: { isDeleted: true },
         });
