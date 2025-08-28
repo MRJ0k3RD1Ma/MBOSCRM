@@ -114,10 +114,11 @@ let SaleService = class SaleService {
                 productId: product.productId,
             }, creatorId);
             if (saleProduct.product.type === "SUBSCRIPTION") {
-                const monthsPast = -(0, dayjs_1.default)(sale.subscribe_begin_date)
+                let monthsPast = -(0, dayjs_1.default)(sale.subscribe_begin_date)
                     .set("days", sale.subscribe_generate_day)
-                    .diff(new Date(), "months");
-                for (let i = monthsPast; i + 1 > 0; i--) {
+                    .diff(new Date(), "months", true);
+                monthsPast = Math.floor(monthsPast);
+                for (let i = monthsPast; i > 0; i--) {
                     await this.subscribeService.create({
                         clientId: sale.clientId,
                         paid: i === monthsPast ? saleProduct.priceCount : 0,
