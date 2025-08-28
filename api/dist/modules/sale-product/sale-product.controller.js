@@ -38,9 +38,8 @@ let SaleProductController = class SaleProductController {
         const modifyId = req.user.id;
         return this.saleProductService.update(+id, updateSaleProductDto, modifyId);
     }
-    remove(id, req) {
-        const modifyId = req.user.id;
-        return this.saleProductService.remove(+id, modifyId);
+    remove(id) {
+        return this.saleProductService.remove(+id);
     }
 };
 exports.SaleProductController = SaleProductController;
@@ -83,9 +82,8 @@ __decorate([
     (0, common_1.Delete)(':id'),
     (0, decorator_auth_1.DecoratorWrapper)('remove SaleProduct', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], SaleProductController.prototype, "remove", null);
 exports.SaleProductController = SaleProductController = __decorate([

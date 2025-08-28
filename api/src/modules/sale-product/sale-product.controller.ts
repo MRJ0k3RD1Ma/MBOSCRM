@@ -57,8 +57,7 @@ export class SaleProductController {
 
   @Delete(':id')
   @DecoratorWrapper('remove SaleProduct', true, [Role.Admin])
-  remove(@Param('id', ParseIntPipe) id: string, @Req() req: Request) {
-    const modifyId = req.user.id;
-    return this.saleProductService.remove(+id, modifyId);
+  remove(@Param('id', ParseIntPipe) id: string ) {
+    return this.saleProductService.remove(+id );
   }
 }
