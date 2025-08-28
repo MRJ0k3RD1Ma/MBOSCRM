@@ -152,7 +152,7 @@ export class ClientService implements OnModuleInit {
         where,
         skip: (page - 1) * limit,
         take: limit,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { id: 'desc' },
         include: {
           ClientType: {
             select: {

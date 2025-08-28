@@ -81,6 +81,7 @@ export class PaidServerService {
         paymentType: true,
         server: { select: { id: true, name: true } },
       },
+      orderBy: { id: 'desc' },
     });
   }
 

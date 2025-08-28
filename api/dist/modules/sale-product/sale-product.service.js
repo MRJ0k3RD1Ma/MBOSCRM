@@ -110,7 +110,7 @@ let SaleProductService = class SaleProductService {
                     register: true,
                 },
                 orderBy: {
-                    createdAt: "desc",
+                    id: 'desc',
                 },
             }),
             this.prisma.saleProduct.count({ where }),

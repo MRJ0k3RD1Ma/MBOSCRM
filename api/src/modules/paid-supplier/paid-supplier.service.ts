@@ -98,18 +98,18 @@ export class PaidSupplierService {
       where.paymentId = paymentId;
     }
 
-    const [data, total] = await this.prisma.$transaction([
-      this.prisma.paidSupplier.findMany({
-        where,
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-        include: { Payment: true, register: true, modify: true },
-      }),
-      this.prisma.paidSupplier.count({
-        where,
-      }),
-    ]);
+		const [data, total] = await this.prisma.$transaction([
+			this.prisma.paidSupplier.findMany({
+				where,
+				skip: (page - 1) * limit,
+				take: limit,
+				orderBy: { id: "desc" },
+				include: { Payment: true, register: true, modify: true },
+			}),
+			this.prisma.paidSupplier.count({
+				where,
+			}),
+		]);
 
     return {
       total,

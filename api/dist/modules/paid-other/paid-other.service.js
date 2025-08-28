@@ -93,6 +93,9 @@ let PaidOtherService = class PaidOtherService {
                 group: true,
                 Payment: true,
             },
+            orderBy: {
+                id: 'desc'
+            }
         });
     }
     async findOne(id) {

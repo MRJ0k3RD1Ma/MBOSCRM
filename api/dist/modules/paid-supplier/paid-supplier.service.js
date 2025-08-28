@@ -90,7 +90,7 @@ let PaidSupplierService = class PaidSupplierService {
                 where,
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { createdAt: 'desc' },
+                orderBy: { id: "desc" },
                 include: { Payment: true, register: true, modify: true },
             }),
             this.prisma.paidSupplier.count({

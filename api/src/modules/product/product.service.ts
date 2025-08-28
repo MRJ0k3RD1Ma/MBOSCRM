@@ -128,34 +128,34 @@ export class ProductService {
       maxCount,
     } = dto;
 
-    const [data, total] = await this.prisma.$transaction([
-      this.prisma.product.findMany({
-        where: {
-          name: {
-            contains: name?.trim() || '',
-            mode: 'insensitive',
-          },
-          type: { equals: type },
-          barcode: { contains: barcode },
-          groupId: { equals: groupId },
-          unitId: { equals: unitId },
-          priceIncome: { gte: minPrice, lte: maxPrice },
-          countArrived: { gte: minCount, lte: maxCount },
-          isDeleted: false,
-        },
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-      }),
-      this.prisma.product.count({
-        where: {
-          name: {
-            contains: name?.trim() || '',
-            mode: 'insensitive',
-          },
-        },
-      }),
-    ]);
+		const [data, total] = await this.prisma.$transaction([
+			this.prisma.product.findMany({
+				where: {
+					name: {
+						contains: name?.trim() || "",
+						mode: "insensitive",
+					},
+					type: { equals: type },
+					barcode: { contains: barcode },
+					groupId: { equals: groupId },
+					unitId: { equals: unitId },
+					priceIncome: { gte: minPrice, lte: maxPrice },
+					countArrived: { gte: minCount, lte: maxCount },
+					isDeleted: false,
+				},
+				skip: (page - 1) * limit,
+				take: limit,
+				orderBy: { id: "desc" },
+			}),
+			this.prisma.product.count({
+				where: {
+					name: {
+						contains: name?.trim() || "",
+						mode: "insensitive",
+					},
+				},
+			}),
+		]);
 
     return {
       total,

@@ -100,7 +100,7 @@ let ArrivedService = class ArrivedService {
         if (code) {
             where.code = {
                 startsWith: code,
-                mode: 'insensitive',
+                mode: "insensitive",
             };
         }
         if (minPrice || maxPrice) {
@@ -122,7 +122,7 @@ let ArrivedService = class ArrivedService {
                 take: limit,
                 include: { ArrivedProduct: true, register: true, supplier: true },
                 orderBy: {
-                    date: 'desc',
+                    id: "desc",
                 },
             }),
             this.prisma.arrived.count({ where }),

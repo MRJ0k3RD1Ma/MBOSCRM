@@ -131,28 +131,25 @@ export class SubscribeService {
 			where.state = { equals: state };
 		}
 
-		const [data, total] = await this.prisma.$transaction([
-			this.prisma.subscribe.findMany({
-				where,
-				skip: (page - 1) * limit,
-				take: limit,
-				include: {
-					client: true,
-					sale: {
-						include: {
-							PaidClient: {
-								include: { Payment: true },
-							},
-							SaleProduct: {
-								include: { product: true },
-								where: { product: { type: ProductType.SUBSCRIPTION } },
-							},
-						},
-					},
-				},
-			}),
-			this.prisma.subscribe.count({ where }),
-		]);
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.subscribe.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+          client: true,
+          sale: {
+            include: {
+              PaidClient: {
+                include: { Payment: true },
+              },
+            },
+          },
+        },
+        orderBy: { id: 'desc' },
+      }),
+      this.prisma.subscribe.count({ where }),
+    ]);
 
 		return {
 			total,

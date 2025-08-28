@@ -129,7 +129,7 @@ let ClientService = class ClientService {
                 where,
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { createdAt: 'desc' },
+                orderBy: { id: 'desc' },
                 include: {
                     ClientType: {
                         select: {

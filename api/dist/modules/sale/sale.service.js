@@ -214,7 +214,7 @@ let SaleService = class SaleService {
                     client: true,
                 },
                 orderBy: {
-                    date: "desc",
+                    id: "desc",
                 },
             }),
             this.prisma.sale.count({ where }),

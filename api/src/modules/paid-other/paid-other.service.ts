@@ -98,6 +98,9 @@ export class PaidOtherService {
         group: true,
         Payment: true,
       },
+      orderBy:{
+        id: 'desc'
+      }
     });
   }
 

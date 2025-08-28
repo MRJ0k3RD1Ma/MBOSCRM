@@ -112,23 +112,23 @@ export class SaleProductService {
 			where.is_subscribe = { equals: isSubscribe };
 		}
 
-		const [data, total] = await this.prisma.$transaction([
-			this.prisma.saleProduct.findMany({
-				where,
-				skip: (page - 1) * limit,
-				take: limit,
-				include: {
-					product: { include: { ProductUnit: true } },
-					sale: true,
-					modify: true,
-					register: true,
-				},
-				orderBy: {
-					createdAt: "desc",
-				},
-			}),
-			this.prisma.saleProduct.count({ where }),
-		]);
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.saleProduct.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+          product: { include: { ProductUnit: true } },
+          sale: true,
+          modify: true,
+          register: true,
+        },
+        orderBy: {
+          id: 'desc',
+        },
+      }),
+      this.prisma.saleProduct.count({ where }),
+    ]);
 
 		return {
 			total,

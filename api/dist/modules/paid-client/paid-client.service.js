@@ -180,6 +180,9 @@ let PaidClientService = class PaidClientService {
                 modify: true,
                 register: true,
             },
+            orderBy: {
+                id: 'desc'
+            }
         });
     }
     async findOne(id) {
