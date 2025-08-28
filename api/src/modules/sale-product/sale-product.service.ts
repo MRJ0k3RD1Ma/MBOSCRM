@@ -112,23 +112,23 @@ export class SaleProductService {
 			where.is_subscribe = { equals: isSubscribe };
 		}
 
-    const [data, total] = await this.prisma.$transaction([
-      this.prisma.saleProduct.findMany({
-        where,
-        skip: (page - 1) * limit,
-        take: limit,
-        include: {
-          product: { include: { ProductUnit: true } },
-          sale: true,
-          modify: true,
-          register: true,
-        },
-        orderBy: {
-          id: 'desc',
-        },
-      }),
-      this.prisma.saleProduct.count({ where }),
-    ]);
+		const [data, total] = await this.prisma.$transaction([
+			this.prisma.saleProduct.findMany({
+				where,
+				skip: (page - 1) * limit,
+				take: limit,
+				include: {
+					product: { include: { ProductUnit: true } },
+					sale: true,
+					modify: true,
+					register: true,
+				},
+				orderBy: {
+					id: "desc",
+				},
+			}),
+			this.prisma.saleProduct.count({ where }),
+		]);
 
 		return {
 			total,
@@ -210,7 +210,7 @@ export class SaleProductService {
 		});
 	}
 
-	async remove(id: number, modifyId: number) {
+	async remove(id: number) {
 		const saleProduct = await this.prisma.saleProduct.findFirst({
 			where: { id, isDeleted: false },
 		});
@@ -219,7 +219,7 @@ export class SaleProductService {
 		}
 		return this.prisma.saleProduct.update({
 			where: { id },
-			data: { isDeleted: true, modifyId: modifyId },
+			data: { isDeleted: true },
 		});
 	}
 }

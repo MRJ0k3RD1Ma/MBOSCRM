@@ -20,7 +20,7 @@ let ClientService = class ClientService {
         this.prisma = prisma;
     }
     async onModuleInit() {
-        if (config_1.env.ENV != 'prod') {
+        if (config_1.env.ENV != "prod") {
             const clientCount = await this.prisma.client.count();
             const requiredCount = 3;
             if (clientCount < requiredCount) {
@@ -45,20 +45,14 @@ let ClientService = class ClientService {
             where: { id: creatorId, isDeleted: false },
         });
         if (!creator) {
-            throw (0, http_error_1.HttpError)({ message: 'Creator not found' });
-        }
-        const existingPhone = await this.prisma.client.findFirst({
-            where: { phone: createClientDto.phone, isDeleted: false },
-        });
-        if (existingPhone) {
-            throw (0, http_error_1.HttpError)({ message: 'Phone already exists', statusCode: 409 });
+            throw (0, http_error_1.HttpError)({ message: "Creator not found" });
         }
         if (createClientDto.districtId) {
             const district = await this.prisma.district.findUnique({
                 where: { id: createClientDto.districtId },
             });
             if (!district) {
-                throw (0, http_error_1.HttpError)({ code: 'District not found' });
+                throw (0, http_error_1.HttpError)({ code: "District not found" });
             }
         }
         if (createClientDto.regionId) {
@@ -66,7 +60,7 @@ let ClientService = class ClientService {
                 where: { id: createClientDto.regionId },
             });
             if (!region) {
-                throw (0, http_error_1.HttpError)({ code: 'Region not found' });
+                throw (0, http_error_1.HttpError)({ code: "Region not found" });
             }
         }
         let type;
@@ -75,7 +69,7 @@ let ClientService = class ClientService {
                 where: { id: createClientDto.typeId, isDeleted: false },
             });
             if (!type) {
-                throw (0, http_error_1.HttpError)({ code: 'type Not Found' });
+                throw (0, http_error_1.HttpError)({ code: "type Not Found" });
             }
         }
         const client = await this.prisma.client.create({
@@ -101,7 +95,7 @@ let ClientService = class ClientService {
             isDeleted: false,
         };
         if (name?.trim()) {
-            where.name = { contains: name.trim(), mode: 'insensitive' };
+            where.name = { contains: name.trim(), mode: "insensitive" };
         }
         if (districtId) {
             where.districtId = districtId;
@@ -110,13 +104,13 @@ let ClientService = class ClientService {
             where.regionId = regionId;
         }
         if (address?.trim()) {
-            where.address = { contains: address.trim(), mode: 'insensitive' };
+            where.address = { contains: address.trim(), mode: "insensitive" };
         }
         if (isPositiveBalance !== undefined) {
             where.balance = isPositiveBalance ? { gt: 0 } : { lt: 0 };
         }
         if (description?.trim()) {
-            where.description = { contains: description.trim(), mode: 'insensitive' };
+            where.description = { contains: description.trim(), mode: "insensitive" };
         }
         if (inn?.trim()) {
             where.inn = { contains: inn.trim() };
@@ -129,7 +123,7 @@ let ClientService = class ClientService {
                 where,
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { id: 'desc' },
+                orderBy: { id: "desc" },
                 include: {
                     ClientType: {
                         select: {
@@ -154,7 +148,7 @@ let ClientService = class ClientService {
             include: { ClientType: true, District: true, Region: true },
         });
         if (!client) {
-            throw (0, http_error_1.HttpError)({ code: 'Client not found' });
+            throw (0, http_error_1.HttpError)({ code: "Client not found" });
         }
         return client;
     }
@@ -163,7 +157,7 @@ let ClientService = class ClientService {
             where: { id, isDeleted: false },
         });
         if (!client)
-            throw (0, http_error_1.HttpError)({ code: 'Client not found' });
+            throw (0, http_error_1.HttpError)({ code: "Client not found" });
         const updateData = {
             name: dto.name ?? client.name,
             address: dto.address ?? client.address,
@@ -182,7 +176,7 @@ let ClientService = class ClientService {
                 where: { id: updateData.typeId, isDeleted: false },
             });
             if (!type) {
-                throw (0, http_error_1.HttpError)({ code: 'type Not Found' });
+                throw (0, http_error_1.HttpError)({ code: "type Not Found" });
             }
             updateData.typeId = type.id;
         }
@@ -197,7 +191,7 @@ let ClientService = class ClientService {
             where: { id: id, isDeleted: false },
         });
         if (!client) {
-            throw (0, http_error_1.HttpError)({ code: 'Client not found' });
+            throw (0, http_error_1.HttpError)({ code: "Client not found" });
         }
         return await this.prisma.client.update({
             where: { id: id },

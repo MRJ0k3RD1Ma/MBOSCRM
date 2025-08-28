@@ -7,13 +7,13 @@ export declare class SaleController {
     private readonly saleService;
     constructor(saleService: SaleService);
     create(createSaleDto: CreateSaleDto, req: Request): Promise<{
+        id: number;
+        price: number;
+        registerId: number | null;
+        modifyId: number | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        registerId: number | null;
-        modifyId: number | null;
-        price: number;
         date: Date | null;
         code: string | null;
         codeId: number | null;
@@ -30,90 +30,90 @@ export declare class SaleController {
         page: number;
         limit: number;
         data: ({
-            client: {
-                description: string | null;
-                name: string;
-                phone: string;
+            register: {
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
-                balance: number;
-                inn: string;
-                address: string | null;
-                regionId: number | null;
-                districtId: number | null;
-                typeId: number | null;
-                registerId: number | null;
-                modifyId: number | null;
-            };
-            register: {
                 name: string;
-                phone: string | null;
                 username: string;
+                password: string;
+                phone: string | null;
                 roleId: number | null;
                 chatId: string | null;
-                password: string;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                id: number;
             };
             SaleProduct: ({
                 product: {
-                    type: import(".prisma/client").$Enums.ProductType;
-                    name: string;
+                    id: number;
+                    price: number;
+                    registerId: number | null;
+                    modifyId: number | null;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
-                    registerId: number | null;
-                    modifyId: number | null;
+                    name: string;
                     barcode: string | null;
+                    barcodeId: number | null;
                     groupId: number;
                     unitId: number | null;
                     priceIncome: number;
                     reminderFirst: number;
-                    price: number;
-                    barcodeId: number | null;
+                    type: import(".prisma/client").$Enums.ProductType;
                     countReminder: number;
                     countArrived: number;
                     countSale: number;
                 };
             } & {
+                id: number;
+                saleId: number | null;
+                productId: number | null;
+                price: number | null;
+                count: number | null;
+                priceCount: number | null;
+                is_subscribe: boolean | null;
+                registerId: number | null;
+                modifyId: number | null;
                 isDeleted: boolean | null;
                 createdAt: Date | null;
                 updatedAt: Date | null;
+            })[];
+            client: {
                 id: number;
                 registerId: number | null;
                 modifyId: number | null;
-                price: number | null;
-                productId: number | null;
-                count: number | null;
-                priceCount: number | null;
-                saleId: number | null;
-                is_subscribe: boolean | null;
-            })[];
-            modifier: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                name: string;
+                phone: string;
+                typeId: number | null;
+                inn: string;
+                regionId: number | null;
+                districtId: number | null;
+                address: string | null;
+                balance: number;
+                description: string | null;
+            };
+            modifier: {
                 id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                name: string;
+                username: string;
+                password: string;
+                phone: string | null;
+                roleId: number | null;
+                chatId: string | null;
             };
         } & {
+            id: number;
+            price: number;
+            registerId: number | null;
+            modifyId: number | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
-            registerId: number | null;
-            modifyId: number | null;
-            price: number;
             date: Date | null;
             code: string | null;
             codeId: number | null;
@@ -127,55 +127,55 @@ export declare class SaleController {
         })[];
     }>;
     findOne(id: string): Promise<{
-        client: {
-            District: {
-                name: string | null;
-                id: number;
-                regionId: number | null;
-            };
-            Region: {
-                name: string | null;
-                id: number;
-            };
-        } & {
-            description: string | null;
-            name: string;
-            phone: string;
-            isDeleted: boolean | null;
-            createdAt: Date;
-            updatedAt: Date;
+        SaleProduct: {
             id: number;
-            balance: number;
-            inn: string;
-            address: string | null;
-            regionId: number | null;
-            districtId: number | null;
-            typeId: number | null;
+            saleId: number | null;
+            productId: number | null;
+            price: number | null;
+            count: number | null;
+            priceCount: number | null;
+            is_subscribe: boolean | null;
             registerId: number | null;
             modifyId: number | null;
-        };
-        SaleProduct: {
             isDeleted: boolean | null;
             createdAt: Date | null;
             updatedAt: Date | null;
+        }[];
+        client: {
+            District: {
+                id: number;
+                name: string | null;
+                regionId: number | null;
+            };
+            Region: {
+                id: number;
+                name: string | null;
+            };
+        } & {
             id: number;
             registerId: number | null;
             modifyId: number | null;
-            price: number | null;
-            productId: number | null;
-            count: number | null;
-            priceCount: number | null;
-            saleId: number | null;
-            is_subscribe: boolean | null;
-        }[];
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            name: string;
+            phone: string;
+            typeId: number | null;
+            inn: string;
+            regionId: number | null;
+            districtId: number | null;
+            address: string | null;
+            balance: number;
+            description: string | null;
+        };
     } & {
+        id: number;
+        price: number;
+        registerId: number | null;
+        modifyId: number | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        registerId: number | null;
-        modifyId: number | null;
-        price: number;
         date: Date | null;
         code: string | null;
         codeId: number | null;
@@ -188,13 +188,13 @@ export declare class SaleController {
         subscribe_generate_day: number | null;
     }>;
     update(id: string, updateSaleDto: UpdateSaleDto): Promise<{
+        id: number;
+        price: number;
+        registerId: number | null;
+        modifyId: number | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        registerId: number | null;
-        modifyId: number | null;
-        price: number;
         date: Date | null;
         code: string | null;
         codeId: number | null;
@@ -207,13 +207,13 @@ export declare class SaleController {
         subscribe_generate_day: number | null;
     }>;
     remove(id: string): Promise<{
+        id: number;
+        price: number;
+        registerId: number | null;
+        modifyId: number | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        registerId: number | null;
-        modifyId: number | null;
-        price: number;
         date: Date | null;
         code: string | null;
         codeId: number | null;

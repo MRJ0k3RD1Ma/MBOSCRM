@@ -271,12 +271,16 @@ let SaleService = class SaleService {
                 id,
                 isDeleted: false,
             },
+            include: { SaleProduct: true },
         });
         if (!sale) {
             throw new http_error_1.HttpError({
                 message: `Sale with ID ${id} not found`,
             });
         }
+        sale.SaleProduct.forEach((saleProduct) => {
+            this.saleProductService.remove(saleProduct.id);
+        });
         await this.prisma.client.update({
             where: { id: sale.clientId },
             data: { balance: { increment: sale.dept } },

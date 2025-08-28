@@ -110,7 +110,7 @@ let SaleProductService = class SaleProductService {
                     register: true,
                 },
                 orderBy: {
-                    id: 'desc',
+                    id: "desc",
                 },
             }),
             this.prisma.saleProduct.count({ where }),
@@ -181,7 +181,7 @@ let SaleProductService = class SaleProductService {
             },
         });
     }
-    async remove(id, modifyId) {
+    async remove(id) {
         const saleProduct = await this.prisma.saleProduct.findFirst({
             where: { id, isDeleted: false },
         });
@@ -190,7 +190,7 @@ let SaleProductService = class SaleProductService {
         }
         return this.prisma.saleProduct.update({
             where: { id },
-            data: { isDeleted: true, modifyId: modifyId },
+            data: { isDeleted: true },
         });
     }
 };
