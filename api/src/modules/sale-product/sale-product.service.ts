@@ -217,7 +217,21 @@ export class SaleProductService {
 		if (!saleProduct) {
 			throw new HttpError({ message: `SaleProduct with ID ${id} not found` });
 		}
-		return this.prisma.saleProduct.update({
+		const sale = await this.prisma.sale.update({
+			where: { id: saleProduct.saleId },
+			data: { price: { decrement: saleProduct.priceCount } },
+		});
+		if (sale.dept > sale.price) {
+			await this.prisma.client.update({
+				where: { id: sale.clientId },
+				data: { balance: { increment: saleProduct.priceCount } },
+			});
+			await this.prisma.sale.update({
+				where: { id: saleProduct.saleId },
+				data: { dept: { decrement: saleProduct.priceCount } },
+			});
+		}
+		return await this.prisma.saleProduct.update({
 			where: { id },
 			data: { isDeleted: true },
 		});
