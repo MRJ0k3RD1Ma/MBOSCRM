@@ -3,8 +3,10 @@ import dayjs from "dayjs";
 import { indexColumn } from "../../../components/tables/indexColumn";
 import { Table } from "antd";
 import { useGetAllSale } from "../../../config/queries/sale/sale-querys";
+import { useNavigate } from "react-router-dom";
 
 export default function ClientSalesTable({ clientId }: { clientId: number }) {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const limit = 5;
 
@@ -78,6 +80,17 @@ export default function ClientSalesTable({ clientId }: { clientId: number }) {
         total: salesClient?.total,
         onChange: (p) => setPage(p),
       }}
+      onRow={(record) => ({
+        onClick: (e) => {
+          if (
+            (e.target as HTMLElement).closest("button") ||
+            (e.target as HTMLElement).closest("svg")
+          ) {
+            return;
+          }
+          navigate(`/sale/${record.id}`);
+        },
+      })}
     />
   );
 }

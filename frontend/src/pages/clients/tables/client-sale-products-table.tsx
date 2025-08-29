@@ -2,12 +2,14 @@ import { useState } from "react";
 import { indexColumn } from "../../../components/tables/indexColumn";
 import { Table } from "antd";
 import { useGetAllSaleProduct } from "../../../config/queries/sale/sale-product-querys";
+import { useNavigate } from "react-router-dom";
 
 export default function ClientSaleProductsTable({
   clientId,
 }: {
   clientId: number;
 }) {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const limit = 5;
 
@@ -22,8 +24,18 @@ export default function ClientSaleProductsTable({
     indexColumn(page, limit),
     {
       title: "Shartnoma raqami",
-      dataIndex: ["sale", "code"],
-      render: (code: number) => (code ? code : "-"),
+      dataIndex: "sale",
+      render: (sale: any) => (
+        <a
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/sale/${sale.id}`);
+          }}
+          style={{ color: "#1677ff", cursor: "pointer" }}
+        >
+          {"#" + sale?.code || "Noma'lum"}
+        </a>
+      ),
     },
     {
       title: "Mahsulot nomi",
@@ -66,6 +78,17 @@ export default function ClientSaleProductsTable({
         total: saleProductsClient?.total,
         onChange: (p) => setPage(p),
       }}
+      onRow={(record) => ({
+        onClick: (e) => {
+          if (
+            (e.target as HTMLElement).closest("button") ||
+            (e.target as HTMLElement).closest("svg")
+          ) {
+            return;
+          }
+          navigate(`/sale/${record.id}`);
+        },
+      })}
     />
   );
 }

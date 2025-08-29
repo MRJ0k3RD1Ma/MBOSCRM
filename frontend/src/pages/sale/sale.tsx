@@ -122,6 +122,12 @@ export default function Sale() {
       >
         <Title level={4}>Savdo tafsilotlari</Title>
         <Space>
+          {sale?.state === "RUNNING" && (
+            <Button type="primary" onClick={() => navigate(`/sale/edit/${id}`)}>
+              Tugugatish
+            </Button>
+          )}
+
           <Button onClick={() => navigate(`/sale/edit/${id}`)}>
             O‘zgartirish
           </Button>
@@ -156,8 +162,7 @@ export default function Sale() {
                 {sale?.code ?? "-"}
               </Descriptions.Item>
               <Descriptions.Item label="Mijoz">
-                {clients?.data?.find((c) => c.id === sale?.clientId)?.name ||
-                  (sale?.clientId ? `ID: ${sale.clientId}` : "-")}
+                {sale?.client?.name ?? "—"}
               </Descriptions.Item>
               <Descriptions.Item label="Umumiy narx">
                 {sale?.price != null

@@ -3,12 +3,14 @@ import { useGetAllSubscribes } from "../../../config/queries/subscribe/subscribe
 import dayjs from "dayjs";
 import { indexColumn } from "../../../components/tables/indexColumn";
 import { Table } from "antd";
+import { useNavigate } from "react-router-dom";
 
 export default function ClientSubscribesTable({
   clientId,
 }: {
   clientId: number;
 }) {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const limit = 5;
 
@@ -22,8 +24,18 @@ export default function ClientSubscribesTable({
     indexColumn(page, limit),
     {
       title: "Shartnoma raqami",
-      dataIndex: ["sale", "code"],
-      key: "checkNumber",
+      dataIndex: "sale",
+      render: (sale: any) => (
+        <a
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/sale/${sale.id}`);
+          }}
+          style={{ color: "#1677ff", cursor: "pointer" }}
+        >
+          {"#" + sale?.code || "Noma'lum"}
+        </a>
+      ),
     },
     {
       title: "To’lov qilishi kerak bo’lgan sanasi",
@@ -71,6 +83,17 @@ export default function ClientSubscribesTable({
         total: allSubscribeClient?.total,
         onChange: (p) => setPage(p),
       }}
+      onRow={(record) => ({
+        onClick: (e) => {
+          if (
+            (e.target as HTMLElement).closest("button") ||
+            (e.target as HTMLElement).closest("svg")
+          ) {
+            return;
+          }
+          navigate(`/subscribe/${record.id}`);
+        },
+      })}
     />
   );
 }

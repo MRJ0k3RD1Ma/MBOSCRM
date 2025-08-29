@@ -73,8 +73,12 @@ export default function Subscribe() {
             <Descriptions.Item label="To‘lov sanasi">
               {formatDate(data.paying_date)}
             </Descriptions.Item>
-            <Descriptions.Item label="Narxi">{data.price}</Descriptions.Item>
-            <Descriptions.Item label="To‘langan">{data.paid}</Descriptions.Item>
+            <Descriptions.Item label="Narxi">
+              {data.price ? data.price.toLocaleString("uz-UZ") + " so'm" : "0"}
+            </Descriptions.Item>
+            <Descriptions.Item label="To‘langan">
+              {data.paid ? data.paid.toLocaleString("uz-UZ") + " so'm" : "0"}
+            </Descriptions.Item>
             <Descriptions.Item label="Holati">{data.state}</Descriptions.Item>
             <Descriptions.Item label="Yaratilgan">
               {formatDate(data.createdAt)}
