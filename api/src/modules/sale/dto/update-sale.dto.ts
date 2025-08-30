@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { SaleState } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsDate, IsNumber, IsOptional, Max, Min } from 'class-validator';
+import { IsDate, IsEnum, IsNumber, IsOptional, Max, Min } from 'class-validator';
 
 export class UpdateSaleDto {
   @ApiPropertyOptional({ example: '2025-07-29T12:12:44.882Z' })
@@ -21,4 +22,9 @@ export class UpdateSaleDto {
   @Min(1)
   @Max(28)
   subscribe_generate_day: number;
+
+  @ApiPropertyOptional({ enum: SaleState })
+  @IsOptional()
+  @IsEnum(SaleState)
+  state?: SaleState;
 }

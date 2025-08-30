@@ -226,6 +226,7 @@ let SaleService = class SaleService {
                 subscribe_begin_date: updateSaleDto.subscribe_begin_date ?? sale.subscribe_begin_date,
                 subscribe_generate_day: updateSaleDto.subscribe_generate_day ?? sale.subscribe_generate_day,
                 date: updateSaleDto.date ?? sale.date,
+                state: updateSaleDto.state ?? sale.state,
             },
         });
     }

@@ -49,12 +49,11 @@ export class SubscribeService {
 				payingDate: payingDate.toDate(),
 			});
 
-			// Move to the next month for the next iteration.
 			loopMonth = loopMonth.add(1, "month");
 		}
 	}
 
-	@Cron("0 0 8 * * *")
+	@Cron("0 0 * * * *")
 	async cron() {
 		const runningSales = await this.prisma.sale.findMany({
 			where: {

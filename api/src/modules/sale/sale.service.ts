@@ -15,7 +15,7 @@ export class SaleService {
 		private readonly prisma: PrismaService,
 		private readonly saleProductService: SaleProductService,
 		private readonly eventEmitter: EventEmitter2,
-	) {}
+	) { }
 
 	async create(createSaleDto: CreateSaleDto, creatorId: number) {
 		const {
@@ -262,6 +262,7 @@ export class SaleService {
 				subscribe_generate_day:
 					updateSaleDto.subscribe_generate_day ?? sale.subscribe_generate_day,
 				date: updateSaleDto.date ?? sale.date,
+				state: updateSaleDto.state ?? sale.state,
 			},
 		});
 	}

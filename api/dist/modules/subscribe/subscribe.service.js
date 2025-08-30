@@ -250,7 +250,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], SubscribeService.prototype, "handleSaleCreatedEvent", null);
 __decorate([
-    (0, schedule_1.Cron)("0 0 8 * * *"),
+    (0, schedule_1.Cron)("0 0 * * * *"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
