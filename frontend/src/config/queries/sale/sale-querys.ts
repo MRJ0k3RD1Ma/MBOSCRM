@@ -19,9 +19,11 @@ export interface CreateSaleInput {
 
 export interface UpdateSaleInput {
   id: number;
-  date: string;
-  credit: number;
+  date?: string;
+  credit?: number;
+  state?: string;
 }
+
 
 export interface SaleProduct {
   id: number;

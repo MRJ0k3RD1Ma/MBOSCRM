@@ -88,7 +88,6 @@ export default function SalesFormPage() {
         { id: Number(id), ...payload },
         {
           onSuccess: () => {
-            message.success("Sotuv yangilandi");
             navigate("/sales");
           },
         }

@@ -17,6 +17,7 @@ import {
   useDeleteSale,
   useGetAllSale,
   useGetSaleById,
+  useUpdateSale,
 } from "../../config/queries/sale/sale-querys";
 import { useGetAllSaleProduct } from "../../config/queries/sale/sale-product-querys";
 import { useGetAllClients } from "../../config/queries/clients/clients-querys";
@@ -44,6 +45,7 @@ export default function Sale() {
   const [page, setPage] = useState(1);
   const limit = 5;
 
+  const updateSale = useUpdateSale();
   const { data: sale, isLoading } = useGetSaleById(currentId ?? undefined);
   const { data: saleProducts } = useGetAllSaleProduct({
     page,
@@ -59,9 +61,13 @@ export default function Sale() {
   const createPaidClient = useCreatePaidClient();
   const deleteSale = useDeleteSale();
 
+  const onClosed = () => {
+    updateSale.mutate({ id: Number(currentId),  state: "CLOSED" });
+  };
+
   const onSubmit = (values: PaidClientDto) => {
     createPaidClient.mutate(values);
-    setPaidOpen(false);
+    setPaidOpen(false); 
   };
 
   const handleDelete = () => {
@@ -123,7 +129,7 @@ export default function Sale() {
         <Title level={4}>Savdo tafsilotlari</Title>
         <Space>
           {sale?.state === "RUNNING" && (
-            <Button type="primary" onClick={() => navigate(`/sale/edit/${id}`)}>
+            <Button type="primary" onClick={() => onClosed()}>
               Tugugatish
             </Button>
           )}
