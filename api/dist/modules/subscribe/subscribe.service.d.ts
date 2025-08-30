@@ -2,9 +2,13 @@ import { CreateSubscribeDto } from "./dto/create-subscribe.dto";
 import { UpdateSubscribeDto } from "./dto/update-subscribe.dto";
 import { PrismaService } from "../prisma/prisma.service";
 import { FindAllSubscribeQueryDto } from "./dto/findAll-subscribe-query.dto";
+import { Sale } from "@prisma/client";
 export declare class SubscribeService {
     private readonly prisma;
     constructor(prisma: PrismaService);
+    handleSaleCreatedEvent(sale: Sale & {
+        SaleProduct: any[];
+    }): Promise<void>;
     cron(): Promise<void>;
     create(createSubscribeDto: CreateSubscribeDto): Promise<{
         isDeleted: boolean;

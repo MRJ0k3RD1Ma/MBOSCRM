@@ -168,7 +168,6 @@ export class StatisticsService {
 			}),
 		]);
 
-		// Year totals assembled
 		const yearlyIncome =
 			sumOrZero(paidClientYearAgg, "price") +
 			sumOrZero(paidOtherIncomeYearAgg, "price");

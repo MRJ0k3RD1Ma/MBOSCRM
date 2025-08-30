@@ -8,9 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SaleService = void 0;
 const common_1 = require("@nestjs/common");
@@ -18,34 +15,12 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const http_error_1 = require("../../common/exception/http.error");
 const client_1 = require("@prisma/client");
 const sale_product_service_1 = require("../sale-product/sale-product.service");
-const config_1 = require("../../common/config");
-const dayjs_1 = __importDefault(require("dayjs"));
-const subscribe_service_1 = require("../subscribe/subscribe.service");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let SaleService = class SaleService {
-    constructor(prisma, saleProductService, subscribeService) {
+    constructor(prisma, saleProductService, eventEmitter) {
         this.prisma = prisma;
         this.saleProductService = saleProductService;
-        this.subscribeService = subscribeService;
-    }
-    async onModuleInit() {
-        if (config_1.env.ENV != "prod") {
-            const count = await this.prisma.sale.count();
-            const requiredCount = 1;
-            const client = await this.prisma.client.findFirst({
-                where: { isDeleted: false },
-            });
-            if (count < requiredCount) {
-                for (let i = count; i < requiredCount; i++) {
-                    await this.create({
-                        clientId: client.id,
-                        products: [{ count: 1, productId: 1 }],
-                        subscribe_begin_date: new Date(),
-                        subscribe_generate_day: 10,
-                        date: new Date(),
-                    }, 1);
-                }
-            }
-        }
+        this.eventEmitter = eventEmitter;
     }
     async create(createSaleDto, creatorId) {
         const { date, clientId, products, subscribe_begin_date, subscribe_generate_day, } = createSaleDto;
@@ -113,24 +88,11 @@ let SaleService = class SaleService {
                 price: product.price,
                 productId: product.productId,
             }, creatorId);
-            if (saleProduct.product.type === "SUBSCRIPTION") {
-                let monthsPast = -(0, dayjs_1.default)(sale.subscribe_begin_date)
-                    .set("days", sale.subscribe_generate_day)
-                    .diff(new Date(), "months", true);
-                monthsPast = Math.floor(monthsPast);
-                for (let i = monthsPast; i > 0; i--) {
-                    await this.subscribeService.create({
-                        clientId: sale.clientId,
-                        paid: i === monthsPast ? saleProduct.priceCount : 0,
-                        price: saleProduct.priceCount,
-                        saleId: sale.id,
-                        state: i === monthsPast ? client_1.SubscribeState.PAID : client_1.SubscribeState.NOTPAYING,
-                        payingDate: (0, dayjs_1.default)(new Date()).add(-i, "months").toDate(),
-                    });
-                }
-            }
         }
-        sale = await this.prisma.sale.findUnique({ where: { id: sale.id } });
+        sale = await this.prisma.sale.findUnique({
+            where: { id: sale.id },
+            include: { SaleProduct: { include: { product: true } } },
+        });
         const totalPrice = sale.price;
         await this.prisma.$transaction(async (tx) => {
             const client = await tx.client.findFirst({ where: { id: clientId } });
@@ -167,6 +129,7 @@ let SaleService = class SaleService {
                 });
             }
         });
+        this.eventEmitter.emit("sale.created", sale);
         return sale;
     }
     async findAll(dto) {
@@ -297,6 +260,6 @@ exports.SaleService = SaleService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         sale_product_service_1.SaleProductService,
-        subscribe_service_1.SubscribeService])
+        event_emitter_1.EventEmitter2])
 ], SaleService);
 //# sourceMappingURL=sale.service.js.map

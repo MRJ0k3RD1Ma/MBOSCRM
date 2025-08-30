@@ -19,40 +19,71 @@ const http_error_1 = require("../../common/exception/http.error");
 const client_1 = require("@prisma/client");
 const schedule_1 = require("@nestjs/schedule");
 const dayjs_1 = __importDefault(require("dayjs"));
+const event_emitter_1 = require("@nestjs/event-emitter");
 let SubscribeService = class SubscribeService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async cron() {
-        const subscribeSales = await this.prisma.saleProduct.findMany({
+    async handleSaleCreatedEvent(sale) {
+        const saleProduct = await this.prisma.saleProduct.findFirst({
             where: {
-                is_subscribe: true,
+                saleId: sale.id,
+                product: { type: client_1.ProductType.SUBSCRIPTION },
             },
-            include: { sale: true, product: true },
         });
-        for (const subscribeSale of subscribeSales) {
-            const subscribe = await this.prisma.subscribe.findFirst({
-                where: {
-                    saleId: subscribeSale.saleId,
-                    paying_date: {
-                        gt: (0, dayjs_1.default)(new Date())
-                            .set("day", subscribeSale.sale.subscribe_generate_day + 1)
-                            .toDate(),
-                    },
-                },
+        if (!saleProduct) {
+            return;
+        }
+        let loopMonth = (0, dayjs_1.default)(sale.subscribe_begin_date).startOf("month");
+        while (loopMonth.isSame((0, dayjs_1.default)(), "month") ||
+            loopMonth.isBefore((0, dayjs_1.default)(), "month")) {
+            const payingDate = loopMonth.set("day", sale.subscribe_generate_day);
+            await this.create({
+                clientId: sale.clientId,
+                paid: 0,
+                price: saleProduct.price * saleProduct.count,
+                saleId: sale.id,
+                state: client_1.SubscribeState.NOTPAYING,
+                payingDate: payingDate.toDate(),
             });
-            if (!subscribe) {
-                this.create({
-                    clientId: subscribeSale.sale.clientId,
-                    paid: 0,
-                    price: subscribeSale.price * subscribeSale.count,
-                    saleId: subscribeSale.saleId,
-                    state: client_1.SubscribeState.NOTPAYING,
-                    payingDate: (0, dayjs_1.default)(new Date())
-                        .add(1, "month")
-                        .set("day", subscribeSale.sale.subscribe_generate_day)
-                        .toDate(),
+            loopMonth = loopMonth.add(1, "month");
+        }
+    }
+    async cron() {
+        const runningSales = await this.prisma.sale.findMany({
+            where: {
+                isDeleted: false,
+                state: "RUNNING",
+            },
+        });
+        for (const sale of runningSales) {
+            const lastSubscribe = await this.prisma.subscribe.findFirst({
+                where: { saleId: sale.id },
+                orderBy: { paying_date: "desc" },
+            });
+            if (!lastSubscribe) {
+                continue;
+            }
+            const today = (0, dayjs_1.default)();
+            const nextPaymentDate = (0, dayjs_1.default)(lastSubscribe.paying_date).add(1, "month");
+            if (nextPaymentDate.isBefore(today) ||
+                nextPaymentDate.isSame(today, "day")) {
+                const saleProduct = await this.prisma.saleProduct.findFirst({
+                    where: {
+                        saleId: sale.id,
+                        product: { type: client_1.ProductType.SUBSCRIPTION },
+                    },
                 });
+                if (saleProduct) {
+                    await this.create({
+                        clientId: sale.clientId,
+                        paid: 0,
+                        price: saleProduct.price * saleProduct.count,
+                        saleId: sale.id,
+                        state: client_1.SubscribeState.NOTPAYING,
+                        payingDate: nextPaymentDate.toDate(),
+                    });
+                }
             }
         }
     }
@@ -86,7 +117,7 @@ let SubscribeService = class SubscribeService {
         });
         await this.prisma.client.update({
             where: { id: clientId },
-            data: { balance: client.balance - price },
+            data: { balance: client.balance - paid },
         });
         return subscribe;
     }
@@ -131,7 +162,7 @@ let SubscribeService = class SubscribeService {
                         },
                     },
                 },
-                orderBy: { id: 'desc' },
+                orderBy: { id: "desc" },
             }),
             this.prisma.subscribe.count({ where }),
         ]);
@@ -213,7 +244,13 @@ let SubscribeService = class SubscribeService {
 };
 exports.SubscribeService = SubscribeService;
 __decorate([
-    (0, schedule_1.Cron)("* * 8 * * *"),
+    (0, event_emitter_1.OnEvent)("sale.created"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], SubscribeService.prototype, "handleSaleCreatedEvent", null);
+__decorate([
+    (0, schedule_1.Cron)("0 0 8 * * *"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

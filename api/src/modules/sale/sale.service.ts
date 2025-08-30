@@ -4,43 +4,18 @@ import { UpdateSaleDto } from "./dto/update-sale.dto";
 import { PrismaService } from "../prisma/prisma.service";
 import { HttpError } from "src/common/exception/http.error";
 import { FindAllSaleQueryDto } from "./dto/findAll-sale-query.dto";
-import { Prisma, ProductType, SaleState, SubscribeState } from "@prisma/client";
+import { Prisma, ProductType, SaleState } from "@prisma/client";
 import { SaleProductService } from "../sale-product/sale-product.service";
 import { env } from "src/common/config";
-import dayjs from "dayjs";
-import { SubscribeService } from "../subscribe/subscribe.service";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 
 @Injectable()
 export class SaleService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly saleProductService: SaleProductService,
-		private readonly subscribeService: SubscribeService,
+		private readonly eventEmitter: EventEmitter2,
 	) {}
-
-	async onModuleInit() {
-		if (env.ENV != "prod") {
-			const count = await this.prisma.sale.count();
-			const requiredCount = 1;
-			const client = await this.prisma.client.findFirst({
-				where: { isDeleted: false },
-			});
-			if (count < requiredCount) {
-				for (let i = count; i < requiredCount; i++) {
-					await this.create(
-						{
-							clientId: client.id,
-							products: [{ count: 1, productId: 1 }],
-							subscribe_begin_date: new Date(),
-							subscribe_generate_day: 10,
-							date: new Date(),
-						},
-						1,
-					);
-				}
-			}
-		}
-	}
 
 	async create(createSaleDto: CreateSaleDto, creatorId: number) {
 		const {
@@ -126,26 +101,12 @@ export class SaleService {
 				},
 				creatorId,
 			);
-			if (saleProduct.product.type === "SUBSCRIPTION") {
-				let monthsPast = -dayjs(sale.subscribe_begin_date)
-					.set("days", sale.subscribe_generate_day)
-					.diff(new Date(), "months", true);
-				monthsPast = Math.floor(monthsPast);
-				for (let i = monthsPast; i > 0; i--) {
-					await this.subscribeService.create({
-						clientId: sale.clientId,
-						paid: i === monthsPast ? saleProduct.priceCount : 0,
-						price: saleProduct.priceCount,
-						saleId: sale.id,
-						state:
-							i === monthsPast ? SubscribeState.PAID : SubscribeState.NOTPAYING,
-						payingDate: dayjs(new Date()).add(-i, "months").toDate(),
-					});
-				}
-			}
 		}
 
-		sale = await this.prisma.sale.findUnique({ where: { id: sale.id } });
+		sale = await this.prisma.sale.findUnique({
+			where: { id: sale.id },
+			include: { SaleProduct: { include: { product: true } } },
+		});
 		const totalPrice = sale.price;
 		await this.prisma.$transaction(async (tx) => {
 			const client = await tx.client.findFirst({ where: { id: clientId } });
@@ -186,6 +147,7 @@ export class SaleService {
 			}
 		});
 
+		this.eventEmitter.emit("sale.created", sale);
 		return sale;
 	}
 

@@ -3,13 +3,12 @@ import { UpdateSaleDto } from "./dto/update-sale.dto";
 import { PrismaService } from "../prisma/prisma.service";
 import { FindAllSaleQueryDto } from "./dto/findAll-sale-query.dto";
 import { SaleProductService } from "../sale-product/sale-product.service";
-import { SubscribeService } from "../subscribe/subscribe.service";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 export declare class SaleService {
     private readonly prisma;
     private readonly saleProductService;
-    private readonly subscribeService;
-    constructor(prisma: PrismaService, saleProductService: SaleProductService, subscribeService: SubscribeService);
-    onModuleInit(): Promise<void>;
+    private readonly eventEmitter;
+    constructor(prisma: PrismaService, saleProductService: SaleProductService, eventEmitter: EventEmitter2);
     create(createSaleDto: CreateSaleDto, creatorId: number): Promise<{
         isDeleted: boolean | null;
         createdAt: Date;

@@ -4,49 +4,99 @@ import { UpdateSubscribeDto } from "./dto/update-subscribe.dto";
 import { PrismaService } from "../prisma/prisma.service";
 import { HttpError } from "src/common/exception/http.error";
 import { FindAllSubscribeQueryDto } from "./dto/findAll-subscribe-query.dto";
-import { Prisma, ProductType, SubscribeState } from "@prisma/client";
+import {
+	Prisma,
+	ProductType,
+	Sale,
+	SaleState,
+	SubscribeState,
+} from "@prisma/client";
 import { Cron } from "@nestjs/schedule";
 import dayjs from "dayjs";
+import { OnEvent } from "@nestjs/event-emitter";
 
 @Injectable()
 export class SubscribeService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	@Cron("* * 8 * * *")
-	async cron() {
-		const subscribeSales = await this.prisma.saleProduct.findMany({
+	@OnEvent("sale.created")
+	async handleSaleCreatedEvent(sale: Sale & { SaleProduct: any[] }) {
+		const saleProduct = await this.prisma.saleProduct.findFirst({
 			where: {
-				is_subscribe: true,
+				saleId: sale.id,
+				product: { type: ProductType.SUBSCRIPTION },
 			},
-
-			include: { sale: true, product: true },
 		});
 
-		for (const subscribeSale of subscribeSales) {
-			const subscribe = await this.prisma.subscribe.findFirst({
-				where: {
-					saleId: subscribeSale.saleId,
+		if (!saleProduct) {
+			return;
+		}
 
-					paying_date: {
-						gt: dayjs(new Date())
-							.set("day", subscribeSale.sale.subscribe_generate_day + 1)
-							.toDate(),
-					},
-				},
+		let loopMonth = dayjs(sale.subscribe_begin_date).startOf("month");
+
+		while (
+			loopMonth.isSame(dayjs(), "month") ||
+			loopMonth.isBefore(dayjs(), "month")
+		) {
+			const payingDate = loopMonth.set("day", sale.subscribe_generate_day);
+
+			await this.create({
+				clientId: sale.clientId,
+				paid: 0,
+				price: saleProduct.price * saleProduct.count,
+				saleId: sale.id,
+				state: SubscribeState.NOTPAYING,
+				payingDate: payingDate.toDate(),
 			});
 
-			if (!subscribe) {
-				this.create({
-					clientId: subscribeSale.sale.clientId,
-					paid: 0,
-					price: subscribeSale.price * subscribeSale.count,
-					saleId: subscribeSale.saleId,
-					state: SubscribeState.NOTPAYING,
-					payingDate: dayjs(new Date())
-						.add(1, "month")
-						.set("day", subscribeSale.sale.subscribe_generate_day)
-						.toDate(),
+			// Move to the next month for the next iteration.
+			loopMonth = loopMonth.add(1, "month");
+		}
+	}
+
+	@Cron("0 0 8 * * *")
+	async cron() {
+		const runningSales = await this.prisma.sale.findMany({
+			where: {
+				isDeleted: false,
+				state: "RUNNING",
+			},
+		});
+
+		for (const sale of runningSales) {
+			const lastSubscribe = await this.prisma.subscribe.findFirst({
+				where: { saleId: sale.id },
+				orderBy: { paying_date: "desc" },
+			});
+
+			if (!lastSubscribe) {
+				continue;
+			}
+
+			const today = dayjs();
+			const nextPaymentDate = dayjs(lastSubscribe.paying_date).add(1, "month");
+
+			if (
+				nextPaymentDate.isBefore(today) ||
+				nextPaymentDate.isSame(today, "day")
+			) {
+				const saleProduct = await this.prisma.saleProduct.findFirst({
+					where: {
+						saleId: sale.id,
+						product: { type: ProductType.SUBSCRIPTION },
+					},
 				});
+
+				if (saleProduct) {
+					await this.create({
+						clientId: sale.clientId,
+						paid: 0,
+						price: saleProduct.price * saleProduct.count,
+						saleId: sale.id,
+						state: SubscribeState.NOTPAYING,
+						payingDate: nextPaymentDate.toDate(),
+					});
+				}
 			}
 		}
 	}
@@ -87,7 +137,7 @@ export class SubscribeService {
 		});
 		await this.prisma.client.update({
 			where: { id: clientId },
-			data: { balance: client.balance - price },
+			data: { balance: client.balance - paid },
 		});
 
 		return subscribe;
@@ -131,25 +181,25 @@ export class SubscribeService {
 			where.state = { equals: state };
 		}
 
-    const [data, total] = await this.prisma.$transaction([
-      this.prisma.subscribe.findMany({
-        where,
-        skip: (page - 1) * limit,
-        take: limit,
-        include: {
-          client: true,
-          sale: {
-            include: {
-              PaidClient: {
-                include: { Payment: true },
-              },
-            },
-          },
-        },
-        orderBy: { id: 'desc' },
-      }),
-      this.prisma.subscribe.count({ where }),
-    ]);
+		const [data, total] = await this.prisma.$transaction([
+			this.prisma.subscribe.findMany({
+				where,
+				skip: (page - 1) * limit,
+				take: limit,
+				include: {
+					client: true,
+					sale: {
+						include: {
+							PaidClient: {
+								include: { Payment: true },
+							},
+						},
+					},
+				},
+				orderBy: { id: "desc" },
+			}),
+			this.prisma.subscribe.count({ where }),
+		]);
 
 		return {
 			total,
