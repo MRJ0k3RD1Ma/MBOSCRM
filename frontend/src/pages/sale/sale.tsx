@@ -3,6 +3,7 @@ import {
   Card,
   Col,
   Descriptions,
+  Modal,
   Row,
   Space,
   Table,
@@ -38,6 +39,7 @@ export default function Sale() {
   const navigate = useNavigate();
   const [paidOpen, setPaidOpen] = useState(false);
   const [currentId, setCurrentId] = useState<number | null>(null);
+  const [isClosed, setIsClosed] = useState(false);
 
   useEffect(() => {
     if (id) setCurrentId(Number(id));
@@ -62,12 +64,13 @@ export default function Sale() {
   const deleteSale = useDeleteSale();
 
   const onClosed = () => {
-    updateSale.mutate({ id: Number(currentId),  state: "CLOSED" });
+    updateSale.mutate({ id: Number(currentId), state: "CLOSED" });
+    setIsClosed(false);
   };
 
   const onSubmit = (values: PaidClientDto) => {
     createPaidClient.mutate(values);
-    setPaidOpen(false); 
+    setPaidOpen(false);
   };
 
   const handleDelete = () => {
@@ -129,7 +132,7 @@ export default function Sale() {
         <Title level={4}>Savdo tafsilotlari</Title>
         <Space>
           {sale?.state === "RUNNING" && (
-            <Button type="primary" onClick={() => onClosed()}>
+            <Button type="primary" onClick={() => setIsClosed(true)}>
               Tugugatish
             </Button>
           )}
@@ -187,6 +190,20 @@ export default function Sale() {
               </Descriptions.Item>
               <Descriptions.Item label="Holati">
                 {sale?.state ?? "-"}
+              </Descriptions.Item>
+              <Descriptions.Item label="Yaratilgan">
+                {sale?.createdAt
+                  ? dayjs(sale.createdAt)
+                      .tz("Asia/Tashkent")
+                      .format("YYYY-MM-DD")
+                  : "Noma'lum"}
+              </Descriptions.Item>
+              <Descriptions.Item label="O'zgartirilgan">
+                {sale?.updatedAt
+                  ? dayjs(sale.updatedAt)
+                      .tz("Asia/Tashkent")
+                      .format("YYYY-MM-DD")
+                  : "Noma'lum"}
               </Descriptions.Item>
             </Descriptions>
           </Col>
@@ -275,6 +292,16 @@ export default function Sale() {
           }}
         />
       </Card>
+      <Modal
+        title="Tasdiqlash"
+        open={isClosed}
+        onOk={() => onClosed()}
+        onCancel={() => setIsClosed(false)}
+        okText="Ha"
+        cancelText="Yo'q"
+      >
+        Rostdan ushbu savdoni tugatmoqchimisiz?
+      </Modal>
     </Card>
   );
 }
