@@ -32,24 +32,24 @@ export class SubscribeService {
 			return;
 		}
 
-		let loopMonth = dayjs(sale.subscribe_begin_date).startOf("month");
+		let loopMonth = dayjs(sale.subscribe_begin_date)
+			.startOf("month")
+			.set("day", sale.subscribe_generate_day);
 
 		while (
 			loopMonth.isSame(dayjs(), "month") ||
 			loopMonth.isBefore(dayjs(), "month")
 		) {
-			const payingDate = loopMonth.set("day", sale.subscribe_generate_day);
-
 			await this.create({
 				clientId: sale.clientId,
 				paid: 0,
 				price: saleProduct.price * saleProduct.count,
 				saleId: sale.id,
 				state: SubscribeState.NOTPAYING,
-				payingDate: payingDate.toDate(),
+				payingDate: loopMonth.toDate(),
 			});
 
-			loopMonth = loopMonth.add(1, "month");
+			loopMonth = loopMonth.add(1, "months");
 		}
 	}
 
@@ -132,7 +132,7 @@ export class SubscribeService {
 				state,
 				sale: { connect: { id: saleId } },
 				client: { connect: { id: clientId } },
-			} as Prisma.SubscribeCreateInput,
+			},
 		});
 		await this.prisma.client.update({
 			where: { id: clientId },

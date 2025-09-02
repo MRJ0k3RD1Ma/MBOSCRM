@@ -34,19 +34,20 @@ let SubscribeService = class SubscribeService {
         if (!saleProduct) {
             return;
         }
-        let loopMonth = (0, dayjs_1.default)(sale.subscribe_begin_date).startOf("month");
+        let loopMonth = (0, dayjs_1.default)(sale.subscribe_begin_date)
+            .startOf("month")
+            .set("day", sale.subscribe_generate_day);
         while (loopMonth.isSame((0, dayjs_1.default)(), "month") ||
             loopMonth.isBefore((0, dayjs_1.default)(), "month")) {
-            const payingDate = loopMonth.set("day", sale.subscribe_generate_day);
             await this.create({
                 clientId: sale.clientId,
                 paid: 0,
                 price: saleProduct.price * saleProduct.count,
                 saleId: sale.id,
                 state: client_1.SubscribeState.NOTPAYING,
-                payingDate: payingDate.toDate(),
+                payingDate: loopMonth.toDate(),
             });
-            loopMonth = loopMonth.add(1, "month");
+            loopMonth = loopMonth.add(1, "months");
         }
     }
     async cron() {

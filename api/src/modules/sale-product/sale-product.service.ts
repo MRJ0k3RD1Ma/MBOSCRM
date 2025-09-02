@@ -41,6 +41,9 @@ export class SaleProductService {
 		let priceCount =
 			(createSaleProductDto.price || product.price) *
 			createSaleProductDto.count;
+		if (isSubscription) {
+			priceCount = 0;
+		}
 
 		const saleProduct = await this.prisma.saleProduct.create({
 			data: {

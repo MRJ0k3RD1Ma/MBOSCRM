@@ -19,10 +19,10 @@ class CreateSubscribeDto {
 }
 exports.CreateSubscribeDto = CreateSubscribeDto;
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-29T12:12:44.882Z' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-29T12:12:44.882Z" }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
-    (0, class_transformer_1.Type)(() => Date),
+    (0, class_transformer_1.Transform)(({ value }) => value || new Date()),
     __metadata("design:type", Date)
 ], CreateSubscribeDto.prototype, "payingDate", void 0);
 __decorate([
