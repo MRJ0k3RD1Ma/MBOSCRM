@@ -40,9 +40,11 @@ export class SubscribeService {
 			loopMonth.isSame(dayjs(), "month") ||
 			loopMonth.isBefore(dayjs(), "month")
 		) {
+			const client = await this.prisma.client.findUnique({
+				where: { id: sale.clientId },
+			});
 			await this.create({
 				clientId: sale.clientId,
-				paid: 0,
 				price: saleProduct.price * saleProduct.count,
 				saleId: sale.id,
 				state: SubscribeState.NOTPAYING,
@@ -89,7 +91,6 @@ export class SubscribeService {
 				if (saleProduct) {
 					await this.create({
 						clientId: sale.clientId,
-						paid: 0,
 						price: saleProduct.price * saleProduct.count,
 						saleId: sale.id,
 						state: SubscribeState.NOTPAYING,
@@ -101,8 +102,7 @@ export class SubscribeService {
 	}
 
 	async create(createSubscribeDto: CreateSubscribeDto) {
-		const { clientId, paid, price, saleId, state, payingDate } =
-			createSubscribeDto;
+		const { clientId, price, saleId, state, payingDate } = createSubscribeDto;
 
 		const client = await this.prisma.client.findFirst({
 			where: { id: clientId, isDeleted: false },
@@ -126,7 +126,7 @@ export class SubscribeService {
 
 		const subscribe = await this.prisma.subscribe.create({
 			data: {
-				paid,
+				paid: 0,
 				paying_date: payingDate,
 				price,
 				state,
@@ -136,7 +136,7 @@ export class SubscribeService {
 		});
 		await this.prisma.client.update({
 			where: { id: clientId },
-			data: { balance: client.balance - paid },
+			data: { balance: client.balance - price },
 		});
 
 		return subscribe;

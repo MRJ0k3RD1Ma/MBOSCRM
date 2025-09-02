@@ -4,6 +4,5 @@ export declare class CreateSubscribeDto {
     clientId: number;
     saleId: number;
     price: number;
-    paid: number;
     state: SubscribeState;
 }

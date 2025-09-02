@@ -39,11 +39,6 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateSubscribeDto.prototype, "price", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateSubscribeDto.prototype, "paid", void 0);
-__decorate([
     (0, swagger_1.ApiPropertyOptional)({ enum: client_1.SubscribeState }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(client_1.SubscribeState),

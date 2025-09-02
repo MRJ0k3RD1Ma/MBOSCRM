@@ -21,10 +21,6 @@ export class CreateSubscribeDto {
 	@IsNumber()
 	price: number;
 
-	@ApiProperty()
-	@IsNumber()
-	paid: number;
-
 	@ApiPropertyOptional({ enum: SubscribeState })
 	@IsOptional()
 	@IsEnum(SubscribeState)

@@ -39,9 +39,11 @@ let SubscribeService = class SubscribeService {
             .set("day", sale.subscribe_generate_day);
         while (loopMonth.isSame((0, dayjs_1.default)(), "month") ||
             loopMonth.isBefore((0, dayjs_1.default)(), "month")) {
+            const client = await this.prisma.client.findUnique({
+                where: { id: sale.clientId },
+            });
             await this.create({
                 clientId: sale.clientId,
-                paid: 0,
                 price: saleProduct.price * saleProduct.count,
                 saleId: sale.id,
                 state: client_1.SubscribeState.NOTPAYING,
@@ -78,7 +80,6 @@ let SubscribeService = class SubscribeService {
                 if (saleProduct) {
                     await this.create({
                         clientId: sale.clientId,
-                        paid: 0,
                         price: saleProduct.price * saleProduct.count,
                         saleId: sale.id,
                         state: client_1.SubscribeState.NOTPAYING,
@@ -89,7 +90,7 @@ let SubscribeService = class SubscribeService {
         }
     }
     async create(createSubscribeDto) {
-        const { clientId, paid, price, saleId, state, payingDate } = createSubscribeDto;
+        const { clientId, price, saleId, state, payingDate } = createSubscribeDto;
         const client = await this.prisma.client.findFirst({
             where: { id: clientId, isDeleted: false },
         });
@@ -108,7 +109,7 @@ let SubscribeService = class SubscribeService {
         }
         const subscribe = await this.prisma.subscribe.create({
             data: {
-                paid,
+                paid: 0,
                 paying_date: payingDate,
                 price,
                 state,
@@ -118,7 +119,7 @@ let SubscribeService = class SubscribeService {
         });
         await this.prisma.client.update({
             where: { id: clientId },
-            data: { balance: client.balance - paid },
+            data: { balance: client.balance - price },
         });
         return subscribe;
     }
