@@ -33,6 +33,7 @@ import {
   type StatisticsResponse,
 } from "../../config/queries/statistics/statistics-querys";
 import { useThemeContext } from "../../providers/theme-provider";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
@@ -49,6 +50,7 @@ type StatCardProps = {
   subtitle?: string | React.ReactNode;
   bgColor: string;
   isDark: boolean;
+  link?: string;
 };
 
 const StatCard: React.FC<StatCardProps> = ({
@@ -59,7 +61,9 @@ const StatCard: React.FC<StatCardProps> = ({
   subtitle,
   bgColor,
   isDark,
+  link,
 }) => {
+  const navigate = useNavigate();
   return (
     <Card
       className={`!border ${
@@ -68,8 +72,12 @@ const StatCard: React.FC<StatCardProps> = ({
       bodyStyle={{
         padding: "16px",
       }}
+      onClick={link ? () => navigate(link) : undefined}
     >
-      <div className="flex items-center justify-between">
+      <div
+        className="flex items-center justify-between"
+        style={{ cursor: link ? "pointer" : "default" }}
+      >
         <div className="flex-1">
           <p
             className={`text-sm ${textColor} opacity-90 mb-1`}
@@ -242,6 +250,7 @@ export default function Dashboard() {
           bgColor="!bg-[#001529]"
           textColor={titleColor}
           isDark={isDark}
+          link="/clients"
         />
         <StatCard
           title="Daromadlar"
@@ -254,6 +263,43 @@ export default function Dashboard() {
         <StatCard
           title="Chiqimlar"
           value={formatMoney(stats.expenses)}
+          icon={<TrendingDown size={32} color="white" />}
+          bgColor="!bg-[#F59E0B]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+        <StatCard
+          title="Qarzdorlik"
+          value={formatMoney(stats.debts)}
+          icon={<TrendingDown size={32} color="white" />}
+          bgColor="!bg-[#EF4444]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Aktiv obunalar"
+          value={`${stats.contracts} dona`}
+          icon={<FileText size={32} color="white" />}
+          bgColor="!bg-[#3B82F6]"
+          textColor={titleColor}
+          isDark={isDark}
+          link="/subscribes"
+        />
+        <StatCard
+          title={`${currentMonthName}dagi daromadlar`}
+          value={formatMoney(stats.currentMonthIncome)}
+          icon={<TrendingUp size={32} color="white" />}
+          bgColor="!bg-[#4CAF50]"
+          textColor={titleColor}
+          isDark={isDark}
+        />
+
+        <StatCard
+          title={`${currentMonthName}dagi chiqimlar`}
+          value={formatMoney(stats.currentMonthExpenses)}
           icon={<TrendingDown size={32} color="white" />}
           bgColor="!bg-[#F59E0B]"
           textColor={titleColor}
@@ -283,43 +329,6 @@ export default function Dashboard() {
               </div>
             </div>
           }
-        />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          title="Aktiv obunalar"
-          value={`${stats.contracts} dona`}
-          icon={<FileText size={32} color="white" />}
-          bgColor="!bg-[#3B82F6]"
-          textColor={titleColor}
-          isDark={isDark}
-        />
-        <StatCard
-          title={`${currentMonthName}dagi daromadlar`}
-          value={formatMoney(stats.currentMonthIncome)}
-          icon={<TrendingUp size={32} color="white" />}
-          bgColor="!bg-[#4CAF50]"
-          textColor={titleColor}
-          isDark={isDark}
-        />
-
-        <StatCard
-          title={`${currentMonthName}dagi chiqimlar`}
-          value={formatMoney(stats.currentMonthExpenses)}
-          icon={<TrendingDown size={32} color="white" />}
-          bgColor="!bg-[#F59E0B]"
-          textColor={titleColor}
-          isDark={isDark}
-        />
-
-        <StatCard
-          title="Qarzdorlik"
-          value={formatMoney(stats.debts)}
-          icon={<TrendingDown size={32} color="white" />}
-          bgColor="!bg-[#EF4444]"
-          textColor={titleColor}
-          isDark={isDark}
         />
       </div>
       <Row gutter={0} style={{ marginTop: 24 }}>
