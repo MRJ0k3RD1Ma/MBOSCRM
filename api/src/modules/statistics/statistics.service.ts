@@ -46,6 +46,7 @@ export class StatisticsService {
 			paidServerYearAgg,
 			paidOtherOutcomeYearAgg,
 			saleDebtAgg,
+			subscribeDeptAgg,
 			paidClientCurrentMonthAgg,
 			paidOtherIncomeCurrentMonthAgg,
 			paidSupplierCurrentMonthAgg,
@@ -106,6 +107,10 @@ export class StatisticsService {
 				where: { isDeleted: false },
 			}),
 
+			this.prisma.subscribe.aggregate({
+				_sum: { price: true, paid: true },
+				where: { isDeleted: false },
+			}),
 			this.prisma.paidClient.aggregate({
 				_sum: { price: true },
 				where: {
@@ -189,7 +194,10 @@ export class StatisticsService {
 		const lastYearIncome =
 			sumOrZero(lastYearPaidClientAgg, "price") +
 			sumOrZero(lastYearPaidOtherIncomeAgg, "price");
-		const totalDebts = sumOrZero(saleDebtAgg, "credit");
+		const totalDebts =
+			sumOrZero(saleDebtAgg, "credit") +
+			(sumOrZero(subscribeDeptAgg, "price") -
+				sumOrZero(subscribeDeptAgg, "paid"));
 
 		const monthlyStats = await Promise.all(
 			Array.from({ length: 12 }, (_, i) => {

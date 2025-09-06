@@ -32,7 +32,7 @@ let StatisticsService = class StatisticsService {
             this.prisma.client.count({ where: { isDeleted: false } }),
             this.prisma.sale.count({ where: { isDeleted: false } }),
         ]);
-        const [paidClientYearAgg, paidOtherIncomeYearAgg, paidSupplierYearAgg, arrivedYearAgg, paidServerYearAgg, paidOtherOutcomeYearAgg, saleDebtAgg, paidClientCurrentMonthAgg, paidOtherIncomeCurrentMonthAgg, paidSupplierCurrentMonthAgg, arrivedCurrentMonthAgg, paidServerCurrentMonthAgg, paidOtherOutcomeCurrentMonthAgg, lastYearPaidClientAgg, lastYearPaidOtherIncomeAgg,] = await Promise.all([
+        const [paidClientYearAgg, paidOtherIncomeYearAgg, paidSupplierYearAgg, arrivedYearAgg, paidServerYearAgg, paidOtherOutcomeYearAgg, saleDebtAgg, subscribeDeptAgg, paidClientCurrentMonthAgg, paidOtherIncomeCurrentMonthAgg, paidSupplierCurrentMonthAgg, arrivedCurrentMonthAgg, paidServerCurrentMonthAgg, paidOtherOutcomeCurrentMonthAgg, lastYearPaidClientAgg, lastYearPaidOtherIncomeAgg,] = await Promise.all([
             this.prisma.paidClient.aggregate({
                 _sum: { price: true },
                 where: {
@@ -79,6 +79,10 @@ let StatisticsService = class StatisticsService {
             }),
             this.prisma.sale.aggregate({
                 _sum: { credit: true },
+                where: { isDeleted: false },
+            }),
+            this.prisma.subscribe.aggregate({
+                _sum: { price: true, paid: true },
                 where: { isDeleted: false },
             }),
             this.prisma.paidClient.aggregate({
@@ -155,7 +159,9 @@ let StatisticsService = class StatisticsService {
             sumOrZero(paidOtherOutcomeCurrentMonthAgg, "price");
         const lastYearIncome = sumOrZero(lastYearPaidClientAgg, "price") +
             sumOrZero(lastYearPaidOtherIncomeAgg, "price");
-        const totalDebts = sumOrZero(saleDebtAgg, "credit");
+        const totalDebts = sumOrZero(saleDebtAgg, "credit") +
+            (sumOrZero(subscribeDeptAgg, "price") -
+                sumOrZero(subscribeDeptAgg, "paid"));
         const monthlyStats = await Promise.all(Array.from({ length: 12 }, (_, i) => {
             const mStart = new Date(year, i, 1);
             const mEnd = new Date(year, i + 1, 0, 23, 59, 59, 999);

@@ -398,9 +398,6 @@ enum ServerState {
   CLOSED
 }
 
-// Uncomment if you have User relations for registerId and modifyId
-// User_PaidClient_registerId User? @relation("PaidClient_registerId", fields: [registerId], references: [id])
-// User_PaidClient_modifyId   User? @relation("PaidClient_modifyId", fields: [modifyId], references: [id])
 model Subscribe {
   id          Int            @id @default(autoincrement())
   saleId      Int?
@@ -453,8 +450,8 @@ model PaidOther {
   registerId Int?
   modifyId   Int?
 
-  register User?    @relation("PaidOther_registerId", fields: [registerId], references: [id])
-  modify   User?    @relation("PaidOther_modifyId", fields: [modifyId], references: [id])
+  register User?   @relation("PaidOther_registerId", fields: [registerId], references: [id])
+  modify   User?   @relation("PaidOther_modifyId", fields: [modifyId], references: [id])
   Payment  Payment @relation("Payment_PaidOther", fields: [paymentId], references: [id])
 
   paymentId Int
