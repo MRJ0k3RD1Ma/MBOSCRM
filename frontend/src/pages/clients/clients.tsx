@@ -5,7 +5,6 @@ import {
   Dropdown,
   Form,
   Input,
-  message,
   Space,
   Table,
   Tooltip,
@@ -51,10 +50,8 @@ export default function ClientsPage() {
   const onSubmit = (values: CreateClientInput) => {
     if (editing) {
       updateClient.mutate({ id: editing.id, ...values });
-      message.success("Mijoz yangilandi");
     } else {
       createClient.mutate(values);
-      message.success("Mijoz yaratildi");
     }
     setOpen(false);
     setEditing(null);

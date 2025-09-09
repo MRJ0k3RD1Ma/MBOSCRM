@@ -7,19 +7,19 @@ import {
   Space,
   Table,
   Typography,
-  message,
 } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
-import dayjs from "dayjs";
 import {
   useDeleteArrived,
   useGetArrivedById,
 } from "../../config/queries/arrived/arrived-qureys";
-import { useGetAllArrivedProduct } from "../../config/queries/arrived/arrived-product-querys";
 import { useEffect, useState } from "react";
-import { useGetAllSuppliers } from "../../config/queries/supplier/supplier-querys";
-import { useGetAllProducts } from "../../config/queries/products/products-querys";
+import { useNavigate, useParams } from "react-router-dom";
+
+import dayjs from "dayjs";
 import { indexColumn } from "../../components/tables/indexColumn";
+import { useGetAllArrivedProduct } from "../../config/queries/arrived/arrived-product-querys";
+import { useGetAllProducts } from "../../config/queries/products/products-querys";
+import { useGetAllSuppliers } from "../../config/queries/supplier/supplier-querys";
 
 const { Title } = Typography;
 
@@ -50,7 +50,6 @@ export default function Arrived() {
     if (!currentId) return;
     deleteArrived.mutate(currentId, {
       onSuccess: () => {
-        message.success("Kirim o‘chirildi");
         navigate("/arrived");
       },
     });

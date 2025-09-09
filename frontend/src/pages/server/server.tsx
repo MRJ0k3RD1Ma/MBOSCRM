@@ -1,34 +1,34 @@
 import {
   Button,
   Card,
+  DatePicker,
   Descriptions,
-  Space,
-  Table,
-  Popconfirm,
-  message,
   Drawer,
   Form,
   Input,
-  DatePicker,
+  Popconfirm,
   Select,
+  Space,
+  Table,
 } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
-
+import {
+  useCreatePaidServer,
+  useGetAllPaidServers,
+} from "../../config/queries/server/paid-servers-querys";
 import {
   useDeleteServer,
   useGetServerById,
   useUpdateServer,
 } from "../../config/queries/server/servers-querys";
-import {
-  useCreatePaidServer,
-  useGetAllPaidServers,
-} from "../../config/queries/server/paid-servers-querys";
-import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
-import { indexColumn } from "../../components/tables/indexColumn";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
+import { useNavigate, useParams } from "react-router-dom";
+
 import dayjs from "dayjs";
+import { indexColumn } from "../../components/tables/indexColumn";
+import timezone from "dayjs/plugin/timezone";
+import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
+import { useState } from "react";
+import utc from "dayjs/plugin/utc";
+
 export default function Server() {
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -57,7 +57,6 @@ export default function Server() {
   const handleDelete = () => {
     deleteMutation.mutate(serverId, {
       onSuccess: () => {
-        message.success("Server o‘chirildi");
         navigate("/servers");
       },
     });

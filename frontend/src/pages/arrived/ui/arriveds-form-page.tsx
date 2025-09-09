@@ -13,7 +13,7 @@ import {
   Typography,
   message,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useGetAllSuppliers } from "../../../config/queries/supplier/supplier-querys";
 import { useGetAllProducts } from "../../../config/queries/products/products-querys";
@@ -60,28 +60,37 @@ export default function ArrivedFormPage() {
 
   const productDataSource = isEdit ? arrivedProductsData?.data || [] : products;
 
-  if (arrivedData) {
-    const patched = {
-      ...arrivedData,
-      date: arrivedData.date ? dayjs(arrivedData.date).startOf("day") : null,
-    };
-    form.setFieldsValue(patched);
-  }
+  useEffect(() => {
+    if (arrivedData) {
+      const patched = {
+        ...arrivedData,
+        date: arrivedData.date ? dayjs(arrivedData.date).startOf("day") : null,
+      };
+      form.setFieldsValue(patched);
+    }
+  }, [arrivedData, form]);
 
   const onFinish = async (values: any) => {
-    const cleanedProducts = products.map(
-      ({ productId, count, priceIncome }) => ({
+    let cleanedProducts;
+
+    if (isEdit) {
+      cleanedProducts =
+        arrivedProductsData?.data?.map(({ productId, count, price }) => ({
+          productId,
+          count,
+          price,
+        })) || [];
+    } else {
+      cleanedProducts = products.map(({ productId, count, priceIncome }) => ({
         productId,
         count,
         price: priceIncome,
-      })
-    );
-    if (values.date) {
-      values.date = values.date.format("YYYY-MM-DD");
+      }));
     }
 
     const payload = {
       ...values,
+      date: values.date ? values.date.format("YYYY-MM-DD") : null,
       products: cleanedProducts,
     };
 
@@ -90,7 +99,6 @@ export default function ArrivedFormPage() {
         { id: Number(id), ...payload },
         {
           onSuccess: () => {
-            message.success("Kirim yangilandi");
             navigate("/arriveds");
           },
         }
@@ -98,7 +106,6 @@ export default function ArrivedFormPage() {
     } else {
       createArrived.mutate(payload, {
         onSuccess: () => {
-          message.success("Yangi kirim qo‘shildi");
           navigate("/arriveds");
         },
       });
@@ -121,10 +128,24 @@ export default function ArrivedFormPage() {
           arrivedId: Number(id),
         });
       } else {
-        setProducts((prev) => [...prev, { ...values }]);
+        setProducts((prev) => {
+          const updated = [...prev];
+          const index = updated.findIndex(
+            (p) => p.productId === values.productId
+          );
+
+          if (index >= 0) {
+            updated[index] = { ...updated[index], ...values };
+          } else {
+            updated.push(values);
+          }
+
+          return updated;
+        });
       }
 
       drawerForm.resetFields();
+      setDrawerOpen(false);
     } catch (err) {
       message.error("Mahsulot kiritishda xatolik yuz berdi");
     }

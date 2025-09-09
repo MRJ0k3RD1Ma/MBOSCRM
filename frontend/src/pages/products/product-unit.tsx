@@ -38,7 +38,6 @@ export default function ProductUnit() {
   const handleDelete = async (record: any) => {
     try {
       await deleteProductUnit.mutateAsync(record.id);
-      message.success("Muvaffaqiyatli o‘chirildi");
     } catch {
       message.error("O‘chirishda xatolik");
     }

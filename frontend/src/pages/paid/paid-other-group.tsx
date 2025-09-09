@@ -38,7 +38,6 @@ export default function PaidOtherGroup() {
   const handleDelete = async (record: any) => {
     try {
       await deleteClientType.mutateAsync(record.id);
-      message.success("Muvaffaqiyatli o‘chirildi");
     } catch {
       message.error("O‘chirishda xatolik");
     }

@@ -27,7 +27,7 @@ export default function ClientType() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState({ name: "" });
-  
+
   const { data, isLoading, refetch } = useGetAllClientTypes({
     page,
     limit: 10,
@@ -44,7 +44,6 @@ export default function ClientType() {
   const handleDelete = async (record: any) => {
     try {
       await deleteClientType.mutateAsync(record.id);
-      message.success("Muvaffaqiyatli o‘chirildi");
     } catch {
       message.error("O‘chirishda xatolik");
     }
