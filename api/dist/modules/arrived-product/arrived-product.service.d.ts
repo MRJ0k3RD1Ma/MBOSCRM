@@ -1,21 +1,21 @@
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateArrivedProductDto } from './dto/create-arrived-product.dto';
-import { FindAllArrivedProductQueryDto } from './dto/findAll-arrived-product-query.dto';
-import { UpdateArrivedProductDto } from './dto/update-arrived-product.dto';
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateArrivedProductDto } from "./dto/create-arrived-product.dto";
+import { FindAllArrivedProductQueryDto } from "./dto/findAll-arrived-product-query.dto";
+import { UpdateArrivedProductDto } from "./dto/update-arrived-product.dto";
 export declare class ArrivedProductService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(createArrivedProductDto: CreateArrivedProductDto, registerId: number): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
+        count: number;
         arrivedId: number | null;
         productId: number | null;
-        count: number;
         priceCount: number | null;
     }>;
     findAll(dto: FindAllArrivedProductQueryDto): Promise<{
@@ -26,20 +26,20 @@ export declare class ArrivedProductService {
             Product: {
                 ProductUnit: {
                     name: string;
-                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
+                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                 };
             } & {
                 type: import(".prisma/client").$Enums.ProductType;
                 name: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
@@ -60,20 +60,20 @@ export declare class ArrivedProductService {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
             Arrived: {
                 supplier: {
                     description: string | null;
                     name: string;
                     phone: string;
-                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
+                    id: number;
                     balance: number;
                     registerId: number | null;
                     modifyId: number | null;
@@ -81,8 +81,8 @@ export declare class ArrivedProductService {
                 };
             } & {
                 description: string | null;
-                id: number;
                 isDeleted: boolean | null;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number;
@@ -95,56 +95,56 @@ export declare class ArrivedProductService {
                 updated: Date;
             };
         } & {
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
+            count: number;
             arrivedId: number | null;
             productId: number | null;
-            count: number;
             priceCount: number | null;
         })[];
     }>;
     findOne(id: number): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
+        count: number;
         arrivedId: number | null;
         productId: number | null;
-        count: number;
         priceCount: number | null;
     }>;
     update(id: number, updateArrivedProductDto: UpdateArrivedProductDto): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
+        count: number;
         arrivedId: number | null;
         productId: number | null;
-        count: number;
         priceCount: number | null;
     }>;
     remove(id: number): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
+        count: number;
         arrivedId: number | null;
         productId: number | null;
-        count: number;
         priceCount: number | null;
     }>;
 }

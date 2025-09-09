@@ -15,6 +15,12 @@ export declare class StatisticsService {
             yearlyIncome: any;
             lastYearIncome: any;
         };
+        month: {
+            name: string;
+            income: any;
+            outcome: any;
+            credit: any;
+        };
         charts: {
             monthlyStats: {
                 month: number;

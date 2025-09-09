@@ -40,7 +40,7 @@ let ArrivedProductService = class ArrivedProductService {
                 message: `Product with ID ${productId} not found`,
             });
         }
-        price = product.priceIncome;
+        price = price | product.priceIncome;
         const arrivedproduct = await this.prisma.arrivedProduct.create({
             data: {
                 count,
@@ -95,7 +95,7 @@ let ArrivedProductService = class ArrivedProductService {
                     register: true,
                 },
                 orderBy: {
-                    id: 'desc',
+                    id: "desc",
                 },
             }),
             this.prisma.arrivedProduct.count({ where }),

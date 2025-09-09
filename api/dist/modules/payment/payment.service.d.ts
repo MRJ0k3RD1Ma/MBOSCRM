@@ -8,10 +8,10 @@ export declare class PaymentService {
     onModuleInit(): Promise<void>;
     create(createPaymentDto: CreatePaymentDto): Promise<{
         name: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;
@@ -22,10 +22,10 @@ export declare class PaymentService {
         limit: number;
         data: {
             name: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
@@ -33,30 +33,30 @@ export declare class PaymentService {
     }>;
     findOne(id: number): Promise<{
         name: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;
     }>;
     update(id: number, updatePaymentDto: UpdatePaymentDto): Promise<{
         name: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;
     }>;
     remove(id: number): Promise<{
         name: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;

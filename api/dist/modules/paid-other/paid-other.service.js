@@ -47,13 +47,13 @@ let PaidOtherService = class PaidOtherService {
                 paymentId,
             },
         });
-        if (type === 'OUTCOME') {
+        if (type === "OUTCOME") {
             await this.prisma.setting.update({
                 where: { id: 1 },
                 data: { balance: { decrement: price } },
             });
         }
-        else if (type === 'INCOME') {
+        else if (type === "INCOME") {
             await this.prisma.setting.update({
                 where: { id: 1 },
                 data: { balance: { increment: price } },
@@ -62,7 +62,7 @@ let PaidOtherService = class PaidOtherService {
         return paidOther;
     }
     async findAll(dto) {
-        const { minPrice, maxPrice, fromDate, toDate, description, groupId, type } = dto;
+        const { minPrice, maxPrice, fromDate, toDate, description, groupId, type, limit = 10, page = 1, } = dto;
         const where = {
             isDeleted: false,
         };
@@ -87,16 +87,29 @@ let PaidOtherService = class PaidOtherService {
         if (type) {
             where.type = { equals: type };
         }
-        return this.prisma.paidOther.findMany({
+        const paidOthers = await this.prisma.paidOther.findMany({
             where,
             include: {
                 group: true,
                 Payment: true,
             },
+            skip: (page - 1) * limit,
+            take: limit,
             orderBy: {
-                id: 'desc'
-            }
+                id: "desc",
+            },
         });
+        const agg = await this.prisma.paidOther.aggregate({
+            _sum: { price: true },
+            _count: { _all: true },
+        });
+        return {
+            data: paidOthers,
+            page,
+            limit,
+            total: agg._count._all,
+            price: agg._sum.price,
+        };
     }
     async findOne(id) {
         const paidOther = await this.prisma.paidOther.findFirst({

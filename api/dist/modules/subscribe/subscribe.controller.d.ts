@@ -6,10 +6,10 @@ export declare class SubscribeController {
     private readonly subscribeService;
     constructor(subscribeService: SubscribeService);
     create(createSubscribeDto: CreateSubscribeDto): Promise<{
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         price: number;
         saleId: number | null;
         clientId: number;
@@ -26,10 +26,10 @@ export declare class SubscribeController {
                 description: string | null;
                 name: string;
                 phone: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 balance: number;
                 inn: string;
                 address: string | null;
@@ -43,19 +43,19 @@ export declare class SubscribeController {
                 PaidClient: ({
                     Payment: {
                         name: string | null;
-                        id: number;
                         isDeleted: boolean | null;
                         createdAt: Date;
                         updatedAt: Date;
+                        id: number;
                         registerId: number | null;
                         modifyId: number | null;
                         icon: string | null;
                     };
                 } & {
-                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
+                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                     price: number | null;
@@ -65,10 +65,10 @@ export declare class SubscribeController {
                     clientId: number | null;
                 })[];
             } & {
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number;
@@ -84,10 +84,10 @@ export declare class SubscribeController {
                 subscribe_generate_day: number | null;
             };
         } & {
-            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             price: number;
             saleId: number | null;
             clientId: number;
@@ -101,10 +101,10 @@ export declare class SubscribeController {
             description: string | null;
             name: string;
             phone: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -118,19 +118,19 @@ export declare class SubscribeController {
             PaidClient: ({
                 Payment: {
                     name: string | null;
-                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
+                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                     icon: string | null;
                 };
             } & {
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number | null;
@@ -143,10 +143,10 @@ export declare class SubscribeController {
                 product: {
                     type: import(".prisma/client").$Enums.ProductType;
                     name: string;
-                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
+                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                     barcode: string | null;
@@ -161,24 +161,24 @@ export declare class SubscribeController {
                     countSale: number;
                 };
             } & {
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date | null;
                 updatedAt: Date | null;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number | null;
-                productId: number | null;
                 count: number | null;
+                productId: number | null;
                 priceCount: number | null;
                 saleId: number | null;
                 is_subscribe: boolean | null;
             })[];
         } & {
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number;
@@ -194,10 +194,10 @@ export declare class SubscribeController {
             subscribe_generate_day: number | null;
         };
     } & {
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         price: number;
         saleId: number | null;
         clientId: number;
@@ -206,10 +206,10 @@ export declare class SubscribeController {
         paying_date: Date;
     }>;
     update(id: string, updateSubscribeDto: UpdateSubscribeDto): Promise<{
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         price: number;
         saleId: number | null;
         clientId: number;
@@ -218,10 +218,10 @@ export declare class SubscribeController {
         paying_date: Date;
     }>;
     remove(id: string): Promise<{
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         price: number;
         saleId: number | null;
         clientId: number;

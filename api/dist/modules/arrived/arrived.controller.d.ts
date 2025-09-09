@@ -8,8 +8,8 @@ export declare class ArrivedController {
     constructor(arrivedService: ArrivedService);
     create(createArrivedDto: CreateArrivedDto, req: Request): Promise<{
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -30,10 +30,10 @@ export declare class ArrivedController {
                 description: string | null;
                 name: string;
                 phone: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 balance: number;
                 registerId: number | null;
                 modifyId: number | null;
@@ -46,28 +46,28 @@ export declare class ArrivedController {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
             ArrivedProduct: {
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number | null;
+                count: number;
                 arrivedId: number | null;
                 productId: number | null;
-                count: number;
                 priceCount: number | null;
             }[];
         } & {
             description: string | null;
-            id: number;
             isDeleted: boolean | null;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number;
@@ -85,10 +85,10 @@ export declare class ArrivedController {
             description: string | null;
             name: string;
             phone: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             balance: number;
             registerId: number | null;
             modifyId: number | null;
@@ -101,28 +101,28 @@ export declare class ArrivedController {
             roleId: number | null;
             chatId: string | null;
             password: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
         ArrivedProduct: {
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
+            count: number;
             arrivedId: number | null;
             productId: number | null;
-            count: number;
             priceCount: number | null;
         }[];
     } & {
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -139,10 +139,10 @@ export declare class ArrivedController {
             description: string | null;
             name: string;
             phone: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             balance: number;
             registerId: number | null;
             modifyId: number | null;
@@ -155,10 +155,10 @@ export declare class ArrivedController {
             roleId: number | null;
             chatId: string | null;
             password: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
         register: {
             name: string;
@@ -167,19 +167,19 @@ export declare class ArrivedController {
             roleId: number | null;
             chatId: string | null;
             password: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
         ArrivedProduct: ({
             Product: {
                 type: import(".prisma/client").$Enums.ProductType;
                 name: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
@@ -194,22 +194,22 @@ export declare class ArrivedController {
                 countSale: number;
             };
         } & {
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
+            count: number;
             arrivedId: number | null;
             productId: number | null;
-            count: number;
             priceCount: number | null;
         })[];
     } & {
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -223,8 +223,8 @@ export declare class ArrivedController {
     }>;
     remove(id: string): Promise<{
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;

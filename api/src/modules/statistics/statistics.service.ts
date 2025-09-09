@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
+import dayjs from "dayjs";
 
 @Injectable()
 export class StatisticsService {
@@ -284,6 +285,7 @@ export class StatisticsService {
 			(m) => m.expectedSubscription,
 		);
 
+		const currentMonth = monthlyStats[dayjs().month()];
 		return {
 			balance: settings?.balance ?? 0,
 			totals: {
@@ -296,6 +298,12 @@ export class StatisticsService {
 				currentMonthExpenses,
 				yearlyIncome,
 				lastYearIncome,
+			},
+			month: {
+				name: dayjs().format("MMMM"),
+				income: currentMonth.tushum,
+				outcome: currentMonth.chiqim,
+				credit: currentMonth.qarzdorlik,
 			},
 			charts: {
 				monthlyStats,

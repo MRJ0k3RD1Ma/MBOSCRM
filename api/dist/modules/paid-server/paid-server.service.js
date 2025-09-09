@@ -50,7 +50,7 @@ let PaidServerService = class PaidServerService {
         return paidServer;
     }
     async findAll(dto) {
-        const { minPrice, maxPrice, fromDate, toDate, description, serverId } = dto;
+        const { minPrice, maxPrice, fromDate, toDate, description, serverId, limit = 10, page = 1, } = dto;
         const where = {
             isDeleted: false,
         };
@@ -72,14 +72,27 @@ let PaidServerService = class PaidServerService {
         if (description) {
             where.description = { contains: description };
         }
-        return this.prisma.paidServer.findMany({
+        const paidServers = this.prisma.paidServer.findMany({
             where,
             include: {
                 paymentType: true,
                 server: { select: { id: true, name: true } },
             },
-            orderBy: { id: 'desc' },
+            skip: (page - 1) * limit,
+            take: limit,
+            orderBy: { id: "desc" },
         });
+        const agg = await this.prisma.paidServer.aggregate({
+            _sum: { price: true },
+            _count: { _all: true },
+        });
+        return {
+            data: paidServers,
+            page,
+            limit,
+            total: agg._count._all,
+            price: agg._sum.price,
+        };
     }
     async findOne(id) {
         const paidServer = await this.prisma.paidServer.findFirst({

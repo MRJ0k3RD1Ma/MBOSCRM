@@ -76,12 +76,12 @@ let PaidClientService = class PaidClientService {
             where: { id: clientId },
         });
         if (!client)
-            throw new Error('Client not found');
+            throw new Error("Client not found");
         let remainingPayment = paymentAmount;
         let currentBalance = client.balance ?? 0;
         let sales = await this.prisma.sale.findMany({
             where: { clientId, credit: { gt: 0 }, id: { not: saleId } },
-            orderBy: { createdAt: 'asc' },
+            orderBy: { createdAt: "asc" },
         });
         if (saleId) {
             const prioritySale = await this.prisma.sale.findFirst({
@@ -98,7 +98,7 @@ let PaidClientService = class PaidClientService {
                 data: {
                     credit: sale.credit - payAmount,
                     dept: (sale.dept ?? 0) + payAmount,
-                    ...(sale.credit - payAmount <= 0 ? { state: 'CLOSED' } : {}),
+                    ...(sale.credit - payAmount <= 0 ? { state: "CLOSED" } : {}),
                 },
             });
             remainingPayment -= payAmount;
@@ -146,7 +146,7 @@ let PaidClientService = class PaidClientService {
         return { remainingPayment, currentBalance };
     }
     async findAll(dto) {
-        const { minPrice, maxPrice, fromDate, toDate, clientId, saleId, paymentId, } = dto;
+        const { minPrice, maxPrice, fromDate, toDate, clientId, saleId, paymentId, limit = 10, page = 1, } = dto;
         const where = {
             isDeleted: false,
         };
@@ -171,7 +171,7 @@ let PaidClientService = class PaidClientService {
         if (paymentId) {
             where.paymentId = paymentId;
         }
-        return this.prisma.paidClient.findMany({
+        const paidClients = await this.prisma.paidClient.findMany({
             where,
             include: {
                 Client: true,
@@ -180,10 +180,23 @@ let PaidClientService = class PaidClientService {
                 modify: true,
                 register: true,
             },
+            skip: (page - 1) * limit,
+            take: limit,
             orderBy: {
-                id: 'desc'
-            }
+                id: "desc",
+            },
         });
+        const agg = await this.prisma.paidClient.aggregate({
+            _sum: { price: true },
+            _count: { _all: true },
+        });
+        return {
+            data: paidClients,
+            page,
+            limit,
+            total: agg._count._all,
+            price: agg._sum.price,
+        };
     }
     async findOne(id) {
         const paidClient = await this.prisma.paidClient.findFirst({

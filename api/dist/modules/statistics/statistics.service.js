@@ -8,10 +8,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StatisticsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const dayjs_1 = __importDefault(require("dayjs"));
 let StatisticsService = class StatisticsService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -229,6 +233,7 @@ let StatisticsService = class StatisticsService {
             });
         }));
         const subscriptionForecast = monthlyStats.map((m) => m.expectedSubscription);
+        const currentMonth = monthlyStats[(0, dayjs_1.default)().month()];
         return {
             balance: settings?.balance ?? 0,
             totals: {
@@ -241,6 +246,12 @@ let StatisticsService = class StatisticsService {
                 currentMonthExpenses,
                 yearlyIncome,
                 lastYearIncome,
+            },
+            month: {
+                name: (0, dayjs_1.default)().format("MMMM"),
+                income: currentMonth.tushum,
+                outcome: currentMonth.chiqim,
+                credit: currentMonth.qarzdorlik,
             },
             charts: {
                 monthlyStats,

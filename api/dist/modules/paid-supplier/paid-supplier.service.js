@@ -19,7 +19,7 @@ let PaidSupplierService = class PaidSupplierService {
         this.prisma = prisma;
     }
     async onModuleInit() {
-        if (config_1.env.ENV != 'prod') {
+        if (config_1.env.ENV != "prod") {
             const count = await this.prisma.paidSupplier.count();
             const requiredCount = 5;
             if (count < requiredCount) {
@@ -40,13 +40,13 @@ let PaidSupplierService = class PaidSupplierService {
             where: { id: paymentId, isDeleted: false },
         });
         if (!payment) {
-            throw new http_error_1.HttpError({ message: 'Payment Not Found' });
+            throw new http_error_1.HttpError({ message: "Payment Not Found" });
         }
         const supplier = await this.prisma.supplier.findFirst({
             where: { id: supplierId, isDeleted: false },
         });
         if (!supplier) {
-            throw new http_error_1.HttpError({ message: 'Supplier Not Found', code: 404 });
+            throw new http_error_1.HttpError({ message: "Supplier Not Found", code: 404 });
         }
         await this.prisma.setting.update({
             where: { id: 1 },
@@ -93,12 +93,14 @@ let PaidSupplierService = class PaidSupplierService {
                 orderBy: { id: "desc" },
                 include: { Payment: true, register: true, modify: true },
             }),
-            this.prisma.paidSupplier.count({
-                where,
+            this.prisma.paidServer.aggregate({
+                _sum: { price: true },
+                _count: { _all: true },
             }),
         ]);
         return {
-            total,
+            total: total._count._all,
+            price: total._sum.price,
             page,
             limit,
             data,
@@ -117,7 +119,7 @@ let PaidSupplierService = class PaidSupplierService {
             },
         });
         if (!paidSupplier) {
-            throw (0, http_error_1.HttpError)({ code: 'PaidSupplier not found' });
+            throw (0, http_error_1.HttpError)({ code: "PaidSupplier not found" });
         }
         return paidSupplier;
     }
@@ -126,7 +128,7 @@ let PaidSupplierService = class PaidSupplierService {
             where: { id, isDeleted: false },
         });
         if (!paidsupplier)
-            throw (0, http_error_1.HttpError)({ code: 'PaidSupplier not found' });
+            throw (0, http_error_1.HttpError)({ code: "PaidSupplier not found" });
         const updateData = {
             price: dto.price ?? paidsupplier.price,
             paidDate: dto.paidDate ?? paidsupplier.paidDate,
@@ -142,7 +144,7 @@ let PaidSupplierService = class PaidSupplierService {
             where: { id: id, isDeleted: false },
         });
         if (!paidsupplier) {
-            throw (0, http_error_1.HttpError)({ code: 'PaidSupplier not found' });
+            throw (0, http_error_1.HttpError)({ code: "PaidSupplier not found" });
         }
         return await this.prisma.paidSupplier.update({
             where: { id: id },

@@ -9,10 +9,10 @@ export declare class SaleProductService {
         product: {
             type: import(".prisma/client").$Enums.ProductType;
             name: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -27,15 +27,15 @@ export declare class SaleProductService {
             countSale: number;
         };
     } & {
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date | null;
         updatedAt: Date | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        productId: number | null;
         count: number | null;
+        productId: number | null;
         priceCount: number | null;
         saleId: number | null;
         is_subscribe: boolean | null;
@@ -48,20 +48,20 @@ export declare class SaleProductService {
             product: {
                 ProductUnit: {
                     name: string;
-                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
+                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                 };
             } & {
                 type: import(".prisma/client").$Enums.ProductType;
                 name: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
@@ -76,10 +76,10 @@ export declare class SaleProductService {
                 countSale: number;
             };
             sale: {
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number;
@@ -101,10 +101,10 @@ export declare class SaleProductService {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
             register: {
                 name: string;
@@ -113,21 +113,21 @@ export declare class SaleProductService {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
         } & {
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date | null;
             updatedAt: Date | null;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
-            productId: number | null;
             count: number | null;
+            productId: number | null;
             priceCount: number | null;
             saleId: number | null;
             is_subscribe: boolean | null;
@@ -137,10 +137,10 @@ export declare class SaleProductService {
         product: {
             type: import(".prisma/client").$Enums.ProductType;
             name: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -155,43 +155,43 @@ export declare class SaleProductService {
             countSale: number;
         };
     } & {
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date | null;
         updatedAt: Date | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        productId: number | null;
         count: number | null;
+        productId: number | null;
         priceCount: number | null;
         saleId: number | null;
         is_subscribe: boolean | null;
     }>;
     update(id: number, updateSaleProductDto: UpdateSaleProductDto, modifyId: number): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date | null;
         updatedAt: Date | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        productId: number | null;
         count: number | null;
+        productId: number | null;
         priceCount: number | null;
         saleId: number | null;
         is_subscribe: boolean | null;
     }>;
     remove(id: number): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date | null;
         updatedAt: Date | null;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        productId: number | null;
         count: number | null;
+        productId: number | null;
         priceCount: number | null;
         saleId: number | null;
         is_subscribe: boolean | null;

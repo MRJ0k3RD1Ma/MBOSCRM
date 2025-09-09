@@ -8,14 +8,14 @@ export declare class ServerController {
     constructor(serverService: ServerService);
     create(createServerDto: CreateServerDto, req: Request): Promise<{
         name: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
-        state: import(".prisma/client").$Enums.ServerState;
         endDate: Date | null;
+        state: import(".prisma/client").$Enums.ServerState;
         responsible: string | null;
         plan: string | null;
     }>;
@@ -28,14 +28,14 @@ export declare class ServerController {
     findOne(id: string): Promise<any>;
     update(id: string, updateServerDto: UpdateServerDto, req: Request): Promise<{
         name: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
-        state: import(".prisma/client").$Enums.ServerState;
         endDate: Date | null;
+        state: import(".prisma/client").$Enums.ServerState;
         responsible: string | null;
         plan: string | null;
     }>;
