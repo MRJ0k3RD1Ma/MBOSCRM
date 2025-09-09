@@ -14,10 +14,6 @@ import {
   Typography,
   message,
 } from "antd";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useGetAllClients } from "../../../config/queries/clients/clients-querys";
-import { useGetAllProducts } from "../../../config/queries/products/products-querys";
 import {
   useCreateSale,
   useGetSaleById,
@@ -29,7 +25,12 @@ import {
   useGetAllSaleProduct,
   useUpdateSaleProduct,
 } from "../../../config/queries/sale/sale-product-querys";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import dayjs from "dayjs";
+import { useGetAllClients } from "../../../config/queries/clients/clients-querys";
+import { useGetAllProducts } from "../../../config/queries/products/products-querys";
 
 const { Title } = Typography;
 
@@ -95,7 +96,6 @@ export default function SalesFormPage() {
     } else {
       createSale.mutate(payload, {
         onSuccess: () => {
-          message.success("Yangi sotuv qo‘shildi");
           navigate("/sales");
         },
       });

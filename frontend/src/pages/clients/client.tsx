@@ -61,7 +61,6 @@ export default function ClientPage() {
   const handleEdit = (values: CreateClientInput) => {
     try {
       updateClient.mutateAsync({ id: clientId, ...values });
-      message.success("Mijoz yangilandi");
       setIsEditOpen(false);
       refetch();
     } catch (error) {

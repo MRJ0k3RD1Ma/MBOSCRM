@@ -7,7 +7,6 @@ import {
   Space,
   Table,
   Tooltip,
-  message,
   type MenuProps,
 } from "antd";
 import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
@@ -37,9 +36,7 @@ export default function Arriveds() {
 
   const deleteArrived = useDeleteArrived();
   const handleDelete = (id: number) => {
-    deleteArrived.mutate(id, {
-      onSuccess: () => message.success("Kirim o‘chirildi"),
-    });
+    deleteArrived.mutate(id, {});
   };
 
   const columns = [

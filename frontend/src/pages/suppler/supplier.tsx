@@ -4,7 +4,6 @@ import {
   Descriptions,
   Button,
   Popconfirm,
-  message,
   Spin,
   Tabs,
   type TabsProps,
@@ -72,7 +71,6 @@ export default function Supplier() {
   const handleDelete = () => {
     deleteSupplier.mutate(supplierId, {
       onSuccess: () => {
-        message.success("Yetkazib beruvchi o‘chirildi");
         navigate("/supplier");
       },
     });

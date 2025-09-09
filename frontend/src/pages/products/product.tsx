@@ -4,7 +4,6 @@ import {
   Descriptions,
   Button,
   Popconfirm,
-  message,
   Spin,
   Tabs,
   Table,
@@ -67,7 +66,6 @@ export default function Product() {
   const handleDelete = () => {
     deleteProduct.mutate(productId, {
       onSuccess: () => {
-        message.success("Mahsulot o‘chirildi");
         navigate("/products");
       },
     });

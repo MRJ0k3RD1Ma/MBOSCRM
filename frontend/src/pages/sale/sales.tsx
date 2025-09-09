@@ -7,7 +7,6 @@ import {
   Space,
   Table,
   Tooltip,
-  message,
   type MenuProps,
 } from "antd";
 import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
@@ -40,9 +39,7 @@ export default function Sales() {
 
   const deleteSale = useDeleteSale();
   const handleDelete = (id: number) => {
-    deleteSale.mutate(id, {
-      onSuccess: () => message.success("Savdo o‘chirildi"),
-    });
+    deleteSale.mutate(id, {});
   };
 
   const columns = [
@@ -70,9 +67,7 @@ export default function Sales() {
           ? firstSaleProduct?.product?.price
           : record.price;
 
-        return priceToUse
-          ? priceToUse.toLocaleString("uz-UZ") + " so'm"
-          : "0";
+        return priceToUse ? priceToUse.toLocaleString("uz-UZ") + " so'm" : "0";
       },
     },
     {

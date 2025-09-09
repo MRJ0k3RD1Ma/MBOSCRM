@@ -8,7 +8,6 @@ import {
   Space,
   Table,
   Typography,
-  message,
 } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
@@ -77,7 +76,6 @@ export default function Sale() {
     if (!currentId) return;
     deleteSale.mutate(currentId, {
       onSuccess: () => {
-        message.success("Savdo o‘chirildi");
         navigate("/sale");
       },
     });

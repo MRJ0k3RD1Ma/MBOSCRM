@@ -28,7 +28,6 @@ export default function ClientInfos({
   const handleDelete = async () => {
     try {
       await deleteClient.mutateAsync(clientId);
-      message.success("Mijoz muvaffaqiyatli o‘chirildi");
       navigate("/clients");
     } catch (error) {
       message.error("O‘chirishda xatolik yuz berdi");
