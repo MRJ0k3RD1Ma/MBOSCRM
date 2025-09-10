@@ -184,16 +184,16 @@ export default function Server() {
         }
       >
         <Table
+          columns={columns}
+          dataSource={Array.isArray(paidServers?.data) ? paidServers?.data : []}
           loading={isPaidLoading}
-          dataSource={paidServers}
           rowKey="id"
           pagination={{
             current: page,
             pageSize: limit,
-            total: paidServers?.length,
-            onChange: setPage,
+            total: paidServers?.total || 0,
+            onChange: (page) => setPage(page),
           }}
-          columns={columns}
         />
       </Card>
 

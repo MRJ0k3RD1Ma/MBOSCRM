@@ -1,8 +1,16 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { notification } from "antd";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import axiosPrivate from "../../api";
+import { notification } from "antd";
 import { paidOtherEndpoints } from "../../endpoint";
 
+interface PaidOtherResponse {
+  data: PaidOther[];
+  page: number;
+  limit: number;
+  total: number;
+  price: number;
+}
 export interface PaidOther {
   id: number;
   type: "INCOME" | "EXPENSE";
@@ -47,7 +55,7 @@ export interface PaidOtherQueryParams {
 }
 
 export const useGetAllPaidOthers = (params?: PaidOtherQueryParams) => {
-  return useQuery<PaidOther[]>({
+  return useQuery<PaidOtherResponse>({
     queryKey: ["paid-others", params],
     queryFn: async () => {
       const { data } = await axiosPrivate.get(paidOtherEndpoints.all, {

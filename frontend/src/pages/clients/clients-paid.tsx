@@ -193,13 +193,13 @@ export default function ClientsPaid() {
 
       <Table
         columns={columns}
-        dataSource={data || []}
+        dataSource={data?.data || []}
         loading={isLoading}
         rowKey="id"
         pagination={{
           current: page,
           pageSize: limit,
-          total: data?.length,
+          total: data?.total || 0,
           onChange: (page) => setPage(page),
         }}
       />

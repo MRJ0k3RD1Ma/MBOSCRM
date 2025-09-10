@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { Table } from "antd";
 import dayjs from "dayjs";
 import { indexColumn } from "../../../components/tables/indexColumn";
-import { Table } from "antd";
 import { useGetAllPaidClients } from "../../../config/queries/clients/paid-client-querys";
+import { useState } from "react";
 
 export default function ClientPaidsTable({ clientId }: { clientId: number }) {
   const [page, setPage] = useState(1);
   const limit = 5;
 
-  const { data: paidClient } = useGetAllPaidClients({
+  const { data: paidClient, isLoading } = useGetAllPaidClients({
     clientId,
     page: page,
     limit,
@@ -42,13 +42,14 @@ export default function ClientPaidsTable({ clientId }: { clientId: number }) {
   return (
     <Table
       columns={paidByClientColumns}
-      dataSource={paidClient}
+      dataSource={paidClient?.data || []}
+      loading={isLoading}
       rowKey="id"
       pagination={{
         current: page,
         pageSize: limit,
-        total: paidClient?.length,
-        onChange: (p) => setPage(p),
+        total: paidClient?.total || 0,
+        onChange: (page) => setPage(page),
       }}
     />
   );

@@ -1,11 +1,12 @@
-import dayjs from "dayjs";
-import { useState } from "react";
 import { Button, Card, Select, Space, Table } from "antd";
+
 import { FilterOutlined } from "@ant-design/icons";
-import { useGetAllPaidServers } from "../../config/queries/server/paid-servers-querys";
 import PaidServersFilterModal from "./ui/paid-servers-filter-modal";
+import dayjs from "dayjs";
 import { indexColumn } from "../../components/tables/indexColumn";
+import { useGetAllPaidServers } from "../../config/queries/server/paid-servers-querys";
 import { useGetAllServers } from "../../config/queries/server/servers-querys";
+import { useState } from "react";
 
 export default function PaidServer() {
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -96,12 +97,13 @@ export default function PaidServer() {
 
       <Table
         columns={columns}
-        dataSource={data || []}
+        dataSource={Array.isArray(data?.data) ? data.data : []}
         loading={isLoading}
         rowKey="id"
         pagination={{
           current: page,
           pageSize: limit,
+          total: data?.total || 0,
           onChange: (page) => setPage(page),
         }}
       />

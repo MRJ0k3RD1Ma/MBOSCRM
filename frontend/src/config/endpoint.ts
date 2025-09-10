@@ -1,4 +1,3 @@
-// ===================== AUTH ENDPOINTS =====================
 export const authEndpoints = {
   register: "user",
   login: "user/login",
@@ -6,7 +5,6 @@ export const authEndpoints = {
   logout: "user/logout",
 };
 
-// ===================== USER ENDPOINTS =====================
 export const userEndpoints = {
   create: "user",
   all: "user",
@@ -16,7 +14,6 @@ export const userEndpoints = {
   delete: (id: string) => `user/${id}`,
 };
 
-// ===================== USER ROLE ENDPOINTS =====================
 export const userRoleEndpoints = {
   create: "user/role",
   all: "user/role",
@@ -25,24 +22,20 @@ export const userRoleEndpoints = {
   delete: (id: string) => `user/role/${id}`,
 };
 
-// ===================== SETTINGS ENDPOINTS =====================
 export const settingsEndpoints = {
   get: "settings",
   update: "settings",
 };
-// ===================== SETTINGS ENDPOINTS =====================
 export const statisticsEndpoints = {
   get: "statistics",
 };
 
-// ===================== LOCATION ENDPOINTS =====================
 export const locationEndpoints = {
   region: "location/region",
   districtByRegion: (regionId: string | number) =>
     `location/district/${regionId}`,
 };
 
-// ===================== CLIENT ENDPOINTS =====================
 export const clientEndpoints = {
   create: "client",
   all: "client",
@@ -51,7 +44,6 @@ export const clientEndpoints = {
   delete: (id: string) => `client/${id}`,
 };
 
-// ===================== CLIENT TYPE ENDPOINTS =====================
 export const clientTypeEndpoints = {
   create: "client/type",
   all: "client/type",
@@ -60,7 +52,6 @@ export const clientTypeEndpoints = {
   delete: (id: string) => `client/type/${id}`,
 };
 
-// ===================== PRODUCT GROUP ENDPOINTS =====================
 export const productGroupEndpoints = {
   create: "product-group",
   all: "product-group",
@@ -69,7 +60,6 @@ export const productGroupEndpoints = {
   delete: (id: string) => `product-group/${id}`,
 };
 
-// ===================== PRODUCT ENDPOINTS =====================
 export const productEndpoints = {
   create: "product",
   all: "product",
@@ -78,7 +68,6 @@ export const productEndpoints = {
   delete: (id: string) => `product/${id}`,
 };
 
-// ===================== PRODUCT UNIT ENDPOINTS =====================
 export const productUnitEndpoints = {
   create: "product-unit",
   all: "product-unit",
@@ -87,7 +76,6 @@ export const productUnitEndpoints = {
   delete: (id: string) => `product-unit/${id}`,
 };
 
-// ===================== SUPPLIER ENDPOINTS =====================
 export const supplierEndpoints = {
   create: "supplier",
   all: "supplier",
@@ -96,7 +84,6 @@ export const supplierEndpoints = {
   delete: (id: string) => `supplier/${id}`,
 };
 
-// ===================== PAID SUPPLIER ENDPOINTS =====================
 export const paidSupplierEndpoints = {
   create: "paidsupplier",
   all: "paidsupplier",
@@ -105,7 +92,14 @@ export const paidSupplierEndpoints = {
   delete: (id: string) => `paidsupplier/${id}`,
 };
 
-// ===================== PAYMENT ENDPOINTS =====================
+export const paidClientEndpoints = {
+  create: "paid-client",
+  all: "paid-client",
+  one: (id: string) => `paid-client/${id}`,
+  update: (id: string) => `paid-client/${id}`,
+  delete: (id: string) => `paid-client/${id}`,
+};
+
 export const paymentEndpoints = {
   create: "payment",
   all: "payment",
@@ -114,7 +108,6 @@ export const paymentEndpoints = {
   delete: (id: string) => `payment/${id}`,
 };
 
-// ===================== ARRIVED ENDPOINTS =====================
 export const arrivedEndpoints = {
   create: "arrived",
   all: "arrived",
@@ -123,7 +116,6 @@ export const arrivedEndpoints = {
   delete: (id: string) => `arrived/${id}`,
 };
 
-// ===================== ARRIVED PRODUCT ENDPOINTS =====================
 export const arrivedProductEndpoints = {
   create: "arrived-product",
   all: "arrived-product",
@@ -132,7 +124,6 @@ export const arrivedProductEndpoints = {
   delete: (id: string) => `arrived-product/${id}`,
 };
 
-// ===================== SALE ENDPOINTS =====================
 export const saleEndpoints = {
   create: "sale",
   all: "sale",
@@ -141,7 +132,6 @@ export const saleEndpoints = {
   delete: (id: string) => `sale/${id}`,
 };
 
-// ===================== SALE PRODUCT ENDPOINTS =====================
 export const saleProductEndpoints = {
   create: "sale-product",
   all: "sale-product",
@@ -150,7 +140,6 @@ export const saleProductEndpoints = {
   delete: (id: string) => `sale-product/${id}`,
 };
 
-// ===================== SUBSCRIBE ENDPOINTS =====================
 export const subscribeEndpoints = {
   all: "subscribe",
   one: (id: string) => `subscribe/${id}`,
@@ -159,7 +148,6 @@ export const subscribeEndpoints = {
   delete: (id: string) => `subscribe/${id}`,
 };
 
-// ===================== SERVER ENDPOINTS =====================
 export const serverEndpoints = {
   all: "server",
   one: (id: string) => `server/${id}`,
@@ -168,7 +156,6 @@ export const serverEndpoints = {
   delete: (id: string) => `server/${id}`,
 };
 
-// ===================== PAID SERVER ENDPOINTS =====================
 export const paidServerEndpoints = {
   all: "paid-server",
   one: (id: string) => `paid-server/${id}`,
@@ -177,7 +164,6 @@ export const paidServerEndpoints = {
   delete: (id: string) => `paid-server/${id}`,
 };
 
-// ===================== PAID OTHER ENDPOINTS =====================
 export const paidOtherEndpoints = {
   all: "paid-other",
   one: (id: string) => `paid-other/${id}`,
@@ -186,7 +172,6 @@ export const paidOtherEndpoints = {
   delete: (id: string) => `paid-other/${id}`,
 };
 
-// ===================== PAID OTHER GROUP ENDPOINTS =====================
 export const paidOtherGroupEndpoints = {
   all: "paid-other/group",
   one: (id: string) => `paid-other/group/${id}`,

@@ -187,12 +187,13 @@ export default function PaidOtherPage() {
 
       <Table
         columns={columns}
-        dataSource={data || []}
+        dataSource={data?.data || []}
         loading={isLoading}
         rowKey="id"
         pagination={{
           current: page,
           pageSize: limit,
+          total: data?.total || 0,
           onChange: (page) => setPage(page),
         }}
       />
