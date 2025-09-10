@@ -19,7 +19,7 @@ export declare class PaidServerController {
         paymentTypeId: number;
     }>;
     findAll(dto: FindAllQueryPaidServerDto): Promise<{
-        data: import(".prisma/client").Prisma.PrismaPromise<({
+        data: ({
             server: {
                 name: string;
                 id: number;
@@ -46,7 +46,7 @@ export declare class PaidServerController {
             serverId: number;
             endDate: Date;
             paymentTypeId: number;
-        })[]>;
+        })[];
         page: number;
         limit: number;
         total: number;

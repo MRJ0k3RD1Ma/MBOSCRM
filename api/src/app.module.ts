@@ -27,6 +27,7 @@ import { ServerModule } from "./modules/server/server.module";
 import { NestjsGrammyModule } from "@grammyjs/nestjs";
 import { env } from "./common/config";
 import { EventEmitterModule } from "@nestjs/event-emitter";
+import { SaleTodoModule } from "./modules/saleTodo/saleTodo.module";
 
 @Module({
 	controllers: [],
@@ -58,6 +59,7 @@ import { EventEmitterModule } from "@nestjs/event-emitter";
 		PaidOtherModule,
 		PaidServerModule,
 		ServerModule,
+		SaleTodoModule,
 		ScheduleModule.forRoot(),
 		EventEmitterModule.forRoot(),
 		NestjsGrammyModule.forRoot({ token: env.BOT_TOKEN }),

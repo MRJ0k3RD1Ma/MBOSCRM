@@ -2,7 +2,6 @@ import { CreatePaidServerDto } from "./dto/create-paid-server.dto";
 import { UpdatePaidServerDto } from "./dto/update-paid-server.dto";
 import { PrismaService } from "../prisma/prisma.service";
 import { FindAllQueryPaidServerDto } from "./dto/findAll-query-paid-server.dto";
-import { Prisma } from "@prisma/client";
 export declare class PaidServerService {
     private readonly prisma;
     constructor(prisma: PrismaService);
@@ -20,7 +19,7 @@ export declare class PaidServerService {
         paymentTypeId: number;
     }>;
     findAll(dto: FindAllQueryPaidServerDto): Promise<{
-        data: Prisma.PrismaPromise<({
+        data: ({
             server: {
                 name: string;
                 id: number;
@@ -47,7 +46,7 @@ export declare class PaidServerService {
             serverId: number;
             endDate: Date;
             paymentTypeId: number;
-        })[]>;
+        })[];
         page: number;
         limit: number;
         total: number;

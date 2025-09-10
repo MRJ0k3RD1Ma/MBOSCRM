@@ -36,6 +36,7 @@ const server_module_1 = require("./modules/server/server.module");
 const nestjs_1 = require("@grammyjs/nestjs");
 const config_1 = require("./common/config");
 const event_emitter_1 = require("@nestjs/event-emitter");
+const saleTodo_module_1 = require("./modules/saleTodo/saleTodo.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -70,6 +71,7 @@ exports.AppModule = AppModule = __decorate([
             paid_other_module_1.PaidOtherModule,
             paid_server_module_1.PaidServerModule,
             server_module_1.ServerModule,
+            saleTodo_module_1.SaleTodoModule,
             schedule_1.ScheduleModule.forRoot(),
             event_emitter_1.EventEmitterModule.forRoot(),
             nestjs_1.NestjsGrammyModule.forRoot({ token: config_1.env.BOT_TOKEN }),

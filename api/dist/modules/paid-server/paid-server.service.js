@@ -72,7 +72,7 @@ let PaidServerService = class PaidServerService {
         if (description) {
             where.description = { contains: description };
         }
-        const paidServers = this.prisma.paidServer.findMany({
+        const paidServers = await this.prisma.paidServer.findMany({
             where,
             include: {
                 paymentType: true,

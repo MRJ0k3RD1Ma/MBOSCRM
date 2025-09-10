@@ -57,6 +57,13 @@ model ClientType {
   @@map("client_type")
 }
 
+model Todo {
+  id   Int     @id @default(autoincrement())
+  name String? @db.VarChar(255)
+
+  @@index([name])
+}
+
 model District {
   id       Int      @id @default(autoincrement())
   regionId Int?
