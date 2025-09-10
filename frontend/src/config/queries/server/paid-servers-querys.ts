@@ -1,8 +1,16 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { notification } from "antd";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import axiosPrivate from "../../api";
+import { notification } from "antd";
 import { paidServerEndpoints } from "../../endpoint";
 
+interface PaidServerResponse {
+  data: PaidServer[];
+  page: number;
+  limit: number;
+  total: number;
+  price: number;
+}
 export interface PaidServer {
   id: number;
   serverId: number;
@@ -47,13 +55,16 @@ export interface PaidServerQueryParams {
 }
 
 export const useGetAllPaidServers = (params?: PaidServerQueryParams) => {
-  return useQuery<PaidServer[]>({
+  return useQuery<PaidServerResponse>({
     queryKey: ["paid-servers", params],
     queryFn: async () => {
       const { data } = await axiosPrivate.get(paidServerEndpoints.all, {
         params,
       });
-      return data;
+      return {
+        ...data,
+        data: Array.isArray(data.data) ? data.data : [],
+      };
     },
   });
 };

@@ -1,44 +1,47 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import LoginPage from "../pages/auth/login";
-import Dashboard from "../pages/dashboard/dashboard";
-import ProtectedRoute from "./protected-route";
+import { Navigate, createBrowserRouter } from "react-router-dom";
+
 import AppLayout from "../layout/app-layout";
-import { TokenManager } from "../config/token-manager";
-import { ErrorPage } from "../pages/error/error";
-import Clients from "../pages/clients/clients";
-import ClientType from "../pages/clients/client-type";
+import Arrived from "../pages/arrived/arrived";
+import ArrivedFormPage from "../pages/arrived/ui/arriveds-form-page";
+import ArrivedProducts from "../pages/arrived/arrived-products";
+import Arriveds from "../pages/arrived/arriveds";
+import ArrivedsCredit from "../pages/arrived/arriveds-credit";
 import ClientPage from "../pages/clients/client";
-import Products from "../pages/products/products";
+import ClientType from "../pages/clients/client-type";
+import Clients from "../pages/clients/clients";
+import ClientsCredit from "../pages/clients/clients-credit";
+import ClientsOverPaid from "../pages/clients/clients-over-paid";
+import ClientsPaid from "../pages/clients/clients-paid";
+import Dashboard from "../pages/dashboard/dashboard";
+import { ErrorPage } from "../pages/error/error";
+import LoginPage from "../pages/auth/login";
+import MonthlyExpenses from "../pages/paid_statistic/monthly_expenses";
+import MonthlyRevenues from "../pages/paid_statistic/monthly_revenues";
+import PaidOther from "../pages/paid/paid-other";
+import PaidOtherGroup from "../pages/paid/paid-other-group";
+import PaidServer from "../pages/server/paid-server";
+import PaidSuppliers from "../pages/suppler/paid-supplier";
+import Payments from "../pages/payment/payment";
+import PriceCurant from "../pages/sale/price-curant";
 import Product from "../pages/products/product";
 import ProductGroup from "../pages/products/product-group";
 import ProductUnit from "../pages/products/product-unit";
-import Suppliers from "../pages/suppler/suppliers";
-import Supplier from "../pages/suppler/supplier";
-import PaidSuppliers from "../pages/suppler/paid-supplier";
-import Payments from "../pages/payment/payment";
-import Arriveds from "../pages/arrived/arriveds";
-import Arrived from "../pages/arrived/arrived";
-import ArrivedFormPage from "../pages/arrived/ui/arriveds-form-page";
+import Products from "../pages/products/products";
+import ProtectedRoute from "./protected-route";
+import Sale from "../pages/sale/sale";
+import SaleCredit from "../pages/sale/sale-credit";
 import Sales from "../pages/sale/sales";
 import SalesFormPage from "../pages/sale/ui/sales-form-page";
-import Sale from "../pages/sale/sale";
-import Subscribes from "../pages/subscribe/subscribes";
-import Subscribe from "../pages/subscribe/subscribe";
-import ClientsPaid from "../pages/clients/clients-paid";
-import Servers from "../pages/server/servers";
 import Server from "../pages/server/server";
-import SaleCredit from "../pages/sale/sale-credit";
-import PaidOther from "../pages/paid/paid-other";
-import PaidServer from "../pages/server/paid-server";
-import PriceCurant from "../pages/sale/price-curant";
-import ArrivedsCredit from "../pages/arrived/arriveds-credit";
-import ClientsOverPaid from "../pages/clients/clients-over-paid";
-import ClientsCredit from "../pages/clients/clients-credit";
-import ArrivedProducts from "../pages/arrived/arrived-products";
+import Servers from "../pages/server/servers";
+import Subscribe from "../pages/subscribe/subscribe";
+import Subscribes from "../pages/subscribe/subscribes";
+import Supplier from "../pages/suppler/supplier";
 import SupplierCredit from "../pages/suppler/supplier-credit";
 import SupplierOverPaid from "../pages/suppler/supplier-over-paid";
+import Suppliers from "../pages/suppler/suppliers";
+import { TokenManager } from "../config/token-manager";
 import Users from "../pages/users/users";
-import PaidOtherGroup from "../pages/paid/paid-other-group";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -209,6 +212,18 @@ export const router = createBrowserRouter([
           {
             path: "users",
             element: <Users />,
+          },
+          {
+            path: "monthly-revenues",
+            element: <MonthlyRevenues />,
+          },
+          {
+            path: "monthly-expenses",
+            element: <MonthlyExpenses />,
+          },
+          {
+            path: "monthly-arrears",
+            element: <MonthlyRevenues />,
           },
           {
             path: "*",

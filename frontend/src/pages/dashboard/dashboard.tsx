@@ -8,13 +8,7 @@ import {
   Spin,
   Tooltip as AntdTooltip,
 } from "antd";
-import {
-  Users,
-  FileText,
-  TrendingUp,
-  TrendingDown,
-  DollarSign,
-} from "lucide-react";
+import { Users, TrendingUp, TrendingDown, DollarSign } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -244,8 +238,8 @@ export default function Dashboard() {
 
       <div className="!grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <StatCard
-          title="Mijozlar"
-          value={`${stats.clients} dona`}
+          title="Mijozlar va Aktiv obunalar"
+          value={`${stats.clients} mijoz va ${stats.contracts} obuna`}
           icon={<Users size={32} color="white" />}
           bgColor="!bg-[#001529]"
           textColor={titleColor}
@@ -279,7 +273,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
+        {/* <StatCard
           title="Aktiv obunalar"
           value={`${stats.contracts} dona`}
           icon={<FileText size={32} color="white" />}
@@ -287,25 +281,7 @@ export default function Dashboard() {
           textColor={titleColor}
           isDark={isDark}
           link="/subscribes"
-        />
-        <StatCard
-          title={`${currentMonthName}dagi daromadlar`}
-          value={formatMoney(stats.currentMonthIncome)}
-          icon={<TrendingUp size={32} color="white" />}
-          bgColor="!bg-[#4CAF50]"
-          textColor={titleColor}
-          isDark={isDark}
-        />
-
-        <StatCard
-          title={`${currentMonthName}dagi chiqimlar`}
-          value={formatMoney(stats.currentMonthExpenses)}
-          icon={<TrendingDown size={32} color="white" />}
-          bgColor="!bg-[#F59E0B]"
-          textColor={titleColor}
-          isDark={isDark}
-        />
-
+        /> */}
         <StatCard
           title="Solishtirma daromadlar"
           value=""
@@ -329,6 +305,32 @@ export default function Dashboard() {
               </div>
             </div>
           }
+        />
+        <StatCard
+          title={`${currentMonthName}dagi daromadlar`}
+          value={formatMoney(stats.currentMonthIncome)}
+          icon={<TrendingUp size={32} color="white" />}
+          bgColor="!bg-[#4CAF50]"
+          textColor={titleColor}
+          isDark={isDark}
+          link="/monthly-revenues"
+        />
+        <StatCard
+          title={`${currentMonthName}dagi chiqimlar`}
+          value={formatMoney(stats.currentMonthExpenses)}
+          icon={<TrendingDown size={32} color="white" />}
+          bgColor="!bg-[#F59E0B]"
+          textColor={titleColor}
+          isDark={isDark}
+          link="/monthly-expenses"
+        />
+        <StatCard
+          title={`${currentMonthName}dagi qarzdorlik`}
+          value={formatMoney(data?.month?.credit)}
+          icon={<TrendingDown size={32} color="white" />}
+          bgColor="!bg-[#EF4444]"
+          textColor={titleColor}
+          isDark={isDark}
         />
       </div>
       <Row gutter={0} style={{ marginTop: 24 }}>

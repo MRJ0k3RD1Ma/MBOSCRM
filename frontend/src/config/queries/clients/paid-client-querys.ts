@@ -1,9 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { notification } from "antd";
+
 import axiosPrivate from "../../api";
+import { notification } from "antd";
+import { paidClientEndpoints } from "../../endpoint";
 
-const endpoint = "/paid-client";
-
+interface PaidClientsResponse {
+  data: PaidClient[];
+  page: number;
+  limit: number;
+  total: number;
+  price: number;
+}
 export interface PaidClient {
   id: number;
   clientId: number;
@@ -40,10 +47,12 @@ export const useGetAllPaidClients = (params?: {
   saleId?: number;
   paymentId?: number;
 }) => {
-  return useQuery<PaidClient[]>({
+  return useQuery<PaidClientsResponse>({
     queryKey: ["paid-clients", params],
     queryFn: async () => {
-      const { data } = await axiosPrivate.get(endpoint, { params });
+      const { data } = await axiosPrivate.get(paidClientEndpoints.all, {
+        params,
+      });
       return data;
     },
   });
@@ -54,7 +63,9 @@ export const useGetPaidClientById = (id?: number) => {
     queryKey: ["paid-client", id],
     enabled: !!id,
     queryFn: async () => {
-      const { data } = await axiosPrivate.get(`${endpoint}/${id}`);
+      const { data } = await axiosPrivate.get(
+        `${paidClientEndpoints.one}/${id}`
+      );
       return data;
     },
   });
@@ -64,7 +75,10 @@ export const useCreatePaidClient = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (input: PaidClientDto) => {
-      const { data } = await axiosPrivate.post(endpoint, input);
+      const { data } = await axiosPrivate.post(
+        paidClientEndpoints.create,
+        input
+      );
       return data;
     },
     onSuccess: () => {
@@ -81,7 +95,10 @@ export const useUpdatePaidClient = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...input }: PaidClientDto & { id: number }) => {
-      const { data } = await axiosPrivate.patch(`${endpoint}/${id}`, input);
+      const { data } = await axiosPrivate.patch(
+        `${paidClientEndpoints.update}/${id}`,
+        input
+      );
       return data;
     },
     onSuccess: () => {
@@ -98,7 +115,9 @@ export const useDeletePaidClient = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: number) => {
-      const { data } = await axiosPrivate.delete(`${endpoint}/${id}`);
+      const { data } = await axiosPrivate.delete(
+        `${paidClientEndpoints.delete}/${id}`
+      );
       return data;
     },
     onSuccess: () => {
