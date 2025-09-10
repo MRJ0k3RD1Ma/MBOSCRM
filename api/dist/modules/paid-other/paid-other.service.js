@@ -100,6 +100,7 @@ let PaidOtherService = class PaidOtherService {
             },
         });
         const agg = await this.prisma.paidOther.aggregate({
+            where: { type: type ? { equals: type } : {} },
             _sum: { price: true },
             _count: { _all: true },
         });
