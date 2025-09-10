@@ -1,6 +1,7 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { notification } from "antd";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import axiosPrivate from "../../api";
+import { notification } from "antd";
 import { paidSupplierEndpoints } from "../../endpoint";
 
 export interface PaidSupplier {
@@ -31,6 +32,7 @@ export interface PaidSupplierResponse {
   total: number;
   page: number;
   limit: number;
+  price: number;
   data: PaidSupplier[];
 }
 

@@ -1,9 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
 import axiosPrivate from "../../api";
 import { statisticsEndpoints } from "../../endpoint";
+import { useQuery } from "@tanstack/react-query";
 
 export interface StatisticsResponse {
   balance: number;
+  month: {
+    name: string;
+    income: number;
+    outcome: number;
+    credit: number;
+  };
   totals: {
     clients: number;
     contracts: number;

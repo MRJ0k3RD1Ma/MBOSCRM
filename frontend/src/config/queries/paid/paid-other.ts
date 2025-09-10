@@ -51,7 +51,7 @@ export interface PaidOtherQueryParams {
   fromDate?: string;
   toDate?: string;
   groupId?: number;
-  type?: "INCOME" | "EXPENSE";
+  type?: "INCOME" | "OUTCOME";
 }
 
 export const useGetAllPaidOthers = (params?: PaidOtherQueryParams) => {
