@@ -1,6 +1,7 @@
 import { Tabs, type TabsProps } from "antd";
 import PaidOtherMonthly from "./ui/paid_other_monthly";
 import SupplierPaidTable from "./ui/supplier_paid_table";
+import ServerPaidTable from "./ui/server_paid_table";
 
 export default function MonthlyExpenses() {
   const tabItems: TabsProps["items"] = [
@@ -14,21 +15,11 @@ export default function MonthlyExpenses() {
       label: "Boshqa to'lovlar",
       children: <PaidOtherMonthly type={"OUTCOME"} />,
     },
-    // {
-    //   key: "3",
-    //   label: "Shartnomalar",
-    //   children: <ClientSalesTable />,
-    // },
-    // {
-    //   key: "4",
-    //   label: "To'lovlar",
-    //   children: <ClientPaidsTable />,
-    // },
-    // {
-    //   key: "5",
-    //   label: "Sotilgan mahsulotlar",
-    //   children: <ClientSaleProductsTable />,
-    // },
+    {
+      key: "3",
+      label: "Server to'lovlari",
+      children: <ServerPaidTable />,
+    },
   ];
 
   return (

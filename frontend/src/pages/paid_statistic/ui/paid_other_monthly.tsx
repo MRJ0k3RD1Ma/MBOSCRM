@@ -61,10 +61,10 @@ export default function PaidOtherMonthly({
       title={
         type === "INCOME"
           ? ` Oylik boshqa daromadlari ${
-              data?.price.toLocaleString("uz-UZ") + " so'm"
+              data?.price ? data?.price.toLocaleString("uz-UZ") + " so'm" : `0`
             }`
           : ` Oylik boshqa chiqimlari ${
-              data?.price.toLocaleString("uz-UZ") + " so'm"
+              data?.price ? data?.price.toLocaleString("uz-UZ") + " so'm" : `0`
             }`
       }
     >
