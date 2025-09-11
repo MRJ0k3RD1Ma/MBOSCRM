@@ -331,6 +331,7 @@ export default function Dashboard() {
           bgColor="!bg-[#EF4444]"
           textColor={titleColor}
           isDark={isDark}
+          link="/clients-credit"
         />
       </div>
       <Row gutter={0} style={{ marginTop: 24 }}>
