@@ -8,10 +8,10 @@ export declare class PaidOtherService {
     create(createPaidOtherDto: CreatePaidOtherDto): Promise<{
         type: import(".prisma/client").$Enums.PaidOtherType;
         description: string | null;
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         groupId: number;
@@ -23,30 +23,30 @@ export declare class PaidOtherService {
         data: ({
             Payment: {
                 name: string | null;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 icon: string | null;
             };
             group: {
                 name: string;
-                id: number;
                 isDeleted: boolean;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
             };
         } & {
             type: import(".prisma/client").$Enums.PaidOtherType;
             description: string | null;
-            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             groupId: number;
@@ -62,30 +62,30 @@ export declare class PaidOtherService {
     findOne(id: number): Promise<{
         Payment: {
             name: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
         group: {
             name: string;
-            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
         };
     } & {
         type: import(".prisma/client").$Enums.PaidOtherType;
         description: string | null;
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         groupId: number;
@@ -96,10 +96,10 @@ export declare class PaidOtherService {
     update(id: number, updatePaidOtherDto: UpdatePaidOtherDto): Promise<{
         type: import(".prisma/client").$Enums.PaidOtherType;
         description: string | null;
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         groupId: number;
@@ -110,10 +110,10 @@ export declare class PaidOtherService {
     remove(id: number): Promise<{
         type: import(".prisma/client").$Enums.PaidOtherType;
         description: string | null;
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         groupId: number;

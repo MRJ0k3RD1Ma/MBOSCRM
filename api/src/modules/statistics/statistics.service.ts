@@ -218,14 +218,9 @@ export class StatisticsService {
 							isDeleted: false,
 						},
 					}),
-
 					this.prisma.paidSupplier.aggregate({
 						_sum: { price: true },
 						where: { paidDate: { gte: mStart, lte: mEnd }, isDeleted: false },
-					}),
-					this.prisma.arrived.aggregate({
-						_sum: { price: true },
-						where: { created: { gte: mStart, lte: mEnd }, isDeleted: false },
 					}),
 					this.prisma.paidServer.aggregate({
 						_sum: { price: true },
@@ -252,32 +247,29 @@ export class StatisticsService {
 							isDeleted: false,
 						},
 					}),
-				]).then(
-					([pc, poInc, psup, arr, pserv, poOut, saleDebtMonth, subAgg]) => {
-						const incomeMonth =
-							sumOrZero(pc, "price") + sumOrZero(poInc, "price");
-						const expenseMonth =
-							sumOrZero(psup, "price") +
-							sumOrZero(arr, "price") +
-							sumOrZero(pserv, "price") +
-							sumOrZero(poOut, "price");
+				]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg]) => {
+					const incomeMonth =
+						sumOrZero(pc, "price") + sumOrZero(poInc, "price");
+					const expenseMonth =
+						sumOrZero(psup, "price") +
+						sumOrZero(pserv, "price") +
+						sumOrZero(poOut, "price");
 
-						const subPrice = sumOrZero(subAgg, "price");
-						const subPaid = sumOrZero(subAgg, "paid");
-						const expectedSubscription = Math.max(0, subPrice - subPaid);
+					const subPrice = sumOrZero(subAgg, "price");
+					const subPaid = sumOrZero(subAgg, "paid");
+					const expectedSubscription = Math.max(0, subPrice - subPaid);
 
-						const debtMonth =
-							sumOrZero(saleDebtMonth, "credit") + (subPrice - subPaid);
+					const debtMonth =
+						sumOrZero(saleDebtMonth, "credit") + (subPrice - subPaid);
 
-						return {
-							month: i + 1,
-							tushum: incomeMonth,
-							chiqim: expenseMonth,
-							qarzdorlik: debtMonth,
-							expectedSubscription,
-						};
-					},
-				);
+					return {
+						month: i + 1,
+						tushum: incomeMonth,
+						chiqim: expenseMonth,
+						qarzdorlik: debtMonth,
+						expectedSubscription,
+					};
+				});
 			}),
 		);
 

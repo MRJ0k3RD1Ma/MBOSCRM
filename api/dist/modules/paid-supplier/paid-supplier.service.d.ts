@@ -7,10 +7,10 @@ export declare class PaidSupplierService {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createPaidSupplierDto: CreatePaidSupplierDto, creatorId: number): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -31,10 +31,10 @@ export declare class PaidSupplierService {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
             register: {
                 name: string;
@@ -43,26 +43,26 @@ export declare class PaidSupplierService {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
             Payment: {
                 name: string | null;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 icon: string | null;
             };
         } & {
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
@@ -79,10 +79,10 @@ export declare class PaidSupplierService {
             roleId: number | null;
             chatId: string | null;
             password: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
         register: {
             name: string;
@@ -91,26 +91,26 @@ export declare class PaidSupplierService {
             roleId: number | null;
             chatId: string | null;
             password: string;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
         Payment: {
             name: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
     } & {
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -119,10 +119,10 @@ export declare class PaidSupplierService {
         paymentId: number | null;
     }>;
     update(id: number, dto: UpdatePaidSupplierDto): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
@@ -131,10 +131,10 @@ export declare class PaidSupplierService {
         paymentId: number | null;
     }>;
     remove(id: number, modifierId: number): Promise<{
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;

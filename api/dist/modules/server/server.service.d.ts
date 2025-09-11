@@ -11,10 +11,10 @@ export declare class ServerService {
     handleExpiredServers(): Promise<void>;
     create(createServerDto: CreateServerDto, modifyId: number): Promise<{
         name: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         endDate: Date | null;
@@ -31,10 +31,10 @@ export declare class ServerService {
     findOne(id: number): Promise<any>;
     update(id: number, updateServerDto: UpdateServerDto, modifyId: number): Promise<{
         name: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         endDate: Date | null;

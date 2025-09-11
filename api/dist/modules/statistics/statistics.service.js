@@ -186,10 +186,6 @@ let StatisticsService = class StatisticsService {
                     _sum: { price: true },
                     where: { paidDate: { gte: mStart, lte: mEnd }, isDeleted: false },
                 }),
-                this.prisma.arrived.aggregate({
-                    _sum: { price: true },
-                    where: { created: { gte: mStart, lte: mEnd }, isDeleted: false },
-                }),
                 this.prisma.paidServer.aggregate({
                     _sum: { price: true },
                     where: { createdAt: { gte: mStart, lte: mEnd }, isDeleted: false },
@@ -213,10 +209,9 @@ let StatisticsService = class StatisticsService {
                         isDeleted: false,
                     },
                 }),
-            ]).then(([pc, poInc, psup, arr, pserv, poOut, saleDebtMonth, subAgg]) => {
+            ]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg]) => {
                 const incomeMonth = sumOrZero(pc, "price") + sumOrZero(poInc, "price");
                 const expenseMonth = sumOrZero(psup, "price") +
-                    sumOrZero(arr, "price") +
                     sumOrZero(pserv, "price") +
                     sumOrZero(poOut, "price");
                 const subPrice = sumOrZero(subAgg, "price");

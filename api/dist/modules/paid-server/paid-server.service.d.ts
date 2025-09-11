@@ -7,10 +7,10 @@ export declare class PaidServerService {
     constructor(prisma: PrismaService);
     create(createPaidServerDto: CreatePaidServerDto): Promise<{
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -26,20 +26,20 @@ export declare class PaidServerService {
             };
             paymentType: {
                 name: string | null;
-                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 icon: string | null;
             };
         } & {
             description: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number;
@@ -59,20 +59,20 @@ export declare class PaidServerService {
         };
         paymentType: {
             name: string | null;
-            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
     } & {
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -82,10 +82,10 @@ export declare class PaidServerService {
     }>;
     update(id: number, updatePaidServerDto: UpdatePaidServerDto): Promise<{
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
@@ -95,10 +95,10 @@ export declare class PaidServerService {
     }>;
     remove(id: number): Promise<{
         description: string | null;
-        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number;
