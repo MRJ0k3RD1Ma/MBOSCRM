@@ -31,6 +31,8 @@ model Client {
   Sale                   Sale[]
   PaidClient             PaidClient[]
   Subscribe              Subscribe[]
+  ClientCrm              ClientCrm[]
+  PaidCrm                PaidCrm[]
 
   @@index([districtId], map: "FK_client_district_id")
   @@index([modifyId], map: "FK_client_modify_id")
@@ -64,6 +66,122 @@ model Todo {
   @@index([name])
 }
 
+model Appeal {
+  id        Int         @id @default(autoincrement())
+  name      String      @db.VarChar(255)
+  phone     String      @db.VarChar(255)
+  subject   String      @db.VarChar(255)
+  detail    String      @db.Text
+  state     AppealState @default(NEW)
+  isDeleted Boolean?    @default(false)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+  modifyId  Int?
+  modify    User?       @relation("Appeal_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model SaleFeedback {
+  id          Int                 @id @default(autoincrement())
+  saleId      Int
+  sale        Sale                @relation(fields: [saleId], references: [id])
+  alias       String              @default("") @db.VarChar(255)
+  name        String?             @db.VarChar(255)
+  description String?             @db.Text
+  score       Int?
+  state       SaleFeedbackState   @default(TODO)
+  result      SaleFeedbackResult?
+  SaleTodo    SaleTodo[]
+}
+
+model SaleTodo {
+  id         Int           @id @default(autoincrement())
+  saleId     Int?
+  feedbackId Int?
+  sale       Sale?         @relation(fields: [saleId], references: [id])
+  feedback   SaleFeedback? @relation(fields: [feedbackId], references: [id])
+
+  name        String?  @db.VarChar(255)
+  isCompleted Boolean  @default(false)
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  registerId  Int?
+  modifyId    Int?
+  modify      User?    @relation("SaleTodo_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  register    User?    @relation("SaleTodo_creatorId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Access {
+  id            Int             @id @default(autoincrement())
+  productId     Int?
+  product       Product?        @relation(fields: [productId], references: [id])
+  key           String          @unique
+  name          String?
+  description   String?
+  isActive      Boolean         @default(false)
+  isDeleted     Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now())
+  Detailization Detailization[]
+}
+
+model ClientCrm {
+  id                Int             @id @default(autoincrement())
+  clientId          Int?            @default(1) @map("client_id")
+  productId         Int?
+  client            Client?         @relation(fields: [clientId], references: [id])
+  product           Product?        @relation(fields: [productId], references: [id])
+  domain            String?
+  isFullAccess      Boolean         @default(false)
+  expiredFullAccess DateTime?
+  balance           Float           @default(0)
+  key               String          @db.VarChar(255)
+  isDeleted         Boolean         @default(false)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @default(now())
+  Detailization     Detailization[]
+  PaidCrm           PaidCrm[]
+}
+
+model Detailization {
+  id Int @id @default(autoincrement())
+
+  accessId Int
+  access   Access @relation(fields: [accessId], references: [id])
+
+  message   String
+  messageId String?             @db.VarChar(255)
+  state     DetailizationState?
+  count     Int                 @default(1)
+  price     Float               @default(0)
+  crmId     Int
+  crm       ClientCrm           @relation(fields: [crmId], references: [id])
+
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model PaidCrm {
+  id Int @id @default(autoincrement())
+
+  price         Float
+  paidDate      DateTime
+  transactionId String?
+  state         String?  @db.VarChar(255)
+
+  crmId     Int
+  paymentId Int
+  clientId  Int
+  client    Client    @relation(fields: [clientId], references: [id])
+  crm       ClientCrm @relation(fields: [crmId], references: [id])
+  payment   Payment   @relation(fields: [paymentId], references: [id])
+
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
 model District {
   id       Int      @id @default(autoincrement())
   regionId Int?
@@ -92,12 +210,14 @@ model Product {
   updatedAt      DateTime         @default(now())
   registerId     Int?
   modifyId       Int?
-  ProductGroup   ProductGroup     @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   modify         User?            @relation("Product_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   register       User?            @relation("Product_creatorId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ProductGroup   ProductGroup     @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ProductUnit    ProductUnit?     @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ArrivedProduct ArrivedProduct[]
   SaleProduct    SaleProduct[]
+  Access         Access[]
+  ClientCrm      ClientCrm[]
 
   @@index([groupId], map: "FK_product_group_id")
   @@index([modifyId], map: "FK_product_modify_id")
@@ -148,9 +268,15 @@ model Region {
 }
 
 model Setting {
-  id      Int    @id @default(autoincrement())
-  name    String @db.VarChar(255)
-  balance Float  @default(0)
+  id                     Int    @id @default(autoincrement())
+  name                   String @db.VarChar(255)
+  balance                Float  @default(0)
+  creditReminderInterval Int    @default(1)
+  smsExpiredHour         Int    @default(1)
+  smsPrice               Float  @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("setting")
 }
@@ -201,6 +327,9 @@ model User {
   PaidOtherGroup_PaidOtherGroup_registerId PaidOtherGroup[] @relation("PaidOtherGroup_registerId")
   PaidOtherGroup_PaidOtherGroup_modifyId   PaidOtherGroup[] @relation("PaidOtherGroup_modifyId")
   UserRole                                 UserRole?        @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Appeal                                   Appeal[]         @relation("Appeal_modifyId")
+  SaleTodo_modify                          SaleTodo[]       @relation("SaleTodo_modifyId")
+  SaleTodo_register                        SaleTodo[]       @relation("SaleTodo_creatorId")
 
   @@index([roleId], map: "FK_user_role_id")
   @@map("user")
@@ -309,14 +438,16 @@ model Sale {
   register   User?     @relation("RegisterRelation", fields: [registerId], references: [id])
   registerId Int?
 
-  modifier               User?         @relation("ModifyRelation", fields: [modifyId], references: [id])
+  modifier               User?          @relation("ModifyRelation", fields: [modifyId], references: [id])
   modifyId               Int?
-  clientName             String?       @db.VarChar(255)
+  clientName             String?        @db.VarChar(255)
   SaleProduct            SaleProduct[]
   subscribe_begin_date   DateTime?
   subscribe_generate_day Int?
   Subscribe              Subscribe[]
   PaidClient             PaidClient[]
+  SaleFeedback           SaleFeedback[]
+  SaleTodo               SaleTodo[]
 }
 
 model SaleProduct {
@@ -437,6 +568,7 @@ model Payment {
   PaidClient   PaidClient[]
   PaidServer   PaidServer[]
   PaidOther    PaidOther[]    @relation("Payment_PaidOther")
+  PaidCrm      PaidCrm[]
 
   @@map("payment")
 }
@@ -510,6 +642,33 @@ enum SubscribeState {
 enum SaleState {
   RUNNING
   CLOSED
+}
+
+enum AppealState {
+  NEW
+  RUNNING
+  COMPLETED
+}
+
+enum SaleFeedbackState {
+  TODO
+  RUNNING
+  WAITING
+  COMPLETED
+  REJECTED
+}
+
+enum SaleFeedbackResult {
+  NOT_COMPLETED
+  PART_COMPLETED
+  COMPLETED
+}
+
+enum DetailizationState {
+  NEW
+  WAITING
+  REJECTED
+  DELIVRD
 }
 
 enum Role {
