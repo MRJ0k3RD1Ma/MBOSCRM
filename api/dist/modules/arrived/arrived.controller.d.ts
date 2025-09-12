@@ -7,17 +7,17 @@ export declare class ArrivedController {
     private readonly arrivedService;
     constructor(arrivedService: ArrivedService);
     create(createArrivedDto: CreateArrivedDto, req: Request): Promise<{
-        description: string | null;
         id: number;
         isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;
-        supplierId: number;
+        description: string | null;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
         codeId: number | null;
+        waybillNumber: string | null;
+        supplierId: number;
         created: Date;
         updated: Date;
     }>;
@@ -26,30 +26,17 @@ export declare class ArrivedController {
         page: number;
         limit: number;
         data: ({
-            supplier: {
-                description: string | null;
-                name: string;
-                phone: string;
+            register: {
                 id: number;
+                name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                balance: number;
-                registerId: number | null;
-                modifyId: number | null;
-                phoneTwo: string | null;
-            };
-            register: {
-                name: string;
                 phone: string | null;
                 username: string;
+                password: string;
                 roleId: number | null;
                 chatId: string | null;
-                password: string;
-                id: number;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
             };
             ArrivedProduct: {
                 id: number;
@@ -60,51 +47,51 @@ export declare class ArrivedController {
                 modifyId: number | null;
                 price: number | null;
                 count: number;
-                arrivedId: number | null;
                 productId: number | null;
                 priceCount: number | null;
+                arrivedId: number | null;
             }[];
+            supplier: {
+                id: number;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                registerId: number | null;
+                modifyId: number | null;
+                description: string | null;
+                balance: number;
+                phone: string;
+                phoneTwo: string | null;
+            };
         } & {
-            description: string | null;
             id: number;
             isDeleted: boolean | null;
             registerId: number | null;
             modifyId: number | null;
             price: number;
-            supplierId: number;
+            description: string | null;
             date: Date | null;
-            waybillNumber: string | null;
             code: string | null;
             codeId: number | null;
+            waybillNumber: string | null;
+            supplierId: number;
             created: Date;
             updated: Date;
         })[];
     }>;
     findOne(id: string): Promise<{
-        supplier: {
-            description: string | null;
-            name: string;
-            phone: string;
+        register: {
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            balance: number;
-            registerId: number | null;
-            modifyId: number | null;
-            phoneTwo: string | null;
-        };
-        register: {
-            name: string;
             phone: string | null;
             username: string;
+            password: string;
             roleId: number | null;
             chatId: string | null;
-            password: string;
-            id: number;
-            isDeleted: boolean | null;
-            createdAt: Date;
-            updatedAt: Date;
         };
         ArrivedProduct: {
             id: number;
@@ -115,80 +102,80 @@ export declare class ArrivedController {
             modifyId: number | null;
             price: number | null;
             count: number;
-            arrivedId: number | null;
             productId: number | null;
             priceCount: number | null;
+            arrivedId: number | null;
         }[];
+        supplier: {
+            id: number;
+            name: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            registerId: number | null;
+            modifyId: number | null;
+            description: string | null;
+            balance: number;
+            phone: string;
+            phoneTwo: string | null;
+        };
     } & {
-        description: string | null;
         id: number;
         isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;
-        supplierId: number;
+        description: string | null;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
         codeId: number | null;
+        waybillNumber: string | null;
+        supplierId: number;
         created: Date;
         updated: Date;
     }>;
     update(id: string, updateArrivedDto: UpdateArrivedDto, req: Request): Promise<{
-        supplier: {
-            description: string | null;
-            name: string;
-            phone: string;
+        register: {
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            balance: number;
-            registerId: number | null;
-            modifyId: number | null;
-            phoneTwo: string | null;
+            phone: string | null;
+            username: string;
+            password: string;
+            roleId: number | null;
+            chatId: string | null;
         };
         modify: {
-            name: string;
-            phone: string | null;
-            username: string;
-            roleId: number | null;
-            chatId: string | null;
-            password: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-        };
-        register: {
-            name: string;
             phone: string | null;
             username: string;
+            password: string;
             roleId: number | null;
             chatId: string | null;
-            password: string;
-            id: number;
-            isDeleted: boolean | null;
-            createdAt: Date;
-            updatedAt: Date;
         };
         ArrivedProduct: ({
             Product: {
-                type: import(".prisma/client").$Enums.ProductType;
-                name: string;
                 id: number;
+                name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
                 registerId: number | null;
                 modifyId: number | null;
-                barcode: string | null;
+                price: number;
+                type: import(".prisma/client").$Enums.ProductType;
                 groupId: number;
+                barcode: string | null;
+                barcodeId: number | null;
                 unitId: number | null;
                 priceIncome: number;
                 reminderFirst: number;
-                price: number;
-                barcodeId: number | null;
                 countReminder: number;
                 countArrived: number;
                 countSale: number;
@@ -202,37 +189,50 @@ export declare class ArrivedController {
             modifyId: number | null;
             price: number | null;
             count: number;
-            arrivedId: number | null;
             productId: number | null;
             priceCount: number | null;
+            arrivedId: number | null;
         })[];
+        supplier: {
+            id: number;
+            name: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            registerId: number | null;
+            modifyId: number | null;
+            description: string | null;
+            balance: number;
+            phone: string;
+            phoneTwo: string | null;
+        };
     } & {
-        description: string | null;
         id: number;
         isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;
-        supplierId: number;
+        description: string | null;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
         codeId: number | null;
+        waybillNumber: string | null;
+        supplierId: number;
         created: Date;
         updated: Date;
     }>;
     remove(id: string): Promise<{
-        description: string | null;
         id: number;
         isDeleted: boolean | null;
         registerId: number | null;
         modifyId: number | null;
         price: number;
-        supplierId: number;
+        description: string | null;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
         codeId: number | null;
+        waybillNumber: string | null;
+        supplierId: number;
         created: Date;
         updated: Date;
     }>;

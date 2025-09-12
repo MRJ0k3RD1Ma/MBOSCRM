@@ -7,17 +7,17 @@ export declare class ServerController {
     private readonly serverService;
     constructor(serverService: ServerService);
     create(createServerDto: CreateServerDto, req: Request): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
+        responsible: string | null;
+        plan: string | null;
+        endDate: Date | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         registerId: number | null;
         modifyId: number | null;
-        endDate: Date | null;
         state: import(".prisma/client").$Enums.ServerState;
-        responsible: string | null;
-        plan: string | null;
     }>;
     findAll(dto: FindAllQueryServer): Promise<{
         total: any;
@@ -27,17 +27,17 @@ export declare class ServerController {
     }>;
     findOne(id: string): Promise<any>;
     update(id: string, updateServerDto: UpdateServerDto, req: Request): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
+        responsible: string | null;
+        plan: string | null;
+        endDate: Date | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         registerId: number | null;
         modifyId: number | null;
-        endDate: Date | null;
         state: import(".prisma/client").$Enums.ServerState;
-        responsible: string | null;
-        plan: string | null;
     }>;
     remove(id: string): Promise<void>;
 }

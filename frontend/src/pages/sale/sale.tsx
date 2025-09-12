@@ -176,14 +176,14 @@ export default function Sale() {
                   ? sale.price.toLocaleString("uz-UZ") + " so'm"
                   : "0"}
               </Descriptions.Item>
-              <Descriptions.Item label="Naqd (To‘langan)">
-                {sale?.credit != null
-                  ? sale.credit.toLocaleString("uz-UZ") + " so'm"
+              <Descriptions.Item label="To‘langan">
+                {sale?.dept != null
+                  ? sale.dept.toLocaleString("uz-UZ") + " so'm"
                   : "0"}
               </Descriptions.Item>
               <Descriptions.Item label="Qarz">
-                {sale?.dept != null
-                  ? sale.dept.toLocaleString("uz-UZ") + " so'm"
+                {sale?.credit != null
+                  ? sale.credit.toLocaleString("uz-UZ") + " so'm"
                   : "0"}
               </Descriptions.Item>
               <Descriptions.Item label="Holati">

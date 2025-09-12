@@ -7,8 +7,8 @@ export declare class ProductGroupService {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createProductGroupDto: CreateProductGroupDto, creatorId: number): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -20,8 +20,8 @@ export declare class ProductGroupService {
         page: number;
         limit: number;
         data: {
-            name: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
@@ -30,8 +30,8 @@ export declare class ProductGroupService {
         }[];
     }>;
     findOne(id: number): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -39,8 +39,8 @@ export declare class ProductGroupService {
         modifyId: number;
     }>;
     update(id: number, updateProductGroupDto: UpdateProductGroupDto, userId: number): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -48,8 +48,8 @@ export declare class ProductGroupService {
         modifyId: number;
     }>;
     remove(id: number, modifierId: number): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;

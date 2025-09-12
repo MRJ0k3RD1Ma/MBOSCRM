@@ -7,8 +7,8 @@ export declare class ProductGroupController {
     private readonly productGroupService;
     constructor(productGroupService: ProductGroupService);
     create(createProductGroupDto: CreateProductGroupDto, req: Request): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -20,8 +20,8 @@ export declare class ProductGroupController {
         page: number;
         limit: number;
         data: {
-            name: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
@@ -30,8 +30,8 @@ export declare class ProductGroupController {
         }[];
     }>;
     findOne(id: string): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -39,8 +39,8 @@ export declare class ProductGroupController {
         modifyId: number;
     }>;
     update(id: string, updateProductGroupDto: UpdateProductGroupDto, req: Request): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -48,8 +48,8 @@ export declare class ProductGroupController {
         modifyId: number;
     }>;
     remove(id: string, req: Request): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;

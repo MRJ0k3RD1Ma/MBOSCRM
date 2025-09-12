@@ -69,10 +69,10 @@ export const useGetAllPaidServers = (params?: PaidServerQueryParams) => {
   });
 };
 
-export const useGetPaidServerById = (id?: string) => {
+export const useGetPaidServerById = (id?: string, enabled = true) => {
   return useQuery<PaidServer>({
-    queryKey: ["paid-server", id],
-    enabled: !!id,
+    queryKey: ["paid-servers", id],
+    enabled: enabled && !!id,
     queryFn: async () => {
       const { data } = await axiosPrivate.get(paidServerEndpoints.one(id!));
       return data;
@@ -138,7 +138,9 @@ export const useDeletePaidServer = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["paid-servers"] });
+      queryClient.invalidateQueries({
+        queryKey: ["paid-servers"],
+      });
       notification.success({
         message: "To‘lov serveri muvaffaqiyatli o‘chirildi",
       });

@@ -7,8 +7,8 @@ export declare class UserRoleService {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createUserRoleDto: CreateUserRoleDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -18,30 +18,30 @@ export declare class UserRoleService {
         page: number;
         limit: number;
         data: {
-            name: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
         }[];
     }>;
     findOne(id: number): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
     update(id: number, dto: UpdateUserRoleDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
     remove(id: number): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;

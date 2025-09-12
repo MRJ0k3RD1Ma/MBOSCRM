@@ -4,13 +4,13 @@ export declare class SettingsController {
     private readonly settingsService;
     constructor(settingsService: SettingsService);
     get(): Promise<{
-        name: string;
         id: number;
+        name: string;
         balance: number;
     }>;
     update(data: UpdateSettingsDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         balance: number;
     }>;
 }

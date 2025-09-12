@@ -98,7 +98,7 @@ export default function Server() {
       paymentTypeId: undefined,
       price: undefined,
       description: "",
-      endDate: dayjs().startOf("day"),
+      endDate: null,
     });
   };
 
@@ -135,8 +135,14 @@ export default function Server() {
         price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
-      title: "Sanasi",
+      title: "Yaratilgan sanasi",
       dataIndex: "createdAt",
+      render: (text: string) =>
+        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
+    },
+    {
+      title: "Muddat",
+      dataIndex: "endDate",
       render: (text: string) =>
         text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
     },

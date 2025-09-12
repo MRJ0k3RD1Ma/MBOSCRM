@@ -14,85 +14,85 @@ export declare class ArrivedProductService {
         modifyId: number | null;
         price: number | null;
         count: number;
-        arrivedId: number | null;
         productId: number | null;
         priceCount: number | null;
+        arrivedId: number | null;
     }>;
     findAll(dto: FindAllArrivedProductQueryDto): Promise<{
         total: number;
         page: number;
         limit: number;
         data: ({
-            Product: {
-                ProductUnit: {
-                    name: string;
-                    id: number;
-                    isDeleted: boolean | null;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    registerId: number | null;
-                    modifyId: number | null;
-                };
-            } & {
-                type: import(".prisma/client").$Enums.ProductType;
-                name: string;
+            register: {
                 id: number;
+                name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                registerId: number | null;
-                modifyId: number | null;
-                barcode: string | null;
-                groupId: number;
-                unitId: number | null;
-                priceIncome: number;
-                reminderFirst: number;
-                price: number;
-                barcodeId: number | null;
-                countReminder: number;
-                countArrived: number;
-                countSale: number;
-            };
-            register: {
-                name: string;
                 phone: string | null;
                 username: string;
+                password: string;
                 roleId: number | null;
                 chatId: string | null;
-                password: string;
-                id: number;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
             };
             Arrived: {
                 supplier: {
-                    description: string | null;
-                    name: string;
-                    phone: string;
                     id: number;
+                    name: string;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    balance: number;
                     registerId: number | null;
                     modifyId: number | null;
+                    description: string | null;
+                    balance: number;
+                    phone: string;
                     phoneTwo: string | null;
                 };
             } & {
-                description: string | null;
                 id: number;
                 isDeleted: boolean | null;
                 registerId: number | null;
                 modifyId: number | null;
                 price: number;
-                supplierId: number;
+                description: string | null;
                 date: Date | null;
-                waybillNumber: string | null;
                 code: string | null;
                 codeId: number | null;
+                waybillNumber: string | null;
+                supplierId: number;
                 created: Date;
                 updated: Date;
+            };
+            Product: {
+                ProductUnit: {
+                    id: number;
+                    name: string;
+                    isDeleted: boolean | null;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    registerId: number | null;
+                    modifyId: number | null;
+                };
+            } & {
+                id: number;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                registerId: number | null;
+                modifyId: number | null;
+                price: number;
+                type: import(".prisma/client").$Enums.ProductType;
+                groupId: number;
+                barcode: string | null;
+                barcodeId: number | null;
+                unitId: number | null;
+                priceIncome: number;
+                reminderFirst: number;
+                countReminder: number;
+                countArrived: number;
+                countSale: number;
             };
         } & {
             id: number;
@@ -103,9 +103,9 @@ export declare class ArrivedProductService {
             modifyId: number | null;
             price: number | null;
             count: number;
-            arrivedId: number | null;
             productId: number | null;
             priceCount: number | null;
+            arrivedId: number | null;
         })[];
     }>;
     findOne(id: number): Promise<{
@@ -117,9 +117,9 @@ export declare class ArrivedProductService {
         modifyId: number | null;
         price: number | null;
         count: number;
-        arrivedId: number | null;
         productId: number | null;
         priceCount: number | null;
+        arrivedId: number | null;
     }>;
     update(id: number, updateArrivedProductDto: UpdateArrivedProductDto): Promise<{
         id: number;
@@ -130,9 +130,9 @@ export declare class ArrivedProductService {
         modifyId: number | null;
         price: number | null;
         count: number;
-        arrivedId: number | null;
         productId: number | null;
         priceCount: number | null;
+        arrivedId: number | null;
     }>;
     remove(id: number): Promise<{
         id: number;
@@ -143,8 +143,8 @@ export declare class ArrivedProductService {
         modifyId: number | null;
         price: number | null;
         count: number;
-        arrivedId: number | null;
         productId: number | null;
         priceCount: number | null;
+        arrivedId: number | null;
     }>;
 }

@@ -6,8 +6,8 @@ export declare class UserRoleController {
     private readonly userRoleService;
     constructor(userRoleService: UserRoleService);
     create(createUserRoleDto: CreateUserRoleDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -17,30 +17,30 @@ export declare class UserRoleController {
         page: number;
         limit: number;
         data: {
-            name: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
         }[];
     }>;
     findOne(id: string): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
     update(id: string, updateUserRoleDto: UpdateUserRoleDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
     remove(id: string): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
