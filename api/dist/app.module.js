@@ -37,6 +37,9 @@ const nestjs_1 = require("@grammyjs/nestjs");
 const config_1 = require("./common/config");
 const event_emitter_1 = require("@nestjs/event-emitter");
 const saleTodo_module_1 = require("./modules/saleTodo/saleTodo.module");
+const eskiz_module_1 = require("./modules/eskiz/eskiz.module");
+const feature_flag_module_1 = require("./modules/feature-flag/feature-flag.module");
+const MainModules = [eskiz_module_1.EskizModule];
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -45,6 +48,9 @@ exports.AppModule = AppModule = __decorate([
         controllers: [],
         providers: [],
         imports: [
+            prisma_module_1.PrismaModule,
+            ...(config_1.env.IS_MAIN ? MainModules : []),
+            feature_flag_module_1.FeatureFlagModule,
             location_module_1.LocationModule,
             userRole_module_1.UserRoleModule,
             user_module_1.UserModule,
@@ -56,7 +62,6 @@ exports.AppModule = AppModule = __decorate([
             client_module_1.ClientModule,
             product_group_module_1.ProductGroupModule,
             settings_module_1.SettingsModule,
-            prisma_module_1.PrismaModule,
             product_module_1.ProductModule,
             supplier_module_1.SupplierModule,
             payment_module_1.PaymentModule,

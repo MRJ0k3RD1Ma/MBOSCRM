@@ -28,11 +28,18 @@ import { NestjsGrammyModule } from "@grammyjs/nestjs";
 import { env } from "./common/config";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { SaleTodoModule } from "./modules/saleTodo/saleTodo.module";
+import { EskizModule } from "./modules/eskiz/eskiz.module";
+import { FeatureFlagModule } from "./modules/feature-flag/feature-flag.module";
+
+const MainModules = [EskizModule];
 
 @Module({
 	controllers: [],
 	providers: [],
 	imports: [
+		PrismaModule,
+		...(env.IS_MAIN ? MainModules : []),
+		FeatureFlagModule,
 		LocationModule,
 		UserRoleModule,
 		UserModule,
@@ -44,7 +51,6 @@ import { SaleTodoModule } from "./modules/saleTodo/saleTodo.module";
 		ClientModule,
 		ProductGroupModule,
 		SettingsModule,
-		PrismaModule,
 		ProductModule,
 		SupplierModule,
 		PaymentModule,

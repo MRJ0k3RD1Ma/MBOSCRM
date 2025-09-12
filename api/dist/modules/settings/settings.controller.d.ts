@@ -5,12 +5,22 @@ export declare class SettingsController {
     constructor(settingsService: SettingsService);
     get(): Promise<{
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         balance: number;
+        creditReminderInterval: number;
+        smsExpiredHour: number;
+        smsPrice: number;
     }>;
     update(data: UpdateSettingsDto): Promise<{
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         balance: number;
+        creditReminderInterval: number;
+        smsExpiredHour: number;
+        smsPrice: number;
     }>;
 }
