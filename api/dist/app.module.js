@@ -38,6 +38,8 @@ const config_1 = require("./common/config");
 const event_emitter_1 = require("@nestjs/event-emitter");
 const saleTodo_module_1 = require("./modules/saleTodo/saleTodo.module");
 const payme_module_1 = require("./modules/payme/payme.module");
+const todo_module_1 = require("./modules/todo/todo.module");
+const sale_feedback_module_1 = require("./modules/sale-feedback/sale-feedback.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -77,6 +79,8 @@ exports.AppModule = AppModule = __decorate([
             event_emitter_1.EventEmitterModule.forRoot(),
             nestjs_1.NestjsGrammyModule.forRoot({ token: config_1.env.BOT_TOKEN }),
             payme_module_1.PaymeModule,
+            todo_module_1.TodoModule,
+            sale_feedback_module_1.SaleFeedbackModule,
         ],
     })
 ], AppModule);

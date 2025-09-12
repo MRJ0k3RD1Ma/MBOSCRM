@@ -6,11 +6,21 @@ export declare class SettingsController {
     get(): Promise<{
         name: string;
         id: number;
+        createdAt: Date;
+        updatedAt: Date;
         balance: number;
+        creditReminderInterval: number;
+        smsExpiredHour: number;
+        smsPrice: number;
     }>;
     update(data: UpdateSettingsDto): Promise<{
         name: string;
         id: number;
+        createdAt: Date;
+        updatedAt: Date;
         balance: number;
+        creditReminderInterval: number;
+        smsExpiredHour: number;
+        smsPrice: number;
     }>;
 }
