@@ -9,10 +9,10 @@ export declare class ProductController {
     create(createProductDto: CreateProductDto, req: Request): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -33,10 +33,10 @@ export declare class ProductController {
         data: {
             type: import(".prisma/client").$Enums.ProductType;
             name: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -54,10 +54,10 @@ export declare class ProductController {
     findOne(id: string): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -74,10 +74,10 @@ export declare class ProductController {
     update(id: string, updateProductDto: UpdateProductDto): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -94,10 +94,10 @@ export declare class ProductController {
     remove(id: string): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
