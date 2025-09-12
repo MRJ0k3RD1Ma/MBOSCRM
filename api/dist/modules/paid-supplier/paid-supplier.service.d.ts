@@ -14,9 +14,9 @@ export declare class PaidSupplierService {
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        supplierId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
+        supplierId: number | null;
     }>;
     findAll(dto: FindAllPaidSupplierQueryDto): Promise<{
         total: number;
@@ -24,33 +24,33 @@ export declare class PaidSupplierService {
         page: number;
         limit: number;
         data: ({
-            modify: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
-                id: number;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-            };
             register: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
                 id: number;
+                name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                phone: string | null;
+                username: string;
+                password: string;
+                roleId: number | null;
+                chatId: string | null;
+            };
+            modify: {
+                id: number;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                phone: string | null;
+                username: string;
+                password: string;
+                roleId: number | null;
+                chatId: string | null;
             };
             Payment: {
-                name: string | null;
                 id: number;
+                name: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
@@ -66,39 +66,39 @@ export declare class PaidSupplierService {
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
-            supplierId: number | null;
             paidDate: Date | null;
             paymentId: number | null;
+            supplierId: number | null;
         })[];
     }>;
     findOne(id: number): Promise<{
-        modify: {
-            name: string;
-            phone: string | null;
-            username: string;
-            roleId: number | null;
-            chatId: string | null;
-            password: string;
-            id: number;
-            isDeleted: boolean | null;
-            createdAt: Date;
-            updatedAt: Date;
-        };
         register: {
-            name: string;
-            phone: string | null;
-            username: string;
-            roleId: number | null;
-            chatId: string | null;
-            password: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            phone: string | null;
+            username: string;
+            password: string;
+            roleId: number | null;
+            chatId: string | null;
+        };
+        modify: {
+            id: number;
+            name: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            phone: string | null;
+            username: string;
+            password: string;
+            roleId: number | null;
+            chatId: string | null;
         };
         Payment: {
-            name: string | null;
             id: number;
+            name: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
@@ -114,9 +114,9 @@ export declare class PaidSupplierService {
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        supplierId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
+        supplierId: number | null;
     }>;
     update(id: number, dto: UpdatePaidSupplierDto): Promise<{
         id: number;
@@ -126,9 +126,9 @@ export declare class PaidSupplierService {
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        supplierId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
+        supplierId: number | null;
     }>;
     remove(id: number, modifierId: number): Promise<{
         id: number;
@@ -138,8 +138,8 @@ export declare class PaidSupplierService {
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        supplierId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
+        supplierId: number | null;
     }>;
 }

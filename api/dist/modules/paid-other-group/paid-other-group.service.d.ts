@@ -8,8 +8,8 @@ export declare class PaidOtherGroupService implements OnModuleInit {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createPaidOtherGroupDto: CreatePaidOtherGroupDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -21,8 +21,8 @@ export declare class PaidOtherGroupService implements OnModuleInit {
         page: number;
         limit: number;
         data: {
-            name: string;
             id: number;
+            name: string;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
@@ -31,8 +31,8 @@ export declare class PaidOtherGroupService implements OnModuleInit {
         }[];
     }>;
     findOne(id: number): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -40,8 +40,8 @@ export declare class PaidOtherGroupService implements OnModuleInit {
         modifyId: number | null;
     }>;
     update(id: number, dto: UpdatePaidOtherGroupDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -49,8 +49,8 @@ export declare class PaidOtherGroupService implements OnModuleInit {
         modifyId: number | null;
     }>;
     remove(id: number): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;

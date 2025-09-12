@@ -7,8 +7,8 @@ export declare class PaymentService {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createPaymentDto: CreatePaymentDto): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -21,8 +21,8 @@ export declare class PaymentService {
         page: number;
         limit: number;
         data: {
-            name: string | null;
             id: number;
+            name: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
@@ -32,8 +32,8 @@ export declare class PaymentService {
         }[];
     }>;
     findOne(id: number): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -42,8 +42,8 @@ export declare class PaymentService {
         icon: string | null;
     }>;
     update(id: number, updatePaymentDto: UpdatePaymentDto): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -52,8 +52,8 @@ export declare class PaymentService {
         icon: string | null;
     }>;
     remove(id: number): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;

@@ -8,8 +8,8 @@ export declare class ClientTypeService implements OnModuleInit {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createClientTypeDto: CreateClientTypeDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -21,8 +21,8 @@ export declare class ClientTypeService implements OnModuleInit {
         page: number;
         limit: number;
         data: {
-            name: string;
             id: number;
+            name: string;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
@@ -31,8 +31,8 @@ export declare class ClientTypeService implements OnModuleInit {
         }[];
     }>;
     findOne(id: number): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -40,8 +40,8 @@ export declare class ClientTypeService implements OnModuleInit {
         creatorId: number | null;
     }>;
     update(id: number, dto: UpdateClientTypeDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -49,8 +49,8 @@ export declare class ClientTypeService implements OnModuleInit {
         creatorId: number | null;
     }>;
     remove(id: number): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;

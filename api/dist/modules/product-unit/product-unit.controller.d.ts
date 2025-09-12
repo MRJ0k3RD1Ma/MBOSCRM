@@ -6,8 +6,8 @@ export declare class ProductUnitController {
     private readonly productUnitService;
     constructor(productUnitService: ProductUnitService);
     create(createProductUnitDto: CreateProductUnitDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -19,8 +19,8 @@ export declare class ProductUnitController {
         page: number;
         limit: number;
         data: {
-            name: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
@@ -29,8 +29,8 @@ export declare class ProductUnitController {
         }[];
     }>;
     findOne(id: string): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -38,8 +38,8 @@ export declare class ProductUnitController {
         modifyId: number | null;
     }>;
     update(id: string, updateProductUnitDto: UpdateProductUnitDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
@@ -47,8 +47,8 @@ export declare class ProductUnitController {
         modifyId: number | null;
     }>;
     remove(id: string): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
