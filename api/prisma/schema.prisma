@@ -90,7 +90,10 @@ model SaleFeedback {
   description String?             @db.Text
   score       Int?
   state       SaleFeedbackState   @default(TODO)
+  isDeleted   Boolean             @default(false)
   result      SaleFeedbackResult?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @default(now()) @updatedAt
   SaleTodo    SaleTodo[]
 }
 

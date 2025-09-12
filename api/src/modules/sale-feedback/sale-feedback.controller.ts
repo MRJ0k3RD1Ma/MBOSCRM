@@ -1,0 +1,42 @@
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, ParseUUIDPipe } from '@nestjs/common';
+import { SaleFeedbackService } from './sale-feedback.service';
+import { CreateSaleFeedbackDto } from './dto/create-sale-feedback.dto';
+import { AliasParamDto, UpdateSaleFeedbackDto } from './dto/update-sale-feedback.dto';
+import { FindAllSaleFeedbackDto } from './dto/findAll-sale-feedback.dto';
+import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
+import { Role } from 'src/common/auth/roles/role.enum';
+
+@Controller('sale-feedback')
+export class SaleFeedbackController {
+  constructor(private readonly saleFeedbackService: SaleFeedbackService) { }
+
+  @Post()
+  @DecoratorWrapper('saleFeedbackCreate', true, [Role.Admin])
+  create(@Body() createSaleFeedbackDto: CreateSaleFeedbackDto) {
+    return this.saleFeedbackService.create(createSaleFeedbackDto);
+  }
+
+  @Get()
+  @DecoratorWrapper('saleFeedbackGetAll')
+  findAll(@Query() dto: FindAllSaleFeedbackDto) {
+    return this.saleFeedbackService.findAll(dto);
+  }
+
+  @Get(':id')
+  @DecoratorWrapper('saleFeedbackGetOne')
+  findOne(@Param('id', ParseIntPipe) id: string) {
+    return this.saleFeedbackService.findOne(+id);
+  }
+
+  @Patch(':alias')
+  @DecoratorWrapper('saleFeedbackUpdate')
+  update(@Param('alias', new ParseUUIDPipe({ version: '4' })) alias: string, @Body() updateSaleFeedbackDto: UpdateSaleFeedbackDto) {
+    return this.saleFeedbackService.update(alias, updateSaleFeedbackDto);
+  }
+
+  @Delete(':id')
+  @DecoratorWrapper('saleFeedbackDelete', true, [Role.Admin])
+  remove(@Param('id', ParseIntPipe) id: string) {
+    return this.saleFeedbackService.remove(+id);
+  }
+}

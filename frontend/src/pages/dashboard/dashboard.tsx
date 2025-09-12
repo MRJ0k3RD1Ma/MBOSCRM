@@ -27,7 +27,7 @@ import {
   type StatisticsResponse,
 } from "../../config/queries/statistics/statistics-querys";
 import { useThemeContext } from "../../providers/theme-provider";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
@@ -412,24 +412,30 @@ export default function Dashboard() {
                       fontSize: "12px",
                     }}
                   />
-                  <Bar
-                    dataKey="tushum"
-                    name="Tushum"
-                    fill="#22c55e"
-                    radius={[4, 4, 0, 0]}
-                  />
-                  <Bar
-                    dataKey="chiqim"
-                    name="Chiqim"
-                    fill="#f59e0b"
-                    radius={[4, 4, 0, 0]}
-                  />
-                  <Bar
-                    dataKey="qarzdorlik"
-                    name="Qarzdorlik"
-                    fill="#ef4444"
-                    radius={[4, 4, 0, 0]}
-                  />
+                  <Link to={"/monthly-revenues"}>
+                    <Bar
+                      dataKey="tushum"
+                      name="Tushum"
+                      fill="#22c55e"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </Link>
+                  <Link to={"/monthly-expenses"}>
+                    <Bar
+                      dataKey="chiqim"
+                      name="Chiqim"
+                      fill="#f59e0b"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </Link>
+                  <Link to={"/clients-credit"}>
+                    <Bar
+                      dataKey="qarzdorlik"
+                      name="Qarzdorlik"
+                      fill="#ef4444"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </Link>
                 </BarChart>
               </ResponsiveContainer>
             </div>

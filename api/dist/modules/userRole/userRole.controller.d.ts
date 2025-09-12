@@ -6,43 +6,43 @@ export declare class UserRoleController {
     private readonly userRoleService;
     constructor(userRoleService: UserRoleService);
     create(createUserRoleDto: CreateUserRoleDto): Promise<{
+        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     findAll(query: FindAllUserRoleQueryDto): Promise<{
         total: number;
         page: number;
         limit: number;
         data: {
+            id: number;
             name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
         }[];
     }>;
     findOne(id: string): Promise<{
+        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     update(id: string, updateUserRoleDto: UpdateUserRoleDto): Promise<{
+        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     remove(id: string): Promise<{
+        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
 }

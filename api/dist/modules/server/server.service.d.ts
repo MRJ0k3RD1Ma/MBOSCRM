@@ -10,17 +10,17 @@ export declare class ServerService {
     constructor(prisma: PrismaService, bot: Bot<Context>);
     handleExpiredServers(): Promise<void>;
     create(createServerDto: CreateServerDto, modifyId: number): Promise<{
+        id: number;
         name: string | null;
+        responsible: string | null;
+        plan: string | null;
+        endDate: Date | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
-        endDate: Date | null;
         state: import(".prisma/client").$Enums.ServerState;
-        responsible: string | null;
-        plan: string | null;
     }>;
     findAll(dto: FindAllQueryServer): Promise<{
         total: any;
@@ -30,17 +30,17 @@ export declare class ServerService {
     }>;
     findOne(id: number): Promise<any>;
     update(id: number, updateServerDto: UpdateServerDto, modifyId: number): Promise<{
+        id: number;
         name: string | null;
+        responsible: string | null;
+        plan: string | null;
+        endDate: Date | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
-        endDate: Date | null;
         state: import(".prisma/client").$Enums.ServerState;
-        responsible: string | null;
-        plan: string | null;
     }>;
     remove(id: number): Promise<void>;
 }

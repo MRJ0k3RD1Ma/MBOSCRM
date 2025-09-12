@@ -7,145 +7,145 @@ export declare class ArrivedProductController {
     private readonly arrivedproductService;
     constructor(arrivedproductService: ArrivedProductService);
     create(createArrivedProductDto: CreateArrivedProductDto, req: Request): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
         count: number;
-        arrivedId: number | null;
         productId: number | null;
         priceCount: number | null;
+        arrivedId: number | null;
     }>;
     findAll(dto: FindAllArrivedProductQueryDto): Promise<{
         total: number;
         page: number;
         limit: number;
         data: ({
-            Product: {
-                ProductUnit: {
-                    name: string;
-                    isDeleted: boolean | null;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    id: number;
-                    registerId: number | null;
-                    modifyId: number | null;
-                };
-            } & {
-                type: import(".prisma/client").$Enums.ProductType;
+            register: {
+                id: number;
                 name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                phone: string | null;
+                username: string;
+                password: string;
+                roleId: number | null;
+                chatId: string | null;
+            };
+            Arrived: {
+                supplier: {
+                    id: number;
+                    name: string;
+                    isDeleted: boolean | null;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    registerId: number | null;
+                    modifyId: number | null;
+                    description: string | null;
+                    balance: number;
+                    phone: string;
+                    phoneTwo: string | null;
+                };
+            } & {
                 id: number;
+                isDeleted: boolean | null;
                 registerId: number | null;
                 modifyId: number | null;
-                barcode: string | null;
+                price: number;
+                description: string | null;
+                date: Date | null;
+                code: string | null;
+                codeId: number | null;
+                waybillNumber: string | null;
+                supplierId: number;
+                created: Date;
+                updated: Date;
+            };
+            Product: {
+                ProductUnit: {
+                    id: number;
+                    name: string;
+                    isDeleted: boolean | null;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    registerId: number | null;
+                    modifyId: number | null;
+                };
+            } & {
+                id: number;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                registerId: number | null;
+                modifyId: number | null;
+                price: number;
+                type: import(".prisma/client").$Enums.ProductType;
                 groupId: number;
+                barcode: string | null;
+                barcodeId: number | null;
                 unitId: number | null;
                 priceIncome: number;
                 reminderFirst: number;
-                price: number;
-                barcodeId: number | null;
                 countReminder: number;
                 countArrived: number;
                 countSale: number;
             };
-            register: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                id: number;
-            };
-            Arrived: {
-                supplier: {
-                    description: string | null;
-                    name: string;
-                    phone: string;
-                    isDeleted: boolean | null;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    id: number;
-                    balance: number;
-                    registerId: number | null;
-                    modifyId: number | null;
-                    phoneTwo: string | null;
-                };
-            } & {
-                description: string | null;
-                isDeleted: boolean | null;
-                id: number;
-                registerId: number | null;
-                modifyId: number | null;
-                price: number;
-                supplierId: number;
-                date: Date | null;
-                waybillNumber: string | null;
-                code: string | null;
-                codeId: number | null;
-                created: Date;
-                updated: Date;
-            };
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
             count: number;
-            arrivedId: number | null;
             productId: number | null;
             priceCount: number | null;
+            arrivedId: number | null;
         })[];
     }>;
     findOne(id: string): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
         count: number;
-        arrivedId: number | null;
         productId: number | null;
         priceCount: number | null;
+        arrivedId: number | null;
     }>;
     update(id: string, updateArrivedProductDto: UpdateArrivedProductDto): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
         count: number;
-        arrivedId: number | null;
         productId: number | null;
         priceCount: number | null;
+        arrivedId: number | null;
     }>;
     remove(id: string): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
         count: number;
-        arrivedId: number | null;
         productId: number | null;
         priceCount: number | null;
+        arrivedId: number | null;
     }>;
 }

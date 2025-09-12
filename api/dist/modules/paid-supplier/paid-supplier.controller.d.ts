@@ -7,16 +7,16 @@ export declare class PaidSupplierController {
     private readonly paidsupplierService;
     constructor(paidsupplierService: PaidSupplierService);
     create(createPaidSupplierDto: CreatePaidSupplierDto, req: Request): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        supplierId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
+        supplierId: number | null;
     }>;
     findAll(query: FindAllPaidSupplierQueryDto): Promise<{
         total: number;
@@ -24,122 +24,122 @@ export declare class PaidSupplierController {
         page: number;
         limit: number;
         data: ({
-            modify: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                id: number;
-            };
             register: {
+                id: number;
                 name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                phone: string | null;
+                username: string;
+                password: string;
+                roleId: number | null;
+                chatId: string | null;
+            };
+            modify: {
                 id: number;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                phone: string | null;
+                username: string;
+                password: string;
+                roleId: number | null;
+                chatId: string | null;
             };
             Payment: {
+                id: number;
                 name: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 icon: string | null;
             };
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
-            supplierId: number | null;
             paidDate: Date | null;
             paymentId: number | null;
+            supplierId: number | null;
         })[];
     }>;
     findOne(id: string): Promise<{
-        modify: {
-            name: string;
-            phone: string | null;
-            username: string;
-            roleId: number | null;
-            chatId: string | null;
-            password: string;
-            isDeleted: boolean | null;
-            createdAt: Date;
-            updatedAt: Date;
-            id: number;
-        };
         register: {
+            id: number;
             name: string;
-            phone: string | null;
-            username: string;
-            roleId: number | null;
-            chatId: string | null;
-            password: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            phone: string | null;
+            username: string;
+            password: string;
+            roleId: number | null;
+            chatId: string | null;
+        };
+        modify: {
             id: number;
+            name: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            phone: string | null;
+            username: string;
+            password: string;
+            roleId: number | null;
+            chatId: string | null;
         };
         Payment: {
+            id: number;
             name: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
     } & {
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        supplierId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
+        supplierId: number | null;
     }>;
     update(id: string, updatePaidSupplierDto: UpdatePaidSupplierDto): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        supplierId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
+        supplierId: number | null;
     }>;
     remove(id: string, req: Request): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
         price: number | null;
-        supplierId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
+        supplierId: number | null;
     }>;
 }

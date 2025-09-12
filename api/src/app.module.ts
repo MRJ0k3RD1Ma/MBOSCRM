@@ -32,6 +32,9 @@ import { EskizModule } from "./modules/eskiz/eskiz.module";
 import { FeatureFlagModule } from "./modules/feature-flag/feature-flag.module";
 
 const MainModules = [EskizModule];
+import { PaymeModule } from './modules/payme/payme.module';
+import { TodoModule } from './modules/todo/todo.module';
+import { SaleFeedbackModule } from './modules/sale-feedback/sale-feedback.module';
 
 @Module({
 	controllers: [],
@@ -69,6 +72,9 @@ const MainModules = [EskizModule];
 		ScheduleModule.forRoot(),
 		EventEmitterModule.forRoot(),
 		NestjsGrammyModule.forRoot({ token: env.BOT_TOKEN }),
+		PaymeModule,
+		TodoModule,
+		SaleFeedbackModule,
 	],
 })
 export class AppModule {}
