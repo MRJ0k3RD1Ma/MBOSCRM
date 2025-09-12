@@ -4,11 +4,11 @@ export declare class SaleTodoController {
     private readonly saleTodoService;
     constructor(saleTodoService: SaleTodoService);
     create(createTodoDto: CreateTodoDto): Promise<{
-        id: number;
         name: string | null;
+        id: number;
     }>;
     searchTodo(query: string): Promise<string | {
-        id: number;
         name: string | null;
+        id: number;
     }[]>;
 }

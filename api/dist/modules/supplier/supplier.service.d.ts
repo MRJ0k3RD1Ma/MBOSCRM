@@ -7,16 +7,16 @@ export declare class SupplierService {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createSupplierDto: CreateSupplierDto, creatorId: number): Promise<{
-        id: number;
+        description: string | null;
         name: string;
+        phone: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
+        balance: number;
         registerId: number | null;
         modifyId: number | null;
-        description: string | null;
-        balance: number;
-        phone: string;
         phoneTwo: string | null;
     }>;
     findAll(dto: FindAllSupplierQueryDto): Promise<{
@@ -24,106 +24,106 @@ export declare class SupplierService {
         page: number;
         limit: number;
         data: ({
-            register: {
-                id: number;
-                name: string;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                phone: string | null;
-                username: string;
-                password: string;
-                roleId: number | null;
-                chatId: string | null;
-            };
             modify: {
-                id: number;
                 name: string;
+                phone: string | null;
+                username: string;
+                roleId: number | null;
+                chatId: string | null;
+                password: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
+            };
+            register: {
+                name: string;
                 phone: string | null;
                 username: string;
-                password: string;
                 roleId: number | null;
                 chatId: string | null;
+                password: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
             };
         } & {
-            id: number;
+            description: string | null;
             name: string;
+            phone: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
+            balance: number;
             registerId: number | null;
             modifyId: number | null;
-            description: string | null;
-            balance: number;
-            phone: string;
             phoneTwo: string | null;
         })[];
     }>;
     findOne(id: number): Promise<{
-        register: {
-            id: number;
-            name: string;
-            isDeleted: boolean | null;
-            createdAt: Date;
-            updatedAt: Date;
-            phone: string | null;
-            username: string;
-            password: string;
-            roleId: number | null;
-            chatId: string | null;
-        };
         modify: {
-            id: number;
             name: string;
+            phone: string | null;
+            username: string;
+            roleId: number | null;
+            chatId: string | null;
+            password: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
+        };
+        register: {
+            name: string;
             phone: string | null;
             username: string;
-            password: string;
             roleId: number | null;
             chatId: string | null;
+            password: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
         };
     } & {
-        id: number;
+        description: string | null;
         name: string;
+        phone: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
+        balance: number;
         registerId: number | null;
         modifyId: number | null;
-        description: string | null;
-        balance: number;
-        phone: string;
         phoneTwo: string | null;
     }>;
     update(id: number, dto: UpdateSupplierDto, creatorId: number): Promise<{
-        id: number;
+        description: string | null;
         name: string;
+        phone: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
+        balance: number;
         registerId: number | null;
         modifyId: number | null;
-        description: string | null;
-        balance: number;
-        phone: string;
         phoneTwo: string | null;
     }>;
     remove(id: number): Promise<{
-        id: number;
+        description: string | null;
         name: string;
+        phone: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
+        balance: number;
         registerId: number | null;
         modifyId: number | null;
-        description: string | null;
-        balance: number;
-        phone: string;
         phoneTwo: string | null;
     }>;
 }
