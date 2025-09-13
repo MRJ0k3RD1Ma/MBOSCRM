@@ -6,12 +6,11 @@ export declare class ProductUnitController {
     private readonly productUnitService;
     constructor(productUnitService: ProductUnitService);
     create(createProductUnitDto: CreateProductUnitDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -20,43 +19,39 @@ export declare class ProductUnitController {
         page: number;
         limit: number;
         data: {
-            name: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
         }[];
     }>;
     findOne(id: string): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
     update(id: string, updateProductUnitDto: UpdateProductUnitDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
     remove(id: string): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;

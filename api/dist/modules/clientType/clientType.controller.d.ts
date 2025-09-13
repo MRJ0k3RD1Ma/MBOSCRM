@@ -6,12 +6,11 @@ export declare class ClientTypeController {
     private readonly clientTypeService;
     constructor(clientTypeService: ClientTypeService);
     create(createClientTypeDto: CreateClientTypeDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;
@@ -20,43 +19,39 @@ export declare class ClientTypeController {
         page: number;
         limit: number;
         data: {
-            name: string;
             id: number;
+            name: string;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             modifyId: number | null;
             creatorId: number | null;
         }[];
     }>;
     findOne(id: string): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;
     update(id: string, updateClientTypeDto: UpdateClientTypeDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;
     remove(id: string): Promise<{
-        name: string;
         id: number;
+        name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;

@@ -7,8 +7,8 @@ export declare class SaleTodoController {
     private readonly saleTodoService;
     constructor(saleTodoService: SaleTodoService);
     create(createSaleTodoDto: CreateSaleTodoDto, req: Request): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -20,8 +20,8 @@ export declare class SaleTodoController {
     }>;
     findAll(dto: FindAllSaleTodoDto): Promise<{
         data: {
-            name: string | null;
             id: number;
+            name: string | null;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
@@ -36,8 +36,8 @@ export declare class SaleTodoController {
         limit: number;
     }>;
     findOne(id: string): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -48,8 +48,8 @@ export declare class SaleTodoController {
         isCompleted: boolean;
     }>;
     update(id: string, updateSaleTodoDto: UpdateSaleTodoDto): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;

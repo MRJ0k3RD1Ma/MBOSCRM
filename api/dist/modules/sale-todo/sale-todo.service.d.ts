@@ -8,8 +8,8 @@ export declare class SaleTodoService {
     private readonly todo;
     constructor(prisma: PrismaService, todo: TodoService);
     create(createSaleTodoDto: CreateSaleTodoDto, user: number): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -21,8 +21,8 @@ export declare class SaleTodoService {
     }>;
     findAll(dto: FindAllSaleTodoDto): Promise<{
         data: {
-            name: string | null;
             id: number;
+            name: string | null;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
@@ -37,8 +37,8 @@ export declare class SaleTodoService {
         limit: number;
     }>;
     findOne(id: number): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -49,8 +49,8 @@ export declare class SaleTodoService {
         isCompleted: boolean;
     }>;
     update(id: number, updateSaleTodoDto: UpdateSaleTodoDto): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
