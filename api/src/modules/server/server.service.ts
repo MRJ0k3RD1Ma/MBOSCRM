@@ -38,7 +38,6 @@ export class ServerService {
     if (sevenDaysLeftServers?.length > 0) {
       for (const server of sevenDaysLeftServers) {
         const leftDays = dayjs(server.endDate).diff(now, 'day') + 1;
-        console.log(leftDays);
         const users = [];
         users.push(
           ...(await this.prisma.user.findMany({

@@ -47,7 +47,6 @@ let ServerService = ServerService_1 = class ServerService {
         if (sevenDaysLeftServers?.length > 0) {
             for (const server of sevenDaysLeftServers) {
                 const leftDays = (0, dayjs_1.default)(server.endDate).diff(now, 'day') + 1;
-                console.log(leftDays);
                 const users = [];
                 users.push(...(await this.prisma.user.findMany({
                     where: { UserRole: { name: 'superadmin' } },

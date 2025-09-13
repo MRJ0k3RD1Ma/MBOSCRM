@@ -33,8 +33,9 @@ import { FeatureFlagModule } from "./modules/feature-flag/feature-flag.module";
 import { PaymeModule } from "./modules/payme/payme.module";
 import { TodoModule } from "./modules/todo/todo.module";
 import { SaleFeedbackModule } from "./modules/sale-feedback/sale-feedback.module";
+import { ClientCrmModule } from "./modules/client-crm/client-crm.module";
 
-const MainModules = [EskizModule];
+const MainModules = [EskizModule, ClientCrmModule];
 
 @Module({
 	controllers: [],

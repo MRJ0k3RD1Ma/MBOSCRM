@@ -42,7 +42,8 @@ const feature_flag_module_1 = require("./modules/feature-flag/feature-flag.modul
 const payme_module_1 = require("./modules/payme/payme.module");
 const todo_module_1 = require("./modules/todo/todo.module");
 const sale_feedback_module_1 = require("./modules/sale-feedback/sale-feedback.module");
-const MainModules = [eskiz_module_1.EskizModule];
+const client_crm_module_1 = require("./modules/client-crm/client-crm.module");
+const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule];
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
