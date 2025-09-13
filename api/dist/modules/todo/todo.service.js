@@ -17,42 +17,28 @@ let TodoService = class TodoService {
         this.prisma = prisma;
     }
     async create(createTodoDto) {
-        const todo = await this.prisma.todo.create({
-            data: {
-                name: createTodoDto.name,
-            }
+        let todo = await this.prisma.todo.findFirst({
+            where: { name: createTodoDto.name },
         });
+        if (!todo) {
+            todo = await this.prisma.todo.create({
+                data: {
+                    name: createTodoDto.name,
+                },
+            });
+        }
         return todo;
     }
     async findAll(dto) {
-        const { page, limit, name } = dto;
-        const [data, total] = await this.prisma.$transaction([
-            this.prisma.todo.findMany({
-                where: {
-                    name: {
-                        contains: name?.trim() || '',
-                        mode: 'insensitive',
-                    },
+        const todo = this.prisma.todo.findMany({
+            where: {
+                name: {
+                    contains: dto.name?.trim() || '',
+                    mode: 'insensitive',
                 },
-                skip: (page - 1) * limit,
-                take: limit,
-                orderBy: { id: 'desc' },
-            }),
-            this.prisma.todo.count({
-                where: {
-                    name: {
-                        contains: name?.trim() || '',
-                        mode: 'insensitive',
-                    },
-                },
-            }),
-        ]);
-        return {
-            total,
-            page,
-            limit,
-            data,
-        };
+            },
+        });
+        return todo;
     }
 };
 exports.TodoService = TodoService;

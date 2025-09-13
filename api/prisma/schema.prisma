@@ -113,6 +113,8 @@ model SaleTodo {
   modifyId    Int?
   modify      User?    @relation("SaleTodo_modifyId", fields: [modifyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   register    User?    @relation("SaleTodo_creatorId", fields: [registerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([name])
 }
 
 model Access {
