@@ -27,10 +27,10 @@ import { ServerModule } from "./modules/server/server.module";
 import { NestjsGrammyModule } from "@grammyjs/nestjs";
 import { env } from "./common/config";
 import { EventEmitterModule } from "@nestjs/event-emitter";
-import { SaleTodoModule } from "./modules/saleTodo/saleTodo.module";
 import { PaymeModule } from './modules/payme/payme.module';
 import { TodoModule } from './modules/todo/todo.module';
 import { SaleFeedbackModule } from './modules/sale-feedback/sale-feedback.module';
+import { SaleTodoModule } from './modules/sale-todo/sale-todo.module';
 
 @Module({
 	controllers: [],
@@ -71,4 +71,4 @@ import { SaleFeedbackModule } from './modules/sale-feedback/sale-feedback.module
 		SaleFeedbackModule,
 	],
 })
-export class AppModule {}
+export class AppModule { }

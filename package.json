@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@nestjs/mapped-types": "*",
     "base-64": "^1.0.0",
     "mongoose": "^8.18.1"
   }
