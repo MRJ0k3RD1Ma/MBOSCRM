@@ -1,9 +1,16 @@
-import { Link, useParams } from "react-router-dom";
-import { Card, Descriptions, Spin, Typography, Table } from "antd";
-import { useGetSubscribeById } from "../../config/queries/subscribe/subscribe-querys";
+import { Card, Descriptions, Spin, Table, Tag, Typography } from "antd";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  useGetAllSubscribes,
+  useGetSubscribeById,
+  type Subscribe,
+} from "../../config/queries/subscribe/subscribe-querys";
+
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
+import { indexColumn } from "../../components/tables/indexColumn";
 import timezone from "dayjs/plugin/timezone";
+import { useState } from "react";
+import utc from "dayjs/plugin/utc";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -11,10 +18,17 @@ dayjs.extend(timezone);
 const { Title } = Typography;
 
 export default function Subscribe() {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const numericId = Number(id);
-
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
   const { data, isLoading, isError } = useGetSubscribeById(numericId);
+  const { data: allSubscribes } = useGetAllSubscribes({
+    page,
+    limit,
+    saleId: data?.sale?.id,
+  });
 
   if (isLoading) {
     return (
@@ -27,7 +41,6 @@ export default function Subscribe() {
   if (isError || !data) {
     return <div>Xatolik yuz berdi yoki subscribe topilmadi.</div>;
   }
-
   const { client, sale } = data;
 
   const formatDate = (
@@ -61,13 +74,113 @@ export default function Subscribe() {
     },
   ];
 
+  const columns = [
+    indexColumn(page, limit),
+    {
+      title: "To‘lov sanasi",
+      dataIndex: "paying_date",
+      render: (date: string) =>
+        dayjs.utc(date).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm"),
+    },
+    {
+      title: "Shartnoma raqami",
+      dataIndex: "sale",
+      render: (sale: any) => (
+        <a
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/sale/${sale.id}`);
+          }}
+          style={{ color: "#1677ff", cursor: "pointer" }}
+        >
+          {"#" + sale?.code || "Noma'lum"}
+        </a>
+      ),
+    },
+    {
+      title: "Mijoz",
+      dataIndex: "client",
+      render: (client: any) => client?.name || "Noma'lum",
+    },
+    {
+      title: "Sotuv",
+      dataIndex: "sale",
+      render: (sale: any) => sale?.id || "-",
+    },
+    {
+      title: "Sotuvdagi mahsulotlar",
+      render: (_: any, record: any) => {
+        if (!record?.sale?.SaleProduct?.length) return "-";
+
+        return record.sale.SaleProduct.map((item: any) => {
+          const name = item?.product?.name || "";
+          return name.length > 7 ? name.slice(0, 7) + "..." : name;
+        }).join(", ");
+      },
+    },
+    {
+      title: "Narx",
+      dataIndex: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
+    { title: "To‘langan", dataIndex: "paid" },
+    {
+      title: "Holat",
+      dataIndex: "state",
+      render: (state: string) => {
+        const color = state === "PAID" && "PAYING" ? "green" : "red";
+        return <Tag color={color}>{state}</Tag>;
+      },
+    },
+  ];
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="flex flex-col gap-6 p-6 space-y-6 overflow-auto h-[820px]">
       <Title level={3}>
-        Obuna: <Link to={`/sale/${sale.id}`}>#{sale.code}</Link>
+        Obuna shartnomasi: <Link to={`/sale/${sale.id}`}>#{sale.code}</Link>
       </Title>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="flex gap-6">
+        {sale && (
+          <Card title="Sotuv ma'lumotlari" className="w-[40%]">
+            <Descriptions bordered column={1} size="middle">
+              <Descriptions.Item label="ID">{sale.id}</Descriptions.Item>
+              <Descriptions.Item label="Sana">
+                {formatDate(sale.date, "YYYY-MM-DD")}
+              </Descriptions.Item>
+              <Descriptions.Item label="Code">{sale.code}</Descriptions.Item>
+              <Descriptions.Item label="Ism">
+                <Link to={`/client/${client.id}`}>{client.name}</Link>
+              </Descriptions.Item>
+              <Descriptions.Item label="Telefon ">
+                {client.phone}
+              </Descriptions.Item>
+              <Descriptions.Item label="Narx">{sale.price}</Descriptions.Item>
+              <Descriptions.Item label="Holat">{sale.state}</Descriptions.Item>
+              <Descriptions.Item label="Obuna boshlangan sana">
+                {formatDate(sale.subscribe_begin_date)}
+              </Descriptions.Item>
+              <Descriptions.Item label="Obuna har necha kunda yaratiladi">
+                {sale.subscribe_generate_day}
+              </Descriptions.Item>
+            </Descriptions>
+          </Card>
+        )}
+
+        {sale?.SaleProduct?.length > 0 && (
+          <Card title="Sotuvdagi mahsulotlar" className="w-full">
+            <Table
+              className="w-full"
+              columns={productColumns}
+              dataSource={sale.SaleProduct}
+              rowKey="id"
+              pagination={false}
+            />
+          </Card>
+        )}
+      </div>
+      <div className="flex flex-col gap-6">
         <Card title="Obuna ma'lumotlari" className="w-full">
           <Descriptions bordered column={1} size="middle">
             <Descriptions.Item label="To‘lov sanasi">
@@ -88,54 +201,24 @@ export default function Subscribe() {
             </Descriptions.Item>
           </Descriptions>
         </Card>
-
-        {client && (
-          <Card title="Mijoz ma'lumotlari" className="w-full">
-            <Descriptions bordered column={1} size="middle">
-              <Descriptions.Item label="ID">{client.id}</Descriptions.Item>
-              <Descriptions.Item label="Ism">{client.name}</Descriptions.Item>
-              <Descriptions.Item label="INN">{client.inn}</Descriptions.Item>
-              <Descriptions.Item label="Viloyat ID">
-                {client.regionId}
-              </Descriptions.Item>
-              <Descriptions.Item label="Tuman ID">
-                {client.districtId}
-              </Descriptions.Item>
-            </Descriptions>
-          </Card>
-        )}
-
-        {sale && (
-          <Card title="Sotuv ma'lumotlari" className="w-full">
-            <Descriptions bordered column={1} size="middle">
-              <Descriptions.Item label="ID">{sale.id}</Descriptions.Item>
-              <Descriptions.Item label="Sana">
-                {formatDate(sale.date, "YYYY-MM-DD")}
-              </Descriptions.Item>
-              <Descriptions.Item label="Code">{sale.code}</Descriptions.Item>
-              <Descriptions.Item label="Narx">{sale.price}</Descriptions.Item>
-              <Descriptions.Item label="Holat">{sale.state}</Descriptions.Item>
-              <Descriptions.Item label="Obuna boshlangan sana">
-                {formatDate(sale.subscribe_begin_date)}
-              </Descriptions.Item>
-              <Descriptions.Item label="Obuna har necha kunda yaratiladi">
-                {sale.subscribe_generate_day}
-              </Descriptions.Item>
-            </Descriptions>
-          </Card>
-        )}
-      </div>
-
-      {sale?.SaleProduct?.length > 0 && (
-        <Card title="Sotuvdagi mahsulotlar">
+        <Card title="Sotuvdagi mahsulotlar" className="w-full">
           <Table
-            columns={productColumns}
-            dataSource={sale.SaleProduct}
+            columns={columns}
+            dataSource={allSubscribes?.data || []}
+            loading={isLoading}
             rowKey="id"
-            pagination={false}
+            onRow={() => ({
+              onClick: () => navigate(`/sale/${sale.id}`),
+            })}
+            pagination={{
+              current: page,
+              pageSize: limit,
+              total: allSubscribes?.total,
+              onChange: (page) => setPage(page),
+            }}
           />
         </Card>
-      )}
+      </div>
     </div>
   );
 }

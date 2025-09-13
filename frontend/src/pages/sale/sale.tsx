@@ -3,6 +3,7 @@ import {
   Card,
   Col,
   Descriptions,
+  Input,
   Modal,
   Row,
   Space,
@@ -129,12 +130,6 @@ export default function Sale() {
       >
         <Title level={4}>Savdo tafsilotlari</Title>
         <Space>
-          {sale?.state === "RUNNING" && (
-            <Button type="primary" onClick={() => setIsClosed(true)}>
-              Tugugatish
-            </Button>
-          )}
-
           <Button onClick={() => navigate(`/sale/edit/${id}`)}>
             O‘zgartirish
           </Button>
@@ -153,113 +148,159 @@ export default function Sale() {
         </Space>
       </Row>
 
-      <Card bordered={false} loading={isLoading} className="!w-full mb-4">
-        <Row gutter={16}>
-          <Col span={12}>
-            <Descriptions
-              bordered
-              column={1}
-              size="small"
-              title="Sotuv ma'lumotlari"
-            >
-              <Descriptions.Item label="Sana">
-                {sale?.date ? dayjs(sale.date).format("YYYY-MM-DD") : "-"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Kod">
-                {sale?.code ?? "-"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Mijoz">
-                {sale?.client?.name ?? "—"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Umumiy narx">
-                {sale?.price != null
-                  ? sale.price.toLocaleString("uz-UZ") + " so'm"
-                  : "0"}
-              </Descriptions.Item>
-              <Descriptions.Item label="To‘langan">
-                {sale?.dept != null
-                  ? sale.dept.toLocaleString("uz-UZ") + " so'm"
-                  : "0"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Qarz">
-                {sale?.credit != null
-                  ? sale.credit.toLocaleString("uz-UZ") + " so'm"
-                  : "0"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Holati">
-                {sale?.state ?? "-"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Yaratilgan">
-                {sale?.createdAt
-                  ? dayjs(sale.createdAt)
-                      .tz("Asia/Tashkent")
-                      .format("YYYY-MM-DD")
-                  : "Noma'lum"}
-              </Descriptions.Item>
-              <Descriptions.Item label="O'zgartirilgan">
-                {sale?.updatedAt
-                  ? dayjs(sale.updatedAt)
-                      .tz("Asia/Tashkent")
-                      .format("YYYY-MM-DD")
-                  : "Noma'lum"}
-              </Descriptions.Item>
-            </Descriptions>
-          </Col>
-          <Col span={12}>
-            <Descriptions
-              bordered
-              column={1}
-              size="small"
-              title="Mijoz ma'lumotlari"
-            >
-              <Descriptions.Item label="Ismi">
-                {sale?.client?.name ?? "—"}
-              </Descriptions.Item>
-              <Descriptions.Item label="INN">
-                {sale?.client?.inn ?? "—"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Telefon">
-                {sale?.client?.phone ?? "—"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Balans">
-                {sale?.client?.balance != null
-                  ? sale.client.balance.toLocaleString("uz-UZ") + " so'm"
-                  : "0"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Manzil">
-                {sale?.client?.address ?? "—"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Viloyat">
-                {sale?.client?.Region?.name ?? "—"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Tuman">
-                {sale?.client?.District?.name ?? "—"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Tavsif">
-                {sale?.client?.description ?? "—"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Mijoz turi">
-                {types?.data?.find((t) => t.id === sale?.client?.typeId)
-                  ?.name ?? "—"}
-              </Descriptions.Item>
-              <Descriptions.Item label="Yaratilgan">
-                {sale?.client?.createdAt
-                  ? dayjs(sale.client.createdAt)
-                      .tz("Asia/Tashkent")
-                      .format("YYYY-MM-DD")
-                  : "Noma'lum"}
-              </Descriptions.Item>
-              <Descriptions.Item label="O'zgartirilgan">
-                {sale?.client?.updatedAt
-                  ? dayjs(sale.client.updatedAt)
-                      .tz("Asia/Tashkent")
-                      .format("YYYY-MM-DD")
-                  : "Noma'lum"}
-              </Descriptions.Item>
-            </Descriptions>
-          </Col>
-        </Row>
-      </Card>
+      <div className="flex gap-6">
+        <div className="w-[30%] flex flex-col gap-6">
+          <Descriptions
+            bordered
+            column={1}
+            size="small"
+            title="Sotuv ma'lumotlari"
+          >
+            <Descriptions.Item label="Sana">
+              {sale?.date ? dayjs(sale.date).format("YYYY-MM-DD") : "-"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Kod">
+              {sale?.code ?? "-"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Mijoz">
+              {sale?.client?.name ?? "—"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Umumiy narx">
+              {sale?.price != null
+                ? sale.price.toLocaleString("uz-UZ") + " so'm"
+                : "0"}
+            </Descriptions.Item>
+            <Descriptions.Item label="To‘langan">
+              {sale?.dept != null
+                ? sale.dept.toLocaleString("uz-UZ") + " so'm"
+                : "0"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Qarz">
+              {sale?.credit != null
+                ? sale.credit.toLocaleString("uz-UZ") + " so'm"
+                : "0"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Holati">
+              {sale?.state ?? "-"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Yaratilgan">
+              {sale?.createdAt
+                ? dayjs(sale.createdAt).tz("Asia/Tashkent").format("YYYY-MM-DD")
+                : "Noma'lum"}
+            </Descriptions.Item>
+            <Descriptions.Item label="O'zgartirilgan">
+              {sale?.updatedAt
+                ? dayjs(sale.updatedAt).tz("Asia/Tashkent").format("YYYY-MM-DD")
+                : "Noma'lum"}
+            </Descriptions.Item>
+          </Descriptions>
+          <Descriptions
+            bordered
+            column={1}
+            size="small"
+            title="Mijoz ma'lumotlari"
+          >
+            <Descriptions.Item label="Ismi">
+              {sale?.client?.name ?? "—"}
+            </Descriptions.Item>
+            <Descriptions.Item label="INN">
+              {sale?.client?.inn ?? "—"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Telefon">
+              {sale?.client?.phone ?? "—"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Balans">
+              {sale?.client?.balance != null
+                ? sale.client.balance.toLocaleString("uz-UZ") + " so'm"
+                : "0"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Manzil">
+              {sale?.client?.address ?? "—"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Viloyat">
+              {sale?.client?.Region?.name ?? "—"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Tuman">
+              {sale?.client?.District?.name ?? "—"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Tavsif">
+              {sale?.client?.description ?? "—"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Mijoz turi">
+              {types?.data?.find((t) => t.id === sale?.client?.typeId)?.name ??
+                "—"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Yaratilgan">
+              {sale?.client?.createdAt
+                ? dayjs(sale.client.createdAt)
+                    .tz("Asia/Tashkent")
+                    .format("YYYY-MM-DD")
+                : "Noma'lum"}
+            </Descriptions.Item>
+            <Descriptions.Item label="O'zgartirilgan">
+              {sale?.client?.updatedAt
+                ? dayjs(sale.client.updatedAt)
+                    .tz("Asia/Tashkent")
+                    .format("YYYY-MM-DD")
+                : "Noma'lum"}
+            </Descriptions.Item>
+          </Descriptions>
+        </div>
+        <div className="w-[70%] flex flex-col gap-6">
+          <Card
+            title="Sotilgan mahsulotlar"
+            bordered={false}
+            className="w-full"
+            style={{ paddingBottom: 0 }}
+          >
+            <Table
+              dataSource={saleProducts?.data || []}
+              columns={productColumns}
+              rowKey="id"
+              pagination={{
+                current: page,
+                pageSize: limit,
+                total: saleProducts?.total || saleProducts?.data?.length || 0,
+                onChange: setPage,
+              }}
+            />
+          </Card>
+          <Card
+            title="Qilingan ishlar ro‘yxati"
+            bordered={false}
+            className="w-full"
+            style={{ paddingBottom: 0 }}
+          >
+            <div className="w-full flex gap-2">
+              <Input
+                type="text"
+                placeholder="Placeholder"
+                className="w-full !h-[35px]"
+              />
+              <Button icon={<PlusOutlined />} type="primary">
+                Qo'shish
+              </Button>
+            </div>
+          </Card>
+          <div className="flex gap-2">
+            {sale?.state === "RUNNING" && (
+              <Button
+                icon={<PlusOutlined />}
+                type="primary"
+                onClick={() => setIsClosed(true)}
+              >
+                Tugugatish
+              </Button>
+            )}
+            <Button icon={<PlusOutlined />} type="primary">
+              Bajarildi
+            </Button>
+            <Button icon={<PlusOutlined />} type="primary">
+              Qayta bajarish
+            </Button>
+          </div>
+        </div>
+      </div>
       <PaidClientFormModal
         open={paidOpen}
         onClose={() => {
@@ -272,24 +313,7 @@ export default function Sale() {
         clientId={Number(sale?.client?.id)}
         saleId={currentId}
       />
-      <Card
-        title="Sotilgan mahsulotlar"
-        bordered={false}
-        className="w-full"
-        style={{ paddingBottom: 0 }}
-      >
-        <Table
-          dataSource={saleProducts?.data || []}
-          columns={productColumns}
-          rowKey="id"
-          pagination={{
-            current: page,
-            pageSize: limit,
-            total: saleProducts?.total || saleProducts?.data?.length || 0,
-            onChange: setPage,
-          }}
-        />
-      </Card>
+
       <Modal
         title="Tasdiqlash"
         open={isClosed}
