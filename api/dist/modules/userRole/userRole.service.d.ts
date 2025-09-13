@@ -12,6 +12,7 @@ export declare class UserRoleService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     findAll(dto: FindAllUserRoleQueryDto): Promise<{
         total: number;
@@ -23,6 +24,7 @@ export declare class UserRoleService {
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         }[];
     }>;
     findOne(id: number): Promise<{
@@ -31,6 +33,7 @@ export declare class UserRoleService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     update(id: number, dto: UpdateUserRoleDto): Promise<{
         name: string;
@@ -38,6 +41,7 @@ export declare class UserRoleService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     remove(id: number): Promise<{
         name: string;
@@ -45,5 +49,6 @@ export declare class UserRoleService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
 }

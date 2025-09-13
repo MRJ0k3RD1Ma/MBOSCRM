@@ -48,6 +48,9 @@ exports.AppModule = AppModule = __decorate([
         controllers: [],
         providers: [],
         imports: [
+            prisma_module_1.PrismaModule,
+            ...(config_1.env.IS_MAIN ? MainModules : []),
+            FeatureFlagModule,
             location_module_1.LocationModule,
             userRole_module_1.UserRoleModule,
             user_module_1.UserModule,
@@ -59,7 +62,6 @@ exports.AppModule = AppModule = __decorate([
             client_module_1.ClientModule,
             product_group_module_1.ProductGroupModule,
             settings_module_1.SettingsModule,
-            prisma_module_1.PrismaModule,
             product_module_1.ProductModule,
             supplier_module_1.SupplierModule,
             payment_module_1.PaymentModule,
@@ -75,12 +77,12 @@ exports.AppModule = AppModule = __decorate([
             paid_server_module_1.PaidServerModule,
             server_module_1.ServerModule,
             sale_todo_module_1.SaleTodoModule,
-            schedule_1.ScheduleModule.forRoot(),
-            event_emitter_1.EventEmitterModule.forRoot(),
-            nestjs_1.NestjsGrammyModule.forRoot({ token: config_1.env.BOT_TOKEN }),
             payme_module_1.PaymeModule,
             todo_module_1.TodoModule,
             sale_feedback_module_1.SaleFeedbackModule,
+            schedule_1.ScheduleModule.forRoot(),
+            event_emitter_1.EventEmitterModule.forRoot(),
+            nestjs_1.NestjsGrammyModule.forRoot({ token: config_1.env.BOT_TOKEN }),
         ],
     })
 ], AppModule);

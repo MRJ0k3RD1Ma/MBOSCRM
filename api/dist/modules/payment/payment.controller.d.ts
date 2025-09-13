@@ -11,6 +11,7 @@ export declare class PaymentController {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;
@@ -25,6 +26,7 @@ export declare class PaymentController {
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
@@ -36,6 +38,7 @@ export declare class PaymentController {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;
@@ -46,6 +49,7 @@ export declare class PaymentController {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;
@@ -56,6 +60,7 @@ export declare class PaymentController {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;

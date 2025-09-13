@@ -11,6 +11,7 @@ export declare class ProductUnitController {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -24,6 +25,7 @@ export declare class ProductUnitController {
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
         }[];
@@ -34,6 +36,7 @@ export declare class ProductUnitController {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -43,6 +46,7 @@ export declare class ProductUnitController {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -52,6 +56,7 @@ export declare class ProductUnitController {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;

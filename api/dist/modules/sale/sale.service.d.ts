@@ -16,11 +16,11 @@ export declare class SaleService {
         updatedAt: Date;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         date: Date | null;
         code: string | null;
         codeId: number | null;
         clientId: number;
+        price: number;
         dept: number;
         credit: number;
         state: import(".prisma/client").$Enums.SaleState;
@@ -33,52 +33,64 @@ export declare class SaleService {
         page: number;
         limit: number;
         data: ({
-            client: {
-                description: string | null;
-                name: string;
-                phone: string;
+            register: {
                 id: number;
+                name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                balance: number;
-                inn: string;
-                address: string | null;
-                regionId: number | null;
-                districtId: number | null;
-                typeId: number | null;
-                registerId: number | null;
-                modifyId: number | null;
-            };
-            register: {
-                name: string;
                 phone: string | null;
                 username: string;
+                password: string;
                 roleId: number | null;
                 chatId: string | null;
-                password: string;
+            };
+            client: {
                 id: number;
+                name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                registerId: number | null;
+                modifyId: number | null;
+                typeId: number | null;
+                inn: string;
+                regionId: number | null;
+                districtId: number | null;
+                address: string | null;
+                balance: number;
+                description: string | null;
+                phone: string;
+            };
+            modifier: {
+                id: number;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                phone: string | null;
+                username: string;
+                password: string;
+                roleId: number | null;
+                chatId: string | null;
             };
             SaleProduct: ({
                 product: {
-                    type: import(".prisma/client").$Enums.ProductType;
-                    name: string;
                     id: number;
+                    name: string;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
                     registerId: number | null;
                     modifyId: number | null;
+                    price: number;
                     barcode: string | null;
+                    barcodeId: number | null;
                     groupId: number;
                     unitId: number | null;
                     priceIncome: number;
                     reminderFirst: number;
-                    price: number;
-                    barcodeId: number | null;
+                    type: import(".prisma/client").$Enums.ProductType;
                     countReminder: number;
                     countArrived: number;
                     countSale: number;
@@ -91,24 +103,12 @@ export declare class SaleService {
                 registerId: number | null;
                 modifyId: number | null;
                 price: number | null;
-                count: number | null;
-                productId: number | null;
-                priceCount: number | null;
                 saleId: number | null;
+                productId: number | null;
+                count: number | null;
+                priceCount: number | null;
                 is_subscribe: boolean | null;
             })[];
-            modifier: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
-                id: number;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-            };
         } & {
             id: number;
             isDeleted: boolean | null;
@@ -116,11 +116,11 @@ export declare class SaleService {
             updatedAt: Date;
             registerId: number | null;
             modifyId: number | null;
-            price: number;
             date: Date | null;
             code: string | null;
             codeId: number | null;
             clientId: number;
+            price: number;
             dept: number;
             credit: number;
             state: import(".prisma/client").$Enums.SaleState;
@@ -132,30 +132,30 @@ export declare class SaleService {
     findOne(id: number): Promise<{
         client: {
             District: {
-                name: string | null;
                 id: number;
+                name: string | null;
                 regionId: number | null;
             };
             Region: {
-                name: string | null;
                 id: number;
+                name: string | null;
             };
         } & {
-            description: string | null;
-            name: string;
-            phone: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            balance: number;
-            inn: string;
-            address: string | null;
-            regionId: number | null;
-            districtId: number | null;
-            typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
+            typeId: number | null;
+            inn: string;
+            regionId: number | null;
+            districtId: number | null;
+            address: string | null;
+            balance: number;
+            description: string | null;
+            phone: string;
         };
         SaleProduct: {
             id: number;
@@ -165,10 +165,10 @@ export declare class SaleService {
             registerId: number | null;
             modifyId: number | null;
             price: number | null;
-            count: number | null;
-            productId: number | null;
-            priceCount: number | null;
             saleId: number | null;
+            productId: number | null;
+            count: number | null;
+            priceCount: number | null;
             is_subscribe: boolean | null;
         }[];
     } & {
@@ -178,11 +178,11 @@ export declare class SaleService {
         updatedAt: Date;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         date: Date | null;
         code: string | null;
         codeId: number | null;
         clientId: number;
+        price: number;
         dept: number;
         credit: number;
         state: import(".prisma/client").$Enums.SaleState;
@@ -197,11 +197,11 @@ export declare class SaleService {
         updatedAt: Date;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         date: Date | null;
         code: string | null;
         codeId: number | null;
         clientId: number;
+        price: number;
         dept: number;
         credit: number;
         state: import(".prisma/client").$Enums.SaleState;
@@ -216,11 +216,11 @@ export declare class SaleService {
         updatedAt: Date;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         date: Date | null;
         code: string | null;
         codeId: number | null;
         clientId: number;
+        price: number;
         dept: number;
         credit: number;
         state: import(".prisma/client").$Enums.SaleState;

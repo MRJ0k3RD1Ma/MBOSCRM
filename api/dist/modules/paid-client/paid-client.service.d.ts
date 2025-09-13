@@ -12,11 +12,11 @@ export declare class PaidClientService {
         updatedAt: Date;
         registerId: number | null;
         modifyId: number | null;
+        clientId: number | null;
         price: number | null;
+        saleId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
-        saleId: number | null;
-        clientId: number | null;
     }>;
     processPayment(clientId: number, paymentAmount: number, saleId?: number): Promise<{
         paidAmount: number;
@@ -28,6 +28,30 @@ export declare class PaidClientService {
     }>;
     findAll(dto: FindAllQueryPaidClientDto): Promise<{
         data: ({
+            register: {
+                id: number;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                phone: string | null;
+                username: string;
+                password: string;
+                roleId: number | null;
+                chatId: string | null;
+            };
+            modify: {
+                id: number;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                phone: string | null;
+                username: string;
+                password: string;
+                roleId: number | null;
+                chatId: string | null;
+            };
             Sale: {
                 id: number;
                 isDeleted: boolean | null;
@@ -35,11 +59,11 @@ export declare class PaidClientService {
                 updatedAt: Date;
                 registerId: number | null;
                 modifyId: number | null;
-                price: number;
                 date: Date | null;
                 code: string | null;
                 codeId: number | null;
                 clientId: number;
+                price: number;
                 dept: number;
                 credit: number;
                 state: import(".prisma/client").$Enums.SaleState;
@@ -48,49 +72,25 @@ export declare class PaidClientService {
                 subscribe_generate_day: number | null;
             };
             Client: {
-                description: string | null;
-                name: string;
-                phone: string;
                 id: number;
+                name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                balance: number;
-                inn: string;
-                address: string | null;
-                regionId: number | null;
-                districtId: number | null;
-                typeId: number | null;
                 registerId: number | null;
                 modifyId: number | null;
-            };
-            modify: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
-                id: number;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-            };
-            register: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
-                id: number;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
+                typeId: number | null;
+                inn: string;
+                regionId: number | null;
+                districtId: number | null;
+                address: string | null;
+                balance: number;
+                description: string | null;
+                phone: string;
             };
             Payment: {
-                name: string | null;
                 id: number;
+                name: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
@@ -105,11 +105,11 @@ export declare class PaidClientService {
             updatedAt: Date;
             registerId: number | null;
             modifyId: number | null;
+            clientId: number | null;
             price: number | null;
+            saleId: number | null;
             paidDate: Date | null;
             paymentId: number | null;
-            saleId: number | null;
-            clientId: number | null;
         })[];
         page: number;
         limit: number;
@@ -124,11 +124,11 @@ export declare class PaidClientService {
             updatedAt: Date;
             registerId: number | null;
             modifyId: number | null;
-            price: number;
             date: Date | null;
             code: string | null;
             codeId: number | null;
             clientId: number;
+            price: number;
             dept: number;
             credit: number;
             state: import(".prisma/client").$Enums.SaleState;
@@ -137,25 +137,25 @@ export declare class PaidClientService {
             subscribe_generate_day: number | null;
         };
         Client: {
-            description: string | null;
-            name: string;
-            phone: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            balance: number;
-            inn: string;
-            address: string | null;
-            regionId: number | null;
-            districtId: number | null;
-            typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
+            typeId: number | null;
+            inn: string;
+            regionId: number | null;
+            districtId: number | null;
+            address: string | null;
+            balance: number;
+            description: string | null;
+            phone: string;
         };
         Payment: {
-            name: string | null;
             id: number;
+            name: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
@@ -170,11 +170,11 @@ export declare class PaidClientService {
         updatedAt: Date;
         registerId: number | null;
         modifyId: number | null;
+        clientId: number | null;
         price: number | null;
+        saleId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
-        saleId: number | null;
-        clientId: number | null;
     }>;
     update(id: number, updatePaidClientDto: UpdatePaidClientDto): Promise<{
         id: number;
@@ -183,11 +183,11 @@ export declare class PaidClientService {
         updatedAt: Date;
         registerId: number | null;
         modifyId: number | null;
+        clientId: number | null;
         price: number | null;
+        saleId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
-        saleId: number | null;
-        clientId: number | null;
     }>;
     remove(id: number): Promise<{
         id: number;
@@ -196,10 +196,10 @@ export declare class PaidClientService {
         updatedAt: Date;
         registerId: number | null;
         modifyId: number | null;
+        clientId: number | null;
         price: number | null;
+        saleId: number | null;
         paidDate: Date | null;
         paymentId: number | null;
-        saleId: number | null;
-        clientId: number | null;
     }>;
 }

@@ -7,21 +7,21 @@ export declare class ClientController {
     private readonly clientService;
     constructor(clientService: ClientService);
     create(createClientDto: CreateClientDto, req: Request): Promise<{
-        description: string | null;
-        name: string;
-        phone: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        balance: number;
-        inn: string;
-        address: string | null;
-        regionId: number | null;
-        districtId: number | null;
-        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
+        typeId: number | null;
+        inn: string;
+        regionId: number | null;
+        districtId: number | null;
+        address: string | null;
+        balance: number;
+        description: string | null;
+        phone: string;
     }>;
     findAll(query: FindAllClientQueryDto): Promise<{
         total: number;
@@ -29,40 +29,40 @@ export declare class ClientController {
         limit: number;
         data: ({
             ClientType: {
-                name: string;
                 id: number;
+                name: string;
             };
         } & {
-            description: string | null;
-            name: string;
-            phone: string;
             id: number;
+            name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            balance: number;
-            inn: string;
-            address: string | null;
-            regionId: number | null;
-            districtId: number | null;
-            typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
+            typeId: number | null;
+            inn: string;
+            regionId: number | null;
+            districtId: number | null;
+            address: string | null;
+            balance: number;
+            description: string | null;
+            phone: string;
         })[];
     }>;
     findOne(id: string): Promise<{
         District: {
-            name: string | null;
             id: number;
+            name: string | null;
             regionId: number | null;
         };
         Region: {
-            name: string | null;
             id: number;
+            name: string | null;
         };
         ClientType: {
-            name: string;
             id: number;
+            name: string;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
@@ -70,54 +70,54 @@ export declare class ClientController {
             creatorId: number | null;
         };
     } & {
-        description: string | null;
-        name: string;
-        phone: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        balance: number;
-        inn: string;
-        address: string | null;
-        regionId: number | null;
-        districtId: number | null;
-        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
+        typeId: number | null;
+        inn: string;
+        regionId: number | null;
+        districtId: number | null;
+        address: string | null;
+        balance: number;
+        description: string | null;
+        phone: string;
     }>;
     update(id: string, updateClientDto: UpdateClientDto, req: Request): Promise<{
-        description: string | null;
-        name: string;
-        phone: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        balance: number;
-        inn: string;
-        address: string | null;
-        regionId: number | null;
-        districtId: number | null;
-        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
+        typeId: number | null;
+        inn: string;
+        regionId: number | null;
+        districtId: number | null;
+        address: string | null;
+        balance: number;
+        description: string | null;
+        phone: string;
     }>;
     remove(id: string): Promise<{
-        description: string | null;
-        name: string;
-        phone: string;
         id: number;
+        name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        balance: number;
-        inn: string;
-        address: string | null;
-        regionId: number | null;
-        districtId: number | null;
-        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
+        typeId: number | null;
+        inn: string;
+        regionId: number | null;
+        districtId: number | null;
+        address: string | null;
+        balance: number;
+        description: string | null;
+        phone: string;
     }>;
 }

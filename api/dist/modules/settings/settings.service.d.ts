@@ -6,8 +6,8 @@ export declare class SettingsService implements OnModuleInit {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     get(): import(".prisma/client").Prisma.Prisma__SettingClient<{
-        name: string;
         id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         balance: number;
@@ -16,8 +16,8 @@ export declare class SettingsService implements OnModuleInit {
         smsPrice: number;
     }, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(data: UpdateSettingsDto): import(".prisma/client").Prisma.Prisma__SettingClient<{
-        name: string;
         id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         balance: number;

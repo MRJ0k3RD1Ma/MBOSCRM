@@ -11,6 +11,7 @@ export declare class ClientTypeController {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;
@@ -24,6 +25,7 @@ export declare class ClientTypeController {
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             modifyId: number | null;
             creatorId: number | null;
         }[];
@@ -34,6 +36,7 @@ export declare class ClientTypeController {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;
@@ -43,6 +46,7 @@ export declare class ClientTypeController {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;
@@ -52,6 +56,7 @@ export declare class ClientTypeController {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         modifyId: number | null;
         creatorId: number | null;
     }>;

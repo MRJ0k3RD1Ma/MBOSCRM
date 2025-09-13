@@ -4,8 +4,8 @@ export declare class SettingsController {
     private readonly settingsService;
     constructor(settingsService: SettingsService);
     get(): Promise<{
-        name: string;
         id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         balance: number;
@@ -14,8 +14,8 @@ export declare class SettingsController {
         smsPrice: number;
     }>;
     update(data: UpdateSettingsDto): Promise<{
-        name: string;
         id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         balance: number;

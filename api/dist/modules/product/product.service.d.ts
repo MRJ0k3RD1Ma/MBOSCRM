@@ -13,6 +13,7 @@ export declare class ProductService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -37,6 +38,7 @@ export declare class ProductService {
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -58,6 +60,7 @@ export declare class ProductService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -78,6 +81,7 @@ export declare class ProductService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -98,6 +102,7 @@ export declare class ProductService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;

@@ -10,6 +10,33 @@ exports.env = (0, envalid_1.cleanEnv)(process.env, {
     ACCESS_TOKEN_SECRET: (0, envalid_1.str)(),
     REFRESH_TOKEN_SECRET: (0, envalid_1.str)(),
     PASSPHRASE: (0, envalid_1.str)(),
+    DATABASE_URL: (0, envalid_1.str)(),
     BOT_TOKEN: (0, envalid_1.str)(),
+    BACKEND_URL: (0, envalid_1.str)(),
+    IS_MAIN: (0, envalid_1.bool)({ default: false }),
+    MAIN_BACKEND_URL: (0, envalid_1.str)({
+        default: undefined,
+        requiredWhen(cleanedEnv) {
+            return !cleanedEnv.IS_MAIN;
+        },
+    }),
+    MAIN_KEY: (0, envalid_1.str)({
+        default: undefined,
+        requiredWhen(cleanedEnv) {
+            return !cleanedEnv.IS_MAIN;
+        },
+    }),
+    ESKIZ_EMAIL: (0, envalid_1.str)({
+        default: undefined,
+        requiredWhen(cleanedEnv) {
+            return !!cleanedEnv.IS_MAIN;
+        },
+    }),
+    ESKIZ_PASSWORD: (0, envalid_1.str)({
+        default: undefined,
+        requiredWhen(cleanedEnv) {
+            return !!cleanedEnv.IS_MAIN;
+        },
+    }),
 });
 //# sourceMappingURL=index.js.map

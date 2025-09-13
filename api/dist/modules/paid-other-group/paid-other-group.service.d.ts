@@ -13,6 +13,7 @@ export declare class PaidOtherGroupService implements OnModuleInit {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -26,6 +27,7 @@ export declare class PaidOtherGroupService implements OnModuleInit {
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
         }[];
@@ -36,6 +38,7 @@ export declare class PaidOtherGroupService implements OnModuleInit {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -45,6 +48,7 @@ export declare class PaidOtherGroupService implements OnModuleInit {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -54,6 +58,7 @@ export declare class PaidOtherGroupService implements OnModuleInit {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;

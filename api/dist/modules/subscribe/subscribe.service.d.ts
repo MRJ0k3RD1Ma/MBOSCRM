@@ -15,10 +15,10 @@ export declare class SubscribeService {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        price: number;
-        saleId: number | null;
         clientId: number;
+        price: number;
         state: import(".prisma/client").$Enums.SubscribeState;
+        saleId: number | null;
         paid: number;
         paying_date: Date;
     }>;
@@ -27,28 +27,11 @@ export declare class SubscribeService {
         page: number;
         limit: number;
         data: ({
-            client: {
-                description: string | null;
-                name: string;
-                phone: string;
-                id: number;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                balance: number;
-                inn: string;
-                address: string | null;
-                regionId: number | null;
-                districtId: number | null;
-                typeId: number | null;
-                registerId: number | null;
-                modifyId: number | null;
-            };
             sale: {
                 PaidClient: ({
                     Payment: {
-                        name: string | null;
                         id: number;
+                        name: string | null;
                         isDeleted: boolean | null;
                         createdAt: Date;
                         updatedAt: Date;
@@ -63,11 +46,11 @@ export declare class SubscribeService {
                     updatedAt: Date;
                     registerId: number | null;
                     modifyId: number | null;
+                    clientId: number | null;
                     price: number | null;
+                    saleId: number | null;
                     paidDate: Date | null;
                     paymentId: number | null;
-                    saleId: number | null;
-                    clientId: number | null;
                 })[];
             } & {
                 id: number;
@@ -76,11 +59,11 @@ export declare class SubscribeService {
                 updatedAt: Date;
                 registerId: number | null;
                 modifyId: number | null;
-                price: number;
                 date: Date | null;
                 code: string | null;
                 codeId: number | null;
                 clientId: number;
+                price: number;
                 dept: number;
                 credit: number;
                 state: import(".prisma/client").$Enums.SaleState;
@@ -88,42 +71,77 @@ export declare class SubscribeService {
                 subscribe_begin_date: Date | null;
                 subscribe_generate_day: number | null;
             };
+            client: {
+                id: number;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                registerId: number | null;
+                modifyId: number | null;
+                typeId: number | null;
+                inn: string;
+                regionId: number | null;
+                districtId: number | null;
+                address: string | null;
+                balance: number;
+                description: string | null;
+                phone: string;
+            };
         } & {
             id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            price: number;
-            saleId: number | null;
             clientId: number;
+            price: number;
             state: import(".prisma/client").$Enums.SubscribeState;
+            saleId: number | null;
             paid: number;
             paying_date: Date;
         })[];
     }>;
     findOne(id: number): Promise<{
-        client: {
-            description: string | null;
-            name: string;
-            phone: string;
-            id: number;
-            isDeleted: boolean | null;
-            createdAt: Date;
-            updatedAt: Date;
-            balance: number;
-            inn: string;
-            address: string | null;
-            regionId: number | null;
-            districtId: number | null;
-            typeId: number | null;
-            registerId: number | null;
-            modifyId: number | null;
-        };
         sale: {
+            SaleProduct: ({
+                product: {
+                    id: number;
+                    name: string;
+                    isDeleted: boolean | null;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    registerId: number | null;
+                    modifyId: number | null;
+                    price: number;
+                    barcode: string | null;
+                    barcodeId: number | null;
+                    groupId: number;
+                    unitId: number | null;
+                    priceIncome: number;
+                    reminderFirst: number;
+                    type: import(".prisma/client").$Enums.ProductType;
+                    countReminder: number;
+                    countArrived: number;
+                    countSale: number;
+                };
+            } & {
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date | null;
+                updatedAt: Date | null;
+                registerId: number | null;
+                modifyId: number | null;
+                price: number | null;
+                saleId: number | null;
+                productId: number | null;
+                count: number | null;
+                priceCount: number | null;
+                is_subscribe: boolean | null;
+            })[];
             PaidClient: ({
                 Payment: {
-                    name: string | null;
                     id: number;
+                    name: string | null;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
@@ -138,46 +156,11 @@ export declare class SubscribeService {
                 updatedAt: Date;
                 registerId: number | null;
                 modifyId: number | null;
+                clientId: number | null;
                 price: number | null;
+                saleId: number | null;
                 paidDate: Date | null;
                 paymentId: number | null;
-                saleId: number | null;
-                clientId: number | null;
-            })[];
-            SaleProduct: ({
-                product: {
-                    type: import(".prisma/client").$Enums.ProductType;
-                    name: string;
-                    id: number;
-                    isDeleted: boolean | null;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    registerId: number | null;
-                    modifyId: number | null;
-                    barcode: string | null;
-                    groupId: number;
-                    unitId: number | null;
-                    priceIncome: number;
-                    reminderFirst: number;
-                    price: number;
-                    barcodeId: number | null;
-                    countReminder: number;
-                    countArrived: number;
-                    countSale: number;
-                };
-            } & {
-                id: number;
-                isDeleted: boolean | null;
-                createdAt: Date | null;
-                updatedAt: Date | null;
-                registerId: number | null;
-                modifyId: number | null;
-                price: number | null;
-                count: number | null;
-                productId: number | null;
-                priceCount: number | null;
-                saleId: number | null;
-                is_subscribe: boolean | null;
             })[];
         } & {
             id: number;
@@ -186,11 +169,11 @@ export declare class SubscribeService {
             updatedAt: Date;
             registerId: number | null;
             modifyId: number | null;
-            price: number;
             date: Date | null;
             code: string | null;
             codeId: number | null;
             clientId: number;
+            price: number;
             dept: number;
             credit: number;
             state: import(".prisma/client").$Enums.SaleState;
@@ -198,15 +181,32 @@ export declare class SubscribeService {
             subscribe_begin_date: Date | null;
             subscribe_generate_day: number | null;
         };
+        client: {
+            id: number;
+            name: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            registerId: number | null;
+            modifyId: number | null;
+            typeId: number | null;
+            inn: string;
+            regionId: number | null;
+            districtId: number | null;
+            address: string | null;
+            balance: number;
+            description: string | null;
+            phone: string;
+        };
     } & {
         id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        price: number;
-        saleId: number | null;
         clientId: number;
+        price: number;
         state: import(".prisma/client").$Enums.SubscribeState;
+        saleId: number | null;
         paid: number;
         paying_date: Date;
     }>;
@@ -215,10 +215,10 @@ export declare class SubscribeService {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        price: number;
-        saleId: number | null;
         clientId: number;
+        price: number;
         state: import(".prisma/client").$Enums.SubscribeState;
+        saleId: number | null;
         paid: number;
         paying_date: Date;
     }>;
@@ -227,10 +227,10 @@ export declare class SubscribeService {
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        price: number;
-        saleId: number | null;
         clientId: number;
+        price: number;
         state: import(".prisma/client").$Enums.SubscribeState;
+        saleId: number | null;
         paid: number;
         paying_date: Date;
     }>;

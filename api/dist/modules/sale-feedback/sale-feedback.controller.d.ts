@@ -8,11 +8,11 @@ export declare class SaleFeedbackController {
     create(createSaleFeedbackDto: CreateSaleFeedbackDto): Promise<{
         description: string | null;
         name: string | null;
-        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
+        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
         saleId: number;
         state: import(".prisma/client").$Enums.SaleFeedbackState;
         score: number | null;
@@ -22,11 +22,11 @@ export declare class SaleFeedbackController {
         data: {
             description: string | null;
             name: string | null;
-            result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
-            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
+            result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
             saleId: number;
             state: import(".prisma/client").$Enums.SaleFeedbackState;
             score: number | null;
@@ -39,11 +39,11 @@ export declare class SaleFeedbackController {
     findOne(id: string): Promise<{
         description: string | null;
         name: string | null;
-        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
+        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
         saleId: number;
         state: import(".prisma/client").$Enums.SaleFeedbackState;
         score: number | null;
@@ -52,11 +52,11 @@ export declare class SaleFeedbackController {
     update(alias: string, updateSaleFeedbackDto: UpdateSaleFeedbackDto): Promise<{
         description: string | null;
         name: string | null;
-        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
+        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
         saleId: number;
         state: import(".prisma/client").$Enums.SaleFeedbackState;
         score: number | null;
@@ -65,11 +65,11 @@ export declare class SaleFeedbackController {
     remove(id: string): Promise<{
         description: string | null;
         name: string | null;
-        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
+        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
         saleId: number;
         state: import(".prisma/client").$Enums.SaleFeedbackState;
         score: number | null;

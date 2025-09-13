@@ -12,6 +12,7 @@ export declare class ProductGroupService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number;
         modifyId: number;
     }>;
@@ -25,6 +26,7 @@ export declare class ProductGroupService {
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number;
             modifyId: number;
         }[];
@@ -35,6 +37,7 @@ export declare class ProductGroupService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number;
         modifyId: number;
     }>;
@@ -44,6 +47,7 @@ export declare class ProductGroupService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number;
         modifyId: number;
     }>;
@@ -53,6 +57,7 @@ export declare class ProductGroupService {
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number;
         modifyId: number;
     }>;

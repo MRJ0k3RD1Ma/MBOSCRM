@@ -31,11 +31,19 @@ import { PaymeModule } from './modules/payme/payme.module';
 import { TodoModule } from './modules/todo/todo.module';
 import { SaleFeedbackModule } from './modules/sale-feedback/sale-feedback.module';
 import { SaleTodoModule } from './modules/sale-todo/sale-todo.module';
+import { EskizModule } from "./modules/eskiz/eskiz.module";
+import { FeatureFlagModule } from "./modules/feature-flag/feature-flag.module";
+import { ClientCrmModule } from "./modules/client-crm/client-crm.module";
+
+const MainModules = [EskizModule, ClientCrmModule];
 
 @Module({
 	controllers: [],
 	providers: [],
 	imports: [
+		PrismaModule,
+		...(env.IS_MAIN ? MainModules : []),
+		FeatureFlagModule,
 		LocationModule,
 		UserRoleModule,
 		UserModule,
@@ -47,7 +55,6 @@ import { SaleTodoModule } from './modules/sale-todo/sale-todo.module';
 		ClientModule,
 		ProductGroupModule,
 		SettingsModule,
-		PrismaModule,
 		ProductModule,
 		SupplierModule,
 		PaymentModule,
@@ -63,12 +70,12 @@ import { SaleTodoModule } from './modules/sale-todo/sale-todo.module';
 		PaidServerModule,
 		ServerModule,
 		SaleTodoModule,
-		ScheduleModule.forRoot(),
-		EventEmitterModule.forRoot(),
-		NestjsGrammyModule.forRoot({ token: env.BOT_TOKEN }),
 		PaymeModule,
 		TodoModule,
 		SaleFeedbackModule,
+		ScheduleModule.forRoot(),
+		EventEmitterModule.forRoot(),
+		NestjsGrammyModule.forRoot({ token: env.BOT_TOKEN }),
 	],
 })
 export class AppModule { }
