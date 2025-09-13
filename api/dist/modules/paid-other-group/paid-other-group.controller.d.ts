@@ -6,11 +6,11 @@ export declare class PaidOtherGroupController {
     private readonly paidOtherGroupService;
     constructor(paidOtherGroupService: PaidOtherGroupService);
     create(createPaidOtherGroupDto: CreatePaidOtherGroupDto): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -19,39 +19,39 @@ export declare class PaidOtherGroupController {
         page: number;
         limit: number;
         data: {
-            id: number;
             name: string;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
         }[];
     }>;
     findOne(id: string): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
     update(id: string, updatePaidOtherGroupDto: UpdatePaidOtherGroupDto): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
     remove(id: string): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;

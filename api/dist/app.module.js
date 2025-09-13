@@ -40,6 +40,10 @@ const payme_module_1 = require("./modules/payme/payme.module");
 const todo_module_1 = require("./modules/todo/todo.module");
 const sale_feedback_module_1 = require("./modules/sale-feedback/sale-feedback.module");
 const sale_todo_module_1 = require("./modules/sale-todo/sale-todo.module");
+const eskiz_module_1 = require("./modules/eskiz/eskiz.module");
+const feature_flag_module_1 = require("./modules/feature-flag/feature-flag.module");
+const client_crm_module_1 = require("./modules/client-crm/client-crm.module");
+const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule];
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -50,7 +54,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             prisma_module_1.PrismaModule,
             ...(config_1.env.IS_MAIN ? MainModules : []),
-            FeatureFlagModule,
+            feature_flag_module_1.FeatureFlagModule,
             location_module_1.LocationModule,
             userRole_module_1.UserRoleModule,
             user_module_1.UserModule,

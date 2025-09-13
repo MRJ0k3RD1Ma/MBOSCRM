@@ -232,6 +232,8 @@ export class SaleService {
 			include: {
 				SaleProduct: true,
 				client: { include: { Region: true, District: true } },
+				SaleFeedback: true,
+				SaleTodo: true,
 			},
 		});
 		if (!sale) {

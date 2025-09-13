@@ -4,20 +4,20 @@ export declare class SettingsController {
     private readonly settingsService;
     constructor(settingsService: SettingsService);
     get(): Promise<{
-        id: number;
         name: string;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         balance: number;
         creditReminderInterval: number;
         smsExpiredHour: number;
         smsPrice: number;
     }>;
     update(data: UpdateSettingsDto): Promise<{
-        id: number;
         name: string;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         balance: number;
         creditReminderInterval: number;
         smsExpiredHour: number;
