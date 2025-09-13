@@ -1,8 +1,12 @@
-import { OnModuleInit } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
-export declare class SmsService implements OnModuleInit {
+import { EskizService } from "../eskiz/eskiz.service";
+import { FeatureFlagService } from "../feature-flag/feature-flag.service";
+export declare class SmsService {
     private readonly prisma;
-    constructor(prisma: PrismaService);
-    onModuleInit(): Promise<void>;
-    sendMessage(mobile_phone: string, message: string, crm_key?: string): Promise<void>;
+    private readonly eskizService;
+    private readonly featureFlagService;
+    constructor(prisma: PrismaService, eskizService: EskizService, featureFlagService: FeatureFlagService);
+    private axios;
+    cron(): Promise<void>;
+    sendMessage(mobile_phone: string, message: string, crm_key?: string): Promise<any>;
 }

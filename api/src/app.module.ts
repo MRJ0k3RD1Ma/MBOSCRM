@@ -34,6 +34,7 @@ import { PaymeModule } from "./modules/payme/payme.module";
 import { TodoModule } from "./modules/todo/todo.module";
 import { SaleFeedbackModule } from "./modules/sale-feedback/sale-feedback.module";
 import { ClientCrmModule } from "./modules/client-crm/client-crm.module";
+import { SmsModule } from "./modules/sms/sms.module";
 
 const MainModules = [EskizModule, ClientCrmModule];
 
@@ -71,6 +72,7 @@ const MainModules = [EskizModule, ClientCrmModule];
 		ServerModule,
 		SaleTodoModule,
 		PaymeModule,
+		SmsModule,
 		TodoModule,
 		SaleFeedbackModule,
 		ScheduleModule.forRoot(),

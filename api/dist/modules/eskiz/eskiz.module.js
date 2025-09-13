@@ -14,6 +14,7 @@ let EskizModule = class EskizModule {
 };
 exports.EskizModule = EskizModule;
 exports.EskizModule = EskizModule = __decorate([
+    (0, common_1.Global)(),
     (0, common_1.Module)({
         controllers: [eskiz_controller_1.EskizController],
         providers: [eskiz_service_1.EskizService],

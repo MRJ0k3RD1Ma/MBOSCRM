@@ -43,6 +43,7 @@ const payme_module_1 = require("./modules/payme/payme.module");
 const todo_module_1 = require("./modules/todo/todo.module");
 const sale_feedback_module_1 = require("./modules/sale-feedback/sale-feedback.module");
 const client_crm_module_1 = require("./modules/client-crm/client-crm.module");
+const sms_module_1 = require("./modules/sms/sms.module");
 const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule];
 let AppModule = class AppModule {
 };
@@ -82,6 +83,7 @@ exports.AppModule = AppModule = __decorate([
             server_module_1.ServerModule,
             saleTodo_module_1.SaleTodoModule,
             payme_module_1.PaymeModule,
+            sms_module_1.SmsModule,
             todo_module_1.TodoModule,
             sale_feedback_module_1.SaleFeedbackModule,
             schedule_1.ScheduleModule.forRoot(),

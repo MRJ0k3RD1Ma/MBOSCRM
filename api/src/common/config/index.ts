@@ -22,12 +22,7 @@ export const env = cleanEnv(process.env, {
 			return !cleanedEnv.IS_MAIN;
 		},
 	}),
-	MAIN_KEY: str({
-		default: undefined,
-		requiredWhen(cleanedEnv) {
-			return !cleanedEnv.IS_MAIN;
-		},
-	}),
+	MAIN_KEY: str(),
 
 	ESKIZ_EMAIL: str({
 		default: undefined,

@@ -2,7 +2,8 @@ import { Injectable, OnModuleInit } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import Axios from "axios";
 import { env } from "src/common/config";
-import { DetailizationState } from "@prisma/client";
+import { DetailizationState, Prisma } from "@prisma/client";
+import { EskizCallbackDto } from "./dtos/eskiz-callback.dto";
 
 @Injectable()
 export class EskizService implements OnModuleInit {
@@ -33,24 +34,45 @@ export class EskizService implements OnModuleInit {
 		);
 	}
 
-	async sendMessage(
-		mobile_phone: string,
-		message: string,
-		from: string = "4546",
-		callback_url: string = `${env.BACKEND_URL}/eskiz/callback`,
-	) {
-		const { data } = await this.axios.post("message/sms/send", {
-			mobile_phone,
-			message,
-			from,
-			callback_url,
+	async callback(dto: EskizCallbackDto) {
+		console.log(dto);
+		await this.prisma.detailization.update({
+			where: { messageId: dto.message_id },
+			data: { state: dto.status as DetailizationState },
 		});
+		return true;
+	}
 
-		return data;
+	async sendMessage(
+		message: Awaited<ReturnType<typeof this.prisma.detailization.findFirst>>,
+	) {
+		try {
+			const callback_url: string = `${env.BACKEND_URL}/eskiz/callback`;
+			const { data } = await this.axios.post("message/sms/send", {
+				mobile_phone: message.phone_number,
+				message: message.message,
+				callback_url,
+			});
+
+			await this.prisma.detailization.update({
+				where: { id: message.id },
+				data: { messageId: data.id, state: "WAITING" },
+			});
+
+			return data;
+		} catch (e) {
+			console.log(e);
+
+			await this.prisma.detailization.update({
+				where: { id: message.id },
+				data: { state: "REJECTED" },
+			});
+			throw e;
+		}
 	}
 
 	async getTemplates() {
-		return await this.axios.get("/user/templates");
+		return (await this.axios.get("/user/templates")).data;
 	}
 
 	private async getToken() {

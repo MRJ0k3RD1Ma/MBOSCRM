@@ -20,12 +20,7 @@ exports.env = (0, envalid_1.cleanEnv)(process.env, {
             return !cleanedEnv.IS_MAIN;
         },
     }),
-    MAIN_KEY: (0, envalid_1.str)({
-        default: undefined,
-        requiredWhen(cleanedEnv) {
-            return !cleanedEnv.IS_MAIN;
-        },
-    }),
+    MAIN_KEY: (0, envalid_1.str)(),
     ESKIZ_EMAIL: (0, envalid_1.str)({
         default: undefined,
         requiredWhen(cleanedEnv) {

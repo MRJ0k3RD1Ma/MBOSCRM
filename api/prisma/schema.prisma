@@ -122,6 +122,7 @@ model Access {
   key           String
   name          String?
   description   String?
+  updatedTime   DateTime        @default(now())
   isActive      Boolean         @default(false)
   isDeleted     Boolean         @default(false)
   createdAt     DateTime        @default(now())
@@ -158,12 +159,12 @@ model Detailization {
 
   phone_number String
   message      String
-  messageId    String?             @db.VarChar(255)
-  state        DetailizationState?
-  count        Int                 @default(1)
-  price        Float               @default(0)
+  messageId    String?            @unique @db.VarChar(255)
+  state        DetailizationState @default(NEW)
+  count        Int                @default(1)
+  price        Float              @default(0)
   crmId        Int
-  crm          ClientCrm           @relation(fields: [crmId], references: [id])
+  crm          ClientCrm          @relation(fields: [crmId], references: [id])
 
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
