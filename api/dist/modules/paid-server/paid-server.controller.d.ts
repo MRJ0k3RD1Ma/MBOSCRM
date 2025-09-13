@@ -6,14 +6,14 @@ export declare class PaidServerController {
     private readonly paidServerService;
     constructor(paidServerService: PaidServerService);
     create(createPaidServerDto: CreatePaidServerDto): Promise<{
-        description: string | null;
+        id: number;
+        price: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        description: string | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         serverId: number;
         endDate: Date;
         paymentTypeId: number;
@@ -21,28 +21,28 @@ export declare class PaidServerController {
     findAll(dto: FindAllQueryPaidServerDto): Promise<{
         data: ({
             server: {
-                name: string;
                 id: number;
+                name: string;
             };
             paymentType: {
+                id: number;
                 name: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 icon: string | null;
             };
         } & {
-            description: string | null;
+            id: number;
+            price: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
+            description: string | null;
             registerId: number | null;
             modifyId: number | null;
-            price: number;
             serverId: number;
             endDate: Date;
             paymentTypeId: number;
@@ -54,54 +54,54 @@ export declare class PaidServerController {
     }>;
     findOne(id: string): Promise<{
         server: {
-            name: string;
             id: number;
+            name: string;
         };
         paymentType: {
+            id: number;
             name: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
     } & {
-        description: string | null;
+        id: number;
+        price: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        description: string | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         serverId: number;
         endDate: Date;
         paymentTypeId: number;
     }>;
     update(id: string, updatePaidServerDto: UpdatePaidServerDto): Promise<{
-        description: string | null;
+        id: number;
+        price: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        description: string | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         serverId: number;
         endDate: Date;
         paymentTypeId: number;
     }>;
     remove(id: string): Promise<{
-        description: string | null;
+        id: number;
+        price: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        description: string | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         serverId: number;
         endDate: Date;
         paymentTypeId: number;

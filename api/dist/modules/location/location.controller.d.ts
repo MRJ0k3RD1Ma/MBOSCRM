@@ -3,12 +3,12 @@ export declare class LocationController {
     private readonly locationService;
     constructor(locationService: LocationService);
     getRegions(): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
     }[]>;
     getDistricts(regionId: number): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
         regionId: number | null;
     }[]>;
 }

@@ -6,11 +6,11 @@ export declare class SaleTodoService {
     private searchCache;
     onModuleInit(): Promise<void>;
     createTodo(createTodoDto: CreateTodoDto): Promise<{
-        name: string | null;
         id: number;
+        name: string | null;
     }>;
     searchTodo(query: string): Promise<string | {
-        name: string | null;
         id: number;
+        name: string | null;
     }[]>;
 }

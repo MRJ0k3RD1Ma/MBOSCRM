@@ -7,11 +7,11 @@ export declare class ProductGroupService {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createProductGroupDto: CreateProductGroupDto, creatorId: number): Promise<{
+        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number;
         modifyId: number;
     }>;
@@ -20,39 +20,39 @@ export declare class ProductGroupService {
         page: number;
         limit: number;
         data: {
+            id: number;
             name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number;
             modifyId: number;
         }[];
     }>;
     findOne(id: number): Promise<{
+        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number;
         modifyId: number;
     }>;
     update(id: number, updateProductGroupDto: UpdateProductGroupDto, userId: number): Promise<{
+        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number;
         modifyId: number;
     }>;
     remove(id: number, modifierId: number): Promise<{
+        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number;
         modifyId: number;
     }>;

@@ -6,53 +6,53 @@ export declare class PaidOtherController {
     private readonly paidOtherService;
     constructor(paidOtherService: PaidOtherService);
     create(createPaidOtherDto: CreatePaidOtherDto): Promise<{
-        type: import(".prisma/client").$Enums.PaidOtherType;
-        description: string | null;
+        id: number;
+        price: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        description: string | null;
         registerId: number | null;
         modifyId: number | null;
-        groupId: number;
-        price: number;
-        paidDate: Date;
         paymentId: number;
+        paidDate: Date;
+        groupId: number;
+        type: import(".prisma/client").$Enums.PaidOtherType;
     }>;
     findAll(dto: FindAllQueryPaidOtherDto): Promise<{
         data: ({
             Payment: {
+                id: number;
                 name: string | null;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
                 icon: string | null;
             };
             group: {
+                id: number;
                 name: string;
                 isDeleted: boolean;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 registerId: number | null;
                 modifyId: number | null;
             };
         } & {
-            type: import(".prisma/client").$Enums.PaidOtherType;
-            description: string | null;
+            id: number;
+            price: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
+            description: string | null;
             registerId: number | null;
             modifyId: number | null;
-            groupId: number;
-            price: number;
-            paidDate: Date;
             paymentId: number;
+            paidDate: Date;
+            groupId: number;
+            type: import(".prisma/client").$Enums.PaidOtherType;
         })[];
         page: number;
         limit: number;
@@ -61,64 +61,64 @@ export declare class PaidOtherController {
     }>;
     findOne(id: string): Promise<{
         Payment: {
+            id: number;
             name: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         };
         group: {
+            id: number;
             name: string;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
         };
     } & {
-        type: import(".prisma/client").$Enums.PaidOtherType;
-        description: string | null;
+        id: number;
+        price: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        description: string | null;
         registerId: number | null;
         modifyId: number | null;
-        groupId: number;
-        price: number;
-        paidDate: Date;
         paymentId: number;
+        paidDate: Date;
+        groupId: number;
+        type: import(".prisma/client").$Enums.PaidOtherType;
     }>;
     update(id: string, updatePaidOtherDto: UpdatePaidOtherDto): Promise<{
-        type: import(".prisma/client").$Enums.PaidOtherType;
-        description: string | null;
+        id: number;
+        price: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        description: string | null;
         registerId: number | null;
         modifyId: number | null;
-        groupId: number;
-        price: number;
-        paidDate: Date;
         paymentId: number;
+        paidDate: Date;
+        groupId: number;
+        type: import(".prisma/client").$Enums.PaidOtherType;
     }>;
     remove(id: string): Promise<{
-        type: import(".prisma/client").$Enums.PaidOtherType;
-        description: string | null;
+        id: number;
+        price: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
+        description: string | null;
         registerId: number | null;
         modifyId: number | null;
-        groupId: number;
-        price: number;
-        paidDate: Date;
         paymentId: number;
+        paidDate: Date;
+        groupId: number;
+        type: import(".prisma/client").$Enums.PaidOtherType;
     }>;
 }
