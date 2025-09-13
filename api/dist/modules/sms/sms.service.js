@@ -35,7 +35,6 @@ let SmsService = class SmsService {
             });
     }
     async cron() {
-        console.log(config_1.env.IS_MAIN);
         if (!config_1.env.IS_MAIN)
             return;
         const messagesToSend = await this.prisma.detailization.findMany({

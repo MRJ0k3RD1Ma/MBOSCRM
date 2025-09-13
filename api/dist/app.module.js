@@ -36,12 +36,12 @@ const server_module_1 = require("./modules/server/server.module");
 const nestjs_1 = require("@grammyjs/nestjs");
 const config_1 = require("./common/config");
 const event_emitter_1 = require("@nestjs/event-emitter");
-const saleTodo_module_1 = require("./modules/saleTodo/saleTodo.module");
-const eskiz_module_1 = require("./modules/eskiz/eskiz.module");
-const feature_flag_module_1 = require("./modules/feature-flag/feature-flag.module");
 const payme_module_1 = require("./modules/payme/payme.module");
 const todo_module_1 = require("./modules/todo/todo.module");
 const sale_feedback_module_1 = require("./modules/sale-feedback/sale-feedback.module");
+const sale_todo_module_1 = require("./modules/sale-todo/sale-todo.module");
+const eskiz_module_1 = require("./modules/eskiz/eskiz.module");
+const feature_flag_module_1 = require("./modules/feature-flag/feature-flag.module");
 const client_crm_module_1 = require("./modules/client-crm/client-crm.module");
 const sms_module_1 = require("./modules/sms/sms.module");
 const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule];
@@ -81,7 +81,7 @@ exports.AppModule = AppModule = __decorate([
             paid_other_module_1.PaidOtherModule,
             paid_server_module_1.PaidServerModule,
             server_module_1.ServerModule,
-            saleTodo_module_1.SaleTodoModule,
+            sale_todo_module_1.SaleTodoModule,
             payme_module_1.PaymeModule,
             sms_module_1.SmsModule,
             todo_module_1.TodoModule,

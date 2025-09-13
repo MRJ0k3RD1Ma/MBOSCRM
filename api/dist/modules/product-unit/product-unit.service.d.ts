@@ -7,11 +7,11 @@ export declare class ProductUnitService {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(dto: CreateProductUnitDto): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -20,39 +20,39 @@ export declare class ProductUnitService {
         page: number;
         limit: number;
         data: {
-            id: number;
             name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
         }[];
     }>;
     findOne(id: number): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
     update(id: number, updateProductUnitDto: UpdateProductUnitDto): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
     remove(id: number): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;

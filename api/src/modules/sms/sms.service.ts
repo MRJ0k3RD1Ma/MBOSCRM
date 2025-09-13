@@ -25,7 +25,6 @@ export class SmsService {
 
 	@Cron("* * * * *")
 	async cron() {
-		console.log(env.IS_MAIN);
 		if (!env.IS_MAIN) return;
 		const messagesToSend = await this.prisma.detailization.findMany({
 			where: { state: "NEW" },

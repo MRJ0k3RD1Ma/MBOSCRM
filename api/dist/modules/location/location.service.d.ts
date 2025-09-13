@@ -5,12 +5,12 @@ export declare class LocationService implements OnModuleInit {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     getRegions(): Promise<{
-        id: number;
         name: string | null;
+        id: number;
     }[]>;
     getDistricts(regionId: number): Promise<{
-        id: number;
         name: string | null;
+        id: number;
         regionId: number | null;
     }[]>;
 }
