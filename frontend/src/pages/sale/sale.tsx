@@ -1,14 +1,17 @@
 import {
   Button,
   Card,
-  Col,
   Descriptions,
+  Dropdown,
   Input,
   Modal,
   Row,
+  Select,
   Space,
   Table,
+  Tooltip,
   Typography,
+  type MenuProps,
 } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
@@ -19,11 +22,12 @@ import {
   useGetAllSale,
   useGetSaleById,
   useUpdateSale,
+  type Sale,
 } from "../../config/queries/sale/sale-querys";
 import { useGetAllSaleProduct } from "../../config/queries/sale/sale-product-querys";
 import { useGetAllClients } from "../../config/queries/clients/clients-querys";
 import { useGetAllClientTypes } from "../../config/queries/clients/client-type-querys";
-import { PlusOutlined } from "@ant-design/icons";
+import { MoreOutlined, PlusOutlined } from "@ant-design/icons";
 import PaidClientFormModal from "../clients/ui/paid-clients-form-modal";
 import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
 import {
@@ -31,6 +35,12 @@ import {
   type PaidClientDto,
 } from "../../config/queries/clients/paid-client-querys";
 import { indexColumn } from "../../components/tables/indexColumn";
+import {
+  useGetAllSaleTodo,
+  type SaleTodo,
+} from "../../config/queries/sale/sale-todo-querys";
+import { useGetAllSaleFeedback } from "../../config/queries/sale/sale-feedback-querys";
+import { useGetAllTodos } from "../../config/queries/sale/todo-querys";
 
 const { Title } = Typography;
 
@@ -45,10 +55,11 @@ export default function Sale() {
     if (id) setCurrentId(Number(id));
   }, [id]);
   const [page, setPage] = useState(1);
+  const [pageSale, setPageSale] = useState(1);
   const limit = 5;
 
   const updateSale = useUpdateSale();
-  const { data: sale, isLoading } = useGetSaleById(currentId ?? undefined);
+  const { data: sale } = useGetSaleById(currentId ?? undefined);
   const { data: saleProducts } = useGetAllSaleProduct({
     page,
     limit,
@@ -56,9 +67,18 @@ export default function Sale() {
   });
   const { data: sales } = useGetAllSale({ page: 1, limit: 1000 });
   const { data: payments } = useGetAllPayments({ page: 1, limit: 1000 });
+  const { data: todo } = useGetAllTodos();
   const { data: clients } = useGetAllClients();
   const { data: products } = useGetAllProducts();
   const { data: types } = useGetAllClientTypes();
+  const { data: saleTodo } = useGetAllSaleTodo({
+    page: pageSale,
+    limit,
+  });
+  const { data: saleFeedback } = useGetAllSaleFeedback({
+    page: 1,
+    limit,
+  });
 
   const createPaidClient = useCreatePaidClient();
   const deleteSale = useDeleteSale();
@@ -117,6 +137,84 @@ export default function Sale() {
     },
   ];
 
+  const saleTodoColumns = [
+    indexColumn(page, limit),
+    {
+      title: "Natija",
+      dataIndex: "isComplated",
+      render: (isComplated: boolean) => (isComplated ? "✓" : "✕"),
+    },
+    {
+      title: "Sana",
+      dataIndex: "updatedAt",
+      render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
+    },
+    {
+      title: "Qilingan ishlar",
+      dataIndex: "name",
+    },
+
+    {
+      title: "Amallar",
+      key: "actions",
+      render: (_: any, row: SaleTodo) => {
+        const items: MenuProps["items"] = [
+          {
+            key: "edit",
+            label: "Tahrirlash",
+            onClick: () => navigate(`/sale/edit/${row.id}`),
+          },
+          {
+            key: "delete",
+            label: "O‘chirish",
+            danger: true,
+            // onClick: () => handleDelete(row.id),
+          },
+        ];
+
+        return (
+          <div onClick={(e) => e.stopPropagation()}>
+            <Dropdown menu={{ items }} trigger={["click"]}>
+              <Tooltip title="Boshqarish">
+                <Button icon={<MoreOutlined />} />
+              </Tooltip>
+            </Dropdown>
+          </div>
+        );
+      },
+    },
+  ];
+
+  const saleFeedbackColumns = [
+    indexColumn(page, limit),
+    {
+      title: "Holati",
+      dataIndex: "state",
+    },
+    {
+      title: "Qabul qilgan shaxs",
+      dataIndex: "name",
+    },
+    {
+      title: "Bajarilgan ish natijasi",
+      dataIndex: "result",
+    },
+    {
+      title: "Baho",
+      dataIndex: "score",
+    },
+    {
+      title: "Sana",
+      dataIndex: "createdAt",
+      render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
+    },
+    {
+      title: "izoh",
+      dataIndex: "description",
+    },
+  ];
+  console.log(saleFeedback);
+
   return (
     <Card style={{ width: "100%" }}>
       <Row
@@ -130,6 +228,15 @@ export default function Sale() {
       >
         <Title level={4}>Savdo tafsilotlari</Title>
         <Space>
+          {sale?.state === "RUNNING" && (
+            <Button
+              icon={<PlusOutlined />}
+              type="primary"
+              onClick={() => setIsClosed(true)}
+            >
+              Tugugatish
+            </Button>
+          )}
           <Button onClick={() => navigate(`/sale/edit/${id}`)}>
             O‘zgartirish
           </Button>
@@ -268,37 +375,69 @@ export default function Sale() {
           <Card
             title="Qilingan ishlar ro‘yxati"
             bordered={false}
-            className="w-full"
             style={{ paddingBottom: 0 }}
           >
-            <div className="w-full flex gap-2">
-              <Input
-                type="text"
-                placeholder="Placeholder"
-                className="w-full !h-[35px]"
-              />
+            <div className="w-full flex gap-2 mb-4">
+              <Select
+                placeholder="Ishlarni tanlang"
+                showSearch
+                optionFilterProp="label"
+                className="w-full"
+              >
+                {todo?.map((s) => (
+                  <Select.Option key={s.id} value={s.id} label={s.name}>
+                    {s.name}
+                  </Select.Option>
+                ))}
+              </Select>
               <Button icon={<PlusOutlined />} type="primary">
                 Qo'shish
               </Button>
             </div>
+            <Table
+              dataSource={saleTodo?.data || []}
+              columns={saleTodoColumns}
+              className="w-full"
+              rowKey="id"
+              pagination={{
+                current: pageSale,
+                pageSize: limit,
+                total: saleTodo?.total || saleTodo?.data?.length || 0,
+                onChange: setPageSale,
+              }}
+            />
+            <Table
+              dataSource={saleFeedback?.data || []}
+              columns={saleFeedbackColumns}
+              rowKey="id"
+              pagination={false}
+            />
+            <div className="flex gap-2 mt-4">
+              {saleFeedback?.data[0]?.state === "TODO" && (
+                <Button icon={<PlusOutlined />} type="primary">
+                  Ishni boshlash
+                </Button>
+              )}
+
+              {saleFeedback?.data[0]?.state === "RUNNING" && (
+                <Button icon={<PlusOutlined />} type="primary">
+                  Ish bajarib tugallanganligini belgilash
+                </Button>
+              )}
+
+              {saleFeedback?.data[0]?.state === "COMPLETED" && (
+                <Button icon={<PlusOutlined />} type="primary">
+                  Ishni qayta bajarish
+                </Button>
+              )}
+
+              {saleFeedback?.data[0]?.state === "REJECT" && (
+                <Button icon={<PlusOutlined />} type="primary">
+                  Ishni qayta bajarishni boshlash
+                </Button>
+              )}
+            </div>
           </Card>
-          <div className="flex gap-2">
-            {sale?.state === "RUNNING" && (
-              <Button
-                icon={<PlusOutlined />}
-                type="primary"
-                onClick={() => setIsClosed(true)}
-              >
-                Tugugatish
-              </Button>
-            )}
-            <Button icon={<PlusOutlined />} type="primary">
-              Bajarildi
-            </Button>
-            <Button icon={<PlusOutlined />} type="primary">
-              Qayta bajarish
-            </Button>
-          </div>
         </div>
       </div>
       <PaidClientFormModal
