@@ -73,10 +73,12 @@ export default function Sale() {
   const { data: saleTodo } = useGetAllSaleTodo({
     page: pageSale,
     limit,
+    saleId: Number(id),
   });
   const { data: saleFeedback } = useGetAllSaleFeedback({
     page: 1,
     limit,
+    saleId: Number(id),
   });
 
   const createPaidClient = useCreatePaidClient();
