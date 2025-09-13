@@ -179,3 +179,27 @@ export const paidOtherGroupEndpoints = {
   update: (id: string) => `paid-other/group/${id}`,
   delete: (id: string) => `paid-other/group/${id}`,
 };
+
+export const saleFeedbackEndpoints = {
+  all: "sale-feedback",
+  create: "sale-feedback",
+  one: (id: string) => `sale-feedback/${id}`,
+  update: (alias: string) => `sale-feedback/${alias}`,
+  delete: (id: string) => `sale-feedback/${id}`,
+};
+
+export const saleTodoEndpoints = {
+  all: "sale-todo",
+  create: "sale-todo",
+  one: (id: string) => `sale-todo/${id}`,
+  update: (id: string) => `sale-todo/${id}`,
+  delete: (id: string) => `sale-todo/${id}`,
+};
+
+export const todoEndpoints = {
+  all: "todo",
+  create: "todo",
+  one: (id: string) => `todo/${id}`,
+  update: (id: string) => `todo/${id}`,
+  delete: (id: string) => `todo/${id}`,
+};

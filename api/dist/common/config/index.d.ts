@@ -9,7 +9,7 @@ export declare const env: Readonly<{
     BACKEND_URL: string;
     IS_MAIN: boolean;
     MAIN_BACKEND_URL: any;
-    MAIN_KEY: any;
+    MAIN_KEY: string;
     ESKIZ_EMAIL: any;
     ESKIZ_PASSWORD: any;
 } & import("envalid").CleanedEnvAccessors>;

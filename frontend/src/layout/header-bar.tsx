@@ -1,11 +1,12 @@
-import { Layout, Typography, Space, Avatar, Dropdown } from "antd";
-import { DownOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { Avatar, Dropdown, Layout, Space, Typography } from "antd";
+import { DownOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 
-import { message } from "antd";
-import { useTheme } from "../hooks/use-theme";
-import { TokenManager } from "../config/token-manager";
 import ThemeToggle from "../components/theme/theme-toggle";
+import { TokenManager } from "../config/token-manager";
+import { UpgradeButton } from "../pages/dashboard/ui/UpgradeButton";
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "../hooks/use-theme";
 
 const { Header } = Layout;
 const { Title } = Typography;
@@ -52,6 +53,8 @@ export default function HeaderBar({ pageTitle }: Props) {
         {pageTitle}
       </Title>
       <Space size="large">
+        <UpgradeButton />
+
         <ThemeToggle />
         <Dropdown menu={profileMenu} placement="bottomRight">
           <Space style={{ cursor: "pointer" }}>

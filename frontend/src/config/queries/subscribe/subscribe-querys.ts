@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { notification } from "antd";
+
 import axiosPrivate from "../../api";
+import { notification } from "antd";
 import { subscribeEndpoints } from "../../endpoint";
 
 export interface Subscribe {
