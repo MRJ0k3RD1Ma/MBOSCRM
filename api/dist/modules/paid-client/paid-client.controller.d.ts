@@ -1,0 +1,198 @@
+import { PaidClientService } from './paid-client.service';
+import { CreatePaidClientDto } from './dto/create-paid-client.dto';
+import { UpdatePaidClientDto } from './dto/update-paid-client.dto';
+import { FindAllQueryPaidClientDto } from './dto/findAll-query-paid-client.dto';
+import { Request } from 'express';
+export declare class PaidClientController {
+    private readonly paidClientService;
+    constructor(paidClientService: PaidClientService);
+    create(createPaidClientDto: CreatePaidClientDto, req: Request): Promise<{
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        paidDate: Date | null;
+        paymentId: number | null;
+        saleId: number | null;
+        clientId: number | null;
+    }>;
+    findAll(dto: FindAllQueryPaidClientDto): Promise<{
+        data: ({
+            Sale: {
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                registerId: number | null;
+                modifyId: number | null;
+                price: number;
+                date: Date | null;
+                code: string | null;
+                codeId: number | null;
+                clientId: number;
+                dept: number;
+                credit: number;
+                state: import(".prisma/client").$Enums.SaleState;
+                clientName: string | null;
+                subscribe_begin_date: Date | null;
+                subscribe_generate_day: number | null;
+            };
+            Client: {
+                description: string | null;
+                name: string;
+                phone: string;
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                balance: number;
+                inn: string;
+                address: string | null;
+                regionId: number | null;
+                districtId: number | null;
+                typeId: number | null;
+                registerId: number | null;
+                modifyId: number | null;
+            };
+            modify: {
+                name: string;
+                phone: string | null;
+                username: string;
+                roleId: number | null;
+                chatId: string | null;
+                password: string;
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+            };
+            register: {
+                name: string;
+                phone: string | null;
+                username: string;
+                roleId: number | null;
+                chatId: string | null;
+                password: string;
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+            };
+            Payment: {
+                name: string | null;
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                registerId: number | null;
+                modifyId: number | null;
+                icon: string | null;
+            };
+        } & {
+            id: number;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            registerId: number | null;
+            modifyId: number | null;
+            price: number | null;
+            paidDate: Date | null;
+            paymentId: number | null;
+            saleId: number | null;
+            clientId: number | null;
+        })[];
+        page: number;
+        limit: number;
+        total: number;
+        price: number;
+    }>;
+    findOne(id: string): Promise<{
+        Sale: {
+            id: number;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            registerId: number | null;
+            modifyId: number | null;
+            price: number;
+            date: Date | null;
+            code: string | null;
+            codeId: number | null;
+            clientId: number;
+            dept: number;
+            credit: number;
+            state: import(".prisma/client").$Enums.SaleState;
+            clientName: string | null;
+            subscribe_begin_date: Date | null;
+            subscribe_generate_day: number | null;
+        };
+        Client: {
+            description: string | null;
+            name: string;
+            phone: string;
+            id: number;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            balance: number;
+            inn: string;
+            address: string | null;
+            regionId: number | null;
+            districtId: number | null;
+            typeId: number | null;
+            registerId: number | null;
+            modifyId: number | null;
+        };
+        Payment: {
+            name: string | null;
+            id: number;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            registerId: number | null;
+            modifyId: number | null;
+            icon: string | null;
+        };
+    } & {
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        paidDate: Date | null;
+        paymentId: number | null;
+        saleId: number | null;
+        clientId: number | null;
+    }>;
+    update(id: string, updatePaidClientDto: UpdatePaidClientDto): Promise<{
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        paidDate: Date | null;
+        paymentId: number | null;
+        saleId: number | null;
+        clientId: number | null;
+    }>;
+    remove(id: string): Promise<{
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        paidDate: Date | null;
+        paymentId: number | null;
+        saleId: number | null;
+        clientId: number | null;
+    }>;
+}

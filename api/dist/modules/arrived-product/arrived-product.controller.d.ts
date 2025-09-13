@@ -1,0 +1,151 @@
+import { ArrivedProductService } from './arrived-product.service';
+import { CreateArrivedProductDto } from './dto/create-arrived-product.dto';
+import { FindAllArrivedProductQueryDto } from './dto/findAll-arrived-product-query.dto';
+import { UpdateArrivedProductDto } from './dto/update-arrived-product.dto';
+import { Request } from 'express';
+export declare class ArrivedProductController {
+    private readonly arrivedproductService;
+    constructor(arrivedproductService: ArrivedProductService);
+    create(createArrivedProductDto: CreateArrivedProductDto, req: Request): Promise<{
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        count: number;
+        arrivedId: number | null;
+        productId: number | null;
+        priceCount: number | null;
+    }>;
+    findAll(dto: FindAllArrivedProductQueryDto): Promise<{
+        total: number;
+        page: number;
+        limit: number;
+        data: ({
+            Product: {
+                ProductUnit: {
+                    name: string;
+                    id: number;
+                    isDeleted: boolean | null;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    registerId: number | null;
+                    modifyId: number | null;
+                };
+            } & {
+                type: import(".prisma/client").$Enums.ProductType;
+                name: string;
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                registerId: number | null;
+                modifyId: number | null;
+                barcode: string | null;
+                groupId: number;
+                unitId: number | null;
+                priceIncome: number;
+                reminderFirst: number;
+                price: number;
+                barcodeId: number | null;
+                countReminder: number;
+                countArrived: number;
+                countSale: number;
+            };
+            register: {
+                name: string;
+                phone: string | null;
+                username: string;
+                roleId: number | null;
+                chatId: string | null;
+                password: string;
+                id: number;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+            };
+            Arrived: {
+                supplier: {
+                    description: string | null;
+                    name: string;
+                    phone: string;
+                    id: number;
+                    isDeleted: boolean | null;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    balance: number;
+                    registerId: number | null;
+                    modifyId: number | null;
+                    phoneTwo: string | null;
+                };
+            } & {
+                description: string | null;
+                id: number;
+                isDeleted: boolean | null;
+                registerId: number | null;
+                modifyId: number | null;
+                price: number;
+                supplierId: number;
+                date: Date | null;
+                waybillNumber: string | null;
+                code: string | null;
+                codeId: number | null;
+                created: Date;
+                updated: Date;
+            };
+        } & {
+            id: number;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            registerId: number | null;
+            modifyId: number | null;
+            price: number | null;
+            count: number;
+            arrivedId: number | null;
+            productId: number | null;
+            priceCount: number | null;
+        })[];
+    }>;
+    findOne(id: string): Promise<{
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        count: number;
+        arrivedId: number | null;
+        productId: number | null;
+        priceCount: number | null;
+    }>;
+    update(id: string, updateArrivedProductDto: UpdateArrivedProductDto): Promise<{
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        count: number;
+        arrivedId: number | null;
+        productId: number | null;
+        priceCount: number | null;
+    }>;
+    remove(id: string): Promise<{
+        id: number;
+        isDeleted: boolean | null;
+        createdAt: Date;
+        updatedAt: Date;
+        registerId: number | null;
+        modifyId: number | null;
+        price: number | null;
+        count: number;
+        arrivedId: number | null;
+        productId: number | null;
+        priceCount: number | null;
+    }>;
+}
