@@ -8,6 +8,9 @@ export class CreateClientCrmDto {
 	@IsId()
 	clientId: number;
 
+	@IsId(false)
+	productId: number;
+
 	@IsName()
 	domain: string;
 

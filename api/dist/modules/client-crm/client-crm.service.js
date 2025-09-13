@@ -26,15 +26,20 @@ let ClientCrmService = class ClientCrmService {
         if (client) {
             throw (0, http_error_1.HttpError)({ code: "type Not Found" });
         }
+        const product = createClientCrmDto.productId !== undefined
+            ? await this.prisma.product.findUnique({
+                where: { id: createClientCrmDto.productId },
+            })
+            : undefined;
         const clientCrm = await this.prisma.clientCrm.create({
             data: {
                 key: (0, uuid_1.v4)(),
                 clientId: client.id,
+                productId: product?.id,
                 domain: createClientCrmDto.domain,
                 isFullAccess: createClientCrmDto.isFullAccess,
                 expiredFullAccess: createClientCrmDto.expiredFullAccess,
                 balance: 0,
-                productId: 1,
             },
         });
         return clientCrm;
@@ -88,7 +93,13 @@ let ClientCrmService = class ClientCrmService {
         });
         if (!clientCrm)
             throw (0, http_error_1.HttpError)({ code: "Client Crm not found" });
+        const product = dto.productId !== undefined
+            ? await this.prisma.product.findUnique({
+                where: { id: dto.productId },
+            })
+            : undefined;
         const updateData = {
+            productId: product?.id ?? clientCrm.productId,
             domain: dto.domain ?? clientCrm.domain,
             isFullAccess: dto.isFullAccess ?? clientCrm.isFullAccess,
             expiredFullAccess: dto.expiredFullAccess ?? clientCrm.expiredFullAccess,

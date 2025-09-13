@@ -5,6 +5,9 @@ import { IsId } from "src/common/dtos/id.dto";
 import { IsName } from "src/common/dtos/name.dto";
 
 export class UpdateClientCrmDto {
+	@IsId(false)
+	productId: number;
+
 	@IsName(false)
 	domain: string;
 

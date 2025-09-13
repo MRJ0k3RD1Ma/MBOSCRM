@@ -21,15 +21,22 @@ export class ClientCrmService implements OnModuleInit {
 			throw HttpError({ code: "type Not Found" });
 		}
 
+		const product =
+			createClientCrmDto.productId !== undefined
+				? await this.prisma.product.findUnique({
+						where: { id: createClientCrmDto.productId },
+					})
+				: undefined;
+
 		const clientCrm = await this.prisma.clientCrm.create({
 			data: {
 				key: uuidv4(),
 				clientId: client.id,
+				productId: product?.id,
 				domain: createClientCrmDto.domain,
 				isFullAccess: createClientCrmDto.isFullAccess,
 				expiredFullAccess: createClientCrmDto.expiredFullAccess,
 				balance: 0,
-				productId: 1,
 			},
 		});
 		return clientCrm;
@@ -91,7 +98,15 @@ export class ClientCrmService implements OnModuleInit {
 		});
 		if (!clientCrm) throw HttpError({ code: "Client Crm not found" });
 
+		const product =
+			dto.productId !== undefined
+				? await this.prisma.product.findUnique({
+						where: { id: dto.productId },
+					})
+				: undefined;
+
 		const updateData: Partial<ClientCrm> = {
+			productId: product?.id ?? clientCrm.productId,
 			domain: dto.domain ?? clientCrm.domain,
 			isFullAccess: dto.isFullAccess ?? clientCrm.isFullAccess,
 			expiredFullAccess: dto.expiredFullAccess ?? clientCrm.expiredFullAccess,

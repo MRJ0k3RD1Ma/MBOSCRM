@@ -23,6 +23,10 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateClientCrmDto.prototype, "clientId", void 0);
 __decorate([
+    (0, id_dto_1.IsId)(false),
+    __metadata("design:type", Number)
+], CreateClientCrmDto.prototype, "productId", void 0);
+__decorate([
     (0, name_dto_1.IsName)(),
     __metadata("design:type", String)
 ], CreateClientCrmDto.prototype, "domain", void 0);

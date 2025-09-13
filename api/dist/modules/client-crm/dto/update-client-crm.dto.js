@@ -13,10 +13,15 @@ exports.UpdateClientCrmDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
+const id_dto_1 = require("../../../common/dtos/id.dto");
 const name_dto_1 = require("../../../common/dtos/name.dto");
 class UpdateClientCrmDto {
 }
 exports.UpdateClientCrmDto = UpdateClientCrmDto;
+__decorate([
+    (0, id_dto_1.IsId)(false),
+    __metadata("design:type", Number)
+], UpdateClientCrmDto.prototype, "productId", void 0);
 __decorate([
     (0, name_dto_1.IsName)(false),
     __metadata("design:type", String)
