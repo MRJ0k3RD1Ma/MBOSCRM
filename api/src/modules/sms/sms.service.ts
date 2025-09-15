@@ -50,7 +50,7 @@ export class SmsService {
 				},
 			});
 		} else if (this.featureFlagService.isActive("sms")) {
-			const { data } = await this.axios.post("/api/sms/send", {
+			const { data } = await this.axios.post("/sms/send", {
 				mobile_phone,
 				message,
 			});
