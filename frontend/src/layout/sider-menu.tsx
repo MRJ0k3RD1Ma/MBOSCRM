@@ -1,34 +1,33 @@
-import { Menu, Layout, message } from "antd";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useMemo } from "react";
 import {
-  HomeOutlined,
-  TagsOutlined,
-  ShoppingCartOutlined,
-  ShoppingOutlined,
-  CreditCardOutlined,
-  DollarCircleOutlined,
-  UsergroupAddOutlined,
-  UserOutlined,
-  TeamOutlined,
-  SolutionOutlined,
-  // BankOutlined,
-  CloudServerOutlined,
   AppstoreOutlined,
-  SettingOutlined,
-  InboxOutlined,
-  ProfileOutlined,
-  FileTextOutlined,
+  CheckSquareOutlined,
+  CloudServerOutlined,
   ClusterOutlined,
   ContainerOutlined,
-  CheckSquareOutlined,
+  CreditCardOutlined,
+  DollarCircleOutlined,
   FileDoneOutlined,
-  WalletOutlined,
-  // ApartmentOutlined,
+  FileTextOutlined,
+  HomeOutlined,
+  InboxOutlined,
   NumberOutlined,
+  ProfileOutlined,
+  SettingOutlined,
+  ShoppingCartOutlined,
+  ShoppingOutlined,
+  SolutionOutlined,
+  TagsOutlined,
+  TeamOutlined,
+  UserOutlined,
+  UsergroupAddOutlined,
+  WalletOutlined,
 } from "@ant-design/icons";
+import { Layout, Menu, message } from "antd";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import Logo from "../../public/LogoMbos.svg";
 import { TokenManager } from "../config/token-manager";
+import { useMemo } from "react";
 
 const { Sider } = Layout;
 const menuItems = [
@@ -203,6 +202,11 @@ const menuItems = [
         icon: <DollarCircleOutlined />,
       },
     ],
+  },
+  {
+    key: "/feedbacks",
+    label: "Fikr-mulohazalar",
+    icon: <HomeOutlined />,
   },
   {
     key: "setting-group",
