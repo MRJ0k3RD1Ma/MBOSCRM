@@ -45,7 +45,8 @@ const feature_flag_module_1 = require("./modules/feature-flag/feature-flag.modul
 const client_crm_module_1 = require("./modules/client-crm/client-crm.module");
 const sms_module_1 = require("./modules/sms/sms.module");
 const access_module_1 = require("./modules/access/access.module");
-const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule];
+const paid_crm_module_1 = require("./modules/paid-crm/paid-crm.module");
+const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule, paid_crm_module_1.PaidCrmModule];
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;

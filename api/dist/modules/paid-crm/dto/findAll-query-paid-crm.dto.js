@@ -9,41 +9,47 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateClientCrmDto = void 0;
+exports.FindAllQueryPaidCrmDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const id_dto_1 = require("../../../common/dtos/id.dto");
-const name_dto_1 = require("../../../common/dtos/name.dto");
-class CreateClientCrmDto {
+const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
+class FindAllQueryPaidCrmDto extends pagination_dto_1.PaginationDto {
 }
-exports.CreateClientCrmDto = CreateClientCrmDto;
+exports.FindAllQueryPaidCrmDto = FindAllQueryPaidCrmDto;
 __decorate([
-    (0, id_dto_1.IsId)(),
-    __metadata("design:type", Number)
-], CreateClientCrmDto.prototype, "clientId", void 0);
-__decorate([
-    (0, id_dto_1.IsId)(false),
-    __metadata("design:type", Number)
-], CreateClientCrmDto.prototype, "productId", void 0);
-__decorate([
-    (0, name_dto_1.IsName)(),
-    __metadata("design:type", String)
-], CreateClientCrmDto.prototype, "domain", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
+    (0, swagger_1.ApiPropertyOptional)({ example: 100000 }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsBoolean)(),
-    __metadata("design:type", Boolean)
-], CreateClientCrmDto.prototype, "isFullAccess", void 0);
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], FindAllQueryPaidCrmDto.prototype, "minPrice", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({
-        example: "2025-07-29T12:12:44.882Z",
-        description: "ISO 8601 formatda vaqt",
-    }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 200000 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], FindAllQueryPaidCrmDto.prototype, "maxPrice", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-01" }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
-], CreateClientCrmDto.prototype, "expiredFullAccess", void 0);
-//# sourceMappingURL=create-client-crm.dto.js.map
+], FindAllQueryPaidCrmDto.prototype, "fromDate", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-30" }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], FindAllQueryPaidCrmDto.prototype, "toDate", void 0);
+__decorate([
+    (0, id_dto_1.IsId)(false),
+    __metadata("design:type", Number)
+], FindAllQueryPaidCrmDto.prototype, "crmId", void 0);
+__decorate([
+    (0, id_dto_1.IsId)(false),
+    __metadata("design:type", Number)
+], FindAllQueryPaidCrmDto.prototype, "paymentId", void 0);
+//# sourceMappingURL=findAll-query-paid-crm.dto.js.map

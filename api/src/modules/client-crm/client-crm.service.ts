@@ -17,8 +17,8 @@ export class ClientCrmService implements OnModuleInit {
 		const client = await this.prisma.client.findFirst({
 			where: { id: createClientCrmDto.clientId, isDeleted: false },
 		});
-		if (client) {
-			throw HttpError({ code: "type Not Found" });
+		if (!client) {
+			throw HttpError({ code: "Client Not Found" });
 		}
 
 		const product =

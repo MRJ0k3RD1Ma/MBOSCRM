@@ -9,41 +9,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateClientCrmDto = void 0;
+exports.CreatePaidCrmDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
-const id_dto_1 = require("../../../common/dtos/id.dto");
-const name_dto_1 = require("../../../common/dtos/name.dto");
-class CreateClientCrmDto {
+class CreatePaidCrmDto {
 }
-exports.CreateClientCrmDto = CreateClientCrmDto;
+exports.CreatePaidCrmDto = CreatePaidCrmDto;
 __decorate([
-    (0, id_dto_1.IsId)(),
-    __metadata("design:type", Number)
-], CreateClientCrmDto.prototype, "clientId", void 0);
-__decorate([
-    (0, id_dto_1.IsId)(false),
-    __metadata("design:type", Number)
-], CreateClientCrmDto.prototype, "productId", void 0);
-__decorate([
-    (0, name_dto_1.IsName)(),
-    __metadata("design:type", String)
-], CreateClientCrmDto.prototype, "domain", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
+    (0, swagger_1.ApiProperty)({ example: 1, description: "Crm ID" }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsBoolean)(),
-    __metadata("design:type", Boolean)
-], CreateClientCrmDto.prototype, "isFullAccess", void 0);
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreatePaidCrmDto.prototype, "crmId", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({
-        example: "2025-07-29T12:12:44.882Z",
-        description: "ISO 8601 formatda vaqt",
-    }),
+    (0, swagger_1.ApiProperty)({ example: 3, description: "Payment ID" }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreatePaidCrmDto.prototype, "paymentId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-29T12:12:44.882Z" }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
-], CreateClientCrmDto.prototype, "expiredFullAccess", void 0);
-//# sourceMappingURL=create-client-crm.dto.js.map
+], CreatePaidCrmDto.prototype, "paidDate", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 200.5, description: "Payment price" }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreatePaidCrmDto.prototype, "price", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: "2025-07-29T12:12:44.882Z" }),
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], CreatePaidCrmDto.prototype, "expiredFullAccess", void 0);
+//# sourceMappingURL=create-paid-crm.dto.js.map

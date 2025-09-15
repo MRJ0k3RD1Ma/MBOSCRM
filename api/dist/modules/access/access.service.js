@@ -57,7 +57,7 @@ let AccessService = class AccessService {
         this.featureFlagService.loadFlags();
     }
     async onModuleInit() {
-        const keys = ["sms"];
+        const keys = ["sms", "feedback"];
         if (config_1.env.IS_MAIN) {
             for (let key of keys) {
                 await this.prisma.access.upsert({
@@ -74,26 +74,32 @@ let AccessService = class AccessService {
             }
         }
         else {
-            const { data } = await this.axios.get("/access", {
-                params: { limit: 1000 },
-            });
-            const accesses = data.data;
-            for (let access of accesses) {
-                await this.prisma.access.upsert({
-                    where: { key: access.key },
-                    create: {
-                        key: access.key,
-                        isActive: false,
-                        name: access.name,
-                        description: access.description,
-                        price: access.price,
-                    },
-                    update: {
-                        name: access.name,
-                        description: access.description,
-                        price: access.price,
-                    },
+            try {
+                const { data } = await this.axios.get("/access", {
+                    params: { limit: 1000 },
                 });
+                const accesses = data.data;
+                for (let access of accesses) {
+                    await this.prisma.access.upsert({
+                        where: { key: access.key },
+                        create: {
+                            key: access.key,
+                            isActive: false,
+                            name: access.name,
+                            description: access.description,
+                            price: access.price,
+                        },
+                        update: {
+                            name: access.name,
+                            description: access.description,
+                            price: access.price,
+                        },
+                    });
+                }
+            }
+            catch (e) {
+                console.log(e);
+                throw e;
             }
         }
         this.featureFlagService.loadFlags();

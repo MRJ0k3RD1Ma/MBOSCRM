@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import {  Injectable, Optional } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { env } from "src/common/config";
 import Axios from "axios";
@@ -12,8 +12,9 @@ import { HttpError } from "src/common/exception/http.error";
 export class SmsService {
 	constructor(
 		private readonly prisma: PrismaService,
-		private readonly eskizService: EskizService,
 		private readonly featureFlagService: FeatureFlagService,
+    @Optional()
+		private readonly eskizService?: EskizService,
 	) {}
 
 	private axios = env.IS_MAIN
@@ -49,7 +50,7 @@ export class SmsService {
 				},
 			});
 		} else if (this.featureFlagService.isActive("sms")) {
-			const { data } = await this.axios.post("/api/sms/send", {
+			const { data } = await this.axios.post("/sms/send", {
 				mobile_phone,
 				message,
 			});
