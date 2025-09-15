@@ -27,14 +27,15 @@ import { ServerModule } from "./modules/server/server.module";
 import { NestjsGrammyModule } from "@grammyjs/nestjs";
 import { env } from "./common/config";
 import { EventEmitterModule } from "@nestjs/event-emitter";
-import { PaymeModule } from './modules/payme/payme.module';
-import { TodoModule } from './modules/todo/todo.module';
-import { SaleFeedbackModule } from './modules/sale-feedback/sale-feedback.module';
-import { SaleTodoModule } from './modules/sale-todo/sale-todo.module';
+import { PaymeModule } from "./modules/payme/payme.module";
+import { TodoModule } from "./modules/todo/todo.module";
+import { SaleFeedbackModule } from "./modules/sale-feedback/sale-feedback.module";
+import { SaleTodoModule } from "./modules/sale-todo/sale-todo.module";
 import { EskizModule } from "./modules/eskiz/eskiz.module";
 import { FeatureFlagModule } from "./modules/feature-flag/feature-flag.module";
 import { ClientCrmModule } from "./modules/client-crm/client-crm.module";
 import { SmsModule } from "./modules/sms/sms.module";
+import { AccessModule } from "./modules/access/access.module";
 
 const MainModules = [EskizModule, ClientCrmModule];
 
@@ -44,6 +45,7 @@ const MainModules = [EskizModule, ClientCrmModule];
 	imports: [
 		PrismaModule,
 		...(env.IS_MAIN ? MainModules : []),
+		AccessModule,
 		FeatureFlagModule,
 		LocationModule,
 		UserRoleModule,
@@ -80,4 +82,4 @@ const MainModules = [EskizModule, ClientCrmModule];
 		NestjsGrammyModule.forRoot({ token: env.BOT_TOKEN }),
 	],
 })
-export class AppModule { }
+export class AppModule {}
