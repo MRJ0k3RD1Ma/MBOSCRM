@@ -6,14 +6,12 @@ import { saleTodoEndpoints } from "../../endpoint";
 
 export interface CreateSaleTodoInput {
   saleId: number;
-  feedbackId: number;
   name: string;
 }
 
 export interface UpdateSaleTodoInput {
   id: number;
   saleId?: number;
-  feedbackId?: number;
   name?: string;
   isCompleted?: boolean;
 }

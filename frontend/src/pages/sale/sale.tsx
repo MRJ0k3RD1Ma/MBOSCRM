@@ -5,7 +5,6 @@ import {
   Dropdown,
   Modal,
   Row,
-  Select,
   Space,
   Table,
   Tooltip,
@@ -35,11 +34,14 @@ import {
 } from "../../config/queries/clients/paid-client-querys";
 import { indexColumn } from "../../components/tables/indexColumn";
 import {
+  useDeleteSaleTodo,
   useGetAllSaleTodo,
   type SaleTodo,
 } from "../../config/queries/sale/sale-todo-querys";
 import { useGetAllSaleFeedback } from "../../config/queries/sale/sale-feedback-querys";
-import { useGetAllTodos } from "../../config/queries/sale/todo-querys";
+import SaleTodoInput from "./ui/sale-todo-input";
+import SaleUpdateModal from "./ui/sale-update-modal";
+import type { ColumnsType } from "antd/es/table";
 
 const { Title } = Typography;
 
@@ -56,7 +58,7 @@ export default function Sale() {
   const [page, setPage] = useState(1);
   const [pageSale, setPageSale] = useState(1);
   const limit = 5;
-
+  const [editTodo, setEditTodo] = useState<SaleTodo | null>(null);
   const updateSale = useUpdateSale();
   const { data: sale } = useGetSaleById(currentId ?? undefined);
   const { data: saleProducts } = useGetAllSaleProduct({
@@ -66,7 +68,6 @@ export default function Sale() {
   });
   const { data: sales } = useGetAllSale({ page: 1, limit: 1000 });
   const { data: payments } = useGetAllPayments({ page: 1, limit: 1000 });
-  const { data: todo } = useGetAllTodos();
   const { data: clients } = useGetAllClients();
   const { data: products } = useGetAllProducts();
   const { data: types } = useGetAllClientTypes();
@@ -83,6 +84,7 @@ export default function Sale() {
 
   const createPaidClient = useCreatePaidClient();
   const deleteSale = useDeleteSale();
+  const deleteSaleTodo = useDeleteSaleTodo();
 
   const onClosed = () => {
     updateSale.mutate({ id: Number(currentId), state: "CLOSED" });
@@ -137,8 +139,7 @@ export default function Sale() {
       },
     },
   ];
-
-  const saleTodoColumns = [
+  const saleTodoColumns: ColumnsType<SaleTodo> = [
     indexColumn(page, limit),
     {
       title: "Natija",
@@ -154,8 +155,10 @@ export default function Sale() {
       title: "Qilingan ishlar",
       dataIndex: "name",
     },
+  ];
 
-    {
+  if (["TODO", "REJECT"].includes(saleFeedback?.data?.[0]?.state ?? "")) {
+    saleTodoColumns.push({
       title: "Amallar",
       key: "actions",
       render: (_: any, row: SaleTodo) => {
@@ -163,13 +166,13 @@ export default function Sale() {
           {
             key: "edit",
             label: "Tahrirlash",
-            onClick: () => navigate(`/sale/edit/${row.id}`),
+            onClick: () => setEditTodo(row),
           },
           {
             key: "delete",
             label: "O‘chirish",
             danger: true,
-            // onClick: () => handleDelete(row.id),
+            onClick: () => deleteSaleTodo.mutate(row.id),
           },
         ];
 
@@ -183,8 +186,8 @@ export default function Sale() {
           </div>
         );
       },
-    },
-  ];
+    });
+  }
 
   const saleFeedbackColumns = [
     indexColumn(page, limit),
@@ -379,21 +382,7 @@ export default function Sale() {
             style={{ paddingBottom: 0 }}
           >
             <div className="w-full flex gap-2 mb-4">
-              <Select
-                placeholder="Ishlarni tanlang"
-                showSearch
-                optionFilterProp="label"
-                className="w-full"
-              >
-                {todo?.map((s) => (
-                  <Select.Option key={s.id} value={s.id} label={s.name}>
-                    {s.name}
-                  </Select.Option>
-                ))}
-              </Select>
-              <Button icon={<PlusOutlined />} type="primary">
-                Qo'shish
-              </Button>
+              <SaleTodoInput saleId={Number(id)} saleFeedback={saleFeedback} />
             </div>
             <Table
               dataSource={saleTodo?.data || []}
@@ -464,6 +453,22 @@ export default function Sale() {
       >
         Rostdan ushbu savdoni tugatmoqchimisiz?
       </Modal>
+      {editTodo && (
+        <Modal
+          open={true}
+          title="Ishni tahrirlash"
+          footer={null}
+          onCancel={() => setEditTodo(null)}
+          destroyOnClose
+        >
+          <SaleUpdateModal
+            saleId={Number(id)}
+            saleFeedback={saleFeedback}
+            initialData={editTodo}
+            onClose={() => setEditTodo(null)}
+          />
+        </Modal>
+      )}
     </Card>
   );
 }
