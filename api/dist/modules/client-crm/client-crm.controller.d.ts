@@ -6,16 +6,16 @@ export declare class ClientCrmController {
     private readonly clientCrmService;
     constructor(clientCrmService: ClientCrmService);
     create(createClientCrmDto: CreateClientCrmDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
+        balance: number;
         key: string;
     }>;
     findAll(query: FindAllClientCrmQueryDto): Promise<{
@@ -24,91 +24,91 @@ export declare class ClientCrmController {
         limit: number;
         data: ({
             client: {
-                description: string | null;
+                id: number;
                 name: string;
-                phone: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 balance: number;
+                typeId: number | null;
                 inn: string;
-                address: string | null;
                 regionId: number | null;
                 districtId: number | null;
-                typeId: number | null;
+                address: string | null;
+                description: string | null;
                 registerId: number | null;
                 modifyId: number | null;
+                phone: string;
             };
         } & {
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
-            balance: number;
-            productId: number;
             clientId: number;
+            productId: number;
             domain: string | null;
             isFullAccess: boolean;
             expiredFullAccess: Date | null;
+            balance: number;
             key: string;
         })[];
     }>;
     findOne(id: string): Promise<{
         client: {
-            description: string | null;
+            id: number;
             name: string;
-            phone: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
+            typeId: number | null;
             inn: string;
-            address: string | null;
             regionId: number | null;
             districtId: number | null;
-            typeId: number | null;
+            address: string | null;
+            description: string | null;
             registerId: number | null;
             modifyId: number | null;
+            phone: string;
         };
     } & {
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
+        balance: number;
         key: string;
     }>;
     update(id: string, updateClientCrmDto: UpdateClientCrmDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
+        balance: number;
         key: string;
     }>;
     remove(id: string): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
+        balance: number;
         key: string;
     }>;
 }

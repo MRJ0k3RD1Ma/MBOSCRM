@@ -55,7 +55,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
             Layout: {
               siderBg: "#001529",
               headerBg: "#0a0f1e",
-              bodyBg: "#000000",
+              bodyBg: "#0a0f1e",
               footerBg: "#0f172a",
             },
             Drawer: {
