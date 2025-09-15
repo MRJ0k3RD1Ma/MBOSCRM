@@ -36,8 +36,9 @@ import { FeatureFlagModule } from "./modules/feature-flag/feature-flag.module";
 import { ClientCrmModule } from "./modules/client-crm/client-crm.module";
 import { SmsModule } from "./modules/sms/sms.module";
 import { AccessModule } from "./modules/access/access.module";
+import { PaidCrmModule } from "./modules/paid-crm/paid-crm.module";
 
-const MainModules = [EskizModule, ClientCrmModule];
+const MainModules = [EskizModule, ClientCrmModule, PaidCrmModule];
 
 @Module({
 	controllers: [],

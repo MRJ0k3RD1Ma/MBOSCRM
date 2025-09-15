@@ -52,7 +52,7 @@ export class AccessService {
 	}
 
 	async onModuleInit() {
-		const keys = ["sms"];
+		const keys = ["sms", "feedback"];
 		if (env.IS_MAIN) {
 			for (let key of keys) {
 				await this.prisma.access.upsert({
