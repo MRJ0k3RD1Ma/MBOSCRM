@@ -37,7 +37,10 @@ __decorate([
     __metadata("design:type", Boolean)
 ], CreateClientCrmDto.prototype, "isFullAccess", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
+    (0, swagger_1.ApiPropertyOptional)({
+        example: "2025-07-29T12:12:44.882Z",
+        description: "ISO 8601 formatda vaqt",
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),

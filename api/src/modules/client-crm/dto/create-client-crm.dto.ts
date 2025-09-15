@@ -19,7 +19,10 @@ export class CreateClientCrmDto {
 	@IsBoolean()
 	isFullAccess: boolean;
 
-	@ApiPropertyOptional()
+	@ApiPropertyOptional({
+		example: "2025-07-29T12:12:44.882Z",
+		description: "ISO 8601 formatda vaqt",
+	})
 	@IsOptional()
 	@IsDate()
 	@Type(() => Date)

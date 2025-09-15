@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -23,10 +26,10 @@ const eskiz_service_1 = require("../eskiz/eskiz.service");
 const feature_flag_service_1 = require("../feature-flag/feature-flag.service");
 const http_error_1 = require("../../common/exception/http.error");
 let SmsService = class SmsService {
-    constructor(prisma, eskizService, featureFlagService) {
+    constructor(prisma, featureFlagService, eskizService) {
         this.prisma = prisma;
-        this.eskizService = eskizService;
         this.featureFlagService = featureFlagService;
+        this.eskizService = eskizService;
         this.axios = config_1.env.IS_MAIN
             ? undefined
             : axios_1.default.create({
@@ -83,8 +86,9 @@ __decorate([
 ], SmsService.prototype, "cron", null);
 exports.SmsService = SmsService = __decorate([
     (0, common_1.Injectable)(),
+    __param(2, (0, common_1.Optional)()),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        eskiz_service_1.EskizService,
-        feature_flag_service_1.FeatureFlagService])
+        feature_flag_service_1.FeatureFlagService,
+        eskiz_service_1.EskizService])
 ], SmsService);
 //# sourceMappingURL=sms.service.js.map
