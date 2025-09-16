@@ -83,7 +83,7 @@ model Appeal {
 
 model SaleFeedback {
   id          Int                 @id @default(autoincrement())
-  saleId      Int
+  saleId      Int                 @unique 
   sale        Sale                @relation(fields: [saleId], references: [id])
   alias       String              @default("") @db.VarChar(255)
   name        String?             @db.VarChar(255)
@@ -447,15 +447,15 @@ model Sale {
   register   User?     @relation("RegisterRelation", fields: [registerId], references: [id])
   registerId Int?
 
-  modifier               User?          @relation("ModifyRelation", fields: [modifyId], references: [id])
+  modifier               User?         @relation("ModifyRelation", fields: [modifyId], references: [id])
   modifyId               Int?
-  clientName             String?        @db.VarChar(255)
+  clientName             String?       @db.VarChar(255)
   SaleProduct            SaleProduct[]
   subscribe_begin_date   DateTime?
   subscribe_generate_day Int?
   Subscribe              Subscribe[]
   PaidClient             PaidClient[]
-  SaleFeedback           SaleFeedback[]
+  SaleFeedback           SaleFeedback?
   SaleTodo               SaleTodo[]
 }
 

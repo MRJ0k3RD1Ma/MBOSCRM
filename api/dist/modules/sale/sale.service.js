@@ -16,10 +16,12 @@ const http_error_1 = require("../../common/exception/http.error");
 const client_1 = require("@prisma/client");
 const sale_product_service_1 = require("../sale-product/sale-product.service");
 const event_emitter_1 = require("@nestjs/event-emitter");
+const sale_feedback_service_1 = require("../sale-feedback/sale-feedback.service");
 let SaleService = class SaleService {
-    constructor(prisma, saleProductService, eventEmitter) {
+    constructor(prisma, saleProductService, saleFeedback, eventEmitter) {
         this.prisma = prisma;
         this.saleProductService = saleProductService;
+        this.saleFeedback = saleFeedback;
         this.eventEmitter = eventEmitter;
     }
     async create(createSaleDto, creatorId) {
@@ -129,6 +131,7 @@ let SaleService = class SaleService {
                 });
             }
         });
+        await this.saleFeedback.create({ saleId: sale.id });
         this.eventEmitter.emit("sale.created", sale);
         return sale;
     }
@@ -263,6 +266,7 @@ exports.SaleService = SaleService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         sale_product_service_1.SaleProductService,
+        sale_feedback_service_1.SaleFeedbackService,
         event_emitter_1.EventEmitter2])
 ], SaleService);
 //# sourceMappingURL=sale.service.js.map

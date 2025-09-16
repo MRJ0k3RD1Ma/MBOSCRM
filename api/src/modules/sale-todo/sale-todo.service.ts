@@ -4,46 +4,51 @@ import { UpdateSaleTodoDto } from './dto/update-sale-todo.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { FindAllSaleTodoDto } from './dto/findAll-sale-todo.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, SaleFeedbackResult, SaleFeedbackState } from '@prisma/client';
 import { TodoService } from '../todo/todo.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class SaleTodoService {
   constructor(private readonly prisma: PrismaService, private readonly todo: TodoService) { }
 
   async create(createSaleTodoDto: CreateSaleTodoDto, user: number) {
-    if (createSaleTodoDto.saleId) {
-      const sale = await this.prisma.sale.findFirst({
-        where: { id: createSaleTodoDto.saleId, isDeleted: false },
-      });
-      if (!sale) {
-        throw new HttpError({ message: 'Sale not found' });
-      }
-    }
-
-    if (createSaleTodoDto.feedbackId) {
-      const feedback = await this.prisma.saleFeedback.findFirst({
-        where: { id: createSaleTodoDto.feedbackId, isDeleted: false },
-      });
-      if (!feedback) {
-        throw new HttpError({ message: 'Feedback not found' });
-      }
-    }
-
-    const todo = await this.todo.create({
-      name: createSaleTodoDto.name,
+    const sale = await this.prisma.sale.findFirst({
+      where: { id: createSaleTodoDto.saleId, isDeleted: false },
+      include: { SaleFeedback: true },
     });
+
+    if (!sale) {
+      throw new HttpError({ message: 'Sale not found' });
+    }
+
+    let feedbackId: number;
+    if (sale.SaleFeedback) {
+      feedbackId = sale.SaleFeedback.id;
+    } else {
+      const newFeedback = await this.prisma.saleFeedback.create({
+        data: {
+          saleId: sale.id,
+          alias: uuidv4(),
+          state: SaleFeedbackState.TODO,
+          result: SaleFeedbackResult.NOT_COMPLETED,
+          score: 0,
+        },
+      });
+      feedbackId = newFeedback.id;
+    }
 
     return this.prisma.saleTodo.create({
       data: {
-        name: todo.name,
-        saleId: createSaleTodoDto.saleId,
-        feedbackId: createSaleTodoDto.feedbackId,
+        name: createSaleTodoDto.name,
+        saleId: sale.id,
+        feedbackId,
         registerId: user,
         modifyId: user,
       },
     });
   }
+
 
   async findAll(dto: FindAllSaleTodoDto) {
     const { page, limit, name, isCompleted, saleId, feedbackId } = dto;
@@ -103,19 +108,10 @@ export class SaleTodoService {
       }
     }
 
-    if (updateSaleTodoDto.feedbackId) {
-      const feedback = await this.prisma.saleFeedback.findFirst({
-        where: { id: updateSaleTodoDto.feedbackId, isDeleted: false },
-      });
-      if (!feedback) {
-        throw new HttpError({ message: 'Feedback not found' });
-      }
-    }
 
     return this.prisma.saleTodo.update({
       where: { id },
       data: {
-        feedbackId: updateSaleTodoDto.feedbackId ?? saleTodo.feedbackId,
         saleId: updateSaleTodoDto.saleId ?? saleTodo.saleId,
         name: updateSaleTodoDto.name ?? saleTodo.name,
         isCompleted: updateSaleTodoDto.isCompleted ?? saleTodo.isCompleted,

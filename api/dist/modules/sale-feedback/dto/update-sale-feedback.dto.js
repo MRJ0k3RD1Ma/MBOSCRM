@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AliasParamDto = exports.UpdateSaleFeedbackDto = void 0;
+exports.UpdateStateDto = exports.AliasParamDto = exports.UpdateSaleFeedbackDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const create_sale_feedback_dto_1 = require("./create-sale-feedback.dto");
 const client_1 = require("@prisma/client");
@@ -36,4 +36,12 @@ __decorate([
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], AliasParamDto.prototype, "alias", void 0);
+class UpdateStateDto {
+}
+exports.UpdateStateDto = UpdateStateDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'TODO' }),
+    (0, class_validator_1.IsEnum)(client_1.SaleFeedbackState),
+    __metadata("design:type", String)
+], UpdateStateDto.prototype, "state", void 0);
 //# sourceMappingURL=update-sale-feedback.dto.js.map

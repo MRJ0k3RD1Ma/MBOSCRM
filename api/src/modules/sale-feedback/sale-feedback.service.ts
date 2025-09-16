@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSaleFeedbackDto } from './dto/create-sale-feedback.dto';
-import { UpdateSaleFeedbackDto } from './dto/update-sale-feedback.dto';
+import { UpdateSaleFeedbackDto, UpdateStateDto } from './dto/update-sale-feedback.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { Prisma, SaleFeedbackResult, SaleFeedbackState } from '@prisma/client';
@@ -113,6 +113,21 @@ export class SaleFeedbackService {
         score: updateSaleFeedbackDto.score ?? saleFeedback.score,
         state: updateSaleFeedbackDto.state ?? saleFeedback.state,
         result: updateSaleFeedbackDto.result ?? saleFeedback.result,
+      },
+    });
+  }
+
+  async updateState(dto: UpdateStateDto, alias: string) {
+    const saleFeedback = await this.prisma.saleFeedback.findFirst({
+      where: { alias: alias },
+    });
+    if (!saleFeedback) {
+      throw new HttpError({ message: "SaleFeedback not found" });
+    }
+    return this.prisma.saleFeedback.update({
+      where: { id: saleFeedback.id },
+      data: {
+        state: dto.state,
       },
     });
   }

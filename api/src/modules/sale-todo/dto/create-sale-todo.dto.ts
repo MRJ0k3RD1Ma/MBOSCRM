@@ -9,12 +9,6 @@ export class CreateSaleTodoDto {
     saleId?: number;
 
     @ApiProperty({
-        example: 1
-    })
-    @IsInt()
-    feedbackId?: number;
-
-    @ApiProperty({
         example: 'Mijoz bilan qayta bog‘lanish',
     })
     @IsOptional()

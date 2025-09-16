@@ -13,37 +13,43 @@ exports.SaleTodoService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const http_error_1 = require("../../common/exception/http.error");
+const client_1 = require("@prisma/client");
 const todo_service_1 = require("../todo/todo.service");
+const uuid_1 = require("uuid");
 let SaleTodoService = class SaleTodoService {
     constructor(prisma, todo) {
         this.prisma = prisma;
         this.todo = todo;
     }
     async create(createSaleTodoDto, user) {
-        if (createSaleTodoDto.saleId) {
-            const sale = await this.prisma.sale.findFirst({
-                where: { id: createSaleTodoDto.saleId, isDeleted: false },
-            });
-            if (!sale) {
-                throw new http_error_1.HttpError({ message: 'Sale not found' });
-            }
-        }
-        if (createSaleTodoDto.feedbackId) {
-            const feedback = await this.prisma.saleFeedback.findFirst({
-                where: { id: createSaleTodoDto.feedbackId, isDeleted: false },
-            });
-            if (!feedback) {
-                throw new http_error_1.HttpError({ message: 'Feedback not found' });
-            }
-        }
-        const todo = await this.todo.create({
-            name: createSaleTodoDto.name,
+        const sale = await this.prisma.sale.findFirst({
+            where: { id: createSaleTodoDto.saleId, isDeleted: false },
+            include: { SaleFeedback: true },
         });
+        if (!sale) {
+            throw new http_error_1.HttpError({ message: 'Sale not found' });
+        }
+        let feedbackId;
+        if (sale.SaleFeedback) {
+            feedbackId = sale.SaleFeedback.id;
+        }
+        else {
+            const newFeedback = await this.prisma.saleFeedback.create({
+                data: {
+                    saleId: sale.id,
+                    alias: (0, uuid_1.v4)(),
+                    state: client_1.SaleFeedbackState.TODO,
+                    result: client_1.SaleFeedbackResult.NOT_COMPLETED,
+                    score: 0,
+                },
+            });
+            feedbackId = newFeedback.id;
+        }
         return this.prisma.saleTodo.create({
             data: {
-                name: todo.name,
-                saleId: createSaleTodoDto.saleId,
-                feedbackId: createSaleTodoDto.feedbackId,
+                name: createSaleTodoDto.name,
+                saleId: sale.id,
+                feedbackId,
                 registerId: user,
                 modifyId: user,
             },
@@ -99,18 +105,9 @@ let SaleTodoService = class SaleTodoService {
                 throw new http_error_1.HttpError({ message: 'Sale not found' });
             }
         }
-        if (updateSaleTodoDto.feedbackId) {
-            const feedback = await this.prisma.saleFeedback.findFirst({
-                where: { id: updateSaleTodoDto.feedbackId, isDeleted: false },
-            });
-            if (!feedback) {
-                throw new http_error_1.HttpError({ message: 'Feedback not found' });
-            }
-        }
         return this.prisma.saleTodo.update({
             where: { id },
             data: {
-                feedbackId: updateSaleTodoDto.feedbackId ?? saleTodo.feedbackId,
                 saleId: updateSaleTodoDto.saleId ?? saleTodo.saleId,
                 name: updateSaleTodoDto.name ?? saleTodo.name,
                 isCompleted: updateSaleTodoDto.isCompleted ?? saleTodo.isCompleted,

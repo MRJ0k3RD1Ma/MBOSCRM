@@ -4,11 +4,13 @@ import { PrismaService } from "../prisma/prisma.service";
 import { FindAllSaleQueryDto } from "./dto/findAll-sale-query.dto";
 import { SaleProductService } from "../sale-product/sale-product.service";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { SaleFeedbackService } from "../sale-feedback/sale-feedback.service";
 export declare class SaleService {
     private readonly prisma;
     private readonly saleProductService;
+    private readonly saleFeedback;
     private readonly eventEmitter;
-    constructor(prisma: PrismaService, saleProductService: SaleProductService, eventEmitter: EventEmitter2);
+    constructor(prisma: PrismaService, saleProductService: SaleProductService, saleFeedback: SaleFeedbackService, eventEmitter: EventEmitter2);
     create(createSaleDto: CreateSaleDto, creatorId: number): Promise<{
         isDeleted: boolean | null;
         createdAt: Date;
@@ -181,9 +183,9 @@ export declare class SaleService {
             result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
             saleId: number;
             state: import(".prisma/client").$Enums.SaleFeedbackState;
-            score: number | null;
             alias: string;
-        }[];
+            score: number | null;
+        };
         SaleTodo: {
             name: string | null;
             isDeleted: boolean;
