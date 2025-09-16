@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import {
   useGetClientById,
   useUpdateClient,
-  useGetAllClients,
   type CreateClientInput,
 } from "../../config/queries/clients/clients-querys";
 import {
@@ -23,9 +22,7 @@ import {
   useCreatePaidClient,
   type PaidClientDto,
 } from "../../config/queries/clients/paid-client-querys";
-import { useGetAllSale } from "../../config/queries/sale/sale-querys";
 import PaidClientFormModal from "./ui/paid-clients-form-modal";
-import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
 import ClientSubscribesNotpayingTable from "./tables/client-subscribes-notpaying-table copy";
 import ClientSubscribesTable from "./tables/client-subscribes-table";
 import ClientSalesTable from "./tables/client-sales-table";
@@ -42,11 +39,6 @@ export default function ClientPage() {
   const clientId = Number(id);
 
   const { data, isLoading, refetch } = useGetClientById(clientId);
-
-  const { data: clients } = useGetAllClients({ page: 1, limit: 1000 });
-  const { data: sales } = useGetAllSale({ page: 1, limit: 1000 });
-  const { data: payments } = useGetAllPayments({ page: 1, limit: 1000 });
-
   const updateClient = useUpdateClient();
   const createPaidClient = useCreatePaidClient();
 
@@ -135,9 +127,6 @@ export default function ClientPage() {
           setPaidOpen(false);
         }}
         onSubmit={onSubmit}
-        clients={clients?.data || []}
-        sales={sales?.data || []}
-        payments={payments?.data || []}
         clientId={clientId}
         saleId={false}
       />
