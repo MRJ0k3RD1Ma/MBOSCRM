@@ -14,21 +14,6 @@ export default function MonthlyRevenues() {
       label: "Boshqa to'lovlar",
       children: <PaidOtherMonthly type={"INCOME"} />,
     },
-    // {
-    //   key: "3",
-    //   label: "Shartnomalar",
-    //   children: <ClientSalesTable />,
-    // },
-    // {
-    //   key: "4",
-    //   label: "To'lovlar",
-    //   children: <ClientPaidsTable />,
-    // },
-    // {
-    //   key: "5",
-    //   label: "Sotilgan mahsulotlar",
-    //   children: <ClientSaleProductsTable />,
-    // },
   ];
 
   return (

@@ -1,8 +1,9 @@
 import { Button, Col, Form, Input, Row, Select } from "antd";
+
 import { useEffect } from "react";
-import { useToken } from "antd/es/theme/internal";
-import { useGetAllProductUnits } from "../../../config/queries/products/product-unit-querys";
 import { useGetAllProductGroups } from "../../../config/queries/products/product-gorup-querys";
+import { useGetAllProductUnits } from "../../../config/queries/products/product-unit-querys";
+import { useToken } from "antd/es/theme/internal";
 
 const { Option } = Select;
 
@@ -101,19 +102,7 @@ export default function ProductsFilterModal({
               </Select>
             </Form.Item>
           </Col>
-          {/* <Col span={6}>
-            <Form.Item label="Minimal narxi" name="minPrice">
-              <InputNumber
-                style={{ width: "100%" }}
-                placeholder="Minimal narxi"
-              />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="Minimal Soni" name="minCount">
-              <InputNumber style={{ width: "100%" }} placeholder="5" />
-            </Form.Item>
-          </Col> */}
+
           {reminder ? (
             <Col span={6}>
               <Form.Item label="Turi" name="type">
