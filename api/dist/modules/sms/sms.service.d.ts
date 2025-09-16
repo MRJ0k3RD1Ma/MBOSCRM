@@ -3,9 +3,9 @@ import { EskizService } from "../eskiz/eskiz.service";
 import { FeatureFlagService } from "../feature-flag/feature-flag.service";
 export declare class SmsService {
     private readonly prisma;
-    private readonly eskizService;
     private readonly featureFlagService;
-    constructor(prisma: PrismaService, eskizService: EskizService, featureFlagService: FeatureFlagService);
+    private readonly eskizService?;
+    constructor(prisma: PrismaService, featureFlagService: FeatureFlagService, eskizService?: EskizService);
     private axios;
     cron(): Promise<void>;
     sendMessage(mobile_phone: string, message: string, crm_key?: string): Promise<any>;

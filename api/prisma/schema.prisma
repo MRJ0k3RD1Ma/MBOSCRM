@@ -119,11 +119,10 @@ model SaleTodo {
 
 model Access {
   id            Int             @id @default(autoincrement())
-  productId     Int?
-  product       Product?        @relation(fields: [productId], references: [id])
-  key           String
-  name          String?
-  description   String?
+  key           String          @unique
+  name          String
+  description   String
+  price         Float
   updatedTime   DateTime        @default(now())
   isActive      Boolean         @default(false)
   isDeleted     Boolean         @default(false)
@@ -227,7 +226,6 @@ model Product {
   ProductUnit    ProductUnit?     @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ArrivedProduct ArrivedProduct[]
   SaleProduct    SaleProduct[]
-  Access         Access[]
   ClientCrm      ClientCrm[]
 
   @@index([groupId], map: "FK_product_group_id")

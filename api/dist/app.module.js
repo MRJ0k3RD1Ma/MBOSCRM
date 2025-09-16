@@ -44,7 +44,9 @@ const eskiz_module_1 = require("./modules/eskiz/eskiz.module");
 const feature_flag_module_1 = require("./modules/feature-flag/feature-flag.module");
 const client_crm_module_1 = require("./modules/client-crm/client-crm.module");
 const sms_module_1 = require("./modules/sms/sms.module");
-const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule];
+const access_module_1 = require("./modules/access/access.module");
+const paid_crm_module_1 = require("./modules/paid-crm/paid-crm.module");
+const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule, paid_crm_module_1.PaidCrmModule];
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -55,6 +57,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             prisma_module_1.PrismaModule,
             ...(config_1.env.IS_MAIN ? MainModules : []),
+            access_module_1.AccessModule,
             feature_flag_module_1.FeatureFlagModule,
             location_module_1.LocationModule,
             userRole_module_1.UserRoleModule,

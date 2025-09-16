@@ -178,9 +178,9 @@ export declare class SaleController {
             result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
             saleId: number;
             state: import(".prisma/client").$Enums.SaleFeedbackState;
-            alias: string;
             score: number | null;
-        };
+            alias: string;
+        }[];
         SaleTodo: {
             name: string | null;
             isDeleted: boolean;

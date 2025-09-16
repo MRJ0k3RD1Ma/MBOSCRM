@@ -23,8 +23,8 @@ let ClientCrmService = class ClientCrmService {
         const client = await this.prisma.client.findFirst({
             where: { id: createClientCrmDto.clientId, isDeleted: false },
         });
-        if (client) {
-            throw (0, http_error_1.HttpError)({ code: "type Not Found" });
+        if (!client) {
+            throw (0, http_error_1.HttpError)({ code: "Client Not Found" });
         }
         const product = createClientCrmDto.productId !== undefined
             ? await this.prisma.product.findUnique({

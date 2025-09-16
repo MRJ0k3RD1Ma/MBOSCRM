@@ -1,5 +1,6 @@
-import { Breadcrumb } from "antd";
 import { Link, useLocation } from "react-router-dom";
+
+import { Breadcrumb } from "antd";
 
 const nameMap: Record<string, string> = {
   dashboard: "Bosh sahifa",
@@ -31,6 +32,7 @@ const nameMap: Record<string, string> = {
   "paid-other-group": "Boshqa xarajatlar guruhi",
   payment: "To‘lov turlari",
   client: "Mijoz tafsiloti",
+  feedbacks: "Fikr-mulohazalar",
   product: "Mahsulot tafsiloti",
   supplier: "Yetkazib beruvchi tafsiloti",
   arrived: "Kirim tafsiloti",
