@@ -195,8 +195,8 @@ export declare class SaleService {
             registerId: number | null;
             modifyId: number | null;
             saleId: number | null;
-            feedbackId: number | null;
             isCompleted: boolean;
+            feedbackId: number | null;
         }[];
     } & {
         isDeleted: boolean | null;

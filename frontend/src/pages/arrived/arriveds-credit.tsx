@@ -1,64 +1,14 @@
-import { useState } from "react";
-import { Button, Card, Input, Space, Table } from "antd";
+import { Button, Card, Input, Space } from "antd";
+import ArrivedsCreditTable from "./ui/arriveds-credit-table";
 import { FilterOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import {
-  useGetAllProducts,
-  type Product,
-} from "../../config/queries/products/products-querys";
-import { useGetAllProductUnits } from "../../config/queries/products/product-unit-querys";
-import { useGetAllProductGroups } from "../../config/queries/products/product-gorup-querys";
 import ProductsFilterModal from "../products/ui/products-filter-modal";
-import { indexColumn } from "../../components/tables/indexColumn";
+import { useState } from "react";
 
 export default function ArrivedsCredit() {
-  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
-
-  const { data, isLoading } = useGetAllProducts({
-    page,
-    limit,
-    ...(search ? { name: search } : {}),
-    ...filters,
-    type: "DEVICE",
-  });
-
-  const { data: unitsData } = useGetAllProductUnits();
-  const { data: groupData } = useGetAllProductGroups();
-
-  const columns = [
-    indexColumn(page, 10),
-    { title: "Nomi", dataIndex: "name", key: "name" },
-    { title: "Shtrix kodi", dataIndex: "barcode", key: "barcode" },
-    {
-      title: "Guruhi",
-      dataIndex: "groupId",
-      key: "groupId",
-      render: (groupId: number) =>
-        groupData?.data.find((g) => g.id === groupId)?.name || "–",
-    },
-    {
-      title: "Qoldiq",
-      key: "reminder",
-      render: (_: any, row: Product) => {
-        const unitName =
-          unitsData?.data.find((u) => u.id === row.unitId)?.name || "";
-        return `${row.countReminder} , ${unitName}`;
-      },
-    },
-    {
-      title: "Sotuv narxi",
-      dataIndex: "price",
-      key: "price",
-      render: (price: number) =>
-        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
-    },
-    { title: "Turi", dataIndex: "type", key: "type" },
-  ];
 
   return (
     <Card>
@@ -101,28 +51,11 @@ export default function ArrivedsCredit() {
         initialValues={filters}
         reminder={false}
       />
-      <Table
-        columns={columns}
-        dataSource={data?.data || []}
-        loading={isLoading}
-        rowKey="id"
-        onRow={(record) => ({
-          onClick: (e) => {
-            if (
-              (e.target as HTMLElement).closest("button") ||
-              (e.target as HTMLElement).closest("svg")
-            ) {
-              return;
-            }
-            navigate(`/product/${record.id}`);
-          },
-        })}
-        pagination={{
-          current: page,
-          pageSize: limit,
-          total: data?.total,
-          onChange: (page) => setPage(page),
-        }}
+      <ArrivedsCreditTable
+        page={page}
+        search={search}
+        filters={filters}
+        setPage={setPage}
       />
     </Card>
   );

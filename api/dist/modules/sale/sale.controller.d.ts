@@ -178,9 +178,9 @@ export declare class SaleController {
             result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
             saleId: number;
             state: import(".prisma/client").$Enums.SaleFeedbackState;
-            score: number | null;
             alias: string;
-        }[];
+            score: number | null;
+        };
         SaleTodo: {
             name: string | null;
             isDeleted: boolean;
@@ -190,8 +190,8 @@ export declare class SaleController {
             registerId: number | null;
             modifyId: number | null;
             saleId: number | null;
-            feedbackId: number | null;
             isCompleted: boolean;
+            feedbackId: number | null;
         }[];
     } & {
         isDeleted: boolean | null;
