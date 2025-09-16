@@ -1,51 +1,27 @@
 import { useState } from "react";
-import {
-  Button,
-  Card,
-  Dropdown,
-  Form,
-  Input,
-  Space,
-  Table,
-  Tooltip,
-  type MenuProps,
-} from "antd";
+import { Button, Card, Form, Input, Space } from "antd";
 import {
   useCreateClient,
-  useDeleteClient,
-  useGetAllClients,
   useUpdateClient,
   type Client,
   type CreateClientInput,
 } from "../../config/queries/clients/clients-querys";
-import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { PlusOutlined, FilterOutlined } from "@ant-design/icons";
 import ClientsFilterModal from "./ui/clients-filter-modal";
-import dayjs from "dayjs";
-import { indexColumn } from "../../components/tables/indexColumn";
 import ClientFormModal from "./ui/clients-form-modal";
+import ClientsPageTable from "./tables/clients-page-table";
 
 export default function ClientsPage() {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Client | null>(null);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
-
-  const { data, isLoading } = useGetAllClients({
-    page,
-    limit,
-    ...(search ? { name: search } : {}),
-    ...filters,
-  });
 
   const createClient = useCreateClient();
   const updateClient = useUpdateClient();
-  const deleteClient = useDeleteClient();
 
   const onSubmit = (values: CreateClientInput) => {
     if (editing) {
@@ -56,70 +32,6 @@ export default function ClientsPage() {
     setOpen(false);
     setEditing(null);
   };
-
-  const handleEdit = (client: Client) => {
-    setEditing(client);
-    form.setFieldsValue(client);
-    setOpen(true);
-  };
-
-  const handleDelete = (id: number) => {
-    deleteClient.mutate(id);
-  };
-
-  const columns = [
-    indexColumn(page, limit),
-    { title: "Nomi", dataIndex: "name" },
-    { title: "INN", dataIndex: "inn" },
-    { title: "Telefon", dataIndex: "phone" },
-    { title: "Mijoz turi", dataIndex: ["ClientType", "name"] },
-    {
-      title: "Balans",
-      dataIndex: "balance",
-      render: (balance: number) =>
-        balance ? balance.toLocaleString("uz-UZ") + " so'm" : "0",
-    },
-    {
-      title: "So'ngi o'zgarish",
-      dataIndex: "updatedAt",
-      render: (text: string) =>
-        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (_: any, row: Client) => {
-        const items: MenuProps["items"] = [
-          {
-            key: "edit",
-            label: "Tahrirlash",
-            onClick: () => handleEdit(row),
-          },
-          {
-            key: "delete",
-            label: "O‘chirish",
-            danger: true,
-            onClick: () => handleDelete(row.id),
-          },
-          {
-            key: "view",
-            label: "Profilga o‘tish",
-            onClick: () => navigate(`/client/${row.id}`),
-          },
-        ];
-
-        return (
-          <div onClick={(e) => e.stopPropagation()}>
-            <Dropdown menu={{ items }} trigger={["click"]}>
-              <Tooltip title="Boshqarish">
-                <Button icon={<MoreOutlined />} />
-              </Tooltip>
-            </Dropdown>
-          </div>
-        );
-      },
-    },
-  ];
 
   return (
     <Card>
@@ -163,6 +75,15 @@ export default function ClientsPage() {
           Yangi mijoz qo‘shish
         </Button>
       </Space>
+      <ClientsPageTable
+        page={page}
+        search={search}
+        filters={filters}
+        setEditing={setEditing}
+        form={form}
+        setOpen={setOpen}
+        setPage={setPage}
+      />
       <ClientsFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
@@ -172,30 +93,6 @@ export default function ClientsPage() {
         }}
         initialValues={filters}
       />
-      <Table
-        columns={columns}
-        dataSource={data?.data || []}
-        loading={isLoading}
-        rowKey="id"
-        onRow={(record) => ({
-          onClick: (e) => {
-            if (
-              (e.target as HTMLElement).closest("button") ||
-              (e.target as HTMLElement).closest("svg")
-            ) {
-              return;
-            }
-            navigate(`/client/${record.id}`);
-          },
-        })}
-        pagination={{
-          current: page,
-          pageSize: limit,
-          total: data?.total,
-          onChange: (page) => setPage(page),
-        }}
-      />
-
       <ClientFormModal
         open={open}
         onClose={() => {

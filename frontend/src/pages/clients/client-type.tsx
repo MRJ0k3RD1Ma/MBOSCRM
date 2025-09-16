@@ -1,101 +1,21 @@
-import {
-  Button,
-  Card,
-  Dropdown,
-  Input,
-  Space,
-  Table,
-  message,
-  type MenuProps,
-} from "antd";
-import {
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  SearchOutlined,
-  MoreOutlined,
-} from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import {
-  useDeleteClientType,
-  useGetAllClientTypes,
-} from "../../config/queries/clients/client-type-querys";
+import { Button, Card, Input, Space } from "antd";
+import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+
 import ClientTypeFormModal from "./ui/client-type-form-modal";
-import { indexColumn } from "../../components/tables/indexColumn";
+import ClientTypesTable from "./tables/client-types-table";
+import { useState } from "react";
 
 export default function ClientType() {
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
   const [filters, setFilters] = useState({ name: "" });
-
-  const { data, isLoading, refetch } = useGetAllClientTypes({
-    page,
-    limit: 10,
-    ...(search ? { code: search } : {}),
-    ...filters,
-  });
-  const deleteClientType = useDeleteClientType();
-
   const [modalOpen, setModalOpen] = useState(false);
   const [selected, setSelected] = useState<{ id: number; name: string } | null>(
     null
   );
 
-  const handleDelete = async (record: any) => {
-    try {
-      await deleteClientType.mutateAsync(record.id);
-    } catch {
-      message.error("O‘chirishda xatolik");
-    }
-  };
-
   const handleSearch = () => {
     setFilters((prev) => ({ ...prev, name: search, page: 1 }));
   };
-
-  useEffect(() => {
-    refetch();
-  }, [filters]);
-
-  const columns = [
-    indexColumn(page, 10),
-    {
-      title: "Turi nomi",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Amallar",
-      key: "actions",
-      align: "right" as const,
-      render: (_: any, record: any) => {
-        const items: MenuProps["items"] = [
-          {
-            key: "edit",
-            icon: <EditOutlined />,
-            label: "Tahrirlash",
-            onClick: () => {
-              setSelected({ id: record.id, name: record.name });
-              setModalOpen(true);
-            },
-          },
-          {
-            key: "delete",
-            icon: <DeleteOutlined />,
-            label: "O‘chirish",
-            danger: true,
-            onClick: () => handleDelete(record),
-          },
-        ];
-
-        return (
-          <Dropdown menu={{ items }} trigger={["click"]}>
-            <Button icon={<MoreOutlined />} />
-          </Dropdown>
-        );
-      },
-    },
-  ];
 
   return (
     <Card>
@@ -133,20 +53,12 @@ export default function ClientType() {
           Yangi qo‘shish
         </Button>
       </Space>
-
-      <Table
-        loading={isLoading}
-        columns={columns}
-        dataSource={data?.data || []}
-        rowKey="id"
-        pagination={{
-          current: page,
-          pageSize: 10,
-          total: data?.total,
-          onChange: setPage,
-        }}
+      <ClientTypesTable
+        search={search}
+        filters={filters}
+        setSelected={setSelected}
+        setModalOpen={setModalOpen}
       />
-
       <ClientTypeFormModal
         open={modalOpen}
         onClose={() => {

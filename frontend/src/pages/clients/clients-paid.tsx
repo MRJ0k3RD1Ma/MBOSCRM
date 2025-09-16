@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { Button, Card, Form, Input, Space } from "antd";
-
 import { PlusOutlined, FilterOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
 import {
   useCreatePaidClient,
   useUpdatePaidClient,
@@ -14,9 +10,6 @@ import {
 import PaidClientFilterModal from "./ui/paid-clients-filter-modal";
 import PaidClientFormModal from "./ui/paid-clients-form-modal";
 import ClientsPaidTable from "./tables/clients-paid-table";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 export default function ClientsPaid() {
   const [form] = Form.useForm();

@@ -11,7 +11,12 @@ import { useGetAllSale } from "../../../config/queries/sale/sale-querys";
 import { useGetAllPayments } from "../../../config/queries/payment/payment-querys";
 import { useState } from "react";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { MoreOutlined } from "@ant-design/icons";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const formatDate = (date: string) =>
   dayjs.utc(date).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm");
