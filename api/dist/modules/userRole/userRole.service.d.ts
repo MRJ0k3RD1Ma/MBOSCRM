@@ -7,43 +7,43 @@ export declare class UserRoleService {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createUserRoleDto: CreateUserRoleDto): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     findAll(dto: FindAllUserRoleQueryDto): Promise<{
         total: number;
         page: number;
         limit: number;
         data: {
-            id: number;
             name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         }[];
     }>;
     findOne(id: number): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     update(id: number, dto: UpdateUserRoleDto): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     remove(id: number): Promise<{
-        id: number;
         name: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
 }

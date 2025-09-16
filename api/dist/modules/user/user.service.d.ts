@@ -10,29 +10,29 @@ export declare class UserService implements OnModuleInit {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createUserDto: CreateUserDto): Promise<{
-        id: number;
         name: string;
+        phone: string | null;
+        username: string;
+        roleId: number | null;
+        chatId: string | null;
+        password: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        phone: string | null;
-        username: string;
-        password: string;
-        roleId: number | null;
-        chatId: string | null;
+        id: number;
     }>;
     login(dto: LoginUserDto): Promise<{
         user: {
-            id: number;
             name: string;
+            phone: string | null;
+            username: string;
+            roleId: number | null;
+            chatId: string | null;
+            password: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            phone: string | null;
-            username: string;
-            password: string;
-            roleId: number | null;
-            chatId: string | null;
+            id: number;
         };
         accessToken: string;
         refreshToken: string;
@@ -49,67 +49,67 @@ export declare class UserService implements OnModuleInit {
         limit: number;
         data: ({
             UserRole: {
-                id: number;
                 name: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
             };
         } & {
-            id: number;
             name: string;
+            phone: string | null;
+            username: string;
+            roleId: number | null;
+            chatId: string | null;
+            password: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            phone: string | null;
-            username: string;
-            password: string;
-            roleId: number | null;
-            chatId: string | null;
+            id: number;
         })[];
     }>;
     findOne(id: number): Promise<{
         UserRole: {
-            id: number;
             name: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
         };
     } & {
-        id: number;
         name: string;
+        phone: string | null;
+        username: string;
+        roleId: number | null;
+        chatId: string | null;
+        password: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        phone: string | null;
-        username: string;
-        password: string;
-        roleId: number | null;
-        chatId: string | null;
+        id: number;
     }>;
     update(id: number, dto: UpdateUserDto): Promise<{
-        id: number;
         name: string;
+        phone: string | null;
+        username: string;
+        roleId: number | null;
+        chatId: string | null;
+        password: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        phone: string | null;
-        username: string;
-        password: string;
-        roleId: number | null;
-        chatId: string | null;
+        id: number;
     }>;
     remove(id: number): Promise<{
-        id: number;
         name: string;
+        phone: string | null;
+        username: string;
+        roleId: number | null;
+        chatId: string | null;
+        password: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        phone: string | null;
-        username: string;
-        password: string;
-        roleId: number | null;
-        chatId: string | null;
+        id: number;
     }>;
 }

@@ -8,4 +8,7 @@ export declare class UpdateSaleFeedbackDto extends UpdateSaleFeedbackDto_base {
 export declare class AliasParamDto {
     alias: string;
 }
+export declare class UpdateStateDto {
+    state: SaleFeedbackState;
+}
 export {};

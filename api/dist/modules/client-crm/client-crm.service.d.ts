@@ -8,16 +8,16 @@ export declare class ClientCrmService implements OnModuleInit {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createClientCrmDto: CreateClientCrmDto): Promise<{
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        clientId: number;
+        id: number;
+        balance: number;
         productId: number;
+        clientId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        balance: number;
         key: string;
     }>;
     findAll(dto: FindAllClientCrmQueryDto): Promise<{
@@ -26,91 +26,91 @@ export declare class ClientCrmService implements OnModuleInit {
         limit: number;
         data: ({
             client: {
-                id: number;
+                description: string | null;
                 name: string;
+                phone: string;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
+                id: number;
                 balance: number;
-                typeId: number | null;
                 inn: string;
+                address: string | null;
                 regionId: number | null;
                 districtId: number | null;
-                address: string | null;
-                description: string | null;
+                typeId: number | null;
                 registerId: number | null;
                 modifyId: number | null;
-                phone: string;
             };
         } & {
-            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            clientId: number;
+            id: number;
+            balance: number;
             productId: number;
+            clientId: number;
             domain: string | null;
             isFullAccess: boolean;
             expiredFullAccess: Date | null;
-            balance: number;
             key: string;
         })[];
     }>;
     findOne(id: number): Promise<{
         client: {
-            id: number;
+            description: string | null;
             name: string;
+            phone: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             balance: number;
-            typeId: number | null;
             inn: string;
+            address: string | null;
             regionId: number | null;
             districtId: number | null;
-            address: string | null;
-            description: string | null;
+            typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            phone: string;
         };
     } & {
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        clientId: number;
+        id: number;
+        balance: number;
         productId: number;
+        clientId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        balance: number;
         key: string;
     }>;
     update(id: number, dto: UpdateClientCrmDto): Promise<{
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        clientId: number;
+        id: number;
+        balance: number;
         productId: number;
+        clientId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        balance: number;
         key: string;
     }>;
     remove(id: number): Promise<{
-        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        clientId: number;
+        id: number;
+        balance: number;
         productId: number;
+        clientId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        balance: number;
         key: string;
     }>;
 }

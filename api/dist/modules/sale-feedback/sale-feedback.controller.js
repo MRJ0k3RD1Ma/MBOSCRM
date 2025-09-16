@@ -36,6 +36,9 @@ let SaleFeedbackController = class SaleFeedbackController {
     update(alias, updateSaleFeedbackDto) {
         return this.saleFeedbackService.update(alias, updateSaleFeedbackDto);
     }
+    updateState(dto, alias) {
+        return this.saleFeedbackService.updateState(dto, alias);
+    }
     remove(id) {
         return this.saleFeedbackService.remove(+id);
     }
@@ -74,6 +77,15 @@ __decorate([
     __metadata("design:paramtypes", [String, update_sale_feedback_dto_1.UpdateSaleFeedbackDto]),
     __metadata("design:returntype", void 0)
 ], SaleFeedbackController.prototype, "update", null);
+__decorate([
+    (0, common_1.Patch)(':alias/state'),
+    (0, decorator_auth_1.DecoratorWrapper)('saleFeedbackUpdateState'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('alias', new common_1.ParseUUIDPipe({ version: '4' }))),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [update_sale_feedback_dto_1.UpdateStateDto, String]),
+    __metadata("design:returntype", void 0)
+], SaleFeedbackController.prototype, "updateState", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, decorator_auth_1.DecoratorWrapper)('saleFeedbackDelete', true, [role_enum_1.Role.Admin]),

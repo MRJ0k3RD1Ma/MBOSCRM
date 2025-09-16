@@ -8,21 +8,21 @@ export declare class ClientService implements OnModuleInit {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createClientDto: CreateClientDto, creatorId: number): Promise<{
-        id: number;
+        description: string | null;
         name: string;
+        phone: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         balance: number;
-        typeId: number | null;
         inn: string;
+        address: string | null;
         regionId: number | null;
         districtId: number | null;
-        address: string | null;
-        description: string | null;
+        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        phone: string;
     }>;
     findAll(dto: FindAllClientQueryDto): Promise<{
         total: number;
@@ -30,95 +30,95 @@ export declare class ClientService implements OnModuleInit {
         limit: number;
         data: ({
             ClientType: {
-                id: number;
                 name: string;
+                id: number;
             };
         } & {
-            id: number;
+            description: string | null;
             name: string;
+            phone: string;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             balance: number;
-            typeId: number | null;
             inn: string;
+            address: string | null;
             regionId: number | null;
             districtId: number | null;
-            address: string | null;
-            description: string | null;
+            typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            phone: string;
         })[];
     }>;
     findOne(id: number): Promise<{
         District: {
-            id: number;
             name: string | null;
+            id: number;
             regionId: number | null;
         };
         Region: {
-            id: number;
             name: string | null;
+            id: number;
         };
         ClientType: {
-            id: number;
             name: string;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             modifyId: number | null;
             creatorId: number | null;
         };
     } & {
-        id: number;
+        description: string | null;
         name: string;
+        phone: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         balance: number;
-        typeId: number | null;
         inn: string;
+        address: string | null;
         regionId: number | null;
         districtId: number | null;
-        address: string | null;
-        description: string | null;
+        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        phone: string;
     }>;
     update(id: number, dto: UpdateClientDto, creatorId: number): Promise<{
-        id: number;
+        description: string | null;
         name: string;
+        phone: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         balance: number;
-        typeId: number | null;
         inn: string;
+        address: string | null;
         regionId: number | null;
         districtId: number | null;
-        address: string | null;
-        description: string | null;
+        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        phone: string;
     }>;
     remove(id: number): Promise<{
-        id: number;
+        description: string | null;
         name: string;
+        phone: string;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         balance: number;
-        typeId: number | null;
         inn: string;
+        address: string | null;
         regionId: number | null;
         districtId: number | null;
-        address: string | null;
-        description: string | null;
+        typeId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        phone: string;
     }>;
 }

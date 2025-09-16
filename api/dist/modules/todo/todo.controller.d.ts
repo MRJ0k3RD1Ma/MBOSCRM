@@ -5,11 +5,11 @@ export declare class TodoController {
     private readonly todoService;
     constructor(todoService: TodoService);
     create(createTodoDto: CreateTodoDto): Promise<{
-        id: number;
         name: string | null;
+        id: number;
     }>;
     findAll(dto: FindAllTodoDto): Promise<{
-        id: number;
         name: string | null;
+        id: number;
     }[]>;
 }

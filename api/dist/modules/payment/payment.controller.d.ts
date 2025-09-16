@@ -6,11 +6,11 @@ export declare class PaymentController {
     private readonly paymentService;
     constructor(paymentService: PaymentService);
     create(createPaymentDto: CreatePaymentDto): Promise<{
-        id: number;
         name: string | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;
@@ -20,42 +20,42 @@ export declare class PaymentController {
         page: number;
         limit: number;
         data: {
-            id: number;
             name: string | null;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
+            id: number;
             registerId: number | null;
             modifyId: number | null;
             icon: string | null;
         }[];
     }>;
     findOne(id: string): Promise<{
-        id: number;
         name: string | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;
     }>;
     update(id: string, updatePaymentDto: UpdatePaymentDto): Promise<{
-        id: number;
         name: string | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;
     }>;
     remove(id: string): Promise<{
-        id: number;
         name: string | null;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
         registerId: number | null;
         modifyId: number | null;
         icon: string | null;
