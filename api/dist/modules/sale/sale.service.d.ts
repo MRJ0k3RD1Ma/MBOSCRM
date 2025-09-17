@@ -181,8 +181,8 @@ export declare class SaleService {
             result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
             saleId: number;
             state: import(".prisma/client").$Enums.SaleFeedbackState;
-            score: number | null;
             alias: string;
+            score: number | null;
         }[];
         SaleTodo: {
             name: string | null;

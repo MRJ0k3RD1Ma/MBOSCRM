@@ -82,7 +82,7 @@ let SaleService = class SaleService {
             },
         });
         for (const product of products) {
-            const saleProduct = await this.saleProductService.create({
+            await this.saleProductService.create({
                 saleId: sale.id,
                 count: product.count,
                 price: product.price,

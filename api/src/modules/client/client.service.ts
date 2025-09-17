@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
-import { Client, ClientType, Prisma } from "@prisma/client";
+import { Client, ClientType, Prisma, Sale } from "@prisma/client";
 import { HttpError } from "src/common/exception/http.error";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateClientDto } from "./dto/create-client.dto";
@@ -7,6 +7,7 @@ import { FindAllClientQueryDto } from "./dto/findAll-client.dto";
 import { UpdateClientDto } from "./dto/update-client.dto";
 import { env } from "src/common/config";
 import { faker } from "@faker-js/faker";
+import { OnEvent } from "@nestjs/event-emitter";
 
 @Injectable()
 export class ClientService implements OnModuleInit {

@@ -15,8 +15,8 @@ export declare class SaleFeedbackService {
         result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
         saleId: number;
         state: import(".prisma/client").$Enums.SaleFeedbackState;
-        score: number | null;
         alias: string;
+        score: number | null;
     }>;
     findAll(dto: FindAllSaleFeedbackDto): Promise<{
         data: {
@@ -29,8 +29,8 @@ export declare class SaleFeedbackService {
             result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
             saleId: number;
             state: import(".prisma/client").$Enums.SaleFeedbackState;
-            score: number | null;
             alias: string;
+            score: number | null;
         }[];
         total: number;
         page: number;
@@ -46,8 +46,8 @@ export declare class SaleFeedbackService {
         result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
         saleId: number;
         state: import(".prisma/client").$Enums.SaleFeedbackState;
-        score: number | null;
         alias: string;
+        score: number | null;
     }>;
     update(alias: string, updateSaleFeedbackDto: UpdateSaleFeedbackDto): Promise<{
         description: string | null;
@@ -59,8 +59,8 @@ export declare class SaleFeedbackService {
         result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
         saleId: number;
         state: import(".prisma/client").$Enums.SaleFeedbackState;
-        score: number | null;
         alias: string;
+        score: number | null;
     }>;
     remove(id: number): Promise<{
         description: string | null;
@@ -72,7 +72,7 @@ export declare class SaleFeedbackService {
         result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
         saleId: number;
         state: import(".prisma/client").$Enums.SaleFeedbackState;
-        score: number | null;
         alias: string;
+        score: number | null;
     }>;
 }

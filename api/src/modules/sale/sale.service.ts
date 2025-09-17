@@ -15,7 +15,7 @@ export class SaleService {
 		private readonly prisma: PrismaService,
 		private readonly saleProductService: SaleProductService,
 		private readonly eventEmitter: EventEmitter2,
-	) { }
+	) {}
 
 	async create(createSaleDto: CreateSaleDto, creatorId: number) {
 		const {
@@ -92,7 +92,7 @@ export class SaleService {
 		});
 
 		for (const product of products) {
-			const saleProduct = await this.saleProductService.create(
+			await this.saleProductService.create(
 				{
 					saleId: sale.id,
 					count: product.count,
