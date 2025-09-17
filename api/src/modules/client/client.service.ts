@@ -13,7 +13,47 @@ import { OnEvent } from "@nestjs/event-emitter";
 export class ClientService implements OnModuleInit {
 	constructor(private readonly prisma: PrismaService) {}
 
+	@OnEvent("recalculate.client")
+	async recalculate(clientId: number) {
+		const saleAgg = await this.prisma.sale.aggregate({
+			where: { clientId, isDeleted: false },
+			_sum: { price: true, credit: true, dept: true },
+		});
+		const paidClientAgg = await this.prisma.paidClient.aggregate({
+			where: { clientId, isDeleted: false },
+			_sum: { price: true },
+		});
+		const subscriptionAgg = await this.prisma.subscribe.aggregate({
+			where: { clientId, isDeleted: false },
+			_sum: { paid: true, price: true },
+		});
+
+		const paidClient = paidClientAgg._sum.price;
+		const salePrice = saleAgg._sum.price;
+		const subscriptionPaid = subscriptionAgg._sum.paid;
+		const subscriptionPrice = subscriptionAgg._sum.price;
+		const subscriptionCredit = subscriptionPrice - subscriptionPaid;
+
+		const clientBalance =
+			paidClient - salePrice - subscriptionPaid - subscriptionCredit;
+
+		await this.prisma.client.update({
+			where: { id: clientId },
+			data: { balance: clientBalance },
+		});
+	}
+
 	async onModuleInit() {
+		(async () => {
+			const clients = await this.prisma.client.findMany({
+				where: { isDeleted: false },
+				select: { id: true },
+			});
+			for (let client of clients) {
+				await this.recalculate(client.id);
+			}
+		})();
+
 		if (env.ENV != "prod") {
 			const clientCount = await this.prisma.client.count();
 			const requiredCount = 3;

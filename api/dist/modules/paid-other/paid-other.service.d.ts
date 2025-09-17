@@ -12,12 +12,12 @@ export declare class PaidOtherService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
+        paymentId: number;
         registerId: number | null;
         modifyId: number | null;
         groupId: number;
-        price: number;
         paidDate: Date;
-        paymentId: number;
     }>;
     findAll(dto: FindAllQueryPaidOtherDto): Promise<{
         data: ({
@@ -47,12 +47,12 @@ export declare class PaidOtherService {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            price: number;
+            paymentId: number;
             registerId: number | null;
             modifyId: number | null;
             groupId: number;
-            price: number;
             paidDate: Date;
-            paymentId: number;
         })[];
         page: number;
         limit: number;
@@ -86,12 +86,12 @@ export declare class PaidOtherService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
+        paymentId: number;
         registerId: number | null;
         modifyId: number | null;
         groupId: number;
-        price: number;
         paidDate: Date;
-        paymentId: number;
     }>;
     update(id: number, updatePaidOtherDto: UpdatePaidOtherDto): Promise<{
         type: import(".prisma/client").$Enums.PaidOtherType;
@@ -100,12 +100,12 @@ export declare class PaidOtherService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
+        paymentId: number;
         registerId: number | null;
         modifyId: number | null;
         groupId: number;
-        price: number;
         paidDate: Date;
-        paymentId: number;
     }>;
     remove(id: number): Promise<{
         type: import(".prisma/client").$Enums.PaidOtherType;
@@ -114,11 +114,11 @@ export declare class PaidOtherService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
+        paymentId: number;
         registerId: number | null;
         modifyId: number | null;
         groupId: number;
-        price: number;
         paidDate: Date;
-        paymentId: number;
     }>;
 }

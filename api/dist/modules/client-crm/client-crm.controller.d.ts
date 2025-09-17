@@ -11,8 +11,8 @@ export declare class ClientCrmController {
         updatedAt: Date;
         id: number;
         balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
@@ -46,8 +46,8 @@ export declare class ClientCrmController {
             updatedAt: Date;
             id: number;
             balance: number;
-            productId: number;
             clientId: number;
+            productId: number;
             domain: string | null;
             isFullAccess: boolean;
             expiredFullAccess: Date | null;
@@ -78,8 +78,8 @@ export declare class ClientCrmController {
         updatedAt: Date;
         id: number;
         balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
@@ -91,8 +91,8 @@ export declare class ClientCrmController {
         updatedAt: Date;
         id: number;
         balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
@@ -104,8 +104,8 @@ export declare class ClientCrmController {
         updatedAt: Date;
         id: number;
         balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;

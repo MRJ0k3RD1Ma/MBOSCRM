@@ -14,21 +14,21 @@ const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const http_error_1 = require("../../common/exception/http.error");
 const client_1 = require("@prisma/client");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let PaidClientService = class PaidClientService {
-    constructor(prisma) {
+    constructor(prisma, eventEmitter) {
         this.prisma = prisma;
+        this.eventEmitter = eventEmitter;
     }
     async create(createPaidClientDto, registerId) {
         const { clientId, saleId, paymentId, paidDate, price } = createPaidClientDto;
-        if (clientId) {
-            const client = await this.prisma.client.findFirst({
-                where: { id: clientId, isDeleted: false },
+        const client = await this.prisma.client.findFirst({
+            where: { id: clientId, isDeleted: false },
+        });
+        if (!client) {
+            throw new http_error_1.HttpError({
+                message: `Client with ID ${clientId} not found or deleted`,
             });
-            if (!client) {
-                throw new http_error_1.HttpError({
-                    message: `Client with ID ${clientId} not found or deleted`,
-                });
-            }
         }
         if (paymentId) {
             const payment = await this.prisma.payment.findFirst({
@@ -50,25 +50,16 @@ let PaidClientService = class PaidClientService {
                 registerId,
             },
         });
-        if (clientId) {
-            const client = await this.prisma.client.findFirst({
-                where: { id: clientId, isDeleted: false },
-            });
-            if (!client) {
-                throw new http_error_1.HttpError({
-                    message: `Client with ID ${clientId} not found or deleted`,
-                });
-            }
-            await this.prisma.setting.update({
-                where: { id: 1 },
-                data: {
-                    balance: {
-                        increment: price,
-                    },
+        await this.prisma.setting.update({
+            where: { id: 1 },
+            data: {
+                balance: {
+                    increment: price,
                 },
-            });
-            await this.processPayment(client.id, price, saleId);
-        }
+            },
+        });
+        await this.processPayment(client.id, price, saleId);
+        this.eventEmitter.emit("recalculate.client", clientId);
         return paidClient;
     }
     async processPayment(clientId, paymentAmount, saleId) {
@@ -273,12 +264,14 @@ let PaidClientService = class PaidClientService {
             where: { id },
             data: { isDeleted: true },
         });
+        this.eventEmitter.emit("paidClient.deleted", paidClient);
         return result;
     }
 };
 exports.PaidClientService = PaidClientService;
 exports.PaidClientService = PaidClientService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        event_emitter_1.EventEmitter2])
 ], PaidClientService);
 //# sourceMappingURL=paid-client.service.js.map

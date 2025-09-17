@@ -14,9 +14,11 @@ const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const http_error_1 = require("../../common/exception/http.error");
 const client_1 = require("@prisma/client");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let SaleProductService = class SaleProductService {
-    constructor(prisma) {
+    constructor(prisma, eventEmitter) {
         this.prisma = prisma;
+        this.eventEmitter = eventEmitter;
     }
     async create(createSaleProductDto, creatorId) {
         const sale = await this.prisma.sale.findFirst({
@@ -191,6 +193,12 @@ let SaleProductService = class SaleProductService {
         if (!saleProduct) {
             throw new http_error_1.HttpError({ message: `SaleProduct with ID ${id} not found` });
         }
+        if (saleProduct.is_subscribe) {
+            await this.prisma.subscribe.updateMany({
+                where: { saleId: saleProduct.saleId },
+                data: { isDeleted: true },
+            });
+        }
         const sale = await this.prisma.sale.update({
             where: { id: saleProduct.saleId },
             data: { price: { decrement: saleProduct.priceCount } },
@@ -205,6 +213,7 @@ let SaleProductService = class SaleProductService {
                 data: { dept: { decrement: saleProduct.priceCount } },
             });
         }
+        this.eventEmitter.emit("recalculate.client", sale.clientId);
         return await this.prisma.saleProduct.update({
             where: { id },
             data: { isDeleted: true },
@@ -214,6 +223,7 @@ let SaleProductService = class SaleProductService {
 exports.SaleProductService = SaleProductService;
 exports.SaleProductService = SaleProductService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        event_emitter_1.EventEmitter2])
 ], SaleProductService);
 //# sourceMappingURL=sale-product.service.js.map

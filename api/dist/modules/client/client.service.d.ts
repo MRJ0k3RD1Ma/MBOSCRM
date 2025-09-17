@@ -6,6 +6,7 @@ import { UpdateClientDto } from "./dto/update-client.dto";
 export declare class ClientService implements OnModuleInit {
     private readonly prisma;
     constructor(prisma: PrismaService);
+    recalculate(clientId: number): Promise<void>;
     onModuleInit(): Promise<void>;
     create(createClientDto: CreateClientDto, creatorId: number): Promise<{
         description: string | null;

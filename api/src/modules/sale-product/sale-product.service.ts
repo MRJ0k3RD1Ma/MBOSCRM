@@ -5,10 +5,15 @@ import { PrismaService } from "../prisma/prisma.service";
 import { HttpError } from "src/common/exception/http.error";
 import { FindAllSaleProductQueryDto } from "./dto/findAll-sale-product-query.dto";
 import { Prisma, ProductType, SaleState } from "@prisma/client";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 
 @Injectable()
 export class SaleProductService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly eventEmitter: EventEmitter2,
+	) {}
+
 	async create(createSaleProductDto: CreateSaleProductDto, creatorId: number) {
 		const sale = await this.prisma.sale.findFirst({
 			where: { id: createSaleProductDto.saleId },
@@ -220,6 +225,12 @@ export class SaleProductService {
 		if (!saleProduct) {
 			throw new HttpError({ message: `SaleProduct with ID ${id} not found` });
 		}
+		if (saleProduct.is_subscribe) {
+			await this.prisma.subscribe.updateMany({
+				where: { saleId: saleProduct.saleId },
+				data: { isDeleted: true },
+			});
+		}
 		const sale = await this.prisma.sale.update({
 			where: { id: saleProduct.saleId },
 			data: { price: { decrement: saleProduct.priceCount } },
@@ -234,6 +245,9 @@ export class SaleProductService {
 				data: { dept: { decrement: saleProduct.priceCount } },
 			});
 		}
+
+		this.eventEmitter.emit("recalculate.client", sale.clientId);
+
 		return await this.prisma.saleProduct.update({
 			where: { id },
 			data: { isDeleted: true },

@@ -11,9 +11,9 @@ export declare class PaidServerController {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         serverId: number;
         endDate: Date;
         paymentTypeId: number;
@@ -40,9 +40,9 @@ export declare class PaidServerController {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            price: number;
             registerId: number | null;
             modifyId: number | null;
-            price: number;
             serverId: number;
             endDate: Date;
             paymentTypeId: number;
@@ -73,9 +73,9 @@ export declare class PaidServerController {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         serverId: number;
         endDate: Date;
         paymentTypeId: number;
@@ -86,9 +86,9 @@ export declare class PaidServerController {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         serverId: number;
         endDate: Date;
         paymentTypeId: number;
@@ -99,9 +99,9 @@ export declare class PaidServerController {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
         registerId: number | null;
         modifyId: number | null;
-        price: number;
         serverId: number;
         endDate: Date;
         paymentTypeId: number;

@@ -5,23 +5,25 @@ import { PrismaService } from "../prisma/prisma.service";
 import { HttpError } from "src/common/exception/http.error";
 import { FindAllQueryPaidClientDto } from "./dto/findAll-query-paid-client.dto";
 import { Prisma, SubscribeState } from "@prisma/client";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 @Injectable()
 export class PaidClientService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly eventEmitter: EventEmitter2,
+	) {}
 
 	async create(createPaidClientDto: CreatePaidClientDto, registerId: number) {
 		const { clientId, saleId, paymentId, paidDate, price } =
 			createPaidClientDto;
 
-		if (clientId) {
-			const client = await this.prisma.client.findFirst({
-				where: { id: clientId, isDeleted: false },
+		const client = await this.prisma.client.findFirst({
+			where: { id: clientId, isDeleted: false },
+		});
+		if (!client) {
+			throw new HttpError({
+				message: `Client with ID ${clientId} not found or deleted`,
 			});
-			if (!client) {
-				throw new HttpError({
-					message: `Client with ID ${clientId} not found or deleted`,
-				});
-			}
 		}
 
 		if (paymentId) {
@@ -45,25 +47,17 @@ export class PaidClientService {
 				registerId,
 			},
 		});
-		if (clientId) {
-			const client = await this.prisma.client.findFirst({
-				where: { id: clientId, isDeleted: false },
-			});
-			if (!client) {
-				throw new HttpError({
-					message: `Client with ID ${clientId} not found or deleted`,
-				});
-			}
-			await this.prisma.setting.update({
-				where: { id: 1 },
-				data: {
-					balance: {
-						increment: price,
-					},
+		await this.prisma.setting.update({
+			where: { id: 1 },
+			data: {
+				balance: {
+					increment: price,
 				},
-			});
-			await this.processPayment(client.id, price, saleId);
-		}
+			},
+		});
+		await this.processPayment(client.id, price, saleId);
+
+		this.eventEmitter.emit("recalculate.client", clientId);
 
 		return paidClient;
 	}
@@ -320,6 +314,7 @@ export class PaidClientService {
 			where: { id },
 			data: { isDeleted: true },
 		});
+		this.eventEmitter.emit("paidClient.deleted", paidClient);
 		return result;
 	}
 }

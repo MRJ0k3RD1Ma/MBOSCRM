@@ -1,7 +1,7 @@
 export declare class CreatePaidClientDto {
-    clientId?: number;
+    clientId: number;
     saleId?: number;
-    paymentId?: number;
+    paymentId: number;
     paidDate?: Date;
-    price?: number;
+    price: number;
 }

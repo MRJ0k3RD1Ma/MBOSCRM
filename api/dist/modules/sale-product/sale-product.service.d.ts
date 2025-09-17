@@ -2,9 +2,11 @@ import { CreateSaleProductDto } from "./dto/create-sale-product.dto";
 import { UpdateSaleProductDto } from "./dto/update-sale-product.dto";
 import { PrismaService } from "../prisma/prisma.service";
 import { FindAllSaleProductQueryDto } from "./dto/findAll-sale-product-query.dto";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 export declare class SaleProductService {
     private readonly prisma;
-    constructor(prisma: PrismaService);
+    private readonly eventEmitter;
+    constructor(prisma: PrismaService, eventEmitter: EventEmitter2);
     create(createSaleProductDto: CreateSaleProductDto, creatorId: number): Promise<{
         product: {
             type: import(".prisma/client").$Enums.ProductType;
@@ -13,6 +15,7 @@ export declare class SaleProductService {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            price: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -20,7 +23,6 @@ export declare class SaleProductService {
             unitId: number | null;
             priceIncome: number;
             reminderFirst: number;
-            price: number;
             barcodeId: number | null;
             countReminder: number;
             countArrived: number;
@@ -31,13 +33,13 @@ export declare class SaleProductService {
         createdAt: Date | null;
         updatedAt: Date | null;
         id: number;
+        count: number | null;
+        price: number | null;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
-        count: number | null;
         productId: number | null;
         priceCount: number | null;
-        saleId: number | null;
         is_subscribe: boolean | null;
     }>;
     findAll(dto: FindAllSaleProductQueryDto): Promise<{
@@ -62,6 +64,7 @@ export declare class SaleProductService {
                 createdAt: Date;
                 updatedAt: Date;
                 id: number;
+                price: number;
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
@@ -69,7 +72,6 @@ export declare class SaleProductService {
                 unitId: number | null;
                 priceIncome: number;
                 reminderFirst: number;
-                price: number;
                 barcodeId: number | null;
                 countReminder: number;
                 countArrived: number;
@@ -80,19 +82,19 @@ export declare class SaleProductService {
                 createdAt: Date;
                 updatedAt: Date;
                 id: number;
+                price: number;
+                clientId: number;
                 registerId: number | null;
                 modifyId: number | null;
-                price: number;
+                credit: number;
+                dept: number;
+                codeId: number | null;
+                subscribe_generate_day: number | null;
                 date: Date | null;
                 code: string | null;
-                codeId: number | null;
-                clientId: number;
-                dept: number;
-                credit: number;
                 state: import(".prisma/client").$Enums.SaleState;
                 clientName: string | null;
                 subscribe_begin_date: Date | null;
-                subscribe_generate_day: number | null;
             };
             modify: {
                 name: string;
@@ -123,13 +125,13 @@ export declare class SaleProductService {
             createdAt: Date | null;
             updatedAt: Date | null;
             id: number;
+            count: number | null;
+            price: number | null;
+            saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            price: number | null;
-            count: number | null;
             productId: number | null;
             priceCount: number | null;
-            saleId: number | null;
             is_subscribe: boolean | null;
         })[];
     }>;
@@ -141,6 +143,7 @@ export declare class SaleProductService {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            price: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -148,7 +151,6 @@ export declare class SaleProductService {
             unitId: number | null;
             priceIncome: number;
             reminderFirst: number;
-            price: number;
             barcodeId: number | null;
             countReminder: number;
             countArrived: number;
@@ -159,13 +161,13 @@ export declare class SaleProductService {
         createdAt: Date | null;
         updatedAt: Date | null;
         id: number;
+        count: number | null;
+        price: number | null;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
-        count: number | null;
         productId: number | null;
         priceCount: number | null;
-        saleId: number | null;
         is_subscribe: boolean | null;
     }>;
     update(id: number, updateSaleProductDto: UpdateSaleProductDto, modifyId: number): Promise<{
@@ -173,13 +175,13 @@ export declare class SaleProductService {
         createdAt: Date | null;
         updatedAt: Date | null;
         id: number;
+        count: number | null;
+        price: number | null;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
-        count: number | null;
         productId: number | null;
         priceCount: number | null;
-        saleId: number | null;
         is_subscribe: boolean | null;
     }>;
     remove(id: number): Promise<{
@@ -187,13 +189,13 @@ export declare class SaleProductService {
         createdAt: Date | null;
         updatedAt: Date | null;
         id: number;
+        count: number | null;
+        price: number | null;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
-        count: number | null;
         productId: number | null;
         priceCount: number | null;
-        saleId: number | null;
         is_subscribe: boolean | null;
     }>;
 }

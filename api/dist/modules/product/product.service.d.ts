@@ -13,6 +13,7 @@ export declare class ProductService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -20,7 +21,6 @@ export declare class ProductService {
         unitId: number | null;
         priceIncome: number;
         reminderFirst: number;
-        price: number;
         barcodeId: number | null;
         countReminder: number;
         countArrived: number;
@@ -37,6 +37,7 @@ export declare class ProductService {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            price: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -44,7 +45,6 @@ export declare class ProductService {
             unitId: number | null;
             priceIncome: number;
             reminderFirst: number;
-            price: number;
             barcodeId: number | null;
             countReminder: number;
             countArrived: number;
@@ -58,6 +58,7 @@ export declare class ProductService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -65,7 +66,6 @@ export declare class ProductService {
         unitId: number | null;
         priceIncome: number;
         reminderFirst: number;
-        price: number;
         barcodeId: number | null;
         countReminder: number;
         countArrived: number;
@@ -78,6 +78,7 @@ export declare class ProductService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -85,7 +86,6 @@ export declare class ProductService {
         unitId: number | null;
         priceIncome: number;
         reminderFirst: number;
-        price: number;
         barcodeId: number | null;
         countReminder: number;
         countArrived: number;
@@ -98,6 +98,7 @@ export declare class ProductService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number;
         registerId: number | null;
         modifyId: number | null;
         barcode: string | null;
@@ -105,7 +106,6 @@ export declare class ProductService {
         unitId: number | null;
         priceIncome: number;
         reminderFirst: number;
-        price: number;
         barcodeId: number | null;
         countReminder: number;
         countArrived: number;

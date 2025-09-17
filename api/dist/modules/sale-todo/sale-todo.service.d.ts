@@ -13,9 +13,9 @@ export declare class SaleTodoService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        saleId: number | null;
         feedbackId: number | null;
         isCompleted: boolean;
     }>;
@@ -26,9 +26,9 @@ export declare class SaleTodoService {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            saleId: number | null;
             feedbackId: number | null;
             isCompleted: boolean;
         }[];
@@ -42,9 +42,9 @@ export declare class SaleTodoService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        saleId: number | null;
         feedbackId: number | null;
         isCompleted: boolean;
     }>;
@@ -54,9 +54,9 @@ export declare class SaleTodoService {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        saleId: number | null;
         feedbackId: number | null;
         isCompleted: boolean;
     }>;

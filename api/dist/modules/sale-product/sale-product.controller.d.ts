@@ -14,6 +14,7 @@ export declare class SaleProductController {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            price: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -21,7 +22,6 @@ export declare class SaleProductController {
             unitId: number | null;
             priceIncome: number;
             reminderFirst: number;
-            price: number;
             barcodeId: number | null;
             countReminder: number;
             countArrived: number;
@@ -32,13 +32,13 @@ export declare class SaleProductController {
         createdAt: Date | null;
         updatedAt: Date | null;
         id: number;
+        count: number | null;
+        price: number | null;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
-        count: number | null;
         productId: number | null;
         priceCount: number | null;
-        saleId: number | null;
         is_subscribe: boolean | null;
     }>;
     findAll(dto: FindAllSaleProductQueryDto): Promise<{
@@ -63,6 +63,7 @@ export declare class SaleProductController {
                 createdAt: Date;
                 updatedAt: Date;
                 id: number;
+                price: number;
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
@@ -70,7 +71,6 @@ export declare class SaleProductController {
                 unitId: number | null;
                 priceIncome: number;
                 reminderFirst: number;
-                price: number;
                 barcodeId: number | null;
                 countReminder: number;
                 countArrived: number;
@@ -81,19 +81,19 @@ export declare class SaleProductController {
                 createdAt: Date;
                 updatedAt: Date;
                 id: number;
+                price: number;
+                clientId: number;
                 registerId: number | null;
                 modifyId: number | null;
-                price: number;
+                credit: number;
+                dept: number;
+                codeId: number | null;
+                subscribe_generate_day: number | null;
                 date: Date | null;
                 code: string | null;
-                codeId: number | null;
-                clientId: number;
-                dept: number;
-                credit: number;
                 state: import(".prisma/client").$Enums.SaleState;
                 clientName: string | null;
                 subscribe_begin_date: Date | null;
-                subscribe_generate_day: number | null;
             };
             modify: {
                 name: string;
@@ -124,13 +124,13 @@ export declare class SaleProductController {
             createdAt: Date | null;
             updatedAt: Date | null;
             id: number;
+            count: number | null;
+            price: number | null;
+            saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            price: number | null;
-            count: number | null;
             productId: number | null;
             priceCount: number | null;
-            saleId: number | null;
             is_subscribe: boolean | null;
         })[];
     }>;
@@ -142,6 +142,7 @@ export declare class SaleProductController {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            price: number;
             registerId: number | null;
             modifyId: number | null;
             barcode: string | null;
@@ -149,7 +150,6 @@ export declare class SaleProductController {
             unitId: number | null;
             priceIncome: number;
             reminderFirst: number;
-            price: number;
             barcodeId: number | null;
             countReminder: number;
             countArrived: number;
@@ -160,13 +160,13 @@ export declare class SaleProductController {
         createdAt: Date | null;
         updatedAt: Date | null;
         id: number;
+        count: number | null;
+        price: number | null;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
-        count: number | null;
         productId: number | null;
         priceCount: number | null;
-        saleId: number | null;
         is_subscribe: boolean | null;
     }>;
     update(id: string, updateSaleProductDto: UpdateSaleProductDto, req: Request): Promise<{
@@ -174,13 +174,13 @@ export declare class SaleProductController {
         createdAt: Date | null;
         updatedAt: Date | null;
         id: number;
+        count: number | null;
+        price: number | null;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
-        count: number | null;
         productId: number | null;
         priceCount: number | null;
-        saleId: number | null;
         is_subscribe: boolean | null;
     }>;
     remove(id: string): Promise<{
@@ -188,13 +188,13 @@ export declare class SaleProductController {
         createdAt: Date | null;
         updatedAt: Date | null;
         id: number;
+        count: number | null;
+        price: number | null;
+        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
-        count: number | null;
         productId: number | null;
         priceCount: number | null;
-        saleId: number | null;
         is_subscribe: boolean | null;
     }>;
 }

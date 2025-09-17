@@ -4,20 +4,17 @@ import { UpdateSubscribeDto } from "./dto/update-subscribe.dto";
 import { PrismaService } from "../prisma/prisma.service";
 import { HttpError } from "src/common/exception/http.error";
 import { FindAllSubscribeQueryDto } from "./dto/findAll-subscribe-query.dto";
-import {
-	Prisma,
-	ProductType,
-	Sale,
-	SaleState,
-	SubscribeState,
-} from "@prisma/client";
+import { Prisma, ProductType, Sale, SubscribeState } from "@prisma/client";
 import { Cron } from "@nestjs/schedule";
 import dayjs from "dayjs";
-import { OnEvent } from "@nestjs/event-emitter";
+import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 
 @Injectable()
 export class SubscribeService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly eventEmitter: EventEmitter2,
+	) {}
 
 	@OnEvent("sale.created")
 	async handleSaleCreatedEvent(sale: Sale & { SaleProduct: any[] }) {
@@ -138,6 +135,8 @@ export class SubscribeService {
 			where: { id: clientId },
 			data: { balance: client.balance - price },
 		});
+
+		this.eventEmitter.emit("subscribe.created", subscribe);
 
 		return subscribe;
 	}
@@ -274,6 +273,8 @@ export class SubscribeService {
 				message: `Subscribe with ID ${id} not found`,
 			});
 		}
+		this.eventEmitter.emit("recalculate.client", subscribe.clientId);
+
 		return this.prisma.subscribe.update({
 			where: { id },
 			data: { isDeleted: true },

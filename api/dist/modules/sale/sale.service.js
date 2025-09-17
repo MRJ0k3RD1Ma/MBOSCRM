@@ -236,7 +236,7 @@ let SaleService = class SaleService {
         });
     }
     async remove(id) {
-        const sale = await this.prisma.sale.findFirst({
+        let sale = await this.prisma.sale.findFirst({
             where: {
                 id,
                 isDeleted: false,
@@ -255,10 +255,11 @@ let SaleService = class SaleService {
             where: { id: sale.clientId },
             data: { balance: { increment: sale.dept } },
         });
-        return await this.prisma.sale.update({
+        sale = await this.prisma.sale.update({
             where: { id },
             data: { isDeleted: true },
         });
+        this.eventEmitter.emit("recalculate.client", sale.clientId);
     }
 };
 exports.SaleService = SaleService;

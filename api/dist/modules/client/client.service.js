@@ -15,11 +15,45 @@ const http_error_1 = require("../../common/exception/http.error");
 const prisma_service_1 = require("../prisma/prisma.service");
 const config_1 = require("../../common/config");
 const faker_1 = require("@faker-js/faker");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let ClientService = class ClientService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async recalculate(clientId) {
+        const saleAgg = await this.prisma.sale.aggregate({
+            where: { clientId, isDeleted: false },
+            _sum: { price: true, credit: true, dept: true },
+        });
+        const paidClientAgg = await this.prisma.paidClient.aggregate({
+            where: { clientId, isDeleted: false },
+            _sum: { price: true },
+        });
+        const subscriptionAgg = await this.prisma.subscribe.aggregate({
+            where: { clientId, isDeleted: false },
+            _sum: { paid: true, price: true },
+        });
+        const paidClient = paidClientAgg._sum.price;
+        const salePrice = saleAgg._sum.price;
+        const subscriptionPaid = subscriptionAgg._sum.paid;
+        const subscriptionPrice = subscriptionAgg._sum.price;
+        const subscriptionCredit = subscriptionPrice - subscriptionPaid;
+        const clientBalance = paidClient - salePrice - subscriptionPaid - subscriptionCredit;
+        await this.prisma.client.update({
+            where: { id: clientId },
+            data: { balance: clientBalance },
+        });
+    }
     async onModuleInit() {
+        (async () => {
+            const clients = await this.prisma.client.findMany({
+                where: { isDeleted: false },
+                select: { id: true },
+            });
+            for (let client of clients) {
+                await this.recalculate(client.id);
+            }
+        })();
         if (config_1.env.ENV != "prod") {
             const clientCount = await this.prisma.client.count();
             const requiredCount = 3;
@@ -200,6 +234,12 @@ let ClientService = class ClientService {
     }
 };
 exports.ClientService = ClientService;
+__decorate([
+    (0, event_emitter_1.OnEvent)("recalculate.client"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], ClientService.prototype, "recalculate", null);
 exports.ClientService = ClientService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])

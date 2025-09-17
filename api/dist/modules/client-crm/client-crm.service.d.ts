@@ -13,8 +13,8 @@ export declare class ClientCrmService implements OnModuleInit {
         updatedAt: Date;
         id: number;
         balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
@@ -48,8 +48,8 @@ export declare class ClientCrmService implements OnModuleInit {
             updatedAt: Date;
             id: number;
             balance: number;
-            productId: number;
             clientId: number;
+            productId: number;
             domain: string | null;
             isFullAccess: boolean;
             expiredFullAccess: Date | null;
@@ -80,8 +80,8 @@ export declare class ClientCrmService implements OnModuleInit {
         updatedAt: Date;
         id: number;
         balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
@@ -93,8 +93,8 @@ export declare class ClientCrmService implements OnModuleInit {
         updatedAt: Date;
         id: number;
         balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
@@ -106,8 +106,8 @@ export declare class ClientCrmService implements OnModuleInit {
         updatedAt: Date;
         id: number;
         balance: number;
-        productId: number;
         clientId: number;
+        productId: number;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;

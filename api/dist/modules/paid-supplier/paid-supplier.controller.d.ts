@@ -11,12 +11,12 @@ export declare class PaidSupplierController {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number | null;
+        paymentId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
         supplierId: number | null;
         paidDate: Date | null;
-        paymentId: number | null;
     }>;
     findAll(query: FindAllPaidSupplierQueryDto): Promise<{
         total: number;
@@ -63,12 +63,12 @@ export declare class PaidSupplierController {
             createdAt: Date;
             updatedAt: Date;
             id: number;
+            price: number | null;
+            paymentId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            price: number | null;
             supplierId: number | null;
             paidDate: Date | null;
-            paymentId: number | null;
         })[];
     }>;
     findOne(id: string): Promise<{
@@ -111,35 +111,35 @@ export declare class PaidSupplierController {
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number | null;
+        paymentId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
         supplierId: number | null;
         paidDate: Date | null;
-        paymentId: number | null;
     }>;
     update(id: string, updatePaidSupplierDto: UpdatePaidSupplierDto): Promise<{
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number | null;
+        paymentId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
         supplierId: number | null;
         paidDate: Date | null;
-        paymentId: number | null;
     }>;
     remove(id: string, req: Request): Promise<{
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         id: number;
+        price: number | null;
+        paymentId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        price: number | null;
         supplierId: number | null;
         paidDate: Date | null;
-        paymentId: number | null;
     }>;
 }

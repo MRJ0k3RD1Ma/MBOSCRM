@@ -21,8 +21,9 @@ const schedule_1 = require("@nestjs/schedule");
 const dayjs_1 = __importDefault(require("dayjs"));
 const event_emitter_1 = require("@nestjs/event-emitter");
 let SubscribeService = class SubscribeService {
-    constructor(prisma) {
+    constructor(prisma, eventEmitter) {
         this.prisma = prisma;
+        this.eventEmitter = eventEmitter;
     }
     async handleSaleCreatedEvent(sale) {
         const saleProduct = await this.prisma.saleProduct.findFirst({
@@ -121,6 +122,7 @@ let SubscribeService = class SubscribeService {
             where: { id: clientId },
             data: { balance: client.balance - price },
         });
+        this.eventEmitter.emit("subscribe.created", subscribe);
         return subscribe;
     }
     async findAll(dto) {
@@ -238,6 +240,7 @@ let SubscribeService = class SubscribeService {
                 message: `Subscribe with ID ${id} not found`,
             });
         }
+        this.eventEmitter.emit("recalculate.client", subscribe.clientId);
         return this.prisma.subscribe.update({
             where: { id },
             data: { isDeleted: true },
@@ -259,6 +262,7 @@ __decorate([
 ], SubscribeService.prototype, "cron", null);
 exports.SubscribeService = SubscribeService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        event_emitter_1.EventEmitter2])
 ], SubscribeService);
 //# sourceMappingURL=subscribe.service.js.map
