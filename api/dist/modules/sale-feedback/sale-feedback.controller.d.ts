@@ -1,6 +1,6 @@
 import { SaleFeedbackService } from './sale-feedback.service';
 import { CreateSaleFeedbackDto } from './dto/create-sale-feedback.dto';
-import { UpdateSaleFeedbackDto } from './dto/update-sale-feedback.dto';
+import { UpdateSaleFeedbackDto, UpdateStateDto } from './dto/update-sale-feedback.dto';
 import { FindAllSaleFeedbackDto } from './dto/findAll-sale-feedback.dto';
 export declare class SaleFeedbackController {
     private readonly saleFeedbackService;
@@ -50,6 +50,19 @@ export declare class SaleFeedbackController {
         score: number | null;
     }>;
     update(alias: string, updateSaleFeedbackDto: UpdateSaleFeedbackDto): Promise<{
+        description: string | null;
+        name: string | null;
+        isDeleted: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
+        saleId: number;
+        state: import(".prisma/client").$Enums.SaleFeedbackState;
+        alias: string;
+        score: number | null;
+    }>;
+    updateState(dto: UpdateStateDto, alias: string): Promise<{
         description: string | null;
         name: string | null;
         isDeleted: boolean;

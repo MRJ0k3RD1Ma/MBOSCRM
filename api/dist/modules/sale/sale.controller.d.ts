@@ -180,7 +180,7 @@ export declare class SaleController {
             state: import(".prisma/client").$Enums.SaleFeedbackState;
             alias: string;
             score: number | null;
-        }[];
+        };
         SaleTodo: {
             name: string | null;
             isDeleted: boolean;

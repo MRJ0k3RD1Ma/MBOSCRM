@@ -16,8 +16,8 @@ export declare class SaleTodoService {
         registerId: number | null;
         modifyId: number | null;
         saleId: number | null;
-        isCompleted: boolean;
         feedbackId: number | null;
+        isCompleted: boolean;
     }>;
     findAll(dto: FindAllSaleTodoDto): Promise<{
         data: {
@@ -29,8 +29,8 @@ export declare class SaleTodoService {
             registerId: number | null;
             modifyId: number | null;
             saleId: number | null;
-            isCompleted: boolean;
             feedbackId: number | null;
+            isCompleted: boolean;
         }[];
         total: number;
         page: number;
@@ -45,8 +45,8 @@ export declare class SaleTodoService {
         registerId: number | null;
         modifyId: number | null;
         saleId: number | null;
-        isCompleted: boolean;
         feedbackId: number | null;
+        isCompleted: boolean;
     }>;
     update(id: number, updateSaleTodoDto: UpdateSaleTodoDto): Promise<{
         name: string | null;
@@ -57,8 +57,8 @@ export declare class SaleTodoService {
         registerId: number | null;
         modifyId: number | null;
         saleId: number | null;
-        isCompleted: boolean;
         feedbackId: number | null;
+        isCompleted: boolean;
     }>;
     remove(id: number): Promise<{
         message: string;
