@@ -1,25 +1,24 @@
 import {
+  Button,
+  Col,
   Drawer,
   Form,
   Input,
   InputNumber,
-  Select,
-  Button,
   Row,
-  Col,
+  Select,
 } from "antd";
 import { useEffect, useState } from "react";
+
 import type { CreateProductInput } from "../../../config/queries/products/products-querys";
-import type { ProductUnit } from "../../../config/queries/products/product-unit-querys";
-import type { ProductGroup } from "../../../config/queries/products/product-gorup-querys";
+import { useGetAllProductGroups } from "../../../config/queries/products/product-gorup-querys";
+import { useGetAllProductUnits } from "../../../config/queries/products/product-unit-querys";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onSubmit: (values: CreateProductInput) => void;
   initialValues?: Partial<CreateProductInput> | null;
-  units: ProductUnit[];
-  group: ProductGroup[];
 }
 
 export default function ProductsModal({
@@ -27,11 +26,11 @@ export default function ProductsModal({
   onClose,
   onSubmit,
   initialValues,
-  units,
-  group,
 }: Props) {
   const [form] = Form.useForm<CreateProductInput>();
   const [isReminderDisabled, setIsReminderDisabled] = useState(false);
+  const { data: units } = useGetAllProductUnits();
+  const { data: group } = useGetAllProductGroups();
 
   useEffect(() => {
     if (initialValues) {
@@ -105,7 +104,7 @@ export default function ProductsModal({
                 placeholder="Guruh tanlang"
                 showSearch
                 optionFilterProp="label"
-                options={group.map((g) => ({
+                options={group?.data.map((g) => ({
                   value: g.id,
                   label: g.name,
                 }))}
@@ -124,7 +123,7 @@ export default function ProductsModal({
                 placeholder="Birlik tanlang"
                 showSearch
                 optionFilterProp="label"
-                options={units.map((u) => ({
+                options={units?.data.map((u) => ({
                   value: u.id,
                   label: u.name,
                 }))}

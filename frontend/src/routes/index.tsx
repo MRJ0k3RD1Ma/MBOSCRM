@@ -14,6 +14,7 @@ import ClientsOverPaid from "../pages/clients/clients-over-paid";
 import ClientsPaid from "../pages/clients/clients-paid";
 import Dashboard from "../pages/dashboard/dashboard";
 import { ErrorPage } from "../pages/error/error";
+import Feedbacks from "../pages/feedback/feedbacks";
 import LoginPage from "../pages/auth/login";
 import MonthlyExpenses from "../pages/paid_statistic/monthly_expenses";
 import MonthlyRevenues from "../pages/paid_statistic/monthly_revenues";
@@ -224,6 +225,10 @@ export const router = createBrowserRouter([
           {
             path: "monthly-arrears",
             element: <MonthlyRevenues />,
+          },
+          {
+            path: "feedbacks",
+            element: <Feedbacks />,
           },
           {
             path: "*",

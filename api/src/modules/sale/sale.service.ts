@@ -4,16 +4,18 @@ import { UpdateSaleDto } from "./dto/update-sale.dto";
 import { PrismaService } from "../prisma/prisma.service";
 import { HttpError } from "src/common/exception/http.error";
 import { FindAllSaleQueryDto } from "./dto/findAll-sale-query.dto";
-import { Prisma, ProductType, SaleState } from "@prisma/client";
+import { Prisma, ProductType, SaleFeedback, SaleState } from "@prisma/client";
 import { SaleProductService } from "../sale-product/sale-product.service";
 import { env } from "src/common/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { SaleFeedbackService } from "../sale-feedback/sale-feedback.service";
 
 @Injectable()
 export class SaleService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly saleProductService: SaleProductService,
+		private readonly saleFeedback: SaleFeedbackService,
 		private readonly eventEmitter: EventEmitter2,
 	) {}
 
@@ -146,7 +148,7 @@ export class SaleService {
 				});
 			}
 		});
-
+		await this.saleFeedback.create({ saleId: sale.id });
 		this.eventEmitter.emit("sale.created", sale);
 		return sale;
 	}

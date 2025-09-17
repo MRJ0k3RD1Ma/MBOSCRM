@@ -20,3 +20,9 @@ export class AliasParamDto {
     @IsUUID()
     alias: string;
 }
+
+export class UpdateStateDto {
+    @ApiProperty({ example: 'TODO' })
+    @IsEnum(SaleFeedbackState)
+    state: SaleFeedbackState;
+}

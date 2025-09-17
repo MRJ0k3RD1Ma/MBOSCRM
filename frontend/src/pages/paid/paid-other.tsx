@@ -1,30 +1,16 @@
 import { useState } from "react";
+import { Button, Card, Form, Select, Space } from "antd";
+import { PlusOutlined, FilterOutlined } from "@ant-design/icons";
 import {
-  Button,
-  Card,
-  Dropdown,
-  Form,
-  Select,
-  Space,
-  Table,
-  Tooltip,
-  type MenuProps,
-} from "antd";
-import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
-
-import {
-  useGetAllPaidOthers,
   useCreatePaidOther,
   useUpdatePaidOther,
-  useDeletePaidOther,
   type PaidOther,
   type PaidOtherDto,
 } from "../../config/queries/paid/paid-other";
 import PaidOtherFilterModal from "./ui/paid-other-filter-modal";
 import PaidOtherFormModal from "./ui/paid-other-form-modal";
-import { indexColumn } from "../../components/tables/indexColumn";
 import { useGetAllPaidOtherGroups } from "../../config/queries/paid/paid-other-group";
+import PaidOtherTable from "./ui/paid-other-table";
 
 export default function PaidOtherPage() {
   const [form] = Form.useForm();
@@ -33,18 +19,9 @@ export default function PaidOtherPage() {
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
   const { data: groupData } = useGetAllPaidOtherGroups();
-
-  const { data, isLoading } = useGetAllPaidOthers({
-    page,
-    limit,
-    ...filters,
-  });
-
   const createPaidOther = useCreatePaidOther();
   const updatePaidOther = useUpdatePaidOther();
-  const deletePaidOther = useDeletePaidOther();
 
   const onSubmit = (values: PaidOtherDto) => {
     if (editing) {
@@ -55,75 +32,6 @@ export default function PaidOtherPage() {
     setOpen(false);
     setEditing(null);
   };
-
-  const handleEdit = (row: PaidOther) => {
-    setEditing(row);
-    form.setFieldsValue({
-      ...row,
-      paidDate: row.paidDate ? dayjs(row.paidDate) : undefined,
-    });
-    setOpen(true);
-  };
-
-  const handleDelete = (id: number) => {
-    deletePaidOther.mutate(String(id));
-  };
-
-  const columns = [
-    indexColumn(page, limit),
-    {
-      title: "Guruh",
-      dataIndex: "groupId",
-      render: (_: any, row: PaidOther) => row.group?.name || "–",
-    },
-    {
-      title: "Turi",
-      dataIndex: "type",
-      render: (type: PaidOther["type"]) =>
-        type === "INCOME" ? "Kirim" : "Chiqim",
-    },
-    {
-      title: "To‘lov miqdori",
-      dataIndex: "price",
-      render: (priceCount: number) =>
-        priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
-    },
-    {
-      title: "To‘langan sana",
-      dataIndex: "paidDate",
-      render: (text: string) => (text ? dayjs(text).format("YYYY-MM-DD") : "–"),
-    },
-    { title: "Izoh", dataIndex: "description" },
-    {
-      title: "Amallar",
-      key: "actions",
-      render: (_: any, row: PaidOther) => {
-        const items: MenuProps["items"] = [
-          {
-            key: "edit",
-            label: "Tahrirlash",
-            onClick: () => handleEdit(row),
-          },
-          {
-            key: "delete",
-            label: "O‘chirish",
-            danger: true,
-            onClick: () => handleDelete(row.id),
-          },
-        ];
-
-        return (
-          <div onClick={(e) => e.stopPropagation()}>
-            <Dropdown menu={{ items }} trigger={["click"]}>
-              <Tooltip title="Boshqarish">
-                <Button icon={<MoreOutlined />} />
-              </Tooltip>
-            </Dropdown>
-          </div>
-        );
-      },
-    },
-  ];
 
   return (
     <Card>
@@ -184,18 +92,13 @@ export default function PaidOtherPage() {
         }}
         initialValues={filters}
       />
-
-      <Table
-        columns={columns}
-        dataSource={data?.data || []}
-        loading={isLoading}
-        rowKey="id"
-        pagination={{
-          current: page,
-          pageSize: limit,
-          total: data?.total || 0,
-          onChange: (page) => setPage(page),
-        }}
+      <PaidOtherTable
+        page={page}
+        filters={filters}
+        setEditing={setEditing}
+        form={form}
+        setOpen={setOpen}
+        setPage={setPage}
       />
 
       <PaidOtherFormModal

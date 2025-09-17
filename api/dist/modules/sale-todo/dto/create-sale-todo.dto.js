@@ -24,13 +24,6 @@ __decorate([
 ], CreateSaleTodoDto.prototype, "saleId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 1
-    }),
-    (0, class_validator_1.IsInt)(),
-    __metadata("design:type", Number)
-], CreateSaleTodoDto.prototype, "feedbackId", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
         example: 'Mijoz bilan qayta bog‘lanish',
     }),
     (0, class_validator_1.IsOptional)(),

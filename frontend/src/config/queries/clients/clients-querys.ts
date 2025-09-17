@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { notification } from "antd";
+
 import axiosPrivate from "../../api";
 import { clientEndpoints } from "../../endpoint";
+import { notification } from "antd";
 
 export interface Client {
   id: number;
@@ -64,23 +65,27 @@ export interface UpdateClientInput extends CreateClientInput {
   id: number;
 }
 
-export const useGetAllClients = (params?: {
-  page?: number;
-  limit?: number;
-  name?: string;
-  address?: string;
-  description?: string;
-  phone?: string;
-  inn?: string;
-  districtId?: number;
-  isPositiveBalance?: boolean;
-}) => {
+export const useGetAllClients = (
+  params?: {
+    page?: number;
+    limit?: number;
+    name?: string;
+    address?: string;
+    description?: string;
+    phone?: string;
+    inn?: string;
+    districtId?: number;
+    isPositiveBalance?: boolean;
+  },
+  options?: { enabled?: boolean } 
+) => {
   return useQuery<ClientResponse>({
     queryKey: ["clients", params],
     queryFn: async () => {
       const { data } = await axiosPrivate.get(clientEndpoints.all, { params });
       return data;
     },
+    enabled: options?.enabled ?? true, 
   });
 };
 

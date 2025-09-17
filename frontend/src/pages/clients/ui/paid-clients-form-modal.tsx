@@ -1,14 +1,16 @@
-import { Drawer, Form, Select, Button, InputNumber, DatePicker } from "antd";
-import { useEffect } from "react";
+import { Button, DatePicker, Drawer, Form, InputNumber, Select } from "antd";
 import dayjs, { Dayjs } from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
+
 import type { PaidClientDto } from "../../../config/queries/clients/paid-client-querys";
+import timezone from "dayjs/plugin/timezone";
+import { useEffect } from "react";
+import { useGetAllClients } from "../../../config/queries/clients/clients-querys";
+import { useGetAllPayments } from "../../../config/queries/payment/payment-querys";
+import { useGetAllSale } from "../../../config/queries/sale/sale-querys";
+import utc from "dayjs/plugin/utc";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-
-type OptionType = { id: number; name: string; code?: string };
 
 export interface PaidClientFormValues {
   clientId: number;
@@ -23,9 +25,6 @@ interface Props {
   onClose: () => void;
   onSubmit: (values: PaidClientDto) => void;
   initialValues?: Partial<PaidClientDto> | null;
-  clients: OptionType[];
-  sales: any;
-  payments: OptionType[];
   clientId: number | null;
   saleId: number | null | boolean;
 }
@@ -35,12 +34,23 @@ export default function PaidClientFormModal({
   onClose,
   onSubmit,
   initialValues,
-  clients,
-  sales,
-  payments,
   clientId,
   saleId,
 }: Props) {
+  const { data: sales } = useGetAllSale(
+    { page: 1, limit: 1000 },
+    { enabled: !!saleId }
+  );
+
+  const { data: payments } = useGetAllPayments(
+    { page: 1, limit: 1000 },
+    { enabled: true }
+  );
+
+  const { data: clients } = useGetAllClients(undefined, {
+    enabled: !clientId,
+  });
+
   const [form] = Form.useForm<PaidClientFormValues>();
 
   useEffect(() => {
@@ -98,7 +108,7 @@ export default function PaidClientFormModal({
               allowClear
               optionFilterProp="label"
             >
-              {clients.map((client) => (
+              {clients?.data.map((client) => (
                 <Select.Option
                   key={client.id}
                   value={client.id}
@@ -123,7 +133,7 @@ export default function PaidClientFormModal({
               optionFilterProp="label"
               allowClear
             >
-              {sales.map((sale: any) => (
+              {sales?.data.map((sale: any) => (
                 <Select.Option
                   hidden
                   key={sale.id}
@@ -147,7 +157,7 @@ export default function PaidClientFormModal({
             showSearch
             optionFilterProp="label"
           >
-            {payments.map((p) => (
+            {payments?.data.map((p) => (
               <Select.Option key={p.id} value={p.id} label={p.name}>
                 {p.name}
               </Select.Option>

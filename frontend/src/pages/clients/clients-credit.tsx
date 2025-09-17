@@ -1,47 +1,15 @@
-import { useState } from "react";
-import { Button, Card, Input, Space, Table } from "antd";
-import { useGetAllClients } from "../../config/queries/clients/clients-querys";
-import { FilterOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { Button, Card, Input, Space } from "antd";
+
+import ClientsCreditTable from "./tables/clients-credit-table";
 import ClientsFilterModal from "./ui/clients-filter-modal";
-import dayjs from "dayjs";
-import { indexColumn } from "../../components/tables/indexColumn";
+import { FilterOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 export default function ClientsCredit() {
-  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
-
-  const { data, isLoading } = useGetAllClients({
-    page,
-    limit,
-    ...(search ? { name: search } : {}),
-    ...filters,
-    isPositiveBalance: false,
-  });
-
-  const columns = [
-    indexColumn(page, limit),
-    { title: "Nomi", dataIndex: "name" },
-    { title: "INN", dataIndex: "inn" },
-    { title: "Telefon", dataIndex: "phone" },
-    { title: "Mijoz turi", dataIndex: ["ClientType", "name"] },
-    {
-      title: "Balans",
-      dataIndex: "balance",
-      render: (balance: number) =>
-        balance ? balance.toLocaleString("uz-UZ") + " so'm" : "0",
-    },
-    {
-      title: "So'ngi o'zgarish",
-      dataIndex: "updatedAt",
-      render: (text: string) =>
-        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
-    },
-  ];
 
   return (
     <Card>
@@ -83,28 +51,11 @@ export default function ClientsCredit() {
         }}
         initialValues={filters}
       />
-      <Table
-        columns={columns}
-        dataSource={data?.data || []}
-        loading={isLoading}
-        rowKey="id"
-        onRow={(record) => ({
-          onClick: (e) => {
-            if (
-              (e.target as HTMLElement).closest("button") ||
-              (e.target as HTMLElement).closest("svg")
-            ) {
-              return;
-            }
-            navigate(`/client/${record.id}`);
-          },
-        })}
-        pagination={{
-          current: page,
-          pageSize: limit,
-          total: data?.total,
-          onChange: (page) => setPage(page),
-        }}
+      <ClientsCreditTable
+        page={page}
+        setPage={setPage}
+        search={search}
+        filters={filters}
       />
     </Card>
   );

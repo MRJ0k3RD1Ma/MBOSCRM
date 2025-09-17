@@ -16,7 +16,7 @@ exports.SaleFeedbackModule = SaleFeedbackModule;
 exports.SaleFeedbackModule = SaleFeedbackModule = __decorate([
     (0, common_1.Module)({
         controllers: [sale_feedback_controller_1.SaleFeedbackController],
-        providers: [sale_feedback_service_1.SaleFeedbackService],
+        providers: [sale_feedback_service_1.SaleFeedbackService,],
     })
 ], SaleFeedbackModule);
 //# sourceMappingURL=sale-feedback.module.js.map

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { Table } from "antd";
 import dayjs from "dayjs";
 import { indexColumn } from "../../../components/tables/indexColumn";
-import { Table } from "antd";
 import { useGetAllSale } from "../../../config/queries/sale/sale-querys";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function ClientSalesTable({ clientId }: { clientId: number }) {
   const navigate = useNavigate();

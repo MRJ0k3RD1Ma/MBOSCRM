@@ -42,7 +42,6 @@ export interface SaleFeedbackResponse {
   data: SaleFeedback[];
 }
 
-// ---- Queries ----
 export const useGetAllSaleFeedback = (params?: {
   page?: number;
   limit?: number;
