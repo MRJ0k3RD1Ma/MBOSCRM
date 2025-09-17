@@ -37,9 +37,19 @@ export default function PaidClientFormModal({
   clientId,
   saleId,
 }: Props) {
-  const { data: sales } = useGetAllSale({ page: 1, limit: 1000 });
-  const { data: payments } = useGetAllPayments({ page: 1, limit: 1000 });
-  const { data: clients } = useGetAllClients();
+  const { data: sales } = useGetAllSale(
+    { page: 1, limit: 1000 },
+    { enabled: !!saleId }
+  );
+
+  const { data: payments } = useGetAllPayments(
+    { page: 1, limit: 1000 },
+    { enabled: true }
+  );
+
+  const { data: clients } = useGetAllClients(undefined, {
+    enabled: !clientId,
+  });
 
   const [form] = Form.useForm<PaidClientFormValues>();
 

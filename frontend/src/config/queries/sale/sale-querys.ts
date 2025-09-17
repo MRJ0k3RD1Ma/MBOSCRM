@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { notification } from "antd";
-import axiosPrivate from "../../api";
-import { saleEndpoints } from "../../endpoint";
+
 import type { Client } from "../clients/clients-querys";
+import axiosPrivate from "../../api";
+import { notification } from "antd";
+import { saleEndpoints } from "../../endpoint";
 
 export interface SaleProductInput {
   productId: number;
@@ -23,7 +24,6 @@ export interface UpdateSaleInput {
   credit?: number;
   state?: string;
 }
-
 
 export interface SaleProduct {
   id: number;
@@ -67,23 +67,27 @@ export interface SaleResponse {
   data: Sale[];
 }
 
-export const useGetAllSale = (params?: {
-  page?: number;
-  limit?: number;
-  minPrice?: number;
-  maxPrice?: number;
-  fromDate?: string;
-  toDate?: string;
-  clientId?: number;
-  code?: string;
-  credit?: boolean;
-}) => {
+export const useGetAllSale = (
+  params?: {
+    page?: number;
+    limit?: number;
+    minPrice?: number;
+    maxPrice?: number;
+    fromDate?: string;
+    toDate?: string;
+    clientId?: number;
+    code?: string;
+    credit?: boolean;
+  },
+  options?: { enabled?: boolean }
+) => {
   return useQuery<SaleResponse>({
     queryKey: ["sale", params],
     queryFn: async () => {
       const { data } = await axiosPrivate.get(saleEndpoints.all, { params });
       return data;
     },
+    enabled: options?.enabled ?? true,
   });
 };
 

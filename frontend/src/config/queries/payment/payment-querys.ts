@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { notification } from "antd";
+
 import axiosPrivate from "../../api";
+import { notification } from "antd";
 import { paymentEndpoints } from "../../endpoint";
 
 export interface Payment {
@@ -28,17 +29,21 @@ export interface PaymentResponse {
   data: Payment[];
 }
 
-export const useGetAllPayments = (params?: {
-  page?: number;
-  limit?: number;
-  name?: string;
-}) => {
+export const useGetAllPayments = (
+  params?: {
+    page?: number;
+    limit?: number;
+    name?: string;
+  },
+  options?: { enabled?: boolean }
+) => {
   return useQuery<PaymentResponse>({
     queryKey: ["payments", params],
     queryFn: async () => {
       const { data } = await axiosPrivate.get(paymentEndpoints.all, { params });
       return data;
     },
+    enabled: options?.enabled ?? true,
   });
 };
 
