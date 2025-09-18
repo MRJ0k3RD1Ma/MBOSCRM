@@ -35,6 +35,7 @@ import Sales from "../pages/sale/sales";
 import SalesFormPage from "../pages/sale/ui/sales-form-page";
 import Server from "../pages/server/server";
 import Servers from "../pages/server/servers";
+import Sms from "../pages/sms/sms";
 import Subscribe from "../pages/subscribe/subscribe";
 import Subscribes from "../pages/subscribe/subscribes";
 import Supplier from "../pages/suppler/supplier";
@@ -43,6 +44,7 @@ import SupplierOverPaid from "../pages/suppler/supplier-over-paid";
 import Suppliers from "../pages/suppler/suppliers";
 import { TokenManager } from "../config/token-manager";
 import Users from "../pages/users/users";
+import Appeals from "../pages/appeals/appeals";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -229,6 +231,14 @@ export const router = createBrowserRouter([
           {
             path: "feedbacks",
             element: <Feedbacks />,
+          },
+          {
+            path: "sms",
+            element: <Sms />,
+          },
+          {
+            path: "appeals",
+            element: <Appeals />,
           },
           {
             path: "*",

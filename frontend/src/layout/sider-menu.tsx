@@ -209,6 +209,16 @@ const menuItems = [
     icon: <HomeOutlined />,
   },
   {
+    key: "/sms",
+    label: "SMS xabarlar",
+    icon: <HomeOutlined />,
+  },
+  {
+    key: "/appeals",
+    label: "Murojatlar",
+    icon: <HomeOutlined />,
+  },
+  {
     key: "setting-group",
     label: "Sozlamalar",
     icon: <SettingOutlined />,

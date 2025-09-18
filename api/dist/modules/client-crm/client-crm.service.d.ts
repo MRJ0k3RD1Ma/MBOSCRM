@@ -15,10 +15,10 @@ export declare class ClientCrmService implements OnModuleInit {
         balance: number;
         clientId: number;
         productId: number;
+        key: string;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        key: string;
     }>;
     findAll(dto: FindAllClientCrmQueryDto): Promise<{
         total: number;
@@ -50,10 +50,10 @@ export declare class ClientCrmService implements OnModuleInit {
             balance: number;
             clientId: number;
             productId: number;
+            key: string;
             domain: string | null;
             isFullAccess: boolean;
             expiredFullAccess: Date | null;
-            key: string;
         })[];
     }>;
     findOne(id: number): Promise<{
@@ -82,10 +82,10 @@ export declare class ClientCrmService implements OnModuleInit {
         balance: number;
         clientId: number;
         productId: number;
+        key: string;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        key: string;
     }>;
     update(id: number, dto: UpdateClientCrmDto): Promise<{
         isDeleted: boolean;
@@ -95,10 +95,10 @@ export declare class ClientCrmService implements OnModuleInit {
         balance: number;
         clientId: number;
         productId: number;
+        key: string;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        key: string;
     }>;
     remove(id: number): Promise<{
         isDeleted: boolean;
@@ -108,9 +108,9 @@ export declare class ClientCrmService implements OnModuleInit {
         balance: number;
         clientId: number;
         productId: number;
+        key: string;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        key: string;
     }>;
 }

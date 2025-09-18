@@ -203,3 +203,11 @@ export const todoEndpoints = {
   update: (id: string) => `todo/${id}`,
   delete: (id: string) => `todo/${id}`,
 };
+
+export const smsEndpoints = {
+  all: "sms",
+  create: "sms",
+  one: (id: string) => `sms/${id}`,
+  update: (id: string) => `sms/${id}`,
+  delete: (id: string) => `sms/${id}`,
+};

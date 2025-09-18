@@ -64,7 +64,7 @@ export const useGetPaidClientById = (id?: number) => {
     enabled: !!id,
     queryFn: async () => {
       const { data } = await axiosPrivate.get(
-        `${paidClientEndpoints.one}/${id}`
+        paidClientEndpoints.one(String(id))
       );
       return data;
     },
