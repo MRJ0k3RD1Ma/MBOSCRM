@@ -37,7 +37,7 @@ let SmsController = class SmsController {
 exports.SmsController = SmsController;
 __decorate([
     (0, common_1.Post)('send'),
-    (0, decorator_auth_1.DecoratorWrapper)('find Sms'),
+    (0, decorator_auth_1.DecoratorWrapper)('send Sms'),
     (0, common_1.UseGuards)(crm_auth_guard_1.CrmAuthGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),

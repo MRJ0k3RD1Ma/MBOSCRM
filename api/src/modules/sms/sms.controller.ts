@@ -22,7 +22,7 @@ export class SmsController {
   constructor(private readonly smsService: SmsService) {}
 
   @Post('send')
-  @DecoratorWrapper('find Sms')
+  @DecoratorWrapper('send Sms')
   @UseGuards(CrmAuthGuard)
   sendMessage(@Body() body: SendMessageDto, @Req() req: Request) {
     const key = req.crm?.key || env.MAIN_KEY;

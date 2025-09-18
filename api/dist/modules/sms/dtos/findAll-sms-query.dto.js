@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FindAllSmsQueryDto = void 0;
-const id_dto_1 = require("../../../common/dtos/id.dto");
 const name_dto_1 = require("../../../common/dtos/name.dto");
 const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
 class FindAllSmsQueryDto extends pagination_dto_1.PaginationDto {
@@ -20,8 +19,4 @@ __decorate([
     (0, name_dto_1.IsName)(false),
     __metadata("design:type", String)
 ], FindAllSmsQueryDto.prototype, "message", void 0);
-__decorate([
-    (0, id_dto_1.IsId)(false),
-    __metadata("design:type", Number)
-], FindAllSmsQueryDto.prototype, "crmId", void 0);
 //# sourceMappingURL=findAll-sms-query.dto.js.map
