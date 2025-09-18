@@ -14,12 +14,14 @@ const common_1 = require("@nestjs/common");
 const http_error_1 = require("../../common/exception/http.error");
 const prisma_service_1 = require("../prisma/prisma.service");
 const config_1 = require("../../common/config");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let PaidSupplierService = class PaidSupplierService {
-    constructor(prisma) {
+    constructor(prisma, eventEmitter) {
         this.prisma = prisma;
+        this.eventEmitter = eventEmitter;
     }
     async onModuleInit() {
-        if (config_1.env.ENV != 'prod') {
+        if (config_1.env.ENV != "prod") {
             const count = await this.prisma.paidSupplier.count();
             const requiredCount = 5;
             if (count < requiredCount) {
@@ -40,13 +42,13 @@ let PaidSupplierService = class PaidSupplierService {
             where: { id: paymentId, isDeleted: false },
         });
         if (!payment) {
-            throw new http_error_1.HttpError({ message: 'Payment Not Found' });
+            throw new http_error_1.HttpError({ message: "Payment Not Found" });
         }
         const supplier = await this.prisma.supplier.findFirst({
             where: { id: supplierId, isDeleted: false },
         });
         if (!supplier) {
-            throw new http_error_1.HttpError({ message: 'Supplier Not Found', code: 404 });
+            throw new http_error_1.HttpError({ message: "Supplier Not Found", code: 404 });
         }
         await this.prisma.setting.update({
             where: { id: 1 },
@@ -66,6 +68,7 @@ let PaidSupplierService = class PaidSupplierService {
                 registerId: creatorId,
             },
         });
+        this.eventEmitter.emit("recalculate.supplier", supplierId);
         return paidsupplier;
     }
     async findAll(dto) {
@@ -90,7 +93,7 @@ let PaidSupplierService = class PaidSupplierService {
                 where,
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { id: 'desc' },
+                orderBy: { id: "desc" },
                 include: { Payment: true, register: true, modify: true },
             }),
             this.prisma.paidServer.aggregate({
@@ -119,7 +122,7 @@ let PaidSupplierService = class PaidSupplierService {
             },
         });
         if (!paidSupplier) {
-            throw (0, http_error_1.HttpError)({ code: 'PaidSupplier not found' });
+            throw (0, http_error_1.HttpError)({ code: "PaidSupplier not found" });
         }
         return paidSupplier;
     }
@@ -128,7 +131,7 @@ let PaidSupplierService = class PaidSupplierService {
             where: { id, isDeleted: false },
         });
         if (!paidsupplier)
-            throw (0, http_error_1.HttpError)({ code: 'PaidSupplier not found' });
+            throw (0, http_error_1.HttpError)({ code: "PaidSupplier not found" });
         const updateData = {
             price: dto.price ?? paidsupplier.price,
             paidDate: dto.paidDate ?? paidsupplier.paidDate,
@@ -137,24 +140,28 @@ let PaidSupplierService = class PaidSupplierService {
             where: { id },
             data: updateData,
         });
+        this.eventEmitter.emit("recalculate.supplier", paidsupplier.supplierId);
         return updatedPaidSupplier;
     }
     async remove(id, modifierId) {
-        const paidsupplier = await this.prisma.paidSupplier.findFirst({
+        let paidsupplier = await this.prisma.paidSupplier.findFirst({
             where: { id: id, isDeleted: false },
         });
         if (!paidsupplier) {
-            throw (0, http_error_1.HttpError)({ code: 'PaidSupplier not found' });
+            throw (0, http_error_1.HttpError)({ code: "PaidSupplier not found" });
         }
-        return await this.prisma.paidSupplier.update({
+        this.eventEmitter.emit("recalculate.supplier", paidsupplier.supplierId);
+        paidsupplier = await this.prisma.paidSupplier.update({
             where: { id: id },
             data: { isDeleted: true, modifyId: modifierId },
         });
+        return paidsupplier;
     }
 };
 exports.PaidSupplierService = PaidSupplierService;
 exports.PaidSupplierService = PaidSupplierService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        event_emitter_1.EventEmitter2])
 ], PaidSupplierService);
 //# sourceMappingURL=paid-supplier.service.js.map

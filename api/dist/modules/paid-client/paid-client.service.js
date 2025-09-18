@@ -59,7 +59,7 @@ let PaidClientService = class PaidClientService {
             },
         });
         await this.processPayment(client.id, price, saleId);
-        this.eventEmitter.emit('recalculate.client', clientId);
+        this.eventEmitter.emit("recalculate.client", clientId);
         return paidClient;
     }
     async processPayment(clientId, paymentAmount, saleId) {
@@ -67,12 +67,12 @@ let PaidClientService = class PaidClientService {
             where: { id: clientId },
         });
         if (!client)
-            throw new Error('Client not found');
+            throw new Error("Client not found");
         let remainingPayment = paymentAmount;
         let currentBalance = client.balance ?? 0;
         let sales = await this.prisma.sale.findMany({
             where: { clientId, credit: { gt: 0 }, id: { not: saleId } },
-            orderBy: { createdAt: 'asc' },
+            orderBy: { createdAt: "asc" },
         });
         if (saleId) {
             const prioritySale = await this.prisma.sale.findFirst({
@@ -89,7 +89,7 @@ let PaidClientService = class PaidClientService {
                 data: {
                     credit: sale.credit - payAmount,
                     dept: (sale.dept ?? 0) + payAmount,
-                    ...(sale.credit - payAmount <= 0 ? { state: 'CLOSED' } : {}),
+                    ...(sale.credit - payAmount <= 0 ? { state: "CLOSED" } : {}),
                 },
             });
             remainingPayment -= payAmount;
@@ -174,7 +174,7 @@ let PaidClientService = class PaidClientService {
             skip: (page - 1) * limit,
             take: limit,
             orderBy: {
-                id: 'desc',
+                id: "desc",
             },
         });
         const agg = await this.prisma.paidClient.aggregate({
@@ -264,7 +264,7 @@ let PaidClientService = class PaidClientService {
             where: { id },
             data: { isDeleted: true },
         });
-        this.eventEmitter.emit('recalculate.client', paidClient.clientId);
+        this.eventEmitter.emit("recalculate.client", paidClient.clientId);
         return result;
     }
 };

@@ -122,30 +122,6 @@ export declare class ArrivedProductController {
         productId: number | null;
         priceCount: number | null;
     }>;
-    update(id: string, updateArrivedProductDto: UpdateArrivedProductDto): Promise<{
-        isDeleted: boolean | null;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        count: number;
-        price: number | null;
-        registerId: number | null;
-        modifyId: number | null;
-        arrivedId: number | null;
-        productId: number | null;
-        priceCount: number | null;
-    }>;
-    remove(id: string): Promise<{
-        isDeleted: boolean | null;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        count: number;
-        price: number | null;
-        registerId: number | null;
-        modifyId: number | null;
-        arrivedId: number | null;
-        productId: number | null;
-        priceCount: number | null;
-    }>;
+    update(id: string, updateArrivedProductDto: UpdateArrivedProductDto): Promise<any>;
+    remove(id: string): Promise<any>;
 }

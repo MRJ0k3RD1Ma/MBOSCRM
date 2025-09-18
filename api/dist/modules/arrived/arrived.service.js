@@ -15,13 +15,27 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const http_error_1 = require("../../common/exception/http.error");
 const arrived_product_service_1 = require("../arrived-product/arrived-product.service");
 const config_1 = require("../../common/config");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let ArrivedService = class ArrivedService {
-    constructor(prisma, arrivedProductService) {
+    constructor(prisma, arrivedProductService, eventEmitter) {
         this.prisma = prisma;
         this.arrivedProductService = arrivedProductService;
+        this.eventEmitter = eventEmitter;
+    }
+    async recalculate(arrivedId) {
+        const arrivedProductAgg = await this.prisma.arrivedProduct.aggregate({
+            _sum: { priceCount: true },
+            where: { arrivedId, isDeleted: false },
+        });
+        const arrivedPrice = arrivedProductAgg._sum.priceCount || 0;
+        await this.prisma.arrived.update({
+            where: { id: arrivedId },
+            data: { price: arrivedPrice },
+        });
+        this.eventEmitter.emit("recalculate.supplier", arrivedId);
     }
     async onModuleInit() {
-        if (config_1.env.ENV != 'prod') {
+        if (config_1.env.ENV != "prod") {
             const count = await this.prisma.arrived.count();
             const requiredCount = 5;
             if (count < requiredCount) {
@@ -29,7 +43,7 @@ let ArrivedService = class ArrivedService {
                     await this.create({
                         supplierId: 1,
                         date: new Date(),
-                        description: 'description asdfghj',
+                        description: "description asdfghj",
                         products: [{ count: 1, productId: 1 }],
                     }, 1);
                 }
@@ -53,7 +67,7 @@ let ArrivedService = class ArrivedService {
                     gt: new Date(new Date().getFullYear(), 0),
                 },
             },
-            orderBy: { codeId: 'desc' },
+            orderBy: { codeId: "desc" },
         });
         const codeId = (maxCode?.codeId || 0) + 1;
         let arrived = await this.prisma.arrived.create({
@@ -100,7 +114,7 @@ let ArrivedService = class ArrivedService {
         if (code) {
             where.code = {
                 startsWith: code,
-                mode: 'insensitive',
+                mode: "insensitive",
             };
         }
         if (minPrice || maxPrice) {
@@ -122,7 +136,7 @@ let ArrivedService = class ArrivedService {
                 take: limit,
                 include: { ArrivedProduct: true, register: true, supplier: true },
                 orderBy: {
-                    id: 'desc',
+                    id: "desc",
                 },
             }),
             this.prisma.arrived.count({ where }),
@@ -207,7 +221,7 @@ let ArrivedService = class ArrivedService {
         });
     }
     async remove(id) {
-        const arrived = await this.prisma.arrived.findFirst({
+        let arrived = await this.prisma.arrived.findFirst({
             where: {
                 id,
                 isDeleted: false,
@@ -218,16 +232,25 @@ let ArrivedService = class ArrivedService {
                 message: `Arrived with ID ${id} not found`,
             });
         }
-        return this.prisma.arrived.update({
+        arrived = this.prisma.arrived.update({
             where: { id },
             data: { isDeleted: true },
         });
+        this.eventEmitter.emit("recalculate.supplier", arrived.supplierId);
+        return arrived;
     }
 };
 exports.ArrivedService = ArrivedService;
+__decorate([
+    (0, event_emitter_1.OnEvent)("recalculate.arrived"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], ArrivedService.prototype, "recalculate", null);
 exports.ArrivedService = ArrivedService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        arrived_product_service_1.ArrivedProductService])
+        arrived_product_service_1.ArrivedProductService,
+        event_emitter_1.EventEmitter2])
 ], ArrivedService);
 //# sourceMappingURL=arrived.service.js.map

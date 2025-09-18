@@ -1,10 +1,12 @@
-import { PrismaService } from '../prisma/prisma.service';
-import { CreatePaidSupplierDto } from './dto/create-paid-supplier.dto';
-import { FindAllPaidSupplierQueryDto } from './dto/findAll-paid-supplier.dto';
-import { UpdatePaidSupplierDto } from './dto/update-paid-supplier.dto';
+import { PrismaService } from "../prisma/prisma.service";
+import { CreatePaidSupplierDto } from "./dto/create-paid-supplier.dto";
+import { FindAllPaidSupplierQueryDto } from "./dto/findAll-paid-supplier.dto";
+import { UpdatePaidSupplierDto } from "./dto/update-paid-supplier.dto";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 export declare class PaidSupplierService {
     private readonly prisma;
-    constructor(prisma: PrismaService);
+    private readonly eventEmitter;
+    constructor(prisma: PrismaService, eventEmitter: EventEmitter2);
     onModuleInit(): Promise<void>;
     create(createPaidSupplierDto: CreatePaidSupplierDto, creatorId: number): Promise<{
         isDeleted: boolean | null;
@@ -130,16 +132,5 @@ export declare class PaidSupplierService {
         supplierId: number | null;
         paidDate: Date | null;
     }>;
-    remove(id: number, modifierId: number): Promise<{
-        isDeleted: boolean | null;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        price: number | null;
-        paymentId: number | null;
-        registerId: number | null;
-        modifyId: number | null;
-        supplierId: number | null;
-        paidDate: Date | null;
-    }>;
+    remove(id: number, modifierId: number): Promise<any>;
 }

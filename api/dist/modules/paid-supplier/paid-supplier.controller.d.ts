@@ -130,16 +130,5 @@ export declare class PaidSupplierController {
         supplierId: number | null;
         paidDate: Date | null;
     }>;
-    remove(id: string, req: Request): Promise<{
-        isDeleted: boolean | null;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        price: number | null;
-        paymentId: number | null;
-        registerId: number | null;
-        modifyId: number | null;
-        supplierId: number | null;
-        paidDate: Date | null;
-    }>;
+    remove(id: string, req: Request): Promise<any>;
 }
