@@ -155,8 +155,8 @@ model Detailization {
   accessId Int?
   access   Access? @relation(fields: [accessId], references: [id])
 
-  clientId Int
-  client   Client @relation(fields: [clientId], references: [id])
+  clientId Int?
+  client   Client? @relation(fields: [clientId], references: [id])
 
   phone_number String
   message      String
@@ -164,8 +164,8 @@ model Detailization {
   state        DetailizationState @default(NEW)
   count        Int                @default(1)
   price        Float              @default(0)
-  crmId        Int
-  crm          ClientCrm          @relation(fields: [crmId], references: [id])
+  crmId        Int?
+  crm          ClientCrm?         @relation(fields: [crmId], references: [id])
 
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())

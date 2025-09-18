@@ -18,7 +18,6 @@ const feature_flag_decorator_1 = require("../feature-flag/feature-flag.decorator
 const sms_service_1 = require("./sms.service");
 const crm_auth_guard_1 = require("../../common/auth/crm-auth.guard");
 const send_message_dto_1 = require("./dtos/send-message.dto");
-const config_1 = require("../../common/config");
 const decorator_auth_1 = require("../../common/auth/decorator.auth");
 const findAll_sms_query_dto_1 = require("./dtos/findAll-sms-query.dto");
 let SmsController = class SmsController {
@@ -26,7 +25,7 @@ let SmsController = class SmsController {
         this.smsService = smsService;
     }
     sendMessage(body, req) {
-        const key = req.crm?.key || config_1.env.MAIN_KEY;
+        const key = req.crm?.key;
         return this.smsService.sendMessage(body.mobile_phone, body.message, key);
     }
     findAll(dto, req) {
