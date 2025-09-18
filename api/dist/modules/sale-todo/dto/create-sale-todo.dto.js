@@ -17,7 +17,7 @@ class CreateSaleTodoDto {
 exports.CreateSaleTodoDto = CreateSaleTodoDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 1
+        example: 1,
     }),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)

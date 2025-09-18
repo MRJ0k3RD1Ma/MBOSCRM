@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSaleFeedbackDto } from './dto/create-sale-feedback.dto';
-import { UpdateSaleFeedbackDto, UpdateStateDto } from './dto/update-sale-feedback.dto';
+import {
+  UpdateSaleFeedbackDto,
+  UpdateStateDto,
+} from './dto/update-sale-feedback.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
 import { Prisma, SaleFeedbackResult, SaleFeedbackState } from '@prisma/client';
@@ -9,15 +12,13 @@ import { FindAllSaleFeedbackDto } from './dto/findAll-sale-feedback.dto';
 
 @Injectable()
 export class SaleFeedbackService {
-  constructor(
-    private readonly prisma: PrismaService
-  ) { }
+  constructor(private readonly prisma: PrismaService) {}
   async create(createSaleFeedbackDto: CreateSaleFeedbackDto) {
     const sale = await this.prisma.sale.findUnique({
       where: { id: createSaleFeedbackDto.saleId },
     });
     if (!sale) {
-      throw new HttpError({ message: "Sale not found" });
+      throw new HttpError({ message: 'Sale not found' });
     }
     const saleFeedback = await this.prisma.saleFeedback.create({
       data: {
@@ -27,9 +28,9 @@ export class SaleFeedbackService {
         description: createSaleFeedbackDto.description,
         score: createSaleFeedbackDto.score,
         state: SaleFeedbackState.TODO,
-        result: SaleFeedbackResult.NOT_COMPLETED
-      }
-    })
+        result: SaleFeedbackResult.NOT_COMPLETED,
+      },
+    });
 
     return saleFeedback;
   }
@@ -40,13 +41,13 @@ export class SaleFeedbackService {
       isDeleted: false,
     };
     if (dto.name) {
-      where.name = { contains: name, mode: 'insensitive' }
+      where.name = { contains: name, mode: 'insensitive' };
     }
     if (dto.state) {
-      where.state = state
+      where.state = state;
     }
     if (dto.result) {
-      where.result = result
+      where.result = result;
     }
 
     if (dto.saleId) {
@@ -62,13 +63,12 @@ export class SaleFeedbackService {
       }),
       this.prisma.saleFeedback.count({ where }),
     ]);
-    return ({
+    return {
       data,
       total,
       page,
       limit,
-    })
-
+    };
   }
   async findOne(id: number) {
     const saleFeedback = await this.prisma.saleFeedback.findFirst({
@@ -91,7 +91,7 @@ export class SaleFeedbackService {
     });
 
     if (!saleFeedback) {
-      throw new HttpError({ message: "SaleFeedback not found" });
+      throw new HttpError({ message: 'SaleFeedback not found' });
     }
 
     let sale = null;
@@ -100,7 +100,7 @@ export class SaleFeedbackService {
         where: { id: updateSaleFeedbackDto.saleId },
       });
       if (!sale) {
-        throw new HttpError({ message: "Sale not found" });
+        throw new HttpError({ message: 'Sale not found' });
       }
     }
 
@@ -108,7 +108,8 @@ export class SaleFeedbackService {
       where: { id: saleFeedback.id },
       data: {
         name: updateSaleFeedbackDto.name ?? saleFeedback.name,
-        description: updateSaleFeedbackDto.description ?? saleFeedback.description,
+        description:
+          updateSaleFeedbackDto.description ?? saleFeedback.description,
         saleId: updateSaleFeedbackDto.saleId ?? saleFeedback.saleId,
         score: updateSaleFeedbackDto.score ?? saleFeedback.score,
         state: updateSaleFeedbackDto.state ?? saleFeedback.state,
@@ -122,7 +123,7 @@ export class SaleFeedbackService {
       where: { alias: alias },
     });
     if (!saleFeedback) {
-      throw new HttpError({ message: "SaleFeedback not found" });
+      throw new HttpError({ message: 'SaleFeedback not found' });
     }
     return this.prisma.saleFeedback.update({
       where: { id: saleFeedback.id },
@@ -137,7 +138,7 @@ export class SaleFeedbackService {
       where: { id, isDeleted: false },
     });
     if (!saleFeedback) {
-      throw new HttpError({ message: "SaleFeedback not found" });
+      throw new HttpError({ message: 'SaleFeedback not found' });
     }
     return this.prisma.saleFeedback.update({
       where: { id },

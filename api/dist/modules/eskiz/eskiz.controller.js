@@ -25,15 +25,15 @@ let EskizController = class EskizController {
 };
 exports.EskizController = EskizController;
 __decorate([
-    (0, common_1.Get)("templates"),
-    (0, decorator_auth_1.DecoratorWrapper)("get templates", true, [role_enum_1.Role.Admin]),
+    (0, common_1.Get)('templates'),
+    (0, decorator_auth_1.DecoratorWrapper)('get templates', true, [role_enum_1.Role.Admin]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], EskizController.prototype, "getTemplates", null);
 exports.EskizController = EskizController = __decorate([
-    (0, common_1.Controller)("eskiz"),
-    (0, feature_flag_decorator_1.FeatureFlag)("ESKIZ"),
+    (0, common_1.Controller)('eskiz'),
+    (0, feature_flag_decorator_1.FeatureFlag)('ESKIZ'),
     __metadata("design:paramtypes", [eskiz_service_1.EskizService])
 ], EskizController);
 //# sourceMappingURL=eskiz.controller.js.map

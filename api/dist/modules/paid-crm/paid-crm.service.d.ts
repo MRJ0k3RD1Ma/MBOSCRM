@@ -1,7 +1,7 @@
-import { CreatePaidCrmDto } from "./dto/create-paid-crm.dto";
-import { UpdatePaidCrmDto } from "./dto/update-paid-crm.dto";
-import { PrismaService } from "../prisma/prisma.service";
-import { FindAllQueryPaidCrmDto } from "./dto/findAll-query-paid-crm.dto";
+import { CreatePaidCrmDto } from './dto/create-paid-crm.dto';
+import { UpdatePaidCrmDto } from './dto/update-paid-crm.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { FindAllQueryPaidCrmDto } from './dto/findAll-query-paid-crm.dto';
 export declare class PaidCrmService {
     private readonly prisma;
     constructor(prisma: PrismaService);

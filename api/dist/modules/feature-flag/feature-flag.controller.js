@@ -19,7 +19,7 @@ let FeatureFlagController = class FeatureFlagController {
 };
 exports.FeatureFlagController = FeatureFlagController;
 exports.FeatureFlagController = FeatureFlagController = __decorate([
-    (0, common_1.Controller)("feature-flag"),
+    (0, common_1.Controller)('feature-flag'),
     __metadata("design:paramtypes", [feature_flag_service_1.FeatureFlagService])
 ], FeatureFlagController);
 //# sourceMappingURL=feature-flag.controller.js.map

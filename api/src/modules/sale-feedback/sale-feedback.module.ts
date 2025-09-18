@@ -4,6 +4,6 @@ import { SaleFeedbackController } from './sale-feedback.controller';
 
 @Module({
   controllers: [SaleFeedbackController],
-  providers: [SaleFeedbackService,],
+  providers: [SaleFeedbackService],
 })
 export class SaleFeedbackModule {}

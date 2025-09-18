@@ -88,7 +88,7 @@ let PaidCrmService = class PaidCrmService {
             skip: (page - 1) * limit,
             take: limit,
             orderBy: {
-                id: "desc",
+                id: 'desc',
             },
         });
         const agg = await this.prisma.paidCrm.aggregate({

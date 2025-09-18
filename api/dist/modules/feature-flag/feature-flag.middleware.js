@@ -23,7 +23,8 @@ let FeatureFlagGuard = class FeatureFlagGuard {
         this.featureFlagService = featureFlagService;
     }
     canActivate(context) {
-        let featureFlag = this.reflector.get(feature_flag_decorator_1.FEATURE_FLAG_KEY, context.getHandler()) || this.reflector.get(feature_flag_decorator_1.FEATURE_FLAG_KEY, context.getClass());
+        let featureFlag = this.reflector.get(feature_flag_decorator_1.FEATURE_FLAG_KEY, context.getHandler()) ||
+            this.reflector.get(feature_flag_decorator_1.FEATURE_FLAG_KEY, context.getClass());
         if (this.featureFlagService === undefined)
             return true;
         return this.featureFlagService.isActive(featureFlag);

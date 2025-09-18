@@ -18,7 +18,7 @@ class UpdateSaleTodoDto extends (0, swagger_1.PartialType)(create_sale_todo_dto_
 exports.UpdateSaleTodoDto = UpdateSaleTodoDto;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        example: true
+        example: true,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),

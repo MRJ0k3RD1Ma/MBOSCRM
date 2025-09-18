@@ -24,7 +24,7 @@ let SaleFeedbackService = class SaleFeedbackService {
             where: { id: createSaleFeedbackDto.saleId },
         });
         if (!sale) {
-            throw new http_error_1.HttpError({ message: "Sale not found" });
+            throw new http_error_1.HttpError({ message: 'Sale not found' });
         }
         const saleFeedback = await this.prisma.saleFeedback.create({
             data: {
@@ -34,8 +34,8 @@ let SaleFeedbackService = class SaleFeedbackService {
                 description: createSaleFeedbackDto.description,
                 score: createSaleFeedbackDto.score,
                 state: client_1.SaleFeedbackState.TODO,
-                result: client_1.SaleFeedbackResult.NOT_COMPLETED
-            }
+                result: client_1.SaleFeedbackResult.NOT_COMPLETED,
+            },
         });
         return saleFeedback;
     }
@@ -65,12 +65,12 @@ let SaleFeedbackService = class SaleFeedbackService {
             }),
             this.prisma.saleFeedback.count({ where }),
         ]);
-        return ({
+        return {
             data,
             total,
             page,
             limit,
-        });
+        };
     }
     async findOne(id) {
         const saleFeedback = await this.prisma.saleFeedback.findFirst({
@@ -91,7 +91,7 @@ let SaleFeedbackService = class SaleFeedbackService {
             where: { alias: alias },
         });
         if (!saleFeedback) {
-            throw new http_error_1.HttpError({ message: "SaleFeedback not found" });
+            throw new http_error_1.HttpError({ message: 'SaleFeedback not found' });
         }
         let sale = null;
         if (updateSaleFeedbackDto.saleId) {
@@ -99,7 +99,7 @@ let SaleFeedbackService = class SaleFeedbackService {
                 where: { id: updateSaleFeedbackDto.saleId },
             });
             if (!sale) {
-                throw new http_error_1.HttpError({ message: "Sale not found" });
+                throw new http_error_1.HttpError({ message: 'Sale not found' });
             }
         }
         return this.prisma.saleFeedback.update({
@@ -119,7 +119,7 @@ let SaleFeedbackService = class SaleFeedbackService {
             where: { alias: alias },
         });
         if (!saleFeedback) {
-            throw new http_error_1.HttpError({ message: "SaleFeedback not found" });
+            throw new http_error_1.HttpError({ message: 'SaleFeedback not found' });
         }
         return this.prisma.saleFeedback.update({
             where: { id: saleFeedback.id },
@@ -133,7 +133,7 @@ let SaleFeedbackService = class SaleFeedbackService {
             where: { id, isDeleted: false },
         });
         if (!saleFeedback) {
-            throw new http_error_1.HttpError({ message: "SaleFeedback not found" });
+            throw new http_error_1.HttpError({ message: 'SaleFeedback not found' });
         }
         return this.prisma.saleFeedback.update({
             where: { id },

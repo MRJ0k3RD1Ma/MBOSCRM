@@ -4,25 +4,24 @@ import { SaleFeedbackResult, SaleFeedbackState } from '@prisma/client';
 import { IsEnum, IsNumber, IsOptional, IsUUID } from 'class-validator';
 
 export class UpdateSaleFeedbackDto extends PartialType(CreateSaleFeedbackDto) {
-    @ApiPropertyOptional({ example: 'TODO' })
-    @IsOptional()
-    @IsEnum(SaleFeedbackState)
-    state?: SaleFeedbackState;
+  @ApiPropertyOptional({ example: 'TODO' })
+  @IsOptional()
+  @IsEnum(SaleFeedbackState)
+  state?: SaleFeedbackState;
 
-    @ApiPropertyOptional({ example: 'NOT_COMPLETED' })
-    @IsOptional()
-    @IsEnum(SaleFeedbackResult)
-    result?: SaleFeedbackResult;
+  @ApiPropertyOptional({ example: 'NOT_COMPLETED' })
+  @IsOptional()
+  @IsEnum(SaleFeedbackResult)
+  result?: SaleFeedbackResult;
 }
 
-
 export class AliasParamDto {
-    @IsUUID()
-    alias: string;
+  @IsUUID()
+  alias: string;
 }
 
 export class UpdateStateDto {
-    @ApiProperty({ example: 'TODO' })
-    @IsEnum(SaleFeedbackState)
-    state: SaleFeedbackState;
+  @ApiProperty({ example: 'TODO' })
+  @IsEnum(SaleFeedbackState)
+  state: SaleFeedbackState;
 }

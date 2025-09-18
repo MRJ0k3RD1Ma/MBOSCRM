@@ -113,42 +113,42 @@ export class ArrivedService {
       code,
     } = dto;
 
-		const where: Prisma.ArrivedWhereInput = {
-			isDeleted: false,
-		};
-		if (supplierId) {
-			where.supplierId = supplierId;
-		}
-		if (code) {
-			where.code = {
-				startsWith: code,
-				mode: "insensitive",
-			};
-		}
-		if (minPrice || maxPrice) {
-			where.price = {
-				...(minPrice && { gte: minPrice }),
-				...(maxPrice && { lte: maxPrice }),
-			};
-		}
-		if (fromDate || toDate) {
-			where.date = {
-				...(fromDate && { gte: fromDate }),
-				...(toDate && { lte: toDate }),
-			};
-		}
-		const [data, total] = await this.prisma.$transaction([
-			this.prisma.arrived.findMany({
-				where,
-				skip: (page - 1) * limit,
-				take: limit,
-				include: { ArrivedProduct: true, register: true, supplier: true },
-				orderBy: {
-					id: "desc",
-				},
-			}),
-			this.prisma.arrived.count({ where }),
-		]);
+    const where: Prisma.ArrivedWhereInput = {
+      isDeleted: false,
+    };
+    if (supplierId) {
+      where.supplierId = supplierId;
+    }
+    if (code) {
+      where.code = {
+        startsWith: code,
+        mode: 'insensitive',
+      };
+    }
+    if (minPrice || maxPrice) {
+      where.price = {
+        ...(minPrice && { gte: minPrice }),
+        ...(maxPrice && { lte: maxPrice }),
+      };
+    }
+    if (fromDate || toDate) {
+      where.date = {
+        ...(fromDate && { gte: fromDate }),
+        ...(toDate && { lte: toDate }),
+      };
+    }
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.arrived.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        include: { ArrivedProduct: true, register: true, supplier: true },
+        orderBy: {
+          id: 'desc',
+        },
+      }),
+      this.prisma.arrived.count({ where }),
+    ]);
 
     return {
       total,

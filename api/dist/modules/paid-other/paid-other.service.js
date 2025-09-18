@@ -47,13 +47,13 @@ let PaidOtherService = class PaidOtherService {
                 paymentId,
             },
         });
-        if (type === "OUTCOME") {
+        if (type === 'OUTCOME') {
             await this.prisma.setting.update({
                 where: { id: 1 },
                 data: { balance: { decrement: price } },
             });
         }
-        else if (type === "INCOME") {
+        else if (type === 'INCOME') {
             await this.prisma.setting.update({
                 where: { id: 1 },
                 data: { balance: { increment: price } },
@@ -96,7 +96,7 @@ let PaidOtherService = class PaidOtherService {
             skip: (page - 1) * limit,
             take: limit,
             orderBy: {
-                id: "desc",
+                id: 'desc',
             },
         });
         const agg = await this.prisma.paidOther.aggregate({

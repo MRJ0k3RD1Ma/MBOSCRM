@@ -32,7 +32,7 @@ let SaleTodoController = class SaleTodoController {
 };
 exports.SaleTodoController = SaleTodoController;
 __decorate([
-    (0, common_1.Post)("/todo"),
+    (0, common_1.Post)('/todo'),
     (0, decorator_auth_1.DecoratorWrapper)('Create payment', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -40,7 +40,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SaleTodoController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)("/todo/:query"),
+    (0, common_1.Get)('/todo/:query'),
     (0, decorator_auth_1.DecoratorWrapper)('Search payment'),
     __param(0, (0, common_1.Param)('query')),
     __metadata("design:type", Function),

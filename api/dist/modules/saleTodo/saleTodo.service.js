@@ -20,7 +20,7 @@ let SaleTodoService = class SaleTodoService {
         this.searchCache = new Map();
     }
     async onModuleInit() {
-        if (config_1.env.ENV != "prod") {
+        if (config_1.env.ENV != 'prod') {
             const count = await this.prisma.todo.count();
             const requiredCount = 10000;
             if (count < requiredCount) {
@@ -45,7 +45,7 @@ let SaleTodoService = class SaleTodoService {
         if (cache)
             return cache;
         const todos = await this.prisma.todo.findMany({
-            where: { name: { contains: query, mode: "insensitive" } },
+            where: { name: { contains: query, mode: 'insensitive' } },
             take: 10,
         });
         this.searchCache.set(query, JSON.stringify(todos));

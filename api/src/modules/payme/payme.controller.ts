@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { PaymeService } from './payme.service';
 import { CreatePaymeDto } from './dto/create-payme.dto';
 import { UpdatePaymeDto } from './dto/update-payme.dto';
@@ -7,7 +16,7 @@ import { PaymeMethod } from './enum/transaction.enum';
 
 @Controller('payme')
 export class PaymeController {
-  constructor(private readonly paymeService: PaymeService) { }
+  constructor(private readonly paymeService: PaymeService) {}
 
   @Post('/pay')
   @UseGuards(PaymeAuthGuard)
@@ -44,4 +53,3 @@ export class PaymeController {
     }
   }
 }
-

@@ -1,5 +1,5 @@
-import { PrismaService } from "../prisma/prisma.service";
-import { CreateTodoDto } from "./dto/create-todo.dto";
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateTodoDto } from './dto/create-todo.dto';
 export declare class SaleTodoService {
     private readonly prisma;
     constructor(prisma: PrismaService);

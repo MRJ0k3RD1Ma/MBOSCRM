@@ -20,7 +20,7 @@ exports.SaleModule = SaleModule = __decorate([
     (0, common_1.Module)({
         controllers: [sale_controller_1.SaleController],
         providers: [sale_service_1.SaleService, sale_feedback_service_1.SaleFeedbackService],
-        imports: [sale_product_module_1.SaleProductModule, subscribe_module_1.SubscribeModule,],
+        imports: [sale_product_module_1.SaleProductModule, subscribe_module_1.SubscribeModule],
     })
 ], SaleModule);
 //# sourceMappingURL=sale.module.js.map

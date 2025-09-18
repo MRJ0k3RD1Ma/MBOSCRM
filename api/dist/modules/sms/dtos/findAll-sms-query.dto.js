@@ -9,15 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateTodoDto = void 0;
-const swagger_1 = require("@nestjs/swagger");
-const class_validator_1 = require("class-validator");
-class CreateTodoDto {
+exports.FindAllSmsQueryDto = void 0;
+const id_dto_1 = require("../../../common/dtos/id.dto");
+const name_dto_1 = require("../../../common/dtos/name.dto");
+const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
+class FindAllSmsQueryDto extends pagination_dto_1.PaginationDto {
 }
-exports.CreateTodoDto = CreateTodoDto;
+exports.FindAllSmsQueryDto = FindAllSmsQueryDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'apple' }),
-    (0, class_validator_1.IsString)(),
+    (0, name_dto_1.IsName)(false),
     __metadata("design:type", String)
-], CreateTodoDto.prototype, "name", void 0);
-//# sourceMappingURL=create-todo.dto.js.map
+], FindAllSmsQueryDto.prototype, "message", void 0);
+__decorate([
+    (0, id_dto_1.IsId)(false),
+    __metadata("design:type", Number)
+], FindAllSmsQueryDto.prototype, "crmId", void 0);
+//# sourceMappingURL=findAll-sms-query.dto.js.map

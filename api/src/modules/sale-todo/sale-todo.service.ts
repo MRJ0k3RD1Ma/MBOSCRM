@@ -10,7 +10,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class SaleTodoService {
-  constructor(private readonly prisma: PrismaService, private readonly todo: TodoService) { }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly todo: TodoService,
+  ) {}
 
   async create(createSaleTodoDto: CreateSaleTodoDto, user: number) {
     const sale = await this.prisma.sale.findFirst({
@@ -48,7 +51,6 @@ export class SaleTodoService {
       },
     });
   }
-
 
   async findAll(dto: FindAllSaleTodoDto) {
     const { page, limit, name, isCompleted, saleId, feedbackId } = dto;
@@ -91,7 +93,7 @@ export class SaleTodoService {
     return saleTodo;
   }
 
-  async update(id: number, updateSaleTodoDto: UpdateSaleTodoDto,) {
+  async update(id: number, updateSaleTodoDto: UpdateSaleTodoDto) {
     const saleTodo = await this.prisma.saleTodo.findFirst({
       where: { id, isDeleted: false },
     });
@@ -107,7 +109,6 @@ export class SaleTodoService {
         throw new HttpError({ message: 'Sale not found' });
       }
     }
-
 
     return this.prisma.saleTodo.update({
       where: { id },

@@ -34,14 +34,14 @@ let SmsService = class SmsService {
             ? undefined
             : axios_1.default.create({
                 baseURL: config_1.env.MAIN_BACKEND_URL,
-                headers: { "x-api-key": (0, hashing_utils_1.encrypt)(config_1.env.MAIN_KEY) },
+                headers: { 'x-api-key': (0, hashing_utils_1.encrypt)(config_1.env.MAIN_KEY) },
             });
     }
     async cron() {
         if (!config_1.env.IS_MAIN)
             return;
         const messagesToSend = await this.prisma.detailization.findMany({
-            where: { state: "NEW" },
+            where: { state: 'NEW' },
         });
         for (let message of messagesToSend) {
             await this.eskizService.sendMessage(message);
@@ -61,8 +61,8 @@ let SmsService = class SmsService {
                 },
             });
         }
-        else if (this.featureFlagService.isActive("sms")) {
-            const { data } = await this.axios.post("/sms/send", {
+        else if (this.featureFlagService.isActive('sms')) {
+            const { data } = await this.axios.post('/sms/send', {
                 mobile_phone,
                 message,
             });
@@ -70,16 +70,67 @@ let SmsService = class SmsService {
         }
         else {
             throw new http_error_1.HttpError({
-                statusCode: "403",
-                message: "Sms is not enabled",
-                code: "SMS_NOT_ENABLED",
+                statusCode: '403',
+                message: 'Sms is not enabled',
+                code: 'SMS_NOT_ENABLED',
+            });
+        }
+    }
+    async getMessages(dto, crm_key) {
+        const { limit = 10, page = 1, message } = dto;
+        if (config_1.env.IS_MAIN) {
+            const where = {
+                isDeleted: false,
+            };
+            if (message) {
+                where.message = {
+                    contains: message.trim(),
+                    mode: 'insensitive',
+                };
+            }
+            if (crm_key) {
+                where.crm = { key: crm_key };
+            }
+            const [data, total] = await this.prisma.$transaction([
+                this.prisma.detailization.findMany({
+                    where,
+                    skip: (page - 1) * limit,
+                    take: limit,
+                    include: {
+                        client: true,
+                        crm: true,
+                    },
+                    orderBy: {
+                        id: 'desc',
+                    },
+                }),
+                this.prisma.detailization.count({ where }),
+            ]);
+            return {
+                total,
+                page,
+                limit,
+                data,
+            };
+        }
+        else if (this.featureFlagService.isActive('sms')) {
+            const { data } = await this.axios.get('/sms/send', {
+                params: { ...dto },
+            });
+            return data;
+        }
+        else {
+            throw new http_error_1.HttpError({
+                statusCode: '403',
+                message: 'Sms is not enabled',
+                code: 'SMS_NOT_ENABLED',
             });
         }
     }
 };
 exports.SmsService = SmsService;
 __decorate([
-    (0, schedule_1.Cron)("0 0 * * *"),
+    (0, schedule_1.Cron)('0 0 * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

@@ -1,6 +1,6 @@
-import { OnModuleInit } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { EskizCallbackDto } from "./dtos/eskiz-callback.dto";
+import { OnModuleInit } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { EskizCallbackDto } from './dtos/eskiz-callback.dto';
 export declare class EskizService implements OnModuleInit {
     private readonly prisma;
     private axios;

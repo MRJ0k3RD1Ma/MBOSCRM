@@ -22,9 +22,7 @@ export class PaidCrmController {
 
   @Post()
   @DecoratorWrapper('create PaidCrm', true, [Role.Admin])
-  create(
-    @Body() createPaidCrmDto: CreatePaidCrmDto,
-  ) {
+  create(@Body() createPaidCrmDto: CreatePaidCrmDto) {
     return this.paidCrmService.create(createPaidCrmDto);
   }
 

@@ -1,10 +1,10 @@
-import { CreateSaleDto } from "./dto/create-sale.dto";
-import { UpdateSaleDto } from "./dto/update-sale.dto";
-import { PrismaService } from "../prisma/prisma.service";
-import { FindAllSaleQueryDto } from "./dto/findAll-sale-query.dto";
-import { SaleProductService } from "../sale-product/sale-product.service";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { SaleFeedbackService } from "../sale-feedback/sale-feedback.service";
+import { CreateSaleDto } from './dto/create-sale.dto';
+import { UpdateSaleDto } from './dto/update-sale.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
+import { SaleProductService } from '../sale-product/sale-product.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { SaleFeedbackService } from '../sale-feedback/sale-feedback.service';
 export declare class SaleService {
     private readonly prisma;
     private readonly saleProductService;
@@ -195,8 +195,8 @@ export declare class SaleService {
             saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            isCompleted: boolean;
             feedbackId: number | null;
+            isCompleted: boolean;
         }[];
     } & {
         isDeleted: boolean | null;

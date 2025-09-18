@@ -95,7 +95,7 @@ let ArrivedProductService = class ArrivedProductService {
                     register: true,
                 },
                 orderBy: {
-                    id: "desc",
+                    id: 'desc',
                 },
             }),
             this.prisma.arrivedProduct.count({ where }),

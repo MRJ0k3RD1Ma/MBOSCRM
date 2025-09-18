@@ -39,5 +39,4 @@ export class AccessController {
   ) {
     return this.accessService.update(+id, updateProductDto);
   }
-
 }

@@ -29,11 +29,11 @@ let AccessService = class AccessService {
             ? undefined
             : axios_1.default.create({
                 baseURL: config_1.env.MAIN_BACKEND_URL,
-                headers: { "x-api-key": (0, hashing_utils_1.encrypt)(config_1.env.MAIN_KEY) },
+                headers: { 'x-api-key': (0, hashing_utils_1.encrypt)(config_1.env.MAIN_KEY) },
             });
     }
     async cron() {
-        const { data } = await this.axios.get("/access", {
+        const { data } = await this.axios.get('/access', {
             params: { limit: 1000 },
         });
         const accesses = data.data;
@@ -57,7 +57,7 @@ let AccessService = class AccessService {
         this.featureFlagService.loadFlags();
     }
     async onModuleInit() {
-        const keys = ["sms", "feedback"];
+        const keys = ['sms', 'feedback'];
         if (config_1.env.IS_MAIN) {
             for (let key of keys) {
                 await this.prisma.access.upsert({
@@ -75,7 +75,7 @@ let AccessService = class AccessService {
         }
         else {
             try {
-                const { data } = await this.axios.get("/access", {
+                const { data } = await this.axios.get('/access', {
                     params: { limit: 1000 },
                 });
                 const accesses = data.data;
@@ -110,7 +110,7 @@ let AccessService = class AccessService {
             this.prisma.access.findMany({
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { id: "desc" },
+                orderBy: { id: 'desc' },
             }),
             this.prisma.access.count({}),
         ]);
@@ -128,7 +128,7 @@ let AccessService = class AccessService {
             },
         });
         if (!access) {
-            throw new http_error_1.HttpError({ code: "access not found" });
+            throw new http_error_1.HttpError({ code: 'access not found' });
         }
         return access;
     }
@@ -157,7 +157,7 @@ let AccessService = class AccessService {
 };
 exports.AccessService = AccessService;
 __decorate([
-    (0, schedule_1.Cron)("0 0 * * *"),
+    (0, schedule_1.Cron)('0 0 * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

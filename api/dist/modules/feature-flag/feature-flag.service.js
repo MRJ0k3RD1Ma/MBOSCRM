@@ -20,8 +20,8 @@ let FeatureFlagService = class FeatureFlagService {
     async onModuleInit() {
         await this.loadFlags();
         await this.prisma.$executeRaw `LISTEN Access`;
-        await this.prisma.subscriber.listenTo("Access");
-        this.prisma.subscriber.notifications.on("Access", (data) => {
+        await this.prisma.subscriber.listenTo('Access');
+        this.prisma.subscriber.notifications.on('Access', (data) => {
             this.flags[data.key] = data.isActive;
         });
     }

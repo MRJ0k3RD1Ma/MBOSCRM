@@ -19,7 +19,7 @@ class FindAllSaleTodoDto extends pagination_dto_1.PaginationDto {
 exports.FindAllSaleTodoDto = FindAllSaleTodoDto;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        example: 1
+        example: 1,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Type)(() => Number),
@@ -28,7 +28,7 @@ __decorate([
 ], FindAllSaleTodoDto.prototype, "saleId", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        example: 1
+        example: 1,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Type)(() => Number),

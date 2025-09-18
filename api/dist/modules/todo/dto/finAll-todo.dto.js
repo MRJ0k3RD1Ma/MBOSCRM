@@ -16,7 +16,7 @@ class FindAllTodoDto {
 }
 exports.FindAllTodoDto = FindAllTodoDto;
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "report" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 'report' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),

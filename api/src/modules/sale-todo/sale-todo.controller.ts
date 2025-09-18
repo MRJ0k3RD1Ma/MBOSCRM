@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+  Query,
+} from '@nestjs/common';
 import { SaleTodoService } from './sale-todo.service';
 import { CreateSaleTodoDto } from './dto/create-sale-todo.dto';
 import { UpdateSaleTodoDto } from './dto/update-sale-todo.dto';
@@ -9,7 +19,7 @@ import { FindAllSaleTodoDto } from './dto/findAll-sale-todo.dto';
 
 @Controller('sale-todo')
 export class SaleTodoController {
-  constructor(private readonly saleTodoService: SaleTodoService) { }
+  constructor(private readonly saleTodoService: SaleTodoService) {}
 
   @Post()
   @DecoratorWrapper('createSaleTodo', true, [Role.Admin])
@@ -31,7 +41,10 @@ export class SaleTodoController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSaleTodoDto: UpdateSaleTodoDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateSaleTodoDto: UpdateSaleTodoDto,
+  ) {
     return this.saleTodoService.update(+id, updateSaleTodoDto);
   }
 

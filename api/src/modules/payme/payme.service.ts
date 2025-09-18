@@ -7,7 +7,7 @@ import TransactionError from './errors/transaction.erros';
 
 @Injectable()
 export class PaymeService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
   async checkPerformTransaction(params: any, id: string): Promise<void> {
     let { account, amount } = params;
 
@@ -16,7 +16,11 @@ export class PaymeService {
     }
 
     if (!Types.ObjectId.isValid(account.product_id)) {
-      throw new TransactionError(PaymeError.ProductNotFound, id, PaymeData.ProductId);
+      throw new TransactionError(
+        PaymeError.ProductNotFound,
+        id,
+        PaymeData.ProductId,
+      );
     }
 
     amount = Math.floor(amount / 100);

@@ -1,8 +1,8 @@
-import { CreatePaidClientDto } from "./dto/create-paid-client.dto";
-import { UpdatePaidClientDto } from "./dto/update-paid-client.dto";
-import { PrismaService } from "../prisma/prisma.service";
-import { FindAllQueryPaidClientDto } from "./dto/findAll-query-paid-client.dto";
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import { CreatePaidClientDto } from './dto/create-paid-client.dto';
+import { UpdatePaidClientDto } from './dto/update-paid-client.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { FindAllQueryPaidClientDto } from './dto/findAll-query-paid-client.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 export declare class PaidClientService {
     private readonly prisma;
     private readonly eventEmitter;

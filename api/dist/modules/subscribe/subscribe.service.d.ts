@@ -1,9 +1,9 @@
-import { CreateSubscribeDto } from "./dto/create-subscribe.dto";
-import { UpdateSubscribeDto } from "./dto/update-subscribe.dto";
-import { PrismaService } from "../prisma/prisma.service";
-import { FindAllSubscribeQueryDto } from "./dto/findAll-subscribe-query.dto";
-import { Sale } from "@prisma/client";
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import { CreateSubscribeDto } from './dto/create-subscribe.dto';
+import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { FindAllSubscribeQueryDto } from './dto/findAll-subscribe-query.dto';
+import { Sale } from '@prisma/client';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 export declare class SubscribeService {
     private readonly prisma;
     private readonly eventEmitter;

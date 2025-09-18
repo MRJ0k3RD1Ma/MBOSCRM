@@ -1,5 +1,5 @@
-import { OnModuleInit } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
+import { OnModuleInit } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 export declare class FeatureFlagService implements OnModuleInit {
     private readonly prisma;
     constructor(prisma: PrismaService);

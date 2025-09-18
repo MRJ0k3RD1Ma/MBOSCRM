@@ -24,7 +24,7 @@ let ClientCrmService = class ClientCrmService {
             where: { id: createClientCrmDto.clientId, isDeleted: false },
         });
         if (!client) {
-            throw (0, http_error_1.HttpError)({ code: "Client Not Found" });
+            throw (0, http_error_1.HttpError)({ code: 'Client Not Found' });
         }
         const product = createClientCrmDto.productId !== undefined
             ? await this.prisma.product.findUnique({
@@ -50,7 +50,7 @@ let ClientCrmService = class ClientCrmService {
             isDeleted: false,
         };
         if (domain?.trim()) {
-            where.domain = { contains: domain.trim(), mode: "insensitive" };
+            where.domain = { contains: domain.trim(), mode: 'insensitive' };
         }
         if (key?.trim()) {
             where.key = { contains: key.trim() };
@@ -63,7 +63,7 @@ let ClientCrmService = class ClientCrmService {
                 where,
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { id: "desc" },
+                orderBy: { id: 'desc' },
                 include: {
                     client: true,
                 },
@@ -83,7 +83,7 @@ let ClientCrmService = class ClientCrmService {
             include: { client: true },
         });
         if (!clientCrm) {
-            throw (0, http_error_1.HttpError)({ code: "Client Crm not found" });
+            throw (0, http_error_1.HttpError)({ code: 'Client Crm not found' });
         }
         return clientCrm;
     }
@@ -92,7 +92,7 @@ let ClientCrmService = class ClientCrmService {
             where: { id, isDeleted: false },
         });
         if (!clientCrm)
-            throw (0, http_error_1.HttpError)({ code: "Client Crm not found" });
+            throw (0, http_error_1.HttpError)({ code: 'Client Crm not found' });
         const product = dto.productId !== undefined
             ? await this.prisma.product.findUnique({
                 where: { id: dto.productId },
@@ -115,7 +115,7 @@ let ClientCrmService = class ClientCrmService {
             where: { id: id, isDeleted: false },
         });
         if (!clientCrm) {
-            throw (0, http_error_1.HttpError)({ code: "Client Crm not found" });
+            throw (0, http_error_1.HttpError)({ code: 'Client Crm not found' });
         }
         return await this.prisma.clientCrm.update({
             where: { id: id },

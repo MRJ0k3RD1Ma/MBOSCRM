@@ -57,7 +57,7 @@ export class SaleProductController {
 
   @Delete(':id')
   @DecoratorWrapper('remove SaleProduct', true, [Role.Admin])
-  remove(@Param('id', ParseIntPipe) id: string ) {
-    return this.saleProductService.remove(+id );
+  remove(@Param('id', ParseIntPipe) id: string) {
+    return this.saleProductService.remove(+id);
   }
 }

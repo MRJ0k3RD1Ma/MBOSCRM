@@ -1,11 +1,11 @@
 declare namespace Express {
-	interface Request {
-		user?: {
-			id: number;
-			role: string;
-		};
-		crm?: {
-			key: string;
-		};
-	}
+  interface Request {
+    user?: {
+      id: number;
+      role: string;
+    };
+    crm?: {
+      key: string;
+    };
+  }
 }

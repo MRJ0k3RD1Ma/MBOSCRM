@@ -8,4 +8,4 @@ import { TodoService } from '../todo/todo.service';
   controllers: [SaleTodoController],
   providers: [SaleTodoService, TodoService],
 })
-export class SaleTodoModule { }
+export class SaleTodoModule {}

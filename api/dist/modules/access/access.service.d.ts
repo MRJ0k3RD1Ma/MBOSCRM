@@ -1,7 +1,7 @@
-import { PrismaService } from "../prisma/prisma.service";
-import { FindAllAccessQueryDto } from "./dto/findAll-access.dto";
-import { UpdateAccessDto } from "./dto/update-access.dto";
-import { FeatureFlagService } from "../feature-flag/feature-flag.service";
+import { PrismaService } from '../prisma/prisma.service';
+import { FindAllAccessQueryDto } from './dto/findAll-access.dto';
+import { UpdateAccessDto } from './dto/update-access.dto';
+import { FeatureFlagService } from '../feature-flag/feature-flag.service';
 export declare class AccessService {
     private readonly prisma;
     private readonly featureFlagService;

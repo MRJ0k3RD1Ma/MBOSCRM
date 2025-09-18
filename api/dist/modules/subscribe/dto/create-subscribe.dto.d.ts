@@ -1,4 +1,4 @@
-import { SubscribeState } from "@prisma/client";
+import { SubscribeState } from '@prisma/client';
 export declare class CreateSubscribeDto {
     payingDate?: Date;
     clientId: number;

@@ -132,6 +132,7 @@ let SaleTodoService = class SaleTodoService {
 exports.SaleTodoService = SaleTodoService;
 exports.SaleTodoService = SaleTodoService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService, todo_service_1.TodoService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        todo_service_1.TodoService])
 ], SaleTodoService);
 //# sourceMappingURL=sale-todo.service.js.map

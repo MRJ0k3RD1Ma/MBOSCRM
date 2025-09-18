@@ -110,8 +110,8 @@ let ProductService = class ProductService {
             this.prisma.product.findMany({
                 where: {
                     name: {
-                        contains: name?.trim() || "",
-                        mode: "insensitive",
+                        contains: name?.trim() || '',
+                        mode: 'insensitive',
                     },
                     type: { equals: type },
                     barcode: { contains: barcode },
@@ -123,13 +123,13 @@ let ProductService = class ProductService {
                 },
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { id: "desc" },
+                orderBy: { id: 'desc' },
             }),
             this.prisma.product.count({
                 where: {
                     name: {
-                        contains: name?.trim() || "",
-                        mode: "insensitive",
+                        contains: name?.trim() || '',
+                        mode: 'insensitive',
                     },
                 },
             }),

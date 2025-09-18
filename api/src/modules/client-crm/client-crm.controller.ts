@@ -44,7 +44,7 @@ export class ClientCrmController {
     @Param('id', ParseIntPipe) id: string,
     @Body() updateClientCrmDto: UpdateClientCrmDto,
   ) {
-    return this.clientCrmService.update(+id, updateClientCrmDto );
+    return this.clientCrmService.update(+id, updateClientCrmDto);
   }
 
   @Delete(':id')

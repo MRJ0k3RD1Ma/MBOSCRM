@@ -7,7 +7,7 @@ import { SaleFeedbackService } from '../sale-feedback/sale-feedback.service';
 
 @Module({
   controllers: [SaleController],
-  providers: [SaleService,SaleFeedbackService],
-  imports: [SaleProductModule, SubscribeModule,],
+  providers: [SaleService, SaleFeedbackService],
+  imports: [SaleProductModule, SubscribeModule],
 })
 export class SaleModule {}

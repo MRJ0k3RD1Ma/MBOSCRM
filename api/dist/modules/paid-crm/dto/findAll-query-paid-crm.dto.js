@@ -31,14 +31,14 @@ __decorate([
     __metadata("design:type", Number)
 ], FindAllQueryPaidCrmDto.prototype, "maxPrice", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-01" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-01' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
 ], FindAllQueryPaidCrmDto.prototype, "fromDate", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-30" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-30' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),

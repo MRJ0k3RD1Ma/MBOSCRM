@@ -1,7 +1,7 @@
-import { CreatePaidOtherDto } from "./dto/create-paid-other.dto";
-import { UpdatePaidOtherDto } from "./dto/update-paid-other.dto";
-import { PrismaService } from "../prisma/prisma.service";
-import { FindAllQueryPaidOtherDto } from "./dto/findAll-query-paid-other.dto";
+import { CreatePaidOtherDto } from './dto/create-paid-other.dto';
+import { UpdatePaidOtherDto } from './dto/update-paid-other.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { FindAllQueryPaidOtherDto } from './dto/findAll-query-paid-other.dto';
 export declare class PaidOtherService {
     private readonly prisma;
     constructor(prisma: PrismaService);

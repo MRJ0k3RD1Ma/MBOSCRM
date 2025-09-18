@@ -7,9 +7,7 @@ import { HttpError } from 'src/common/exception/http.error';
 
 @Injectable()
 export class TodoService {
-  constructor(
-    private readonly prisma: PrismaService,
-  ) { }
+  constructor(private readonly prisma: PrismaService) {}
   async create(createTodoDto: CreateTodoDto) {
     let todo = await this.prisma.todo.findFirst({
       where: { name: createTodoDto.name },
@@ -33,8 +31,7 @@ export class TodoService {
           mode: 'insensitive',
         },
       },
-    })
-    return todo
+    });
+    return todo;
   }
-
 }

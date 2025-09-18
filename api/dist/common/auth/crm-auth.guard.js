@@ -9,7 +9,7 @@ class CrmAuthGuard {
     canActivate(context) {
         try {
             const request = context.switchToHttp().getRequest();
-            let apiKey = request.headers["x-api-key"];
+            let apiKey = request.headers['x-api-key'];
             if (!apiKey) {
                 return true;
             }

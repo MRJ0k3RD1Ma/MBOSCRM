@@ -80,7 +80,7 @@ let PaidServerService = class PaidServerService {
             },
             skip: (page - 1) * limit,
             take: limit,
-            orderBy: { id: "desc" },
+            orderBy: { id: 'desc' },
         });
         const agg = await this.prisma.paidServer.aggregate({
             _sum: { price: true },

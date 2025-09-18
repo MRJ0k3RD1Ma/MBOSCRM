@@ -16,7 +16,7 @@ class CreateTodoDto {
 }
 exports.CreateTodoDto = CreateTodoDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "Finish the report" }),
+    (0, swagger_1.ApiProperty)({ example: 'Finish the report' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)

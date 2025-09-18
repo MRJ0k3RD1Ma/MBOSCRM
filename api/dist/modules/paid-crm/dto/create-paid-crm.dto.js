@@ -17,32 +17,32 @@ class CreatePaidCrmDto {
 }
 exports.CreatePaidCrmDto = CreatePaidCrmDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 1, description: "Crm ID" }),
+    (0, swagger_1.ApiProperty)({ example: 1, description: 'Crm ID' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreatePaidCrmDto.prototype, "crmId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 3, description: "Payment ID" }),
+    (0, swagger_1.ApiProperty)({ example: 3, description: 'Payment ID' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreatePaidCrmDto.prototype, "paymentId", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-29T12:12:44.882Z" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-29T12:12:44.882Z' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
 ], CreatePaidCrmDto.prototype, "paidDate", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 200.5, description: "Payment price" }),
+    (0, swagger_1.ApiProperty)({ example: 200.5, description: 'Payment price' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreatePaidCrmDto.prototype, "price", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "2025-07-29T12:12:44.882Z" }),
+    (0, swagger_1.ApiProperty)({ example: '2025-07-29T12:12:44.882Z' }),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
