@@ -58,6 +58,8 @@ export default function ClientsPaidTable({
   };
 
   const handleDelete = (id: number) => {
+    console.log(id);
+    
     deletePaidClient.mutate(id);
   };
 

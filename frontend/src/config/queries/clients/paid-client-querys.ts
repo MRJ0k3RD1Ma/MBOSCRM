@@ -96,7 +96,7 @@ export const useUpdatePaidClient = () => {
   return useMutation({
     mutationFn: async ({ id, ...input }: PaidClientDto & { id: number }) => {
       const { data } = await axiosPrivate.patch(
-        `${paidClientEndpoints.update}/${id}`,
+        paidClientEndpoints.update(String(id)),
         input
       );
       return data;
@@ -116,7 +116,7 @@ export const useDeletePaidClient = () => {
   return useMutation({
     mutationFn: async (id: number) => {
       const { data } = await axiosPrivate.delete(
-        `${paidClientEndpoints.delete}/${id}`
+        paidClientEndpoints.delete(String(id))
       );
       return data;
     },
