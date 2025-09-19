@@ -34,7 +34,7 @@ export class SubscribeService implements OnModuleInit {
 
 		let loopMonth = dayjs(sale.subscribe_begin_date)
 			.startOf("month")
-			.set("day", sale.subscribe_generate_day);
+			.set("date", sale.subscribe_generate_day);
 
 		while (
 			loopMonth.isSame(dayjs(), "month") ||
@@ -71,6 +71,33 @@ export class SubscribeService implements OnModuleInit {
 			});
 
 			if (!lastSubscribe) {
+				const saleProduct = await this.prisma.saleProduct.findFirst({
+					where: {
+						saleId: sale.id,
+						product: { type: ProductType.SUBSCRIPTION },
+					},
+				});
+
+				if (saleProduct) {
+					let loopMonth = dayjs(sale.subscribe_begin_date)
+						.startOf("month")
+						.set("day", sale.subscribe_generate_day);
+
+					while (
+						loopMonth.isSame(dayjs(), "month") ||
+						loopMonth.isBefore(dayjs(), "month")
+					) {
+						await this.create({
+							clientId: sale.clientId,
+							price: saleProduct.price * saleProduct.count,
+							saleId: sale.id,
+							state: SubscribeState.NOTPAYING,
+							payingDate: loopMonth.toDate(),
+						});
+
+						loopMonth = loopMonth.add(1, "months");
+					}
+				}
 				continue;
 			}
 

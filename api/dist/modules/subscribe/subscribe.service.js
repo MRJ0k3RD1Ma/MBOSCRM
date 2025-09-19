@@ -40,7 +40,7 @@ let SubscribeService = class SubscribeService {
         }
         let loopMonth = (0, dayjs_1.default)(sale.subscribe_begin_date)
             .startOf("month")
-            .set("day", sale.subscribe_generate_day);
+            .set("date", sale.subscribe_generate_day);
         while (loopMonth.isSame((0, dayjs_1.default)(), "month") ||
             loopMonth.isBefore((0, dayjs_1.default)(), "month")) {
             const client = await this.prisma.client.findUnique({
@@ -69,6 +69,28 @@ let SubscribeService = class SubscribeService {
                 orderBy: { paying_date: "desc" },
             });
             if (!lastSubscribe) {
+                const saleProduct = await this.prisma.saleProduct.findFirst({
+                    where: {
+                        saleId: sale.id,
+                        product: { type: client_1.ProductType.SUBSCRIPTION },
+                    },
+                });
+                if (saleProduct) {
+                    let loopMonth = (0, dayjs_1.default)(sale.subscribe_begin_date)
+                        .startOf("month")
+                        .set("day", sale.subscribe_generate_day);
+                    while (loopMonth.isSame((0, dayjs_1.default)(), "month") ||
+                        loopMonth.isBefore((0, dayjs_1.default)(), "month")) {
+                        await this.create({
+                            clientId: sale.clientId,
+                            price: saleProduct.price * saleProduct.count,
+                            saleId: sale.id,
+                            state: client_1.SubscribeState.NOTPAYING,
+                            payingDate: loopMonth.toDate(),
+                        });
+                        loopMonth = loopMonth.add(1, "months");
+                    }
+                }
                 continue;
             }
             const today = (0, dayjs_1.default)();
