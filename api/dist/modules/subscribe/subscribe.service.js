@@ -25,6 +25,9 @@ let SubscribeService = class SubscribeService {
         this.prisma = prisma;
         this.eventEmitter = eventEmitter;
     }
+    async onModuleInit() {
+        await this.cron();
+    }
     async handleSaleCreatedEvent(sale) {
         const saleProduct = await this.prisma.saleProduct.findFirst({
             where: {
@@ -36,10 +39,10 @@ let SubscribeService = class SubscribeService {
             return;
         }
         let loopMonth = (0, dayjs_1.default)(sale.subscribe_begin_date)
-            .startOf('month')
-            .set('day', sale.subscribe_generate_day);
-        while (loopMonth.isSame((0, dayjs_1.default)(), 'month') ||
-            loopMonth.isBefore((0, dayjs_1.default)(), 'month')) {
+            .startOf("month")
+            .set("day", sale.subscribe_generate_day);
+        while (loopMonth.isSame((0, dayjs_1.default)(), "month") ||
+            loopMonth.isBefore((0, dayjs_1.default)(), "month")) {
             const client = await this.prisma.client.findUnique({
                 where: { id: sale.clientId },
             });
@@ -50,28 +53,28 @@ let SubscribeService = class SubscribeService {
                 state: client_1.SubscribeState.NOTPAYING,
                 payingDate: loopMonth.toDate(),
             });
-            loopMonth = loopMonth.add(1, 'months');
+            loopMonth = loopMonth.add(1, "months");
         }
     }
     async cron() {
         const runningSales = await this.prisma.sale.findMany({
             where: {
                 isDeleted: false,
-                state: 'RUNNING',
+                state: "RUNNING",
             },
         });
         for (const sale of runningSales) {
             const lastSubscribe = await this.prisma.subscribe.findFirst({
                 where: { saleId: sale.id },
-                orderBy: { paying_date: 'desc' },
+                orderBy: { paying_date: "desc" },
             });
             if (!lastSubscribe) {
                 continue;
             }
             const today = (0, dayjs_1.default)();
-            const nextPaymentDate = (0, dayjs_1.default)(lastSubscribe.paying_date).add(1, 'month');
+            const nextPaymentDate = (0, dayjs_1.default)(lastSubscribe.paying_date).add(1, "month");
             if (nextPaymentDate.isBefore(today) ||
-                nextPaymentDate.isSame(today, 'day')) {
+                nextPaymentDate.isSame(today, "day")) {
                 const saleProduct = await this.prisma.saleProduct.findFirst({
                     where: {
                         saleId: sale.id,
@@ -122,7 +125,7 @@ let SubscribeService = class SubscribeService {
             where: { id: clientId },
             data: { balance: client.balance - price },
         });
-        this.eventEmitter.emit('recalculate.client', subscribe.clientId);
+        this.eventEmitter.emit("recalculate.client", subscribe.clientId);
         return subscribe;
     }
     async findAll(dto) {
@@ -166,7 +169,7 @@ let SubscribeService = class SubscribeService {
                         },
                     },
                 },
-                orderBy: { id: 'desc' },
+                orderBy: { id: "desc" },
             }),
             this.prisma.subscribe.count({ where }),
         ]);
@@ -240,7 +243,7 @@ let SubscribeService = class SubscribeService {
                 message: `Subscribe with ID ${id} not found`,
             });
         }
-        this.eventEmitter.emit('recalculate.client', subscribe.clientId);
+        this.eventEmitter.emit("recalculate.client", subscribe.clientId);
         return this.prisma.subscribe.update({
             where: { id },
             data: { isDeleted: true },
@@ -249,13 +252,13 @@ let SubscribeService = class SubscribeService {
 };
 exports.SubscribeService = SubscribeService;
 __decorate([
-    (0, event_emitter_1.OnEvent)('sale.created'),
+    (0, event_emitter_1.OnEvent)("recalculate.subscribe"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], SubscribeService.prototype, "handleSaleCreatedEvent", null);
 __decorate([
-    (0, schedule_1.Cron)('0 0 * * * *'),
+    (0, schedule_1.Cron)("0 0 * * * *"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

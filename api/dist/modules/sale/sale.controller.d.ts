@@ -190,8 +190,8 @@ export declare class SaleController {
             saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            isCompleted: boolean;
             feedbackId: number | null;
+            isCompleted: boolean;
         }[];
     } & {
         isDeleted: boolean | null;

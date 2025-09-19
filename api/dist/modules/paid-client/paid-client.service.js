@@ -180,6 +180,7 @@ let PaidClientService = class PaidClientService {
         const agg = await this.prisma.paidClient.aggregate({
             _sum: { price: true },
             _count: { _all: true },
+            where: { isDeleted: false },
         });
         return {
             data: paidClients,
