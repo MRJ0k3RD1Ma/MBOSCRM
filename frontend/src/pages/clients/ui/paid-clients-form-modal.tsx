@@ -47,7 +47,7 @@ export default function PaidClientFormModal({
     { enabled: true }
   );
 
-  const { data: clients } = useGetAllClients(undefined, {
+  const { data: clients } = useGetAllClients({ page: 1, limit: 1000 }, {
     enabled: !clientId,
   });
 
