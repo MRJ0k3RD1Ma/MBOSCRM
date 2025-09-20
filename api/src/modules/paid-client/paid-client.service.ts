@@ -306,6 +306,7 @@ export class PaidClientService {
 	}
 
 	async remove(id: number) {
+		throw new HttpError({ code: 404, message: "unavailable" });
 		const paidClient = await this.prisma.paidClient.findFirst({
 			where: { id, isDeleted: false },
 		});

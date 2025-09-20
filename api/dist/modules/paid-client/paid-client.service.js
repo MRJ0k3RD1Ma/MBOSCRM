@@ -255,6 +255,7 @@ let PaidClientService = class PaidClientService {
         });
     }
     async remove(id) {
+        throw new http_error_1.HttpError({ code: 404, message: "unavailable" });
         const paidClient = await this.prisma.paidClient.findFirst({
             where: { id, isDeleted: false },
         });
