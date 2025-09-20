@@ -13,10 +13,10 @@ export declare class ClientCrmController {
         balance: number;
         clientId: number;
         productId: number;
+        key: string;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        key: string;
     }>;
     findAll(query: FindAllClientCrmQueryDto): Promise<{
         total: number;
@@ -48,10 +48,10 @@ export declare class ClientCrmController {
             balance: number;
             clientId: number;
             productId: number;
+            key: string;
             domain: string | null;
             isFullAccess: boolean;
             expiredFullAccess: Date | null;
-            key: string;
         })[];
     }>;
     findOne(id: string): Promise<{
@@ -80,10 +80,10 @@ export declare class ClientCrmController {
         balance: number;
         clientId: number;
         productId: number;
+        key: string;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        key: string;
     }>;
     update(id: string, updateClientCrmDto: UpdateClientCrmDto): Promise<{
         isDeleted: boolean;
@@ -93,10 +93,10 @@ export declare class ClientCrmController {
         balance: number;
         clientId: number;
         productId: number;
+        key: string;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        key: string;
     }>;
     remove(id: string): Promise<{
         isDeleted: boolean;
@@ -106,9 +106,9 @@ export declare class ClientCrmController {
         balance: number;
         clientId: number;
         productId: number;
+        key: string;
         domain: string | null;
         isFullAccess: boolean;
         expiredFullAccess: Date | null;
-        key: string;
     }>;
 }

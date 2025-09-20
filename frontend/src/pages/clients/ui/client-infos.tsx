@@ -1,14 +1,19 @@
-import { Button, Card, Descriptions, message, Popconfirm, Space } from "antd";
-import Title from "antd/es/typography/Title";
-import { PlusOutlined } from "@ant-design/icons";
-import { useDeleteClient } from "../../../config/queries/clients/clients-querys";
-import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
-import { useGetAllClientTypes } from "../../../config/queries/clients/client-type-querys";
+import { Button, Card, Descriptions, Space } from "antd";
 import type { Dispatch, SetStateAction } from "react";
 
+import { PlusOutlined } from "@ant-design/icons";
+import Title from "antd/es/typography/Title";
+import dayjs from "dayjs";
+import { useGetAllClientTypes } from "../../../config/queries/clients/client-type-querys";
+
+// import { useDeleteClient } from "../../../config/queries/clients/clients-querys";
+
+// import { useNavigate } from "react-router-dom";
+
+// import { Popconfirm, message } from "antd";
+
 export default function ClientInfos({
-  clientId,
+  // clientId,
   data,
   form,
   setIsEditOpen,
@@ -20,19 +25,19 @@ export default function ClientInfos({
   setIsEditOpen: Dispatch<SetStateAction<boolean>>;
   setPaidOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const { data: types } = useGetAllClientTypes();
-  const deleteClient = useDeleteClient();
+  // const deleteClient = useDeleteClient();
 
-  const handleDelete = async () => {
-    try {
-      await deleteClient.mutateAsync(clientId);
-      navigate("/clients");
-    } catch (error) {
-      message.error("O‘chirishda xatolik yuz berdi");
-    }
-  };
+  // const handleDelete = async () => {
+  //   try {
+  //     await deleteClient.mutateAsync(clientId);
+  //     navigate("/clients");
+  //   } catch (error) {
+  //     message.error("O‘chirishda xatolik yuz berdi");
+  //   }
+  // };
 
   return (
     <Card style={{ flex: 1, maxWidth: 480 }}>
@@ -48,12 +53,12 @@ export default function ClientInfos({
           >
             O‘zgartirish
           </Button>
-          <Popconfirm
+          {/* <Popconfirm
             title="Haqiqatan o‘chirmoqchimisiz?"
             onConfirm={handleDelete}
           >
             <Button danger>O‘chirish</Button>
-          </Popconfirm>
+          </Popconfirm> */}
           <Button
             type="primary"
             icon={<PlusOutlined />}
