@@ -36,7 +36,20 @@ export declare class SaleFeedbackController {
         page: number;
         limit: number;
     }>;
-    findOne(id: string): Promise<{
+    findOne(id: number): Promise<{
+        description: string | null;
+        name: string | null;
+        isDeleted: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
+        saleId: number;
+        state: import(".prisma/client").$Enums.SaleFeedbackState;
+        alias: string;
+        score: number | null;
+    }>;
+    findOneSaleFeedback(alias: string): Promise<{
         description: string | null;
         name: string | null;
         isDeleted: boolean;

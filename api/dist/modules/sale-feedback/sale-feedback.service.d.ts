@@ -49,6 +49,19 @@ export declare class SaleFeedbackService {
         alias: string;
         score: number | null;
     }>;
+    findOneByAlias(alias: string): Promise<{
+        description: string | null;
+        name: string | null;
+        isDeleted: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
+        saleId: number;
+        state: import(".prisma/client").$Enums.SaleFeedbackState;
+        alias: string;
+        score: number | null;
+    }>;
     update(alias: string, updateSaleFeedbackDto: UpdateSaleFeedbackDto): Promise<{
         description: string | null;
         name: string | null;

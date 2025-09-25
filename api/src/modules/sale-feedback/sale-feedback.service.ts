@@ -12,7 +12,7 @@ import { FindAllSaleFeedbackDto } from './dto/findAll-sale-feedback.dto';
 
 @Injectable()
 export class SaleFeedbackService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
   async create(createSaleFeedbackDto: CreateSaleFeedbackDto) {
     const sale = await this.prisma.sale.findUnique({
       where: { id: createSaleFeedbackDto.saleId },
@@ -85,28 +85,43 @@ export class SaleFeedbackService {
     return saleFeedback;
   }
 
+  async findOneByAlias(alias: string) {
+    const saleFeedback = await this.prisma.saleFeedback.findFirst({
+      where: {
+        alias,
+        isDeleted: false,
+      },
+    })
+    if (!saleFeedback) {
+      throw new HttpError({
+        message: `SaleFeedback with alias ${alias} not found`,
+      });
+    }
+    return saleFeedback
+  }
+
   async update(alias: string, updateSaleFeedbackDto: UpdateSaleFeedbackDto) {
     const saleFeedback = await this.prisma.saleFeedback.findFirst({
       where: { alias }
     });
-  
+
     if (!saleFeedback) {
       throw new HttpError({ message: 'SaleFeedback not found' });
     }
-  
+
     return this.prisma.saleFeedback.update({
       where: { id: saleFeedback.id },
       data: {
         name: updateSaleFeedbackDto.name ?? saleFeedback.name,
         description: updateSaleFeedbackDto.description ?? saleFeedback.description,
-        saleId: saleFeedback.saleId, 
+        saleId: saleFeedback.saleId,
         score: updateSaleFeedbackDto.score ?? saleFeedback.score,
         state: updateSaleFeedbackDto.state ?? saleFeedback.state,
         result: updateSaleFeedbackDto.result ?? saleFeedback.result,
       },
     });
   }
-  
+
 
   async updateState(dto: UpdateStateDto, alias: string) {
     const saleFeedback = await this.prisma.saleFeedback.findFirst({

@@ -86,6 +86,20 @@ let SaleFeedbackService = class SaleFeedbackService {
         }
         return saleFeedback;
     }
+    async findOneByAlias(alias) {
+        const saleFeedback = await this.prisma.saleFeedback.findFirst({
+            where: {
+                alias,
+                isDeleted: false,
+            },
+        });
+        if (!saleFeedback) {
+            throw new http_error_1.HttpError({
+                message: `SaleFeedback with alias ${alias} not found`,
+            });
+        }
+        return saleFeedback;
+    }
     async update(alias, updateSaleFeedbackDto) {
         const saleFeedback = await this.prisma.saleFeedback.findFirst({
             where: { alias }
