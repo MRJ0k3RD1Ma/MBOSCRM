@@ -1,10 +1,11 @@
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateSupplierDto } from './dto/create-supplier.dto';
-import { FindAllSupplierQueryDto } from './dto/findAll-supplier.dto';
-import { UpdateSupplierDto } from './dto/update-supplier.dto';
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateSupplierDto } from "./dto/create-supplier.dto";
+import { FindAllSupplierQueryDto } from "./dto/findAll-supplier.dto";
+import { UpdateSupplierDto } from "./dto/update-supplier.dto";
 export declare class SupplierService {
     private readonly prisma;
     constructor(prisma: PrismaService);
+    recalculate(supplierId: number): Promise<void>;
     onModuleInit(): Promise<void>;
     create(createSupplierDto: CreateSupplierDto, creatorId: number): Promise<{
         description: string | null;

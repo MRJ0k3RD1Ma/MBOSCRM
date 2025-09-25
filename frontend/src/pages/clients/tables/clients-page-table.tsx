@@ -1,7 +1,7 @@
 import { Button, Dropdown, Table, Tooltip, type MenuProps } from "antd";
 
 import {
-  useDeleteClient,
+  // useDeleteClient,
   useGetAllClients,
   type Client,
 } from "../../../config/queries/clients/clients-querys";
@@ -38,7 +38,7 @@ export default function ClientsPageTable({
     ...filters,
   });
 
-  const deleteClient = useDeleteClient();
+  // const deleteClient = useDeleteClient();
 
   const handleEdit = (client: Client) => {
     setEditing(client);
@@ -46,9 +46,9 @@ export default function ClientsPageTable({
     setOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    deleteClient.mutate(id);
-  };
+  // const handleDelete = (id: number) => {
+  //   deleteClient.mutate(id);
+  // };
   const columns = [
     indexColumn(page, limit),
     { title: "Nomi", dataIndex: "name" },
@@ -77,12 +77,12 @@ export default function ClientsPageTable({
             label: "Tahrirlash",
             onClick: () => handleEdit(row),
           },
-          {
-            key: "delete",
-            label: "O‘chirish",
-            danger: true,
-            onClick: () => handleDelete(row.id),
-          },
+          // {
+          //   key: "delete",
+          //   label: "O‘chirish",
+          //   danger: true,
+          //   onClick: () => handleDelete(row.id),
+          // },
           {
             key: "view",
             label: "Profilga o‘tish",

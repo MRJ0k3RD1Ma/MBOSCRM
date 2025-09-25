@@ -1,12 +1,13 @@
-import { Drawer, Form, Input, Select, Button } from "antd";
-import { useEffect } from "react";
-import type { CreateClientInput } from "../../../config/queries/clients/clients-querys";
+import { Button, Drawer, Form, Input, Modal, Select } from "antd";
 import {
   useGetAllRegions,
   useGetDistrictsByRegion,
 } from "../../../config/queries/location/location-querys";
-import { useGetAllClientTypes } from "../../../config/queries/clients/client-type-querys";
+
+import type { CreateClientInput } from "../../../config/queries/clients/clients-querys";
 import PhoneInput from "../../../components/form/phone-input";
+import { useEffect } from "react";
+import { useGetAllClientTypes } from "../../../config/queries/clients/client-type-querys";
 
 interface Props {
   open: boolean;
@@ -41,7 +42,22 @@ export default function ClientFormModal({
   const handleFinish = async () => {
     try {
       const values = await form.validateFields();
-      onSubmit(values);
+
+      Modal.confirm({
+        title: initialValues
+          ? "Mijozni tahrirlashni tasdiqlaysizmi?"
+          : "Yangi mijoz qo‘shishni tasdiqlaysizmi?",
+        content: "Bu amalni bajarishni xohlaysizmi?",
+        okText: "Ha",
+        cancelText: "Yo‘q",
+        centered: true,
+        className: "dark-confirm-modal",
+        okButtonProps: { className: "dark-ok-btn" },
+        cancelButtonProps: { className: "dark-cancel-btn" },
+        onOk: () => {
+          onSubmit(values);
+        },
+      });
     } catch {}
   };
 
@@ -72,6 +88,7 @@ export default function ClientFormModal({
         >
           <Input placeholder="123456789" />
         </Form.Item>
+
         <Form.Item
           name="phone"
           label="Telefon"
@@ -85,6 +102,7 @@ export default function ClientFormModal({
         >
           <PhoneInput />
         </Form.Item>
+
         <Form.Item
           name="typeId"
           label="Mijoz turi"
@@ -141,6 +159,7 @@ export default function ClientFormModal({
             ))}
           </Select>
         </Form.Item>
+
         <Form.Item name="address" label="Manzil">
           <Input placeholder="Mijoz manzili" />
         </Form.Item>

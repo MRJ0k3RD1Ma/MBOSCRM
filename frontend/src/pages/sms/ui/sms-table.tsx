@@ -1,4 +1,4 @@
-import { Card, Table } from "antd";
+import { Table } from "antd";
 
 import { indexColumn } from "../../../components/tables/indexColumn";
 import { useGetAllSms, type Sms } from "../../../config/queries/sms/sms-querys";

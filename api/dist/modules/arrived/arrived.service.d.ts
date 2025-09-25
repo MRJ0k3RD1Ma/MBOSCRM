@@ -1,12 +1,15 @@
-import { CreateArrivedDto } from './dto/create-arrived.dto';
-import { UpdateArrivedDto } from './dto/update-arrived.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { FindAllArrivedQueryDto } from './dto/findAll-arrived-query.dto';
-import { ArrivedProductService } from '../arrived-product/arrived-product.service';
+import { CreateArrivedDto } from "./dto/create-arrived.dto";
+import { UpdateArrivedDto } from "./dto/update-arrived.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { FindAllArrivedQueryDto } from "./dto/findAll-arrived-query.dto";
+import { ArrivedProductService } from "../arrived-product/arrived-product.service";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 export declare class ArrivedService {
     private readonly prisma;
     private readonly arrivedProductService;
-    constructor(prisma: PrismaService, arrivedProductService: ArrivedProductService);
+    private readonly eventEmitter;
+    constructor(prisma: PrismaService, arrivedProductService: ArrivedProductService, eventEmitter: EventEmitter2);
+    recalculate(arrivedId: number): Promise<void>;
     onModuleInit(): Promise<void>;
     create(createArrivedDto: CreateArrivedDto, creatorId: number): Promise<{
         description: string | null;
@@ -223,19 +226,5 @@ export declare class ArrivedService {
         created: Date;
         updated: Date;
     }>;
-    remove(id: number): Promise<{
-        description: string | null;
-        isDeleted: boolean | null;
-        id: number;
-        price: number;
-        registerId: number | null;
-        modifyId: number | null;
-        codeId: number | null;
-        supplierId: number;
-        date: Date | null;
-        waybillNumber: string | null;
-        code: string | null;
-        created: Date;
-        updated: Date;
-    }>;
+    remove(id: number): Promise<any>;
 }

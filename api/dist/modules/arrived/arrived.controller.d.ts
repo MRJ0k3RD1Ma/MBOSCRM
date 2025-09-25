@@ -221,19 +221,5 @@ export declare class ArrivedController {
         created: Date;
         updated: Date;
     }>;
-    remove(id: string): Promise<{
-        description: string | null;
-        isDeleted: boolean | null;
-        id: number;
-        price: number;
-        registerId: number | null;
-        modifyId: number | null;
-        codeId: number | null;
-        supplierId: number;
-        date: Date | null;
-        waybillNumber: string | null;
-        code: string | null;
-        created: Date;
-        updated: Date;
-    }>;
+    remove(id: string): Promise<any>;
 }

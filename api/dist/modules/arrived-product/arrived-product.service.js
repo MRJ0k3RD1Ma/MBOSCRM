@@ -13,9 +13,11 @@ exports.ArrivedProductService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const http_error_1 = require("../../common/exception/http.error");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let ArrivedProductService = class ArrivedProductService {
-    constructor(prisma) {
+    constructor(prisma, eventEmitter) {
         this.prisma = prisma;
+        this.eventEmitter = eventEmitter;
     }
     async create(createArrivedProductDto, registerId) {
         let { arrivedId, count, productId, price } = createArrivedProductDto;
@@ -62,6 +64,7 @@ let ArrivedProductService = class ArrivedProductService {
                 },
             },
         });
+        this.eventEmitter.emit("recalculate.arrived", arrived.id);
         return arrivedproduct;
     }
     async findAll(dto) {
@@ -95,7 +98,7 @@ let ArrivedProductService = class ArrivedProductService {
                     register: true,
                 },
                 orderBy: {
-                    id: 'desc',
+                    id: "desc",
                 },
             }),
             this.prisma.arrivedProduct.count({ where }),
@@ -122,7 +125,7 @@ let ArrivedProductService = class ArrivedProductService {
         return arrivedproduct;
     }
     async update(id, updateArrivedProductDto) {
-        const arrivedproduct = await this.prisma.arrivedProduct.findFirst({
+        let arrivedproduct = await this.prisma.arrivedProduct.findFirst({
             where: {
                 id,
                 isDeleted: false,
@@ -133,7 +136,7 @@ let ArrivedProductService = class ArrivedProductService {
                 message: `ArrivedProduct with ID ${id} not found`,
             });
         }
-        return this.prisma.arrivedProduct.update({
+        arrivedproduct = this.prisma.arrivedProduct.update({
             where: { id },
             data: {
                 price: updateArrivedProductDto.price || arrivedproduct.price,
@@ -143,9 +146,11 @@ let ArrivedProductService = class ArrivedProductService {
                     arrivedproduct.priceCount,
             },
         });
+        this.eventEmitter.emit("recalculate.arrived", arrivedproduct.arrivedId);
+        return arrivedproduct;
     }
     async remove(id) {
-        const arrivedproduct = await this.prisma.arrivedProduct.findFirst({
+        let arrivedproduct = await this.prisma.arrivedProduct.findFirst({
             where: {
                 id,
                 isDeleted: false,
@@ -156,15 +161,18 @@ let ArrivedProductService = class ArrivedProductService {
                 message: `ArrivedProduct with ID ${id} not found`,
             });
         }
-        return this.prisma.arrivedProduct.update({
+        arrivedproduct = this.prisma.arrivedProduct.update({
             where: { id },
             data: { isDeleted: true },
         });
+        this.eventEmitter.emit("recalculate.arrived", arrivedproduct.arrivedId);
+        return arrivedproduct;
     }
 };
 exports.ArrivedProductService = ArrivedProductService;
 exports.ArrivedProductService = ArrivedProductService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        event_emitter_1.EventEmitter2])
 ], ArrivedProductService);
 //# sourceMappingURL=arrived-product.service.js.map

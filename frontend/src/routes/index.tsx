@@ -44,6 +44,7 @@ import SupplierOverPaid from "../pages/suppler/supplier-over-paid";
 import Suppliers from "../pages/suppler/suppliers";
 import { TokenManager } from "../config/token-manager";
 import Users from "../pages/users/users";
+import Appeals from "../pages/appeals/appeals";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -234,6 +235,10 @@ export const router = createBrowserRouter([
           {
             path: "sms",
             element: <Sms />,
+          },
+          {
+            path: "appeals",
+            element: <Appeals />,
           },
           {
             path: "*",
