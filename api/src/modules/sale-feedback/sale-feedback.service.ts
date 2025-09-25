@@ -87,36 +87,26 @@ export class SaleFeedbackService {
 
   async update(alias: string, updateSaleFeedbackDto: UpdateSaleFeedbackDto) {
     const saleFeedback = await this.prisma.saleFeedback.findFirst({
-      where: { alias: alias },
+      where: { alias }
     });
-
+  
     if (!saleFeedback) {
       throw new HttpError({ message: 'SaleFeedback not found' });
     }
-
-    let sale = null;
-    if (updateSaleFeedbackDto.saleId) {
-      sale = await this.prisma.sale.findUnique({
-        where: { id: updateSaleFeedbackDto.saleId },
-      });
-      if (!sale) {
-        throw new HttpError({ message: 'Sale not found' });
-      }
-    }
-
+  
     return this.prisma.saleFeedback.update({
       where: { id: saleFeedback.id },
       data: {
         name: updateSaleFeedbackDto.name ?? saleFeedback.name,
-        description:
-          updateSaleFeedbackDto.description ?? saleFeedback.description,
-        saleId: updateSaleFeedbackDto.saleId ?? saleFeedback.saleId,
+        description: updateSaleFeedbackDto.description ?? saleFeedback.description,
+        saleId: saleFeedback.saleId, 
         score: updateSaleFeedbackDto.score ?? saleFeedback.score,
         state: updateSaleFeedbackDto.state ?? saleFeedback.state,
         result: updateSaleFeedbackDto.result ?? saleFeedback.result,
       },
     });
   }
+  
 
   async updateState(dto: UpdateStateDto, alias: string) {
     const saleFeedback = await this.prisma.saleFeedback.findFirst({
