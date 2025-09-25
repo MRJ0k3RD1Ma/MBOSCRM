@@ -1,13 +1,27 @@
-import { Layout } from "antd";
-import { Outlet } from "react-router-dom";
-import { useState } from "react";
 import BreadcrumbNav, { usePageTitle } from "./breadcrumb-nav";
-import SiderMenu from "./sider-menu";
+import { Outlet, useLocation } from "react-router-dom";
+
 import HeaderBar from "./header-bar";
+import { Layout } from "antd";
+import SiderMenu from "./sider-menu";
+import { useState } from "react";
 
 export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const pageTitle = usePageTitle();
+  const location = useLocation();
+
+  const isStartPage = location.pathname.startsWith("/fb/start");
+  const isProcessPage = location.pathname.startsWith("/fb/process");
+  const isSuccessPage = location.pathname.startsWith("/fb/success");
+
+  if (isProcessPage || isStartPage || isSuccessPage) {
+    return (
+      <div style={{ minHeight: "100vh" }}>
+        <Outlet />
+      </div>
+    );
+  }
 
   return (
     <Layout style={{ height: "100vh" }} className="app-layout">

@@ -1,6 +1,7 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 
 import AppLayout from "../layout/app-layout";
+import Appeals from "../pages/appeals/appeals";
 import Arrived from "../pages/arrived/arrived";
 import ArrivedFormPage from "../pages/arrived/ui/arriveds-form-page";
 import ArrivedProducts from "../pages/arrived/arrived-products";
@@ -14,6 +15,9 @@ import ClientsOverPaid from "../pages/clients/clients-over-paid";
 import ClientsPaid from "../pages/clients/clients-paid";
 import Dashboard from "../pages/dashboard/dashboard";
 import { ErrorPage } from "../pages/error/error";
+import FbProcess from "../pages/feedback/feedback_client/fb_process";
+import FbStart from "../pages/feedback/feedback_client/fb_start";
+import FbSuccess from "../pages/feedback/feedback_client/fb_success";
 import Feedbacks from "../pages/feedback/feedbacks";
 import LoginPage from "../pages/auth/login";
 import MonthlyExpenses from "../pages/paid_statistic/monthly_expenses";
@@ -44,7 +48,6 @@ import SupplierOverPaid from "../pages/suppler/supplier-over-paid";
 import Suppliers from "../pages/suppler/suppliers";
 import { TokenManager } from "../config/token-manager";
 import Users from "../pages/users/users";
-import Appeals from "../pages/appeals/appeals";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -239,6 +242,18 @@ export const router = createBrowserRouter([
           {
             path: "appeals",
             element: <Appeals />,
+          },
+          {
+            path: "fb/start/:alias",
+            element: <FbStart />,
+          },
+          {
+            path: "fb/process/:alias",
+            element: <FbProcess />,
+          },
+          {
+            path: "fb/success",
+            element: <FbSuccess />,
           },
           {
             path: "*",
