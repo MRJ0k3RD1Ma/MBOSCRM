@@ -37,6 +37,7 @@ import { ClientCrmModule } from './modules/client-crm/client-crm.module';
 import { SmsModule } from './modules/sms/sms.module';
 import { AccessModule } from './modules/access/access.module';
 import { PaidCrmModule } from './modules/paid-crm/paid-crm.module';
+import { AppealModule } from './modules/appeal/appeal.module';
 
 const MainModules = [EskizModule, ClientCrmModule, PaidCrmModule];
 
@@ -81,6 +82,7 @@ const MainModules = [EskizModule, ClientCrmModule, PaidCrmModule];
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
     NestjsGrammyModule.forRoot({ token: env.BOT_TOKEN }),
+    AppealModule,
   ],
 })
 export class AppModule {}

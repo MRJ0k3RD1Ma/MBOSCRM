@@ -46,6 +46,7 @@ const client_crm_module_1 = require("./modules/client-crm/client-crm.module");
 const sms_module_1 = require("./modules/sms/sms.module");
 const access_module_1 = require("./modules/access/access.module");
 const paid_crm_module_1 = require("./modules/paid-crm/paid-crm.module");
+const appeal_module_1 = require("./modules/appeal/appeal.module");
 const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule, paid_crm_module_1.PaidCrmModule];
 let AppModule = class AppModule {
 };
@@ -92,6 +93,7 @@ exports.AppModule = AppModule = __decorate([
             schedule_1.ScheduleModule.forRoot(),
             event_emitter_1.EventEmitterModule.forRoot(),
             nestjs_1.NestjsGrammyModule.forRoot({ token: config_1.env.BOT_TOKEN }),
+            appeal_module_1.AppealModule,
         ],
     })
 ], AppModule);
