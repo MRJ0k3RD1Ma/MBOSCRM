@@ -25,11 +25,16 @@ let PaidSupplierService = class PaidSupplierService {
             const count = await this.prisma.paidSupplier.count();
             const requiredCount = 5;
             if (count < requiredCount) {
+                const supplier = await this.prisma.supplier.findFirst({
+                    where: { isDeleted: false },
+                });
+                if (!supplier)
+                    return;
                 for (let i = count; i < requiredCount; i++) {
                     await this.create({
                         paymentId: 1,
                         price: 100,
-                        supplierId: 1,
+                        supplierId: supplier.id,
                         paidDate: new Date(),
                     }, 1);
                 }

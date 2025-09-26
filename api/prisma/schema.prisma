@@ -34,6 +34,7 @@ model Client {
   ClientCrm              ClientCrm[]
   Detailization          Detailization[]
   PaidCrm                PaidCrm[]
+  SimCard                SimCard[]
 
   @@index([districtId], map: "FK_client_district_id")
   @@index([modifyId], map: "FK_client_modify_id")
@@ -58,6 +59,22 @@ model ClientType {
   @@index([modifyId], map: "FK_client_type_modify_id")
   @@index([creatorId], map: "FK_client_type_register_id")
   @@map("client_type")
+}
+
+model SimCard {
+  id          Int      @id @default(autoincrement())
+  company     String
+  phoneNumber String
+  description String?
+  isActive    Boolean  @default(true)
+  activeDate  DateTime
+
+  clientId Int
+  client   Client @relation(fields: [clientId], references: [id])
+
+  isDeleted Boolean? @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Todo {

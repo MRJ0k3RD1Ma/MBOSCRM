@@ -46,6 +46,7 @@ const client_crm_module_1 = require("./modules/client-crm/client-crm.module");
 const sms_module_1 = require("./modules/sms/sms.module");
 const access_module_1 = require("./modules/access/access.module");
 const paid_crm_module_1 = require("./modules/paid-crm/paid-crm.module");
+const sim_card_module_1 = require("./modules/simcard/sim-card.module");
 const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule, paid_crm_module_1.PaidCrmModule];
 let AppModule = class AppModule {
 };
@@ -58,8 +59,10 @@ exports.AppModule = AppModule = __decorate([
             prisma_module_1.PrismaModule,
             ...(config_1.env.IS_MAIN ? MainModules : []),
             access_module_1.AccessModule,
+            sim_card_module_1.SimCardModule,
             feature_flag_module_1.FeatureFlagModule,
             location_module_1.LocationModule,
+            supplier_module_1.SupplierModule,
             userRole_module_1.UserRoleModule,
             user_module_1.UserModule,
             statistics_module_1.StatisticsModule,
@@ -71,7 +74,6 @@ exports.AppModule = AppModule = __decorate([
             product_group_module_1.ProductGroupModule,
             settings_module_1.SettingsModule,
             product_module_1.ProductModule,
-            supplier_module_1.SupplierModule,
             payment_module_1.PaymentModule,
             paid_supplier_module_1.PaidSupplierModule,
             arrived_module_1.ArrivedModule,

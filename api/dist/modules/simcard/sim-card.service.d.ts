@@ -1,26 +1,23 @@
-import { OnModuleInit } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateClientCrmDto } from './dto/create-client-crm.dto';
-import { FindAllClientCrmQueryDto } from './dto/findAll-client-crm.dto';
-import { UpdateClientCrmDto } from './dto/update-client-crm.dto';
-export declare class ClientCrmService implements OnModuleInit {
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateSimCardDto } from "./dto/create-sim-card.dto";
+import { FindAllSimCardQueryDto } from "./dto/findAll-sim-card.dto";
+import { UpdateSimCardDto } from "./dto/update-sim-card.dto";
+export declare class SimCardService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    onModuleInit(): Promise<void>;
-    create(createClientCrmDto: CreateClientCrmDto): Promise<{
-        isDeleted: boolean;
+    create(createSimCardDto: CreateSimCardDto): Promise<{
+        description: string | null;
+        isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         id: number;
-        balance: number;
         clientId: number;
-        productId: number;
-        key: string;
-        domain: string | null;
-        isFullAccess: boolean;
-        expiredFullAccess: Date | null;
+        isActive: boolean;
+        company: string;
+        activeDate: Date;
+        phoneNumber: string;
     }>;
-    findAll(dto: FindAllClientCrmQueryDto): Promise<{
+    findAll(dto: FindAllSimCardQueryDto): Promise<{
         total: number;
         page: number;
         limit: number;
@@ -43,17 +40,16 @@ export declare class ClientCrmService implements OnModuleInit {
                 modifyId: number | null;
             };
         } & {
-            isDeleted: boolean;
+            description: string | null;
+            isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
             id: number;
-            balance: number;
             clientId: number;
-            productId: number;
-            key: string;
-            domain: string | null;
-            isFullAccess: boolean;
-            expiredFullAccess: Date | null;
+            isActive: boolean;
+            company: string;
+            activeDate: Date;
+            phoneNumber: string;
         })[];
     }>;
     findOne(id: number): Promise<{
@@ -75,42 +71,39 @@ export declare class ClientCrmService implements OnModuleInit {
             modifyId: number | null;
         };
     } & {
-        isDeleted: boolean;
+        description: string | null;
+        isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         id: number;
-        balance: number;
         clientId: number;
-        productId: number;
-        key: string;
-        domain: string | null;
-        isFullAccess: boolean;
-        expiredFullAccess: Date | null;
+        isActive: boolean;
+        company: string;
+        activeDate: Date;
+        phoneNumber: string;
     }>;
-    update(id: number, dto: UpdateClientCrmDto): Promise<{
-        isDeleted: boolean;
+    update(id: number, dto: UpdateSimCardDto): Promise<{
+        description: string | null;
+        isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         id: number;
-        balance: number;
         clientId: number;
-        productId: number;
-        key: string;
-        domain: string | null;
-        isFullAccess: boolean;
-        expiredFullAccess: Date | null;
+        isActive: boolean;
+        company: string;
+        activeDate: Date;
+        phoneNumber: string;
     }>;
     remove(id: number): Promise<{
-        isDeleted: boolean;
+        description: string | null;
+        isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         id: number;
-        balance: number;
         clientId: number;
-        productId: number;
-        key: string;
-        domain: string | null;
-        isFullAccess: boolean;
-        expiredFullAccess: Date | null;
+        isActive: boolean;
+        company: string;
+        activeDate: Date;
+        phoneNumber: string;
     }>;
 }

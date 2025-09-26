@@ -39,10 +39,13 @@ export class ArrivedService {
 			const count = await this.prisma.arrived.count();
 			const requiredCount = 5;
 			if (count < requiredCount) {
+				const supplier = await this.prisma.supplier.findFirst({
+					where: { isDeleted: false },
+				});
 				for (let i = count; i < requiredCount; i++) {
 					await this.create(
 						{
-							supplierId: 1,
+							supplierId: supplier.id,
 							date: new Date(),
 							description: "description asdfghj",
 							products: [{ count: 1, productId: 1 }],
