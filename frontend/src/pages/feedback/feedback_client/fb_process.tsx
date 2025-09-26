@@ -24,7 +24,7 @@ export default function FbProcess() {
 
   useEffect(() => {
     if (data && data.state === "TODO") {
-      navigate("/appeals");
+      navigate("/fb/appeals");
     }
   }, [data, navigate]);
 

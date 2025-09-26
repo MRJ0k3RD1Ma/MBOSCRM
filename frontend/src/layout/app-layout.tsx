@@ -11,7 +11,7 @@ export default function AppLayout() {
   const pageTitle = usePageTitle();
   const location = useLocation();
 
-  const isAppealsPage = location.pathname.startsWith("/appeals");
+  const isAppealsPage = location.pathname.startsWith("/fb/appeals");
   const isStartPage = location.pathname.startsWith("/fb/start");
   const isProcessPage = location.pathname.startsWith("/fb/process");
   const isSuccessPage = location.pathname.startsWith("/success");

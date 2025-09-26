@@ -10,6 +10,7 @@ import {
   FileTextOutlined,
   HomeOutlined,
   InboxOutlined,
+  MessageOutlined,
   NumberOutlined,
   ProfileOutlined,
   SettingOutlined,
@@ -206,17 +207,22 @@ const menuItems = [
   {
     key: "/feedbacks",
     label: "Fikr-mulohazalar",
-    icon: <HomeOutlined />,
+    icon: <SolutionOutlined />,
   },
   {
     key: "/sms",
     label: "SMS xabarlar",
-    icon: <HomeOutlined />,
+    icon: <MessageOutlined />, 
+  },
+  {
+    key: "/simcard",
+    label: "Simkartalar",
+    icon: <NumberOutlined />,
   },
   {
     key: "/appeals",
     label: "Murojatlar",
-    icon: <HomeOutlined />,
+    icon: <FileTextOutlined />,
   },
   {
     key: "setting-group",
@@ -233,16 +239,6 @@ const menuItems = [
         label: "Boshqa xarajat guruhlari",
         icon: <ContainerOutlined />,
       },
-      // {
-      //   key: "/",
-      //   label: "Viloyatlar",
-      //   icon: <BankOutlined />,
-      // },
-      // {
-      //   key: "/",
-      //   label: "Tumanlar",
-      //   icon: <ApartmentOutlined />,
-      // },
       {
         key: "/payment",
         label: "To‘lov turlari",

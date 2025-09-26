@@ -41,6 +41,8 @@ const nameMap: Record<string, string> = {
   subscribe: "Obuna tafsiloti",
   users: "Foydalanuvchilar ro’yhati",
   profile: "Profil",
+  appeals: "Murojatlar",
+  simcard: "Simkartalar",
 };
 
 export function usePageTitle() {
