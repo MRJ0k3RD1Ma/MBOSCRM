@@ -11,11 +11,12 @@ export default function AppLayout() {
   const pageTitle = usePageTitle();
   const location = useLocation();
 
+  const isAppealsPage = location.pathname.startsWith("/appeals");
   const isStartPage = location.pathname.startsWith("/fb/start");
   const isProcessPage = location.pathname.startsWith("/fb/process");
-  const isSuccessPage = location.pathname.startsWith("/fb/success");
+  const isSuccessPage = location.pathname.startsWith("/success");
 
-  if (isProcessPage || isStartPage || isSuccessPage) {
+  if (isAppealsPage || isProcessPage || isStartPage || isSuccessPage) {
     return (
       <div style={{ minHeight: "100vh" }}>
         <Outlet />

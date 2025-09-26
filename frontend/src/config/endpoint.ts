@@ -215,9 +215,9 @@ export const smsEndpoints = {
 };
 
 export const appealEndpoints = {
-  all: "/api/appeal",
-  one: (id: string) => `/api/appeal/${id}`,
-  create: "/api/appeal",
-  update: (id: string) => `/api/appeal/${id}`,
-  delete: (id: string) => `/api/appeal/${id}`,
+  all: "appeal",
+  one: (id: string) => `appeal/${id}`,
+  create: "appeal",
+  update: (id: string) => `appeal/${id}`,
+  delete: (id: string) => `appeal/${id}`,
 };

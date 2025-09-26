@@ -252,7 +252,7 @@ export const router = createBrowserRouter([
             element: <FbProcess />,
           },
           {
-            path: "fb/success",
+            path: "success",
             element: <FbSuccess />,
           },
           {

@@ -1,6 +1,7 @@
 import { Button, Spin } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { ErrorPage } from "../../error/error";
 import Logo from "../../../../public/LogoMbos.svg";
 import info from "../../../../public/info.svg";
 import raceta from "../../../../public/raceta.svg";
@@ -24,6 +25,9 @@ export default function FbStart() {
         <Spin size="large" />
       </div>
     );
+  }
+  if (!data) {
+    return <ErrorPage />;
   }
 
   return (
