@@ -47,6 +47,7 @@ const sms_module_1 = require("./modules/sms/sms.module");
 const access_module_1 = require("./modules/access/access.module");
 const paid_crm_module_1 = require("./modules/paid-crm/paid-crm.module");
 const sim_card_module_1 = require("./modules/simcard/sim-card.module");
+const appeal_module_1 = require("./modules/appeal/appeal.module");
 const MainModules = [eskiz_module_1.EskizModule, client_crm_module_1.ClientCrmModule, paid_crm_module_1.PaidCrmModule];
 let AppModule = class AppModule {
 };
@@ -89,6 +90,7 @@ exports.AppModule = AppModule = __decorate([
             sale_todo_module_1.SaleTodoModule,
             payme_module_1.PaymeModule,
             sms_module_1.SmsModule,
+            appeal_module_1.AppealModule,
             todo_module_1.TodoModule,
             sale_feedback_module_1.SaleFeedbackModule,
             schedule_1.ScheduleModule.forRoot(),

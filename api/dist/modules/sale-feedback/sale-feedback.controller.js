@@ -31,7 +31,10 @@ let SaleFeedbackController = class SaleFeedbackController {
         return this.saleFeedbackService.findAll(dto);
     }
     findOne(id) {
-        return this.saleFeedbackService.findOne(+id);
+        return this.saleFeedbackService.findOne(id);
+    }
+    findOneSaleFeedback(alias) {
+        return this.saleFeedbackService.findOneByAlias(alias);
     }
     update(alias, updateSaleFeedbackDto) {
         return this.saleFeedbackService.update(alias, updateSaleFeedbackDto);
@@ -61,13 +64,21 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SaleFeedbackController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(':id'),
+    (0, common_1.Get)('id/:id'),
     (0, decorator_auth_1.DecoratorWrapper)('saleFeedbackGetOne'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], SaleFeedbackController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Get)('alias/:alias'),
+    (0, decorator_auth_1.DecoratorWrapper)('saleFeedbackGetOneWIthAlias'),
+    __param(0, (0, common_1.Param)('alias', new common_1.ParseUUIDPipe({ version: '4' }))),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], SaleFeedbackController.prototype, "findOneSaleFeedback", null);
 __decorate([
     (0, common_1.Patch)(':alias'),
     (0, decorator_auth_1.DecoratorWrapper)('saleFeedbackUpdate'),

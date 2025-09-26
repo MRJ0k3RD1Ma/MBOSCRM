@@ -182,9 +182,11 @@ export const paidOtherGroupEndpoints = {
 
 export const saleFeedbackEndpoints = {
   all: "sale-feedback",
+  one: (id: string) => `sale-feedback/id/${id}`,
+  oneByAlias: (alias: string) => `sale-feedback/alias/${alias}`,
   create: "sale-feedback",
-  one: (id: string) => `sale-feedback/${id}`,
   update: (alias: string) => `sale-feedback/${alias}`,
+  updateState: (alias: string) => `sale-feedback/${alias}/state`,
   delete: (id: string) => `sale-feedback/${id}`,
 };
 
@@ -210,4 +212,12 @@ export const smsEndpoints = {
   one: (id: string) => `sms/${id}`,
   update: (id: string) => `sms/${id}`,
   delete: (id: string) => `sms/${id}`,
+};
+
+export const appealEndpoints = {
+  all: "appeal",
+  one: (id: string) => `appeal/${id}`,
+  create: "appeal",
+  update: (id: string) => `appeal/${id}`,
+  delete: (id: string) => `appeal/${id}`,
 };

@@ -38,6 +38,7 @@ import { SmsModule } from "./modules/sms/sms.module";
 import { AccessModule } from "./modules/access/access.module";
 import { PaidCrmModule } from "./modules/paid-crm/paid-crm.module";
 import { SimCardModule } from "./modules/simcard/sim-card.module";
+import { AppealModule } from "./modules/appeal/appeal.module";
 
 const MainModules = [EskizModule, ClientCrmModule, PaidCrmModule];
 
@@ -78,6 +79,7 @@ const MainModules = [EskizModule, ClientCrmModule, PaidCrmModule];
 		SaleTodoModule,
 		PaymeModule,
 		SmsModule,
+		AppealModule,
 		TodoModule,
 		SaleFeedbackModule,
 		ScheduleModule.forRoot(),

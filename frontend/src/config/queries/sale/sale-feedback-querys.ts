@@ -6,14 +6,13 @@ import { saleFeedbackEndpoints } from "../../endpoint";
 
 export interface CreateSaleFeedbackInput {
   saleId: number;
-  name: string;
+  name?: string;
   description?: string;
-  score: number;
+  score?: number;
 }
 
 export interface UpdateSaleFeedbackInput {
   alias: string;
-  saleId?: number;
   name?: string;
   description?: string;
   score?: number;
@@ -21,13 +20,18 @@ export interface UpdateSaleFeedbackInput {
   result?: string;
 }
 
+export interface UpdateSaleFeedbackStateInput {
+  alias: string;
+  state: string;
+}
+
 export interface SaleFeedback {
   id: number;
   saleId: number;
   alias: string;
-  name: string;
-  description: string;
-  score: number;
+  name: string | null;
+  description: string | null;
+  score: number | null;
   state: string;
   result: string;
   isDeleted: boolean;
@@ -63,7 +67,7 @@ export const useGetAllSaleFeedback = (params?: {
 
 export const useGetSaleFeedbackById = (id?: number, enabled = true) => {
   return useQuery<SaleFeedback>({
-    queryKey: ["sale-feedback", id],
+    queryKey: ["sale-feedback", "id", id],
     enabled: enabled && !!id,
     queryFn: async () => {
       const { data } = await axiosPrivate.get(
@@ -74,6 +78,20 @@ export const useGetSaleFeedbackById = (id?: number, enabled = true) => {
   });
 };
 
+export const useGetSaleFeedbackByAlias = (alias?: string, enabled = true) => {
+  return useQuery<SaleFeedback>({
+    queryKey: ["sale-feedback", "alias", alias],
+    enabled: enabled && !!alias,
+    queryFn: async () => {
+      const { data } = await axiosPrivate.get(
+        saleFeedbackEndpoints.oneByAlias(String(alias))
+      );
+      return data;
+    },
+  });
+};
+
+// -------------------- MUTATIONS --------------------
 export const useCreateSaleFeedback = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -110,6 +128,28 @@ export const useUpdateSaleFeedback = () => {
     },
     onError: () => {
       notification.error({ message: "Fikrni yangilashda xatolik yuz berdi" });
+    },
+  });
+};
+
+export const useUpdateSaleFeedbackState = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ alias, state }: UpdateSaleFeedbackStateInput) => {
+      const { data } = await axiosPrivate.patch(
+        saleFeedbackEndpoints.updateState(alias),
+        { state }
+      );
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sale-feedback"] });
+      notification.success({ message: "Fikr holati yangilandi" });
+    },
+    onError: () => {
+      notification.error({
+        message: "Fikr holatini yangilashda xatolik yuz berdi",
+      });
     },
   });
 };

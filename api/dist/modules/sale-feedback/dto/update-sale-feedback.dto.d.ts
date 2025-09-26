@@ -1,7 +1,8 @@
-import { CreateSaleFeedbackDto } from './create-sale-feedback.dto';
 import { SaleFeedbackResult, SaleFeedbackState } from '@prisma/client';
-declare const UpdateSaleFeedbackDto_base: import("@nestjs/common").Type<Partial<CreateSaleFeedbackDto>>;
-export declare class UpdateSaleFeedbackDto extends UpdateSaleFeedbackDto_base {
+export declare class UpdateSaleFeedbackDto {
+    name?: string;
+    description?: string;
+    score?: number;
     state?: SaleFeedbackState;
     result?: SaleFeedbackResult;
 }
@@ -11,4 +12,3 @@ export declare class AliasParamDto {
 export declare class UpdateStateDto {
     state: SaleFeedbackState;
 }
-export {};

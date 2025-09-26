@@ -11,12 +11,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateStateDto = exports.AliasParamDto = exports.UpdateSaleFeedbackDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
-const create_sale_feedback_dto_1 = require("./create-sale-feedback.dto");
 const client_1 = require("@prisma/client");
 const class_validator_1 = require("class-validator");
-class UpdateSaleFeedbackDto extends (0, swagger_1.PartialType)(create_sale_feedback_dto_1.CreateSaleFeedbackDto) {
+class UpdateSaleFeedbackDto {
 }
 exports.UpdateSaleFeedbackDto = UpdateSaleFeedbackDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'Yetkazib berish kechikdi',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(255),
+    __metadata("design:type", String)
+], UpdateSaleFeedbackDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'Mahsulot 2 kun kechikib keldi.',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateSaleFeedbackDto.prototype, "description", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 3,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], UpdateSaleFeedbackDto.prototype, "score", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 'TODO' }),
     (0, class_validator_1.IsOptional)(),

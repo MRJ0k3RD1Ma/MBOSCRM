@@ -30,6 +30,7 @@ import ClientPaidsTable from "./tables/client-paids-table";
 import ClientSaleProductsTable from "./tables/client-sale-products-table";
 import ClientInfos from "./ui/client-infos";
 import ClientFormModal from "./ui/clients-form-modal";
+import ClientSimCardTable from "./tables/client-simcard-table";
 
 const { Title } = Typography;
 
@@ -101,6 +102,11 @@ export default function ClientPage() {
       key: "5",
       label: "Sotilgan mahsulotlar",
       children: <ClientSaleProductsTable clientId={clientId} />,
+    },
+    {
+      key: "6",
+      label: "Simkartalar",
+      children: <ClientSimCardTable clientId={clientId} />,
     },
   ];
 

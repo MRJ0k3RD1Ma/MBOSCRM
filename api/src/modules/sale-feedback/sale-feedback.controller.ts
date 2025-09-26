@@ -23,7 +23,7 @@ import { Role } from 'src/common/auth/roles/role.enum';
 
 @Controller('sale-feedback')
 export class SaleFeedbackController {
-  constructor(private readonly saleFeedbackService: SaleFeedbackService) {}
+  constructor(private readonly saleFeedbackService: SaleFeedbackService) { }
 
   @Post()
   @DecoratorWrapper('saleFeedbackCreate', true, [Role.Admin])
@@ -37,10 +37,16 @@ export class SaleFeedbackController {
     return this.saleFeedbackService.findAll(dto);
   }
 
-  @Get(':id')
+  @Get('id/:id')
   @DecoratorWrapper('saleFeedbackGetOne')
-  findOne(@Param('id', ParseIntPipe) id: string) {
-    return this.saleFeedbackService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.saleFeedbackService.findOne(id);
+  }
+
+  @Get('alias/:alias')
+  @DecoratorWrapper('saleFeedbackGetOneWIthAlias')
+  findOneSaleFeedback(@Param('alias', new ParseUUIDPipe({ version: '4' })) alias: string) {
+    return this.saleFeedbackService.findOneByAlias(alias);
   }
 
   @Patch(':alias')
