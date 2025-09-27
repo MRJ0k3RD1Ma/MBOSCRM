@@ -13,6 +13,7 @@ exports.env = (0, envalid_1.cleanEnv)(process.env, {
     DATABASE_URL: (0, envalid_1.str)(),
     BOT_TOKEN: (0, envalid_1.str)(),
     BACKEND_URL: (0, envalid_1.str)(),
+    FRONTEND_URL: (0, envalid_1.str)(),
     IS_MAIN: (0, envalid_1.bool)({ default: false }),
     MAIN_BACKEND_URL: (0, envalid_1.str)({
         default: undefined,

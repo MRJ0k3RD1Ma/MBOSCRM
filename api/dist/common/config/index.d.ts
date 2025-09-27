@@ -7,6 +7,7 @@ export declare const env: Readonly<{
     DATABASE_URL: string;
     BOT_TOKEN: string;
     BACKEND_URL: string;
+    FRONTEND_URL: string;
     IS_MAIN: boolean;
     MAIN_BACKEND_URL: any;
     MAIN_KEY: string;
