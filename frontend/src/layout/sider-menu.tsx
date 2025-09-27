@@ -215,7 +215,7 @@ const menuItems = [
     icon: <MessageOutlined />, 
   },
   {
-    key: "/simcard",
+    key: "/simcards",
     label: "Simkartalar",
     icon: <NumberOutlined />,
   },
