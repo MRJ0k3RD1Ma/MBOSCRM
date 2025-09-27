@@ -10,6 +10,7 @@ exports.SaleFeedbackModule = void 0;
 const common_1 = require("@nestjs/common");
 const sale_feedback_service_1 = require("./sale-feedback.service");
 const sale_feedback_controller_1 = require("./sale-feedback.controller");
+const sms_module_1 = require("../sms/sms.module");
 let SaleFeedbackModule = class SaleFeedbackModule {
 };
 exports.SaleFeedbackModule = SaleFeedbackModule;
@@ -17,6 +18,8 @@ exports.SaleFeedbackModule = SaleFeedbackModule = __decorate([
     (0, common_1.Module)({
         controllers: [sale_feedback_controller_1.SaleFeedbackController],
         providers: [sale_feedback_service_1.SaleFeedbackService],
+        exports: [sale_feedback_service_1.SaleFeedbackService],
+        imports: [sms_module_1.SmsModule],
     })
 ], SaleFeedbackModule);
 //# sourceMappingURL=sale-feedback.module.js.map

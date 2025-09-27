@@ -12,15 +12,15 @@ const sale_service_1 = require("./sale.service");
 const sale_controller_1 = require("./sale.controller");
 const sale_product_module_1 = require("../sale-product/sale-product.module");
 const subscribe_module_1 = require("../subscribe/subscribe.module");
-const sale_feedback_service_1 = require("../sale-feedback/sale-feedback.service");
+const sale_feedback_module_1 = require("../sale-feedback/sale-feedback.module");
 let SaleModule = class SaleModule {
 };
 exports.SaleModule = SaleModule;
 exports.SaleModule = SaleModule = __decorate([
     (0, common_1.Module)({
         controllers: [sale_controller_1.SaleController],
-        providers: [sale_service_1.SaleService, sale_feedback_service_1.SaleFeedbackService],
-        imports: [sale_product_module_1.SaleProductModule, subscribe_module_1.SubscribeModule],
+        providers: [sale_service_1.SaleService],
+        imports: [sale_product_module_1.SaleProductModule, subscribe_module_1.SubscribeModule, sale_feedback_module_1.SaleFeedbackModule],
     })
 ], SaleModule);
 //# sourceMappingURL=sale.module.js.map

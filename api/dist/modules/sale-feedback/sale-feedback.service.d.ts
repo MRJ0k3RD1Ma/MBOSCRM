@@ -1,10 +1,12 @@
-import { CreateSaleFeedbackDto } from './dto/create-sale-feedback.dto';
-import { UpdateSaleFeedbackDto, UpdateStateDto } from './dto/update-sale-feedback.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { FindAllSaleFeedbackDto } from './dto/findAll-sale-feedback.dto';
+import { CreateSaleFeedbackDto } from "./dto/create-sale-feedback.dto";
+import { UpdateSaleFeedbackDto, UpdateStateDto } from "./dto/update-sale-feedback.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { FindAllSaleFeedbackDto } from "./dto/findAll-sale-feedback.dto";
+import { SmsService } from "../sms/sms.service";
 export declare class SaleFeedbackService {
     private readonly prisma;
-    constructor(prisma: PrismaService);
+    private readonly smsService;
+    constructor(prisma: PrismaService, smsService: SmsService);
     create(createSaleFeedbackDto: CreateSaleFeedbackDto): Promise<{
         description: string | null;
         name: string | null;

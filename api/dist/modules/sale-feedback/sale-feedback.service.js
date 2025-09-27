@@ -14,22 +14,26 @@ const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const http_error_1 = require("../../common/exception/http.error");
 const client_1 = require("@prisma/client");
+const crypto_1 = require("crypto");
 const uuid_1 = require("uuid");
+const sms_service_1 = require("../sms/sms.service");
+const config_1 = require("../../common/config");
 let SaleFeedbackService = class SaleFeedbackService {
-    constructor(prisma) {
+    constructor(prisma, smsService) {
         this.prisma = prisma;
+        this.smsService = smsService;
     }
     async create(createSaleFeedbackDto) {
         const sale = await this.prisma.sale.findUnique({
             where: { id: createSaleFeedbackDto.saleId },
         });
         if (!sale) {
-            throw new http_error_1.HttpError({ message: 'Sale not found' });
+            throw new http_error_1.HttpError({ message: "Sale not found" });
         }
         const saleFeedback = await this.prisma.saleFeedback.create({
             data: {
                 name: createSaleFeedbackDto.name,
-                alias: (0, uuid_1.v4)(),
+                alias: (0, crypto_1.hash)("sha256", (0, uuid_1.v4)(), "base64url").slice(0, 14),
                 saleId: createSaleFeedbackDto.saleId,
                 description: createSaleFeedbackDto.description,
                 score: createSaleFeedbackDto.score,
@@ -45,7 +49,7 @@ let SaleFeedbackService = class SaleFeedbackService {
             isDeleted: false,
         };
         if (dto.name) {
-            where.name = { contains: name, mode: 'insensitive' };
+            where.name = { contains: name, mode: "insensitive" };
         }
         if (dto.state) {
             where.state = state;
@@ -61,7 +65,7 @@ let SaleFeedbackService = class SaleFeedbackService {
                 where,
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { createdAt: 'desc' },
+                orderBy: { createdAt: "desc" },
             }),
             this.prisma.saleFeedback.count({ where }),
         ]);
@@ -102,10 +106,15 @@ let SaleFeedbackService = class SaleFeedbackService {
     }
     async update(alias, updateSaleFeedbackDto) {
         const saleFeedback = await this.prisma.saleFeedback.findFirst({
-            where: { alias }
+            where: { alias },
+            include: { sale: { include: { client: true } } },
         });
         if (!saleFeedback) {
-            throw new http_error_1.HttpError({ message: 'SaleFeedback not found' });
+            throw new http_error_1.HttpError({ message: "SaleFeedback not found" });
+        }
+        if (saleFeedback.state !== client_1.SaleFeedbackState.WAITING &&
+            updateSaleFeedbackDto.state === client_1.SaleFeedbackState.WAITING) {
+            await this.smsService.sendMessage(saleFeedback.sale.client.phone, `Hurmatli mijoz! Iltimos, ishni bajargan xodimning ishiga baho bering: ${config_1.env.FRONTEND_URL}${saleFeedback.alias}`, config_1.env.MAIN_KEY);
         }
         return this.prisma.saleFeedback.update({
             where: { id: saleFeedback.id },
@@ -124,7 +133,7 @@ let SaleFeedbackService = class SaleFeedbackService {
             where: { alias: alias },
         });
         if (!saleFeedback) {
-            throw new http_error_1.HttpError({ message: 'SaleFeedback not found' });
+            throw new http_error_1.HttpError({ message: "SaleFeedback not found" });
         }
         return this.prisma.saleFeedback.update({
             where: { id: saleFeedback.id },
@@ -138,7 +147,7 @@ let SaleFeedbackService = class SaleFeedbackService {
             where: { id, isDeleted: false },
         });
         if (!saleFeedback) {
-            throw new http_error_1.HttpError({ message: 'SaleFeedback not found' });
+            throw new http_error_1.HttpError({ message: "SaleFeedback not found" });
         }
         return this.prisma.saleFeedback.update({
             where: { id },
@@ -149,6 +158,7 @@ let SaleFeedbackService = class SaleFeedbackService {
 exports.SaleFeedbackService = SaleFeedbackService;
 exports.SaleFeedbackService = SaleFeedbackService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        sms_service_1.SmsService])
 ], SaleFeedbackService);
 //# sourceMappingURL=sale-feedback.service.js.map
