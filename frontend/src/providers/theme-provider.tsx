@@ -1,14 +1,13 @@
-import { ConfigProvider, theme as antdTheme } from "antd";
+import { ConfigProvider } from "antd";
 import {
   createContext,
   useContext,
-  useEffect,
   useState,
   type ReactNode,
 } from "react";
-import type { ThemeConfig } from "antd/es/config-provider/context";
-
-export type ThemeType = "light" | "dark";
+import type { ThemeType } from "./theme.controller";
+import ThemeController from "./theme.controller";
+import { useThemeConfig } from "./theme.config";
 
 interface ThemeContextType {
   theme: ThemeType;
@@ -18,77 +17,14 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<ThemeType>(() => {
-    return (localStorage.getItem("app-theme") as ThemeType) || "light";
-  });
+  const [theme, setTheme] = useState(() => ThemeController.getCurrent());
 
   const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("app-theme", newTheme);
+    const theme  = ThemeController.toggleTheme()
+    setTheme(theme);
   };
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
-  const config: ThemeConfig = {
-    algorithm:
-      theme === "dark" ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
-    token:
-      theme === "dark"
-        ? {
-            colorPrimary: "#1677ff",
-            colorBgContainer: "#001529",
-            colorBgLayout: "#0a0f1e",
-            colorText: "#e2e8f0",
-          }
-        : {
-            colorPrimary: "#1677ff",
-            colorBgContainer: "#ffffff",
-            colorBgLayout: "#f0f2f5",
-            colorText: "#000000",
-          },
-    components:
-      theme === "dark"
-        ? {
-            Layout: {
-              siderBg: "#001529",
-              headerBg: "#0a0f1e",
-              bodyBg: "#0a0f1e",
-              footerBg: "#0f172a",
-            },
-            Drawer: {
-              colorText: "#e2e8f0",
-              colorBgElevated: "#001529",
-            },
-            Table: {
-              headerBg: "#1e293b",
-              headerColor: "#e2e8f0",
-            },
-            Modal: {
-              contentBg: "#0f172a",
-              headerBg: "#0f172a",
-              titleColor: "#e2e8f0",
-              colorText: "#e2e8f0",
-            },
-          }
-        : {
-            Layout: {
-              bodyBg: "#ffffff",
-            },
-            Table: {
-              headerBg: "#f1f5f9",
-              headerColor: "#000000",
-            },
-            Modal: {
-              contentBg: "#ffffff",
-              headerBg: "#ffffff",
-              titleColor: "#000000",
-              colorText: "#000000",
-            },
-          },
-  };
+  const config = useThemeConfig(theme)
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
@@ -104,3 +40,10 @@ export const useThemeContext = () => {
   }
   return context;
 };
+
+
+// incapsulation
+/*
+UI (UI / Config / Logic)
+
+*/
