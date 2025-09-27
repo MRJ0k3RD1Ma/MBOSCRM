@@ -41,7 +41,8 @@ import Sales from "../pages/sale/sales";
 import SalesFormPage from "../pages/sale/ui/sales-form-page";
 import Server from "../pages/server/server";
 import Servers from "../pages/server/servers";
-import SimCard from "../pages/simcard/simcard";
+import SimCardDetail from "../pages/simcard/simcard-detail";
+import SimCards from "../pages/simcard/simcards";
 import Sms from "../pages/sms/sms";
 import Subscribe from "../pages/subscribe/subscribe";
 import Subscribes from "../pages/subscribe/subscribes";
@@ -243,8 +244,12 @@ export const router = createBrowserRouter([
             element: <Sms />,
           },
           {
-            path: "simcard",
-            element: <SimCard />,
+            path: "simcards",
+            element: <SimCards />,
+          },
+          {
+            path: "simcard/:id",
+            element: <SimCardDetail />,
           },
           {
             path: "appeals",

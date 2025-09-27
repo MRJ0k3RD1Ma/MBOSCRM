@@ -221,3 +221,11 @@ export const appealEndpoints = {
   update: (id: string) => `appeal/${id}`,
   delete: (id: string) => `appeal/${id}`,
 };
+
+export const simCardEndpoints = {
+  all: "sim-card",
+  create: "sim-card",
+  one: (id: string) => `sim-card/${id}`,
+  update: (id: string) => `sim-card/${id}`,
+  delete: (id: string) => `sim-card/${id}`,
+};
