@@ -20,7 +20,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState(() => ThemeController.getCurrent());
 
   const toggleTheme = () => {
-    const theme  = ThemeController.toggleTheme()
+    const theme = ThemeController.toggleTheme()
     setTheme(theme);
   };
 
@@ -40,10 +40,3 @@ export const useThemeContext = () => {
   }
   return context;
 };
-
-
-// incapsulation
-/*
-UI (UI / Config / Logic)
-
-*/

@@ -37,7 +37,7 @@ export default function SaleFeedbackButtons({
           icon={<PlusOutlined />}
           type="primary"
           loading={updateState.isPending}
-          onClick={() => handleUpdateState("COMPLETED")}
+          onClick={() => handleUpdateState("WAITING")}
         >
           Ish bajarib tugallanganligini belgilash
         </Button>

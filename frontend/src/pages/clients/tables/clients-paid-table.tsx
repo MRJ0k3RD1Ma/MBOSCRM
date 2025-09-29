@@ -59,7 +59,7 @@ export default function ClientsPaidTable({
 
   const handleDelete = (id: number) => {
     console.log(id);
-    
+
     deletePaidClient.mutate(id);
   };
 
@@ -89,7 +89,12 @@ export default function ClientsPaidTable({
       dataIndex: "paidDate",
       render: (date: string) => formatDate(date),
     },
-    { title: "Narxi", dataIndex: "price" },
+    {
+      title: "Narxi",
+      dataIndex: "price",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
     {
       title: "Amallar",
       key: "actions",
