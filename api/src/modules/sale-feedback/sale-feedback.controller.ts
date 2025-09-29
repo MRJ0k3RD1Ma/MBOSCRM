@@ -45,14 +45,14 @@ export class SaleFeedbackController {
 
   @Get('alias/:alias')
   @DecoratorWrapper('saleFeedbackGetOneWIthAlias')
-  findOneSaleFeedback(@Param('alias', new ParseUUIDPipe({ version: '4' })) alias: string) {
+  findOneSaleFeedback(@Param('alias' ) alias: string) {
     return this.saleFeedbackService.findOneByAlias(alias);
   }
 
   @Patch(':alias')
   @DecoratorWrapper('saleFeedbackUpdate')
   update(
-    @Param('alias', new ParseUUIDPipe({ version: '4' })) alias: string,
+    @Param('alias') alias: string,
     @Body() updateSaleFeedbackDto: UpdateSaleFeedbackDto,
   ) {
     return this.saleFeedbackService.update(alias, updateSaleFeedbackDto);
@@ -62,7 +62,7 @@ export class SaleFeedbackController {
   @DecoratorWrapper('saleFeedbackUpdateState')
   updateState(
     @Body() dto: UpdateStateDto,
-    @Param('alias', new ParseUUIDPipe({ version: '4' })) alias: string,
+    @Param('alias') alias: string,
   ) {
     return this.saleFeedbackService.updateState(dto, alias);
   }
