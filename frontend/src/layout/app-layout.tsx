@@ -6,17 +6,20 @@ import { Layout } from "antd";
 import SiderMenu from "./sider-menu";
 import { useState } from "react";
 
+const fullPageRoutes = [
+  "/fb/appeals",
+  "/fb/start",
+  "/fb/process",
+  "/success"
+]
+
 export default function AppLayout() {
-  const [collapsed, setCollapsed] = useState(false);
   const pageTitle = usePageTitle();
   const location = useLocation();
+  
+  const [collapsed, setCollapsed] = useState(false);
 
-  const isAppealsPage = location.pathname.startsWith("/fb/appeals");
-  const isStartPage = location.pathname.startsWith("/fb/start");
-  const isProcessPage = location.pathname.startsWith("/fb/process");
-  const isSuccessPage = location.pathname.startsWith("/success");
-
-  if (isAppealsPage || isProcessPage || isStartPage || isSuccessPage) {
+  if (fullPageRoutes.some(route => location.pathname.startsWith(route))) {
     return (
       <div style={{ minHeight: "100vh" }}>
         <Outlet />
