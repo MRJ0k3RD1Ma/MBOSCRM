@@ -47,7 +47,7 @@ let SubscribeService = class SubscribeService {
                 where: { id: sale.clientId },
             });
             await this.create({
-                clientId: sale.clientId,
+                clientId: client.id,
                 price: saleProduct.price * saleProduct.count,
                 saleId: sale.id,
                 state: client_1.SubscribeState.NOTPAYING,
@@ -64,6 +64,12 @@ let SubscribeService = class SubscribeService {
             },
         });
         for (const sale of runningSales) {
+            const client = await this.prisma.client.findUnique({
+                where: { id: sale.clientId, isDeleted: false },
+            });
+            if (!client) {
+                continue;
+            }
             const lastSubscribe = await this.prisma.subscribe.findFirst({
                 where: { saleId: sale.id },
                 orderBy: { paying_date: "desc" },

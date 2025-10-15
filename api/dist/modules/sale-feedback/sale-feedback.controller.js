@@ -74,7 +74,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)('alias/:alias'),
     (0, decorator_auth_1.DecoratorWrapper)('saleFeedbackGetOneWIthAlias'),
-    __param(0, (0, common_1.Param)('alias', new common_1.ParseUUIDPipe({ version: '4' }))),
+    __param(0, (0, common_1.Param)('alias')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
@@ -82,7 +82,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':alias'),
     (0, decorator_auth_1.DecoratorWrapper)('saleFeedbackUpdate'),
-    __param(0, (0, common_1.Param)('alias', new common_1.ParseUUIDPipe({ version: '4' }))),
+    __param(0, (0, common_1.Param)('alias')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_sale_feedback_dto_1.UpdateSaleFeedbackDto]),
@@ -92,7 +92,7 @@ __decorate([
     (0, common_1.Patch)(':alias/state'),
     (0, decorator_auth_1.DecoratorWrapper)('saleFeedbackUpdateState'),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)('alias', new common_1.ParseUUIDPipe({ version: '4' }))),
+    __param(1, (0, common_1.Param)('alias')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [update_sale_feedback_dto_1.UpdateStateDto, String]),
     __metadata("design:returntype", void 0)

@@ -44,7 +44,7 @@ export class SubscribeService implements OnModuleInit {
 				where: { id: sale.clientId },
 			});
 			await this.create({
-				clientId: sale.clientId,
+				clientId: client.id,
 				price: saleProduct.price * saleProduct.count,
 				saleId: sale.id,
 				state: SubscribeState.NOTPAYING,
@@ -65,6 +65,12 @@ export class SubscribeService implements OnModuleInit {
 		});
 
 		for (const sale of runningSales) {
+			const client = await this.prisma.client.findUnique({
+				where: { id: sale.clientId, isDeleted: false },
+			});
+			if (!client) {
+				continue;
+			}
 			const lastSubscribe = await this.prisma.subscribe.findFirst({
 				where: { saleId: sale.id },
 				orderBy: { paying_date: "desc" },
