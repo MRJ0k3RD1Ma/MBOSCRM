@@ -47,9 +47,9 @@ export default function ServerPaidTable() {
   return (
     <Card
       className="ClientsPaidTable"
-      title={` Oylik server chiqimlari  ${
-        data?.price.toLocaleString("uz-UZ") + " so'm"
-      }`}
+
+      title={` Oylik server chiqimlari ${data?.price ? data?.price.toLocaleString("uz-UZ") + " so'm" : "0"}`}
+
     >
       <Table
         columns={columns}

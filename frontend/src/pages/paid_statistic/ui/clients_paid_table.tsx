@@ -65,9 +65,7 @@ export default function ClientsPaidTable() {
   return (
     <Card
       className="ClientsPaidTable"
-      title={` Oylik mijoz daromadlari ${
-        data?.price.toLocaleString("uz-UZ") + " so'm"
-      }`}
+      title={` Oylik mijoz daromadlari ${data?.price ? data?.price.toLocaleString("uz-UZ") + " so'm" : "0"}`}
     >
       <Table
         columns={columns}

@@ -60,9 +60,8 @@ const StatCard: React.FC<StatCardProps> = ({
   const navigate = useNavigate();
   return (
     <Card
-      className={`!border ${
-        isDark ? "!border-white/20 !bg-white/10" : "!border-gray-200 !bg-white"
-      } !shadow-lg !hover:shadow-xl !transition-all !duration-300 hover:scale-[1.03] !backdrop-blur-xl !rounded-2xl`}
+      className={`!border ${isDark ? "!border-white/20 !bg-white/10" : "!border-gray-200 !bg-white"
+        } !shadow-lg !hover:shadow-xl !transition-all !duration-300 hover:scale-[1.03] !backdrop-blur-xl !rounded-2xl`}
       bodyStyle={{
         padding: "16px",
       }}
@@ -399,9 +398,8 @@ export default function Dashboard() {
                       backgroundColor: isDark
                         ? "rgba(0,0,0,0.8)"
                         : "rgba(255,255,255,0.95)",
-                      border: `1px solid ${
-                        isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
-                      }`,
+                      border: `1px solid ${isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                        }`,
                       borderRadius: "8px",
                       color: isDark ? "#fff" : "#000",
                     }}
@@ -510,9 +508,8 @@ export default function Dashboard() {
                       backgroundColor: isDark
                         ? "rgba(0,0,0,0.8)"
                         : "rgba(255,255,255,0.95)",
-                      border: `1px solid ${
-                        isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
-                      }`,
+                      border: `1px solid ${isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                        }`,
                       borderRadius: "8px",
                       color: isDark ? "#fff" : "#000",
                     }}

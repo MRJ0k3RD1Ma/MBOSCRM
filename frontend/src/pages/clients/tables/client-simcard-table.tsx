@@ -1,43 +1,58 @@
 import { Table } from "antd";
 import { indexColumn } from "../../../components/tables/indexColumn";
-import { useGetAllSaleProduct } from "../../../config/queries/sale/sale-product-querys";
 import { useState } from "react";
+import { useGetAllSimCards } from "../../../config/queries/simcard/simcard-querys";
+import dayjs from "dayjs";
 
 export default function ClientSimCardTable({ clientId }: { clientId: number }) {
   const [page, setPage] = useState(1);
   const limit = 5;
 
-  const { data: saleProductsClient } = useGetAllSaleProduct({
+  const { data: SimCardData } = useGetAllSimCards({
     clientId,
-    isSubscribe: false,
     page: page,
     limit,
   });
 
-  const saleProductsColumns = [
+  const columns = [
     indexColumn(page, limit),
-    { title: "Kompaniya", dataIndex: "Kompaniya", key: "Kompaniya" },
-    { title: "Raqami", dataIndex: "phone", key: "phone" },
-    { title: "Tashkiloti", dataIndex: "Tashkiloti", key: "Tashkiloti" },
-    { title: "Mijoz nomi", dataIndex: "Mijoz nomi", key: "Mijoz nomi" },
-    { title: "Izoh", dataIndex: "Izoh", key: "Izoh" },
-    { title: "Holati", dataIndex: "Holati", key: "Holati" },
+    { title: "Kompaniya", dataIndex: "company", key: "company" },
+    { title: "Raqami", dataIndex: "phoneNumber", key: "phoneNumber" },
+    { title: "Izoh", dataIndex: "description", key: "description" },
     {
       title: "Aktiv qilingan sana",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (text: string) => new Date(text).toLocaleString("uz-UZ"),
+      dataIndex: "activeDate",
+      key: "activeDate",
+      render: (text: string) => (text ? dayjs(text).format("YYYY-MM-DD") : "—"),
+    },
+    {
+      title: "Holati",
+      dataIndex: "isActive",
+      key: "isActive",
+      render: (val: boolean) => (
+        <span
+          style={{
+            padding: "2px 8px",
+            borderRadius: 6,
+            fontWeight: 500,
+            backgroundColor: val ? "#4CAF50" : "#F44336",
+            color: "#ffffff",
+          }}
+        >
+          {val ? "Active" : "Inactive"}
+        </span>
+      ),
     },
   ];
   return (
     <Table
-      columns={saleProductsColumns}
-      dataSource={saleProductsClient?.data}
+      columns={columns}
+      dataSource={SimCardData?.data}
       rowKey="id"
       pagination={{
         current: page,
         pageSize: limit,
-        total: saleProductsClient?.total,
+        total: SimCardData?.total,
         onChange: (p) => setPage(p),
       }}
     />

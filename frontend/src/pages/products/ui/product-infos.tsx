@@ -30,10 +30,10 @@ export default function ProductInfos({ product }: { product: any }) {
             "-"}
         </Descriptions.Item>
         <Descriptions.Item label="Kelish narxi">
-          {product.priceIncome || "-"}
+          {product.priceIncome ? product.priceIncome.toLocaleString("uz-UZ") + " so'm" : "-"}
         </Descriptions.Item>
         <Descriptions.Item label="Sotish narxi">
-          {product.price || "-"}
+          {product.price ? product.price.toLocaleString("uz-UZ") + " so'm" : "-"}
         </Descriptions.Item>
         <Descriptions.Item label="Skladdagi qoldiq va birligi">
           {product.countReminder}{" "}
