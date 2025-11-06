@@ -110,7 +110,11 @@ export class StatisticsService {
 
 			this.prisma.subscribe.aggregate({
 				_sum: { price: true, paid: true },
-				where: { isDeleted: false, client: { isDeleted: false } },
+				where: {
+					isDeleted: false,
+					client: { isDeleted: false },
+					sale: { isDeleted: false },
+				},
 			}),
 			this.prisma.paidClient.aggregate({
 				_sum: { price: true },
@@ -278,7 +282,6 @@ export class StatisticsService {
 		);
 
 		const currentMonth = monthlyStats[dayjs().month()];
-		console.log(totalDebts, saleDebtAgg, subscribeDeptAgg);
 		return {
 			balance: settings?.balance ?? 0,
 			totals: {
