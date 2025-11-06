@@ -199,7 +199,6 @@ export class StatisticsService {
 			sumOrZero(saleDebtAgg, "credit") +
 			(sumOrZero(subscribeDeptAgg, "price") -
 				sumOrZero(subscribeDeptAgg, "paid"));
-		console.log(totalDebts, saleDebtAgg, subscribeDeptAgg);
 
 		const monthlyStats = await Promise.all(
 			Array.from({ length: 12 }, (_, i) => {
@@ -279,6 +278,7 @@ export class StatisticsService {
 		);
 
 		const currentMonth = monthlyStats[dayjs().month()];
+		console.log(totalDebts, saleDebtAgg, subscribeDeptAgg);
 		return {
 			balance: settings?.balance ?? 0,
 			totals: {
