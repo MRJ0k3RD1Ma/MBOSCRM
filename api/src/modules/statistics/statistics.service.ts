@@ -204,6 +204,8 @@ export class StatisticsService {
 			(sumOrZero(subscribeDeptAgg, "price") -
 				sumOrZero(subscribeDeptAgg, "paid"));
 
+		console.log(totalDebts, saleDebtAgg, subscribeDeptAgg);
+
 		const monthlyStats = await Promise.all(
 			Array.from({ length: 12 }, (_, i) => {
 				const mStart = new Date(year, i, 1);

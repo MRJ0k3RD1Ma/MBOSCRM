@@ -170,6 +170,7 @@ let StatisticsService = class StatisticsService {
         const totalDebts = sumOrZero(saleDebtAgg, "credit") +
             (sumOrZero(subscribeDeptAgg, "price") -
                 sumOrZero(subscribeDeptAgg, "paid"));
+        console.log(totalDebts, saleDebtAgg, subscribeDeptAgg);
         const monthlyStats = await Promise.all(Array.from({ length: 12 }, (_, i) => {
             const mStart = new Date(year, i, 1);
             const mEnd = new Date(year, i + 1, 0, 23, 59, 59, 999);
