@@ -199,12 +199,16 @@ export class StatisticsService {
 		const lastYearIncome =
 			sumOrZero(lastYearPaidClientAgg, "price") +
 			sumOrZero(lastYearPaidOtherIncomeAgg, "price");
-		const totalDebts =
-			sumOrZero(saleDebtAgg, "credit") +
-			(sumOrZero(subscribeDeptAgg, "price") -
-				sumOrZero(subscribeDeptAgg, "paid"));
 
-		console.log(totalDebts, saleDebtAgg, subscribeDeptAgg);
+		const clientDepts = await this.prisma.client.aggregate({
+			_sum: { balance: true },
+			where: {
+				balance: { lt: 0 },
+				isDeleted: false,
+			},
+		});
+
+		const totalDebts = clientDepts._sum.balance;
 
 		const monthlyStats = await Promise.all(
 			Array.from({ length: 12 }, (_, i) => {
@@ -270,14 +274,10 @@ export class StatisticsService {
 					const subPaid = sumOrZero(subAgg, "paid");
 					const expectedSubscription = Math.max(0, subPrice - subPaid);
 
-					const debtMonth =
-						sumOrZero(saleDebtMonth, "credit") + (subPrice - subPaid);
-
 					return {
 						month: i + 1,
 						tushum: incomeMonth,
 						chiqim: expenseMonth,
-						qarzdorlik: debtMonth,
 						expectedSubscription,
 					};
 				});
@@ -306,7 +306,6 @@ export class StatisticsService {
 				name: dayjs().format("MMMM"),
 				income: currentMonth.tushum,
 				outcome: currentMonth.chiqim,
-				credit: currentMonth.qarzdorlik,
 			},
 			charts: {
 				monthlyStats,

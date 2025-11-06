@@ -9,7 +9,7 @@ export declare class StatisticsService {
             contracts: number;
             income: any;
             expenses: any;
-            debts: any;
+            debts: number;
             currentMonthIncome: any;
             currentMonthExpenses: any;
             yearlyIncome: any;
@@ -19,14 +19,12 @@ export declare class StatisticsService {
             name: string;
             income: any;
             outcome: any;
-            credit: any;
         };
         charts: {
             monthlyStats: {
                 month: number;
                 tushum: any;
                 chiqim: any;
-                qarzdorlik: any;
                 expectedSubscription: number;
             }[];
             subscriptionForecast: number[];
