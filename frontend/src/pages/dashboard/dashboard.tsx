@@ -323,7 +323,7 @@ export default function Dashboard() {
           isDark={isDark}
           link="/monthly-expenses"
         />
-        <StatCard
+        {/* <StatCard
           title={`${currentMonthName}dagi qarzdorlik`}
           value={formatMoney(data?.month?.credit)}
           icon={<TrendingDown size={32} color="white" />}
@@ -331,7 +331,7 @@ export default function Dashboard() {
           textColor={titleColor}
           isDark={isDark}
           link="/clients-credit"
-        />
+        /> */}
       </div>
       <Row gutter={0} style={{ marginTop: 24 }}>
         <Col span={24} style={{ display: "flex", padding: 0 }}>
