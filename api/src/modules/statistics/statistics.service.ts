@@ -241,7 +241,11 @@ export class StatisticsService {
 
 					this.prisma.sale.aggregate({
 						_sum: { credit: true },
-						where: { createdAt: { gte: mStart, lte: mEnd }, isDeleted: false },
+						where: {
+							createdAt: { gte: mStart, lte: mEnd },
+							isDeleted: false,
+							client: { isDeleted: false },
+						},
 					}),
 
 					this.prisma.subscribe.aggregate({
@@ -249,6 +253,7 @@ export class StatisticsService {
 						where: {
 							paying_date: { gte: mStart, lte: mEnd },
 							isDeleted: false,
+							client: { isDeleted: false },
 						},
 					}),
 				]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg]) => {

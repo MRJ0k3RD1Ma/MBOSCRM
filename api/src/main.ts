@@ -64,7 +64,6 @@ async function bootstrap() {
 			}),
 		);
 	}
-	console.log("aaaaaaaaaaaaaaaaaaaaa");
 	await app.listen(env.PORT || 3000);
 }
 bootstrap();
