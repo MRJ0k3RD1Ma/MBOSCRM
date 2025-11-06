@@ -48,7 +48,7 @@ let StatisticsService = class StatisticsService {
                 _sum: { price: true },
                 where: {
                     paidDate: { gte: startOfYear, lte: endOfYear },
-                    type: 'INCOME',
+                    type: "INCOME",
                     isDeleted: false,
                 },
             }),
@@ -77,17 +77,21 @@ let StatisticsService = class StatisticsService {
                 _sum: { price: true },
                 where: {
                     paidDate: { gte: startOfYear, lte: endOfYear },
-                    type: 'OUTCOME',
+                    type: "OUTCOME",
                     isDeleted: false,
                 },
             }),
             this.prisma.sale.aggregate({
                 _sum: { credit: true },
-                where: { isDeleted: false },
+                where: { isDeleted: false, client: { isDeleted: false } },
             }),
             this.prisma.subscribe.aggregate({
                 _sum: { price: true, paid: true },
-                where: { isDeleted: false },
+                where: {
+                    isDeleted: false,
+                    client: { isDeleted: false },
+                    sale: { isDeleted: false },
+                },
             }),
             this.prisma.paidClient.aggregate({
                 _sum: { price: true },
@@ -100,7 +104,7 @@ let StatisticsService = class StatisticsService {
                 _sum: { price: true },
                 where: {
                     paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
-                    type: 'INCOME',
+                    type: "INCOME",
                     isDeleted: false,
                 },
             }),
@@ -129,7 +133,7 @@ let StatisticsService = class StatisticsService {
                 _sum: { price: true },
                 where: {
                     paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
-                    type: 'OUTCOME',
+                    type: "OUTCOME",
                     isDeleted: false,
                 },
             }),
@@ -144,28 +148,28 @@ let StatisticsService = class StatisticsService {
                 _sum: { price: true },
                 where: {
                     paidDate: { gte: startOfLastYear, lte: endOfLastYear },
-                    type: 'INCOME',
+                    type: "INCOME",
                     isDeleted: false,
                 },
             }),
         ]);
-        const yearlyIncome = sumOrZero(paidClientYearAgg, 'price') +
-            sumOrZero(paidOtherIncomeYearAgg, 'price');
-        const yearlyExpenses = sumOrZero(paidSupplierYearAgg, 'price') +
-            sumOrZero(arrivedYearAgg, 'price') +
-            sumOrZero(paidServerYearAgg, 'price') +
-            sumOrZero(paidOtherOutcomeYearAgg, 'price');
-        const currentMonthIncome = sumOrZero(paidClientCurrentMonthAgg, 'price') +
-            sumOrZero(paidOtherIncomeCurrentMonthAgg, 'price');
-        const currentMonthExpenses = sumOrZero(paidSupplierCurrentMonthAgg, 'price') +
-            sumOrZero(arrivedCurrentMonthAgg, 'price') +
-            sumOrZero(paidServerCurrentMonthAgg, 'price') +
-            sumOrZero(paidOtherOutcomeCurrentMonthAgg, 'price');
-        const lastYearIncome = sumOrZero(lastYearPaidClientAgg, 'price') +
-            sumOrZero(lastYearPaidOtherIncomeAgg, 'price');
-        const totalDebts = sumOrZero(saleDebtAgg, 'credit') +
-            (sumOrZero(subscribeDeptAgg, 'price') -
-                sumOrZero(subscribeDeptAgg, 'paid'));
+        const yearlyIncome = sumOrZero(paidClientYearAgg, "price") +
+            sumOrZero(paidOtherIncomeYearAgg, "price");
+        const yearlyExpenses = sumOrZero(paidSupplierYearAgg, "price") +
+            sumOrZero(arrivedYearAgg, "price") +
+            sumOrZero(paidServerYearAgg, "price") +
+            sumOrZero(paidOtherOutcomeYearAgg, "price");
+        const currentMonthIncome = sumOrZero(paidClientCurrentMonthAgg, "price") +
+            sumOrZero(paidOtherIncomeCurrentMonthAgg, "price");
+        const currentMonthExpenses = sumOrZero(paidSupplierCurrentMonthAgg, "price") +
+            sumOrZero(arrivedCurrentMonthAgg, "price") +
+            sumOrZero(paidServerCurrentMonthAgg, "price") +
+            sumOrZero(paidOtherOutcomeCurrentMonthAgg, "price");
+        const lastYearIncome = sumOrZero(lastYearPaidClientAgg, "price") +
+            sumOrZero(lastYearPaidOtherIncomeAgg, "price");
+        const totalDebts = sumOrZero(saleDebtAgg, "credit") +
+            (sumOrZero(subscribeDeptAgg, "price") -
+                sumOrZero(subscribeDeptAgg, "paid"));
         const monthlyStats = await Promise.all(Array.from({ length: 12 }, (_, i) => {
             const mStart = new Date(year, i, 1);
             const mEnd = new Date(year, i + 1, 0, 23, 59, 59, 999);
@@ -178,7 +182,7 @@ let StatisticsService = class StatisticsService {
                     _sum: { price: true },
                     where: {
                         paidDate: { gte: mStart, lte: mEnd },
-                        type: 'INCOME',
+                        type: "INCOME",
                         isDeleted: false,
                     },
                 }),
@@ -194,7 +198,7 @@ let StatisticsService = class StatisticsService {
                     _sum: { price: true },
                     where: {
                         paidDate: { gte: mStart, lte: mEnd },
-                        type: 'OUTCOME',
+                        type: "OUTCOME",
                         isDeleted: false,
                     },
                 }),
@@ -210,14 +214,14 @@ let StatisticsService = class StatisticsService {
                     },
                 }),
             ]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg]) => {
-                const incomeMonth = sumOrZero(pc, 'price') + sumOrZero(poInc, 'price');
-                const expenseMonth = sumOrZero(psup, 'price') +
-                    sumOrZero(pserv, 'price') +
-                    sumOrZero(poOut, 'price');
-                const subPrice = sumOrZero(subAgg, 'price');
-                const subPaid = sumOrZero(subAgg, 'paid');
+                const incomeMonth = sumOrZero(pc, "price") + sumOrZero(poInc, "price");
+                const expenseMonth = sumOrZero(psup, "price") +
+                    sumOrZero(pserv, "price") +
+                    sumOrZero(poOut, "price");
+                const subPrice = sumOrZero(subAgg, "price");
+                const subPaid = sumOrZero(subAgg, "paid");
                 const expectedSubscription = Math.max(0, subPrice - subPaid);
-                const debtMonth = sumOrZero(saleDebtMonth, 'credit') + (subPrice - subPaid);
+                const debtMonth = sumOrZero(saleDebtMonth, "credit") + (subPrice - subPaid);
                 return {
                     month: i + 1,
                     tushum: incomeMonth,
@@ -243,7 +247,7 @@ let StatisticsService = class StatisticsService {
                 lastYearIncome,
             },
             month: {
-                name: (0, dayjs_1.default)().format('MMMM'),
+                name: (0, dayjs_1.default)().format("MMMM"),
                 income: currentMonth.tushum,
                 outcome: currentMonth.chiqim,
                 credit: currentMonth.qarzdorlik,

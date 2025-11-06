@@ -141,7 +141,7 @@ let SubscribeService = class SubscribeService {
         }
         const subscribe = await this.prisma.subscribe.create({
             data: {
-                paid: 0,
+                paid: price,
                 paying_date: payingDate,
                 price,
                 state,
