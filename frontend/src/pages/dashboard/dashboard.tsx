@@ -26,8 +26,8 @@ import {
   useGetStatistics,
   type StatisticsResponse,
 } from "../../config/queries/statistics/statistics-querys";
-import { useThemeContext } from "../../providers/theme-provider";
 import { Link, useNavigate } from "react-router-dom";
+import { useThemeContext } from "../../providers/theme-provider";
 
 const { Title, Text } = Typography;
 

@@ -2,6 +2,7 @@ import { ConfigProvider } from "antd";
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
   type ReactNode,
 } from "react";
@@ -19,12 +20,16 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState(() => ThemeController.getCurrent());
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
   const toggleTheme = () => {
-    const theme = ThemeController.toggleTheme()
-    setTheme(theme);
+    const newTheme = ThemeController.toggleTheme();
+    setTheme(newTheme);
   };
 
-  const config = useThemeConfig(theme)
+  const config = useThemeConfig(theme);
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
@@ -32,6 +37,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     </ThemeContext.Provider>
   );
 };
+
 
 export const useThemeContext = () => {
   const context = useContext(ThemeContext);
