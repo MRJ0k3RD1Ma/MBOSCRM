@@ -16,6 +16,7 @@ export declare class SubscribeController {
         paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
         paying_date: Date;
+        alerted: boolean;
     }>;
     findAll(dto: FindAllSubscribeQueryDto): Promise<{
         total: number;
@@ -94,6 +95,7 @@ export declare class SubscribeController {
             paid: number;
             state: import(".prisma/client").$Enums.SubscribeState;
             paying_date: Date;
+            alerted: boolean;
         })[];
     }>;
     findOne(id: string): Promise<{
@@ -204,6 +206,7 @@ export declare class SubscribeController {
         paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
         paying_date: Date;
+        alerted: boolean;
     }>;
     update(id: string, updateSubscribeDto: UpdateSubscribeDto): Promise<{
         isDeleted: boolean;
@@ -216,6 +219,7 @@ export declare class SubscribeController {
         paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
         paying_date: Date;
+        alerted: boolean;
     }>;
     remove(id: string): Promise<{
         isDeleted: boolean;
@@ -228,5 +232,6 @@ export declare class SubscribeController {
         paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
         paying_date: Date;
+        alerted: boolean;
     }>;
 }

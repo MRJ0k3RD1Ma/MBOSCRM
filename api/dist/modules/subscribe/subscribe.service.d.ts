@@ -5,10 +5,12 @@ import { PrismaService } from "../prisma/prisma.service";
 import { FindAllSubscribeQueryDto } from "./dto/findAll-subscribe-query.dto";
 import { Sale } from "@prisma/client";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { SmsService } from "../sms/sms.service";
 export declare class SubscribeService implements OnModuleInit {
     private readonly prisma;
     private readonly eventEmitter;
-    constructor(prisma: PrismaService, eventEmitter: EventEmitter2);
+    private readonly smsService;
+    constructor(prisma: PrismaService, eventEmitter: EventEmitter2, smsService: SmsService);
     onModuleInit(): Promise<void>;
     handleSaleCreatedEvent(sale: Sale & {
         SaleProduct: any[];
@@ -25,6 +27,7 @@ export declare class SubscribeService implements OnModuleInit {
         paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
         paying_date: Date;
+        alerted: boolean;
     }>;
     findAll(dto: FindAllSubscribeQueryDto): Promise<{
         total: number;
@@ -103,6 +106,7 @@ export declare class SubscribeService implements OnModuleInit {
             paid: number;
             state: import(".prisma/client").$Enums.SubscribeState;
             paying_date: Date;
+            alerted: boolean;
         })[];
     }>;
     findOne(id: number): Promise<{
@@ -213,6 +217,7 @@ export declare class SubscribeService implements OnModuleInit {
         paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
         paying_date: Date;
+        alerted: boolean;
     }>;
     update(id: number, updateSubscribeDto: UpdateSubscribeDto): Promise<{
         isDeleted: boolean;
@@ -225,6 +230,7 @@ export declare class SubscribeService implements OnModuleInit {
         paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
         paying_date: Date;
+        alerted: boolean;
     }>;
     remove(id: number): Promise<{
         isDeleted: boolean;
@@ -237,5 +243,6 @@ export declare class SubscribeService implements OnModuleInit {
         paid: number;
         state: import(".prisma/client").$Enums.SubscribeState;
         paying_date: Date;
+        alerted: boolean;
     }>;
 }

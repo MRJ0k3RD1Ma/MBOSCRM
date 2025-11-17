@@ -20,10 +20,12 @@ const client_1 = require("@prisma/client");
 const schedule_1 = require("@nestjs/schedule");
 const dayjs_1 = __importDefault(require("dayjs"));
 const event_emitter_1 = require("@nestjs/event-emitter");
+const sms_service_1 = require("../sms/sms.service");
 let SubscribeService = class SubscribeService {
-    constructor(prisma, eventEmitter) {
+    constructor(prisma, eventEmitter, smsService) {
         this.prisma = prisma;
         this.eventEmitter = eventEmitter;
+        this.smsService = smsService;
     }
     async onModuleInit() {
         await this.cron();
@@ -50,7 +52,6 @@ let SubscribeService = class SubscribeService {
                 clientId: client.id,
                 price: saleProduct.price * saleProduct.count,
                 saleId: sale.id,
-                state: client_1.SubscribeState.NOTPAYING,
                 payingDate: loopMonth.toDate(),
             });
             loopMonth = loopMonth.add(1, "months");
@@ -73,6 +74,7 @@ let SubscribeService = class SubscribeService {
             const lastSubscribe = await this.prisma.subscribe.findFirst({
                 where: { saleId: sale.id },
                 orderBy: { paying_date: "desc" },
+                include: { client: true, sale: true },
             });
             if (!lastSubscribe) {
                 const saleProduct = await this.prisma.saleProduct.findFirst({
@@ -91,7 +93,6 @@ let SubscribeService = class SubscribeService {
                             clientId: sale.clientId,
                             price: saleProduct.price * saleProduct.count,
                             saleId: sale.id,
-                            state: client_1.SubscribeState.NOTPAYING,
                             payingDate: loopMonth.toDate(),
                         });
                         loopMonth = loopMonth.add(1, "months");
@@ -101,6 +102,23 @@ let SubscribeService = class SubscribeService {
             }
             const today = (0, dayjs_1.default)();
             const nextPaymentDate = (0, dayjs_1.default)(lastSubscribe.paying_date).add(1, "month");
+            const fiveDaysBeforePayment = nextPaymentDate.subtract(5, "days");
+            if (fiveDaysBeforePayment.isBefore(today) &&
+                lastSubscribe.alerted === false &&
+                lastSubscribe.client.balance < lastSubscribe.price) {
+                const saleProduct = await this.prisma.saleProduct.findFirst({
+                    where: {
+                        saleId: sale.id,
+                        product: { type: client_1.ProductType.SUBSCRIPTION },
+                    },
+                    include: { product: true },
+                });
+                await this.smsService.sendMessage(lastSubscribe.client.phone, `Hayrli kun! ${saleProduct.product.name} uchun 5 kun ichida to'lov qilmasangiz bu xizmat o'chirilishini ma'lum qilamiz. Qarzdorlik: ${saleProduct.priceCount} Tel: +998622277676 mbos.uz`);
+                this.prisma.subscribe.update({
+                    where: { id: lastSubscribe.id },
+                    data: { alerted: true },
+                });
+            }
             if (nextPaymentDate.isBefore(today) ||
                 nextPaymentDate.isSame(today, "day")) {
                 const saleProduct = await this.prisma.saleProduct.findFirst({
@@ -114,7 +132,6 @@ let SubscribeService = class SubscribeService {
                         clientId: sale.clientId,
                         price: saleProduct.price * saleProduct.count,
                         saleId: sale.id,
-                        state: client_1.SubscribeState.NOTPAYING,
                         payingDate: nextPaymentDate.toDate(),
                     });
                 }
@@ -122,7 +139,7 @@ let SubscribeService = class SubscribeService {
         }
     }
     async create(createSubscribeDto) {
-        const { clientId, price, saleId, state, payingDate } = createSubscribeDto;
+        const { clientId, price, saleId, payingDate } = createSubscribeDto;
         const client = await this.prisma.client.findFirst({
             where: { id: clientId, isDeleted: false },
         });
@@ -144,7 +161,7 @@ let SubscribeService = class SubscribeService {
                 paid: price,
                 paying_date: payingDate,
                 price,
-                state,
+                state: "PAID",
                 sale: { connect: { id: saleId } },
                 client: { connect: { id: clientId } },
             },
@@ -294,6 +311,7 @@ __decorate([
 exports.SubscribeService = SubscribeService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        event_emitter_1.EventEmitter2])
+        event_emitter_1.EventEmitter2,
+        sms_service_1.SmsService])
 ], SubscribeService);
 //# sourceMappingURL=subscribe.service.js.map

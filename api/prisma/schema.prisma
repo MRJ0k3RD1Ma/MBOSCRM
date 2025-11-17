@@ -557,6 +557,7 @@ model Subscribe {
   saleId      Int?
   clientId    Int
   paying_date DateTime
+  alerted     Boolean        @default(false)
   price       Float
   paid        Float
   state       SubscribeState @default(NOTPAYING)

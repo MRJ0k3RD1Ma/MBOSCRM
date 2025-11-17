@@ -8,12 +8,14 @@ import { Prisma, ProductType, Sale, SubscribeState } from "@prisma/client";
 import { Cron } from "@nestjs/schedule";
 import dayjs from "dayjs";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
+import { SmsService } from "../sms/sms.service";
 
 @Injectable()
 export class SubscribeService implements OnModuleInit {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly eventEmitter: EventEmitter2,
+		private readonly smsService: SmsService,
 	) {}
 	async onModuleInit() {
 		await this.cron();
@@ -47,7 +49,6 @@ export class SubscribeService implements OnModuleInit {
 				clientId: client.id,
 				price: saleProduct.price * saleProduct.count,
 				saleId: sale.id,
-				state: SubscribeState.NOTPAYING,
 				payingDate: loopMonth.toDate(),
 			});
 
@@ -74,6 +75,7 @@ export class SubscribeService implements OnModuleInit {
 			const lastSubscribe = await this.prisma.subscribe.findFirst({
 				where: { saleId: sale.id },
 				orderBy: { paying_date: "desc" },
+				include: { client: true, sale: true },
 			});
 
 			if (!lastSubscribe) {
@@ -97,7 +99,6 @@ export class SubscribeService implements OnModuleInit {
 							clientId: sale.clientId,
 							price: saleProduct.price * saleProduct.count,
 							saleId: sale.id,
-							state: SubscribeState.NOTPAYING,
 							payingDate: loopMonth.toDate(),
 						});
 
@@ -109,6 +110,31 @@ export class SubscribeService implements OnModuleInit {
 
 			const today = dayjs();
 			const nextPaymentDate = dayjs(lastSubscribe.paying_date).add(1, "month");
+
+			const fiveDaysBeforePayment = nextPaymentDate.subtract(5, "days");
+
+			if (
+				fiveDaysBeforePayment.isBefore(today) &&
+				lastSubscribe.alerted === false &&
+				lastSubscribe.client.balance < lastSubscribe.price
+			) {
+				const saleProduct = await this.prisma.saleProduct.findFirst({
+					where: {
+						saleId: sale.id,
+						product: { type: ProductType.SUBSCRIPTION },
+					},
+					include: { product: true },
+				});
+
+				await this.smsService.sendMessage(
+					lastSubscribe.client.phone,
+					`Hayrli kun! ${saleProduct.product.name} uchun 5 kun ichida to'lov qilmasangiz bu xizmat o'chirilishini ma'lum qilamiz. Qarzdorlik: ${saleProduct.priceCount} Tel: +998622277676 mbos.uz`,
+				);
+				this.prisma.subscribe.update({
+					where: { id: lastSubscribe.id },
+					data: { alerted: true },
+				});
+			}
 
 			if (
 				nextPaymentDate.isBefore(today) ||
@@ -126,7 +152,6 @@ export class SubscribeService implements OnModuleInit {
 						clientId: sale.clientId,
 						price: saleProduct.price * saleProduct.count,
 						saleId: sale.id,
-						state: SubscribeState.NOTPAYING,
 						payingDate: nextPaymentDate.toDate(),
 					});
 				}
@@ -135,7 +160,7 @@ export class SubscribeService implements OnModuleInit {
 	}
 
 	async create(createSubscribeDto: CreateSubscribeDto) {
-		const { clientId, price, saleId, state, payingDate } = createSubscribeDto;
+		const { clientId, price, saleId, payingDate } = createSubscribeDto;
 
 		const client = await this.prisma.client.findFirst({
 			where: { id: clientId, isDeleted: false },
@@ -162,7 +187,7 @@ export class SubscribeService implements OnModuleInit {
 				paid: price,
 				paying_date: payingDate,
 				price,
-				state,
+				state: "PAID",
 				sale: { connect: { id: saleId } },
 				client: { connect: { id: clientId } },
 			},
