@@ -10,6 +10,7 @@ exports.SubscribeModule = void 0;
 const common_1 = require("@nestjs/common");
 const subscribe_service_1 = require("./subscribe.service");
 const subscribe_controller_1 = require("./subscribe.controller");
+const sms_module_1 = require("../sms/sms.module");
 let SubscribeModule = class SubscribeModule {
 };
 exports.SubscribeModule = SubscribeModule;
@@ -18,6 +19,7 @@ exports.SubscribeModule = SubscribeModule = __decorate([
         controllers: [subscribe_controller_1.SubscribeController],
         providers: [subscribe_service_1.SubscribeService],
         exports: [subscribe_service_1.SubscribeService],
+        imports: [sms_module_1.SmsModule],
     })
 ], SubscribeModule);
 //# sourceMappingURL=subscribe.module.js.map
