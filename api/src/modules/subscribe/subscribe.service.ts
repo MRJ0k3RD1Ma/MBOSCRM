@@ -128,7 +128,7 @@ export class SubscribeService implements OnModuleInit {
 
 				await this.smsService.sendMessage(
 					lastSubscribe.client.phone,
-					`Hayrli kun! ${saleProduct.product.name} uchun 5 kun ichida to'lov qilmasangiz bu xizmat o'chirilishini ma'lum qilamiz. Qarzdorlik: ${saleProduct.priceCount} Tel: +998622277676 mbos.uz`,
+					`Hayrli kun! ${saleProduct.product.name} uchun 5 kun ichida to'lov qilmasangiz bu xizmat o'chirilishini ma'lum qilamiz. Qarzdorlik: ${lastSubscribe.client.balance - lastSubscribe.price} Tel: +998622277676 mbos.uz`,
 				);
 				this.prisma.subscribe.update({
 					where: { id: lastSubscribe.id },
