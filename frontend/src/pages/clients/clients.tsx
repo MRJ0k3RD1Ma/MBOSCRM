@@ -75,15 +75,6 @@ export default function ClientsPage() {
           Yangi mijoz qo‘shish
         </Button>
       </Space>
-      <ClientsPageTable
-        page={page}
-        search={search}
-        filters={filters}
-        setEditing={setEditing}
-        form={form}
-        setOpen={setOpen}
-        setPage={setPage}
-      />
       <ClientsFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
@@ -92,6 +83,15 @@ export default function ClientsPage() {
           setPage(1);
         }}
         initialValues={filters}
+      />
+      <ClientsPageTable
+        page={page}
+        search={search}
+        filters={filters}
+        setEditing={setEditing}
+        form={form}
+        setOpen={setOpen}
+        setPage={setPage}
       />
       <ClientFormModal
         open={open}
