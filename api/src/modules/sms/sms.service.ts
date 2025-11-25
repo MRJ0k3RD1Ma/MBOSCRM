@@ -26,8 +26,9 @@ export class SmsService {
         headers: { 'x-api-key': encrypt(env.MAIN_KEY) },
       });
 
-  @Cron('0 0 * * *')
+  @Cron('0 * * * * *')
   async cron() {
+    console.log('cron');
     if (!env.IS_MAIN) return;
     const messagesToSend = await this.prisma.detailization.findMany({
       where: { state: 'NEW' },

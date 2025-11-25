@@ -38,6 +38,7 @@ let SmsService = class SmsService {
             });
     }
     async cron() {
+        console.log('cron');
         if (!config_1.env.IS_MAIN)
             return;
         const messagesToSend = await this.prisma.detailization.findMany({
@@ -130,7 +131,7 @@ let SmsService = class SmsService {
 };
 exports.SmsService = SmsService;
 __decorate([
-    (0, schedule_1.Cron)('0 0 * * *'),
+    (0, schedule_1.Cron)('0 * * * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
