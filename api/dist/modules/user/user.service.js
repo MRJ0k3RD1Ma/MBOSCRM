@@ -46,7 +46,7 @@ exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const bcrypt = __importStar(require("bcryptjs"));
 const prisma_service_1 = require("../prisma/prisma.service");
-const http_error_1 = require("src/common/exception/http.error");
+const http_error_1 = require("../../common/exception/http.error");
 const jsonwebtoken_1 = require("jsonwebtoken");
 const token_version_store_1 = require("src/common/auth/token-version.store");
 const refresh_token_version_store_1 = require("src/common/auth/refresh-token-version.store");
@@ -60,20 +60,20 @@ let UserService = class UserService {
     async onModuleInit() {
         if ((await this.prisma.user.count({})) == 0) {
             await this.create({
-                name: 'admin',
-                password: 'admin',
-                username: 'admin',
+                name: "admin",
+                password: "admin",
+                username: "admin",
                 roleId: 1,
             });
         }
-        if (config_1.env.ENV != 'prod') {
+        if (config_1.env.ENV != "prod") {
             const count = await this.prisma.userRole.count();
             const requiredCount = 1;
             if (count < requiredCount) {
                 for (let i = count; i < requiredCount; i++) {
                     await this.create({
                         name: faker_1.faker.person.fullName(),
-                        password: '1234',
+                        password: "1234",
                         username: faker_1.faker.person.firstName(),
                         roleId: 1,
                         phone: faker_1.faker.phone.number(),
@@ -87,7 +87,7 @@ let UserService = class UserService {
             where: { name: createUserDto.name },
         });
         if (existingUser) {
-            throw (0, http_error_1.HttpError)({ code: 'User with this name already exists' });
+            throw (0, http_error_1.HttpError)({ code: "User with this name already exists" });
         }
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
         createUserDto.password = hashedPassword;
@@ -105,11 +105,11 @@ let UserService = class UserService {
             where: { username: username, isDeleted: false },
         });
         if (!user) {
-            throw (0, http_error_1.HttpError)({ code: 'User not found' });
+            throw (0, http_error_1.HttpError)({ code: "User not found" });
         }
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
-            throw (0, http_error_1.HttpError)({ code: 'Invalid credentials' });
+            throw (0, http_error_1.HttpError)({ code: "Invalid credentials" });
         }
         (0, token_version_store_1.incrementTokenVersion)(user.id.toString());
         (0, refresh_token_version_store_1.incrementRefreshTokenVersion)(user.id.toString());
@@ -117,10 +117,10 @@ let UserService = class UserService {
         const refreshTokenVersion = (0, refresh_token_version_store_1.getRefreshTokenVersion)(user.id.toString());
         const [accessToken, refreshToken] = [
             (0, jsonwebtoken_1.sign)({ id: user.id, role: role_enum_1.Role.Admin, tokenVersion }, config_1.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: '2h',
+                expiresIn: "2h",
             }),
             (0, jsonwebtoken_1.sign)({ id: user.id, role: role_enum_1.Role.Admin, refreshTokenVersion }, config_1.env.REFRESH_TOKEN_SECRET, {
-                expiresIn: '7d',
+                expiresIn: "7d",
             }),
         ];
         delete user.password;
@@ -134,16 +134,16 @@ let UserService = class UserService {
         const token = dto.refreshToken;
         const userData = (0, jsonwebtoken_1.verify)(token, config_1.env.REFRESH_TOKEN_SECRET);
         if (!userData)
-            throw (0, http_error_1.HttpError)({ code: 'LOGIN_FAILED' });
+            throw (0, http_error_1.HttpError)({ code: "LOGIN_FAILED" });
         const user = await this.prisma.user.findUnique({
             where: { id: userData.id },
         });
         if (!user) {
-            throw (0, http_error_1.HttpError)({ code: 'User not found' });
+            throw (0, http_error_1.HttpError)({ code: "User not found" });
         }
         const currentRefreshVersion = (0, refresh_token_version_store_1.getRefreshTokenVersion)(user.id.toString());
         if (userData.refreshTokenVersion !== currentRefreshVersion) {
-            throw (0, http_error_1.HttpError)({ code: 'TOKEN_INVALIDATED' });
+            throw (0, http_error_1.HttpError)({ code: "TOKEN_INVALIDATED" });
         }
         (0, token_version_store_1.incrementTokenVersion)(user.id.toString());
         const currentTokenVersion = (0, token_version_store_1.getTokenVersion)(user.id.toString());
@@ -151,17 +151,17 @@ let UserService = class UserService {
             id: user.id,
             tokenVersion: currentTokenVersion,
             role: role_enum_1.Role.Admin,
-        }, config_1.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h' });
+        }, config_1.env.ACCESS_TOKEN_SECRET, { expiresIn: "2h" });
         return { accessToken };
     }
     async logout(id) {
         const user = await this.prisma.user.findUnique({ where: { id } });
         if (!user) {
-            throw (0, http_error_1.HttpError)({ code: 'User not found' });
+            throw (0, http_error_1.HttpError)({ code: "User not found" });
         }
         (0, token_version_store_1.incrementTokenVersion)(user.id.toString());
         (0, refresh_token_version_store_1.incrementRefreshTokenVersion)(user.id.toString());
-        return { message: 'Logged out successfully' };
+        return { message: "Logged out successfully" };
     }
     async findAll(dto) {
         const { limit = 10, page = 1, name, roleId, username, chatId, phone } = dto;
@@ -171,7 +171,7 @@ let UserService = class UserService {
         if (name) {
             where.name = {
                 contains: name.trim(),
-                mode: 'insensitive',
+                mode: "insensitive",
             };
         }
         if (roleId) {
@@ -180,19 +180,19 @@ let UserService = class UserService {
         if (username) {
             where.username = {
                 contains: username.trim(),
-                mode: 'insensitive',
+                mode: "insensitive",
             };
         }
         if (chatId) {
             where.chatId = {
                 contains: chatId.trim(),
-                mode: 'insensitive',
+                mode: "insensitive",
             };
         }
         if (phone) {
             where.phone = {
                 contains: phone.trim(),
-                mode: 'insensitive',
+                mode: "insensitive",
             };
         }
         const [data, total] = await this.prisma.$transaction([
@@ -201,7 +201,7 @@ let UserService = class UserService {
                 skip: (page - 1) * limit,
                 take: limit,
                 include: { UserRole: true },
-                orderBy: { id: 'desc' },
+                orderBy: { id: "desc" },
             }),
             this.prisma.user.count({
                 where,
@@ -220,7 +220,7 @@ let UserService = class UserService {
             include: { UserRole: true },
         });
         if (!user) {
-            throw (0, http_error_1.HttpError)({ code: 'User not found' });
+            throw (0, http_error_1.HttpError)({ code: "User not found" });
         }
         return user;
     }
@@ -229,7 +229,7 @@ let UserService = class UserService {
             where: { id, isDeleted: false },
         });
         if (!user)
-            throw (0, http_error_1.HttpError)({ code: 'User not found' });
+            throw (0, http_error_1.HttpError)({ code: "User not found" });
         const updateData = {
             name: dto.name || user.name,
             chatId: dto.chatId || user.chatId,
@@ -246,7 +246,7 @@ let UserService = class UserService {
                 where: { id: updateData.roleId },
             });
             if (!role) {
-                throw (0, http_error_1.HttpError)({ code: 'Role Not Found' });
+                throw (0, http_error_1.HttpError)({ code: "Role Not Found" });
             }
             updateData.roleId = role.id;
         }
@@ -261,7 +261,7 @@ let UserService = class UserService {
             where: { id: id, isDeleted: false },
         });
         if (!user) {
-            throw (0, http_error_1.HttpError)({ code: 'User not found' });
+            throw (0, http_error_1.HttpError)({ code: "User not found" });
         }
         return await this.prisma.user.update({
             where: { id: id },

@@ -1,10 +1,10 @@
-import { OnModuleInit } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { FindAllUserQueryDto } from './dto/findAll-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import { RefreshUserDto } from './dto/refresh-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { OnModuleInit } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { FindAllUserQueryDto } from "./dto/findAll-user.dto";
+import { LoginUserDto } from "./dto/login-user.dto";
+import { RefreshUserDto } from "./dto/refresh-user.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 export declare class UserService implements OnModuleInit {
     private readonly prisma;
     constructor(prisma: PrismaService);
