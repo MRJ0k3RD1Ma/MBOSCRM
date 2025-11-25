@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductGroupService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const http_error_1 = require("../../common/exception/http.error");
-const config_1 = require("../../common/config");
+const http_error_1 = require("src/common/exception/http.error");
+const config_1 = require("src/common/config");
 let ProductGroupService = class ProductGroupService {
     constructor(prisma) {
         this.prisma = prisma;

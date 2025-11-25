@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RolesGuard = void 0;
 const jsonwebtoken_1 = require("jsonwebtoken");
-const http_error_1 = require("../../exception/http.error");
+const http_error_1 = require("src/common/exception/http.error");
 const roles_decorator_1 = require("./roles.decorator");
-const config_1 = require("../../config");
+const config_1 = require("src/common/config");
 const token_version_store_1 = require("../token-version.store");
 const refresh_token_version_store_1 = require("../refresh-token-version.store");
 class RolesGuard {

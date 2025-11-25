@@ -18,8 +18,8 @@ const payment_service_1 = require("./payment.service");
 const create_payment_dto_1 = require("./dto/create-payment.dto");
 const update_payment_dto_1 = require("./dto/update-payment.dto");
 const findAll_payment_query_dto_1 = require("./dto/findAll-payment-query.dto");
-const role_enum_1 = require("../../common/auth/roles/role.enum");
-const decorator_auth_1 = require("../../common/auth/decorator.auth");
+const role_enum_1 = require("src/common/auth/roles/role.enum");
+const decorator_auth_1 = require("src/common/auth/decorator.auth");
 const swagger_1 = require("@nestjs/swagger");
 let PaymentController = class PaymentController {
     constructor(paymentService) {

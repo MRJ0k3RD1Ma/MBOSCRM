@@ -13,8 +13,8 @@ exports.EskizController = void 0;
 const common_1 = require("@nestjs/common");
 const eskiz_service_1 = require("./eskiz.service");
 const feature_flag_decorator_1 = require("../feature-flag/feature-flag.decorator");
-const decorator_auth_1 = require("../../common/auth/decorator.auth");
-const role_enum_1 = require("../../common/auth/roles/role.enum");
+const decorator_auth_1 = require("src/common/auth/decorator.auth");
+const role_enum_1 = require("src/common/auth/roles/role.enum");
 let EskizController = class EskizController {
     constructor(eskizService) {
         this.eskizService = eskizService;

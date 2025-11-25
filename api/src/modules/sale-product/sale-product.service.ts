@@ -231,18 +231,33 @@ export class SaleProductService {
 				data: { isDeleted: true },
 			});
 		}
-		const sale = await this.prisma.sale.update({
+
+		const sale = await this.prisma.sale.findFirst({
 			where: { id: saleProduct.saleId },
-			data: { price: { decrement: saleProduct.priceCount } },
 		});
-		if (sale.dept > sale.price) {
+
+		const productPrice = saleProduct.priceCount;
+		const totalSalePrice = sale.price;
+		const paidAmount = sale.dept;
+		const unpaidAmount = sale.credit;
+
+		const paidRatio = totalSalePrice > 0 ? paidAmount / totalSalePrice : 0;
+		const productPaidPortion = Math.round(productPrice * paidRatio);
+		const productUnpaidPortion = productPrice - productPaidPortion;
+
+		await this.prisma.sale.update({
+			where: { id: saleProduct.saleId },
+			data: {
+				price: { decrement: productPrice },
+				dept: { decrement: productPaidPortion },
+				credit: { decrement: productUnpaidPortion },
+			},
+		});
+
+		if (productPaidPortion > 0) {
 			await this.prisma.client.update({
 				where: { id: sale.clientId },
-				data: { balance: { increment: saleProduct.priceCount } },
-			});
-			await this.prisma.sale.update({
-				where: { id: saleProduct.saleId },
-				data: { dept: { decrement: saleProduct.priceCount } },
+				data: { balance: { increment: productPaidPortion } },
 			});
 		}
 

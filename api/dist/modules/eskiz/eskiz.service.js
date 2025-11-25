@@ -16,7 +16,7 @@ exports.EskizService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const axios_1 = __importDefault(require("axios"));
-const config_1 = require("../../common/config");
+const config_1 = require("src/common/config");
 let EskizService = class EskizService {
     constructor(prisma) {
         this.prisma = prisma;

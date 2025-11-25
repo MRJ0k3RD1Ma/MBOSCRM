@@ -36,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.encrypt = encrypt;
 exports.decrypt = decrypt;
 const CryptoJS = __importStar(require("crypto-js"));
-const config_1 = require("../../config");
+const config_1 = require("src/common/config");
 function encrypt(text) {
     const ciphertext = CryptoJS.AES.encrypt(text.toString(), config_1.env.PASSPHRASE);
     const ciphertextString = ciphertext.toString();

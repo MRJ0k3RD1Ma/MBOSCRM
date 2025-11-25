@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaymentService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const http_error_1 = require("../../common/exception/http.error");
-const config_1 = require("../../common/config");
+const http_error_1 = require("src/common/exception/http.error");
+const config_1 = require("src/common/config");
 const faker_1 = require("@faker-js/faker");
 let PaymentService = class PaymentService {
     constructor(prisma) {

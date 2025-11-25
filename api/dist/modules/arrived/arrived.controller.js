@@ -17,8 +17,8 @@ const common_1 = require("@nestjs/common");
 const arrived_service_1 = require("./arrived.service");
 const create_arrived_dto_1 = require("./dto/create-arrived.dto");
 const update_arrived_dto_1 = require("./dto/update-arrived.dto");
-const decorator_auth_1 = require("../../common/auth/decorator.auth");
-const role_enum_1 = require("../../common/auth/roles/role.enum");
+const decorator_auth_1 = require("src/common/auth/decorator.auth");
+const role_enum_1 = require("src/common/auth/roles/role.enum");
 const findAll_arrived_query_dto_1 = require("./dto/findAll-arrived-query.dto");
 let ArrivedController = class ArrivedController {
     constructor(arrivedService) {

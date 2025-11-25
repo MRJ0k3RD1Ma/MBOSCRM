@@ -1,1 +1,1 @@
-{"version":3,"file":"findAll-appeal.dto.js","sourceRoot":"","sources":["../../../../src/modules/appeal/dto/findAll-appeal.dto.ts"],"names":[],"mappings":";;;AAAA,wEAA+D;AAE/D,MAAa,gBAAiB,SAAQ,8BAAa;CAElD;AAFD,4CAEC"}
+{"version":3,"file":"findAll-appeal.dto.js","sourceRoot":"","sources":["../../../../src/modules/appeal/dto/findAll-appeal.dto.ts"],"names":[],"mappings":";;;AAAA,mEAA+D;AAE/D,MAAa,gBAAiB,SAAQ,8BAAa;CAElD;AAFD,4CAEC"}

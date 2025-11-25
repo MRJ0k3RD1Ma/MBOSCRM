@@ -12,12 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SaleFeedbackService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const http_error_1 = require("../../common/exception/http.error");
+const http_error_1 = require("src/common/exception/http.error");
 const client_1 = require("@prisma/client");
 const crypto_1 = require("crypto");
 const uuid_1 = require("uuid");
 const sms_service_1 = require("../sms/sms.service");
-const config_1 = require("../../common/config");
+const config_1 = require("src/common/config");
 let SaleFeedbackService = class SaleFeedbackService {
     constructor(prisma, smsService) {
         this.prisma = prisma;

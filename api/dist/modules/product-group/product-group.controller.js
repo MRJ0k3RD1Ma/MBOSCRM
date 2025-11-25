@@ -18,9 +18,9 @@ const product_group_service_1 = require("./product-group.service");
 const create_product_group_dto_1 = require("./dto/create-product-group.dto");
 const update_product_group_dto_1 = require("./dto/update-product-group.dto");
 const findAll_product_group_dto_1 = require("./dto/findAll-product-group.dto,");
-const decorator_auth_1 = require("../../common/auth/decorator.auth");
+const decorator_auth_1 = require("src/common/auth/decorator.auth");
 const swagger_1 = require("@nestjs/swagger");
-const role_enum_1 = require("../../common/auth/roles/role.enum");
+const role_enum_1 = require("src/common/auth/roles/role.enum");
 let ProductGroupController = class ProductGroupController {
     constructor(productGroupService) {
         this.productGroupService = productGroupService;

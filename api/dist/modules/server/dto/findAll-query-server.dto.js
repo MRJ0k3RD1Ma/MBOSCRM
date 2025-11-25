@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FindAllQueryServer = void 0;
-const name_dto_1 = require("../../../common/dtos/name.dto");
-const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
+const name_dto_1 = require("src/common/dtos/name.dto");
+const pagination_dto_1 = require("src/common/dtos/pagination.dto");
 class FindAllQueryServer extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllQueryServer = FindAllQueryServer;

@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateSupplierDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-const name_dto_1 = require("../../../common/dtos/name.dto");
+const name_dto_1 = require("src/common/dtos/name.dto");
 class CreateSupplierDto {
 }
 exports.CreateSupplierDto = CreateSupplierDto;

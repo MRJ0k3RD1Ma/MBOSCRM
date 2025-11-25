@@ -17,8 +17,8 @@ const common_1 = require("@nestjs/common");
 const sale_todo_service_1 = require("./sale-todo.service");
 const create_sale_todo_dto_1 = require("./dto/create-sale-todo.dto");
 const update_sale_todo_dto_1 = require("./dto/update-sale-todo.dto");
-const decorator_auth_1 = require("../../common/auth/decorator.auth");
-const role_enum_1 = require("../../common/auth/roles/role.enum");
+const decorator_auth_1 = require("src/common/auth/decorator.auth");
+const role_enum_1 = require("src/common/auth/roles/role.enum");
 const findAll_sale_todo_dto_1 = require("./dto/findAll-sale-todo.dto");
 let SaleTodoController = class SaleTodoController {
     constructor(saleTodoService) {

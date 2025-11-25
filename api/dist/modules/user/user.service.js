@@ -46,12 +46,12 @@ exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const bcrypt = __importStar(require("bcryptjs"));
 const prisma_service_1 = require("../prisma/prisma.service");
-const http_error_1 = require("../../common/exception/http.error");
+const http_error_1 = require("src/common/exception/http.error");
 const jsonwebtoken_1 = require("jsonwebtoken");
-const token_version_store_1 = require("../../common/auth/token-version.store");
-const refresh_token_version_store_1 = require("../../common/auth/refresh-token-version.store");
-const config_1 = require("../../common/config");
-const role_enum_1 = require("../../common/auth/roles/role.enum");
+const token_version_store_1 = require("src/common/auth/token-version.store");
+const refresh_token_version_store_1 = require("src/common/auth/refresh-token-version.store");
+const config_1 = require("src/common/config");
+const role_enum_1 = require("src/common/auth/roles/role.enum");
 const faker_1 = require("@faker-js/faker");
 let UserService = class UserService {
     constructor(prisma) {

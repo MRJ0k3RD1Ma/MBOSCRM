@@ -15,11 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccessService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const http_error_1 = require("../../common/exception/http.error");
-const config_1 = require("../../common/config");
+const http_error_1 = require("src/common/exception/http.error");
+const config_1 = require("src/common/config");
 const feature_flag_service_1 = require("../feature-flag/feature-flag.service");
 const axios_1 = __importDefault(require("axios"));
-const hashing_utils_1 = require("../../common/utils/hash/hashing.utils");
+const hashing_utils_1 = require("src/common/utils/hash/hashing.utils");
 const schedule_1 = require("@nestjs/schedule");
 let AccessService = class AccessService {
     constructor(prisma, featureFlagService) {

@@ -18,8 +18,8 @@ const appeal_service_1 = require("./appeal.service");
 const create_appeal_dto_1 = require("./dto/create-appeal.dto");
 const update_appeal_dto_1 = require("./dto/update-appeal.dto");
 const findAll_appeal_dto_1 = require("./dto/findAll-appeal.dto");
-const decorator_auth_1 = require("../../common/auth/decorator.auth");
-const role_enum_1 = require("../../common/auth/roles/role.enum");
+const decorator_auth_1 = require("src/common/auth/decorator.auth");
+const role_enum_1 = require("src/common/auth/roles/role.enum");
 let AppealController = class AppealController {
     constructor(appealService) {
         this.appealService = appealService;

@@ -10,9 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FindAllClientCrmQueryDto = void 0;
-const id_dto_1 = require("../../../common/dtos/id.dto");
-const name_dto_1 = require("../../../common/dtos/name.dto");
-const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
+const id_dto_1 = require("src/common/dtos/id.dto");
+const name_dto_1 = require("src/common/dtos/name.dto");
+const pagination_dto_1 = require("src/common/dtos/pagination.dto");
 class FindAllClientCrmQueryDto extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllClientCrmQueryDto = FindAllClientCrmQueryDto;

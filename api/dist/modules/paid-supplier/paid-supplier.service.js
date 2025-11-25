@@ -11,9 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaidSupplierService = void 0;
 const common_1 = require("@nestjs/common");
-const http_error_1 = require("../../common/exception/http.error");
+const http_error_1 = require("src/common/exception/http.error");
 const prisma_service_1 = require("../prisma/prisma.service");
-const config_1 = require("../../common/config");
+const config_1 = require("src/common/config");
 const event_emitter_1 = require("@nestjs/event-emitter");
 let PaidSupplierService = class PaidSupplierService {
     constructor(prisma, eventEmitter) {

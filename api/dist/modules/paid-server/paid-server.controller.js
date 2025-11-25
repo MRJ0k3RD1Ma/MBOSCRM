@@ -18,8 +18,8 @@ const paid_server_service_1 = require("./paid-server.service");
 const create_paid_server_dto_1 = require("./dto/create-paid-server.dto");
 const update_paid_server_dto_1 = require("./dto/update-paid-server.dto");
 const findAll_query_paid_server_dto_1 = require("./dto/findAll-query-paid-server.dto");
-const decorator_auth_1 = require("../../common/auth/decorator.auth");
-const role_enum_1 = require("../../common/auth/roles/role.enum");
+const decorator_auth_1 = require("src/common/auth/decorator.auth");
+const role_enum_1 = require("src/common/auth/roles/role.enum");
 let PaidServerController = class PaidServerController {
     constructor(paidServerService) {
         this.paidServerService = paidServerService;

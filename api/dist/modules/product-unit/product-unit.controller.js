@@ -18,8 +18,8 @@ const product_unit_service_1 = require("./product-unit.service");
 const create_product_unit_dto_1 = require("./dto/create-product-unit.dto");
 const update_product_unit_dto_1 = require("./dto/update-product-unit.dto");
 const findAll_product_unit_query_dto_1 = require("./dto/findAll-product-unit-query.dto");
-const role_enum_1 = require("../../common/auth/roles/role.enum");
-const decorator_auth_1 = require("../../common/auth/decorator.auth");
+const role_enum_1 = require("src/common/auth/roles/role.enum");
+const decorator_auth_1 = require("src/common/auth/decorator.auth");
 let ProductUnitController = class ProductUnitController {
     constructor(productUnitService) {
         this.productUnitService = productUnitService;

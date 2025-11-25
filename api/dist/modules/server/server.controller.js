@@ -18,8 +18,8 @@ const server_service_1 = require("./server.service");
 const create_server_dto_1 = require("./dto/create-server.dto");
 const update_server_dto_1 = require("./dto/update-server.dto");
 const findAll_query_server_dto_1 = require("./dto/findAll-query-server.dto");
-const decorator_auth_1 = require("../../common/auth/decorator.auth");
-const role_enum_1 = require("../../common/auth/roles/role.enum");
+const decorator_auth_1 = require("src/common/auth/decorator.auth");
+const role_enum_1 = require("src/common/auth/roles/role.enum");
 let ServerController = class ServerController {
     constructor(serverService) {
         this.serverService = serverService;
