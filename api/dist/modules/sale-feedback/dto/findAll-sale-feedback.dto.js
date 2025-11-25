@@ -13,8 +13,8 @@ exports.FindAllSaleFeedbackDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const client_1 = require("@prisma/client");
 const class_validator_1 = require("class-validator");
-const id_dto_1 = require("src/common/dtos/id.dto");
-const pagination_dto_1 = require("src/common/dtos/pagination.dto");
+const id_dto_1 = require("../../../common/dtos/id.dto");
+const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
 class FindAllSaleFeedbackDto extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllSaleFeedbackDto = FindAllSaleFeedbackDto;

@@ -1,7 +1,7 @@
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserRoleDto } from './dto/create-user-role.dto';
-import { FindAllUserRoleQueryDto } from './dto/findAll-user-role.dto';
-import { UpdateUserRoleDto } from './dto/update-user-role.dto';
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateUserRoleDto } from "./dto/create-user-role.dto";
+import { FindAllUserRoleQueryDto } from "./dto/findAll-user-role.dto";
+import { UpdateUserRoleDto } from "./dto/update-user-role.dto";
 export declare class UserRoleService {
     private readonly prisma;
     constructor(prisma: PrismaService);

@@ -14,8 +14,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SimCardController = void 0;
 const common_1 = require("@nestjs/common");
-const decorator_auth_1 = require("src/common/auth/decorator.auth");
-const role_enum_1 = require("src/common/auth/roles/role.enum");
+const decorator_auth_1 = require("../../common/auth/decorator.auth");
+const role_enum_1 = require("../../common/auth/roles/role.enum");
 const sim_card_service_1 = require("./sim-card.service");
 const create_sim_card_dto_1 = require("./dto/create-sim-card.dto");
 const findAll_sim_card_dto_1 = require("./dto/findAll-sim-card.dto");

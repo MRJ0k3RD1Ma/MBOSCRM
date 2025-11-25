@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppealService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const http_error_1 = require("src/common/exception/http.error");
+const http_error_1 = require("../../common/exception/http.error");
 let AppealService = class AppealService {
     constructor(prisma) {
         this.prisma = prisma;

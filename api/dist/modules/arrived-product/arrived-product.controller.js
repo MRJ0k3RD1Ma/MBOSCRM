@@ -14,8 +14,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArrivedProductController = void 0;
 const common_1 = require("@nestjs/common");
-const decorator_auth_1 = require("src/common/auth/decorator.auth");
-const role_enum_1 = require("src/common/auth/roles/role.enum");
+const decorator_auth_1 = require("../../common/auth/decorator.auth");
+const role_enum_1 = require("../../common/auth/roles/role.enum");
 const arrived_product_service_1 = require("./arrived-product.service");
 const create_arrived_product_dto_1 = require("./dto/create-arrived-product.dto");
 const findAll_arrived_product_query_dto_1 = require("./dto/findAll-arrived-product-query.dto");

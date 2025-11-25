@@ -9,8 +9,8 @@ import {
   Delete,
   ParseIntPipe,
 } from '@nestjs/common';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { SimCardService } from './sim-card.service';
 import { CreateSimCardDto } from './dto/create-sim-card.dto';
 import { FindAllSimCardQueryDto } from './dto/findAll-sim-card.dto';

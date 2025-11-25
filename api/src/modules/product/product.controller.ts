@@ -14,8 +14,8 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FindAllProductQueryDto } from './dto/findAll-product.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 

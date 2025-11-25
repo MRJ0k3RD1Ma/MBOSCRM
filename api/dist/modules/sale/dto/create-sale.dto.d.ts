@@ -1,4 +1,4 @@
-import { CreateSaleProductDto } from 'src/modules/sale-product/dto/create-sale-product.dto';
+import { CreateSaleProductDto } from '../../sale-product/dto/create-sale-product.dto';
 export declare class CreateSaleDto {
     date?: Date;
     clientId: number;

@@ -1,5 +1,5 @@
 import { SubscribeState } from '@prisma/client';
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { PaginationDto } from '../../../common/dtos/pagination.dto';
 export declare class FindAllSubscribeQueryDto extends PaginationDto {
     minPrice?: number;
     maxPrice?: number;

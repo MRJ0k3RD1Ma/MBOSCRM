@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNumber, IsOptional, Matches } from 'class-validator';
-import { IsName } from 'src/common/dtos/name.dto';
+import { IsName } from '../../../common/dtos/name.dto';
 
 export class UpdateSupplierDto {
   @IsName(false)

@@ -13,8 +13,8 @@ import { PaidServerService } from './paid-server.service';
 import { CreatePaidServerDto } from './dto/create-paid-server.dto';
 import { UpdatePaidServerDto } from './dto/update-paid-server.dto';
 import { FindAllQueryPaidServerDto } from './dto/findAll-query-paid-server.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 
 @Controller('paid-server')
 export class PaidServerController {

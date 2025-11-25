@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateProductGroupDto } from './dto/create-product-group.dto';
 import { UpdateProductGroupDto } from './dto/update-product-group.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 import { FindAllProductGroupQueryDto } from './dto/findAll-product-group.dto,';
-import { env } from 'src/common/config';
+import { env } from '../../common/config';
 
 @Injectable()
 export class ProductGroupService {

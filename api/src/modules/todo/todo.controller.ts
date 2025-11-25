@@ -11,7 +11,7 @@ import {
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { FindAllTodoDto } from './dto/finAll-todo.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
 
 @Controller('todo')
 export class TodoController {

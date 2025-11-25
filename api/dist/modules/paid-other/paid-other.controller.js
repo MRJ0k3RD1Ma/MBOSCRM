@@ -18,8 +18,8 @@ const paid_other_service_1 = require("./paid-other.service");
 const create_paid_other_dto_1 = require("./dto/create-paid-other.dto");
 const update_paid_other_dto_1 = require("./dto/update-paid-other.dto");
 const findAll_query_paid_other_dto_1 = require("./dto/findAll-query-paid-other.dto");
-const decorator_auth_1 = require("src/common/auth/decorator.auth");
-const role_enum_1 = require("src/common/auth/roles/role.enum");
+const decorator_auth_1 = require("../../common/auth/decorator.auth");
+const role_enum_1 = require("../../common/auth/roles/role.enum");
 let PaidOtherController = class PaidOtherController {
     constructor(paidOtherService) {
         this.paidOtherService = paidOtherService;

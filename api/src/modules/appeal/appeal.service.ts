@@ -3,7 +3,7 @@ import { CreateAppealDto } from './dto/create-appeal.dto';
 import { UpdateAppealDto } from './dto/update-appeal.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllAppealDto } from './dto/findAll-appeal.dto';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 
 @Injectable()
 export class AppealService {

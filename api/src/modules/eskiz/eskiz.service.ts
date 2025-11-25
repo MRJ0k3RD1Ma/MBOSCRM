@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import Axios from 'axios';
-import { env } from 'src/common/config';
+import { env } from '../../common/config';
 import { DetailizationState, Prisma } from '@prisma/client';
 import { EskizCallbackDto } from './dtos/eskiz-callback.dto';
 

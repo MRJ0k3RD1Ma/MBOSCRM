@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaidServerService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const http_error_1 = require("src/common/exception/http.error");
+const http_error_1 = require("../../common/exception/http.error");
 const client_1 = require("@prisma/client");
 let PaidServerService = class PaidServerService {
     constructor(prisma) {

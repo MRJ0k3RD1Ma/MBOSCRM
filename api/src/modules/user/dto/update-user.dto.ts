@@ -1,8 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString, Matches } from 'class-validator';
-import { IsId } from 'src/common/dtos/id.dto';
-import { IsName } from 'src/common/dtos/name.dto';
-import { IsPassword } from 'src/common/dtos/password.dto';
+import { IsId } from '../../../common/dtos/id.dto';
+import { IsName } from '../../../common/dtos/name.dto';
+import { IsPassword } from '../../../common/dtos/password.dto';
 
 export class UpdateUserDto {
   @IsName(false)

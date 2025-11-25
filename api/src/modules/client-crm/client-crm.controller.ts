@@ -9,8 +9,8 @@ import {
   Delete,
   ParseIntPipe,
 } from '@nestjs/common';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { ClientCrmService } from './client-crm.service';
 import { CreateClientCrmDto } from './dto/create-client-crm.dto';
 import { FindAllClientCrmQueryDto } from './dto/findAll-client-crm.dto';

@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { SupplierService } from './supplier.service';
 import { FindAllSupplierQueryDto } from './dto/findAll-supplier.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { Request } from 'express';

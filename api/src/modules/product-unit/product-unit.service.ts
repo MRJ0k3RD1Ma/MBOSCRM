@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateProductUnitDto } from './dto/create-product-unit.dto';
 import { UpdateProductUnitDto } from './dto/update-product-unit.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 import { FindAllProductUnitQueryDto } from './dto/findAll-product-unit-query.dto';
-import { env } from 'src/common/config';
+import { env } from '../../common/config';
 
 @Injectable()
 export class ProductUnitService {

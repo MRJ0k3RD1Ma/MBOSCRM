@@ -12,8 +12,8 @@ import {
 import { SaleTodoService } from './sale-todo.service';
 import { CreateSaleTodoDto } from './dto/create-sale-todo.dto';
 import { UpdateSaleTodoDto } from './dto/update-sale-todo.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { Request } from 'express';
 import { FindAllSaleTodoDto } from './dto/findAll-sale-todo.dto';
 

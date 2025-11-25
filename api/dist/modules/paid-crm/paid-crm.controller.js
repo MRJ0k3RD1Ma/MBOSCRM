@@ -18,8 +18,8 @@ const paid_crm_service_1 = require("./paid-crm.service");
 const create_paid_crm_dto_1 = require("./dto/create-paid-crm.dto");
 const update_paid_crm_dto_1 = require("./dto/update-paid-crm.dto");
 const findAll_query_paid_crm_dto_1 = require("./dto/findAll-query-paid-crm.dto");
-const decorator_auth_1 = require("src/common/auth/decorator.auth");
-const role_enum_1 = require("src/common/auth/roles/role.enum");
+const decorator_auth_1 = require("../../common/auth/decorator.auth");
+const role_enum_1 = require("../../common/auth/roles/role.enum");
 let PaidCrmController = class PaidCrmController {
     constructor(paidCrmService) {
         this.paidCrmService = paidCrmService;

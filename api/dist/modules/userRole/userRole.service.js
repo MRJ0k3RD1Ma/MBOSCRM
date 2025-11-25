@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRoleService = void 0;
 const common_1 = require("@nestjs/common");
-const http_error_1 = require("src/common/exception/http.error");
+const http_error_1 = require("../../common/exception/http.error");
 const prisma_service_1 = require("../prisma/prisma.service");
 let UserRoleService = class UserRoleService {
     constructor(prisma) {
@@ -21,10 +21,10 @@ let UserRoleService = class UserRoleService {
         const count = await this.prisma.userRole.count();
         if (count == 0) {
             await this.create({
-                name: 'superadmin',
+                name: "superadmin",
             });
             await this.create({
-                name: 'admin',
+                name: "admin",
             });
         }
     }
@@ -40,20 +40,20 @@ let UserRoleService = class UserRoleService {
             this.prisma.userRole.findMany({
                 where: {
                     name: {
-                        contains: name?.trim() || '',
-                        mode: 'insensitive',
+                        contains: name?.trim() || "",
+                        mode: "insensitive",
                     },
                     isDeleted: false,
                 },
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { id: 'desc' },
+                orderBy: { id: "desc" },
             }),
             this.prisma.userRole.count({
                 where: {
                     name: {
-                        contains: name?.trim() || '',
-                        mode: 'insensitive',
+                        contains: name?.trim() || "",
+                        mode: "insensitive",
                     },
                     isDeleted: false,
                 },
@@ -71,7 +71,7 @@ let UserRoleService = class UserRoleService {
             where: { id, isDeleted: false },
         });
         if (!userRole) {
-            throw (0, http_error_1.HttpError)({ code: 'UserRole not found' });
+            throw (0, http_error_1.HttpError)({ code: "UserRole not found" });
         }
         return userRole;
     }
@@ -80,7 +80,7 @@ let UserRoleService = class UserRoleService {
             where: { id, isDeleted: false },
         });
         if (!userRole)
-            throw (0, http_error_1.HttpError)({ code: 'UserRole not found' });
+            throw (0, http_error_1.HttpError)({ code: "UserRole not found" });
         const updateData = {
             name: dto.name || userRole.name,
         };
@@ -95,7 +95,7 @@ let UserRoleService = class UserRoleService {
             where: { id: id, isDeleted: false },
         });
         if (!userRole) {
-            throw (0, http_error_1.HttpError)({ code: 'UserRole not found' });
+            throw (0, http_error_1.HttpError)({ code: "UserRole not found" });
         }
         return await this.prisma.userRole.update({
             where: { id: id },

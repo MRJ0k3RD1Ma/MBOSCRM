@@ -15,9 +15,9 @@ import { CreateProductGroupDto } from './dto/create-product-group.dto';
 import { UpdateProductGroupDto } from './dto/update-product-group.dto';
 import { FindAllProductGroupQueryDto } from './dto/findAll-product-group.dto,';
 import { Request } from 'express';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
 import { ApiTags } from '@nestjs/swagger';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { Role } from '../../common/auth/roles/role.enum';
 
 @Controller('product-group')
 @ApiTags('Product Group')

@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { FindAllClientQueryDto } from './dto/findAll-client.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { Request } from 'express';

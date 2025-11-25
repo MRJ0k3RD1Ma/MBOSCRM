@@ -13,8 +13,8 @@ import { PaidCrmService } from './paid-crm.service';
 import { CreatePaidCrmDto } from './dto/create-paid-crm.dto';
 import { UpdatePaidCrmDto } from './dto/update-paid-crm.dto';
 import { FindAllQueryPaidCrmDto } from './dto/findAll-query-paid-crm.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 
 @Controller('paid-crm')
 export class PaidCrmController {

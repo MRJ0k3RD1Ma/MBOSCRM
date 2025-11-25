@@ -1,8 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { SaleFeedbackResult, SaleFeedbackState } from '@prisma/client';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { IsId } from 'src/common/dtos/id.dto';
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { IsId } from '../../../common/dtos/id.dto';
+import { PaginationDto } from '../../../common/dtos/pagination.dto';
 
 export class FindAllSaleFeedbackDto extends PaginationDto {
   @ApiPropertyOptional({ example: 'abs' })

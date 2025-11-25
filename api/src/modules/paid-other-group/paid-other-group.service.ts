@@ -1,10 +1,10 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePaidOtherGroupDto } from './dto/create-paid-other-group.dto';
 import { FindAllPaidOtherGroupQueryDto } from './dto/findAll-paid-other-group.dto';
 import { UpdatePaidOtherGroupDto } from './dto/update-paid-other-group.dto';
-import { env } from 'src/common/config';
+import { env } from '../../common/config';
 import { faker } from '@faker-js/faker';
 
 @Injectable()

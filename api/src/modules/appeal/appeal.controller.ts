@@ -4,8 +4,8 @@ import { CreateAppealDto } from './dto/create-appeal.dto';
 import { UpdateAppealDto } from './dto/update-appeal.dto';
 import { FindAllAppealDto } from './dto/findAll-appeal.dto';
 import { Request } from 'express';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 
 @Controller('appeal')
 export class AppealController {

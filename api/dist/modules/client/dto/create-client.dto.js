@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateClientDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-const id_dto_1 = require("src/common/dtos/id.dto");
-const name_dto_1 = require("src/common/dtos/name.dto");
+const id_dto_1 = require("../../../common/dtos/id.dto");
+const name_dto_1 = require("../../../common/dtos/name.dto");
 class CreateClientDto {
 }
 exports.CreateClientDto = CreateClientDto;

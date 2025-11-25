@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 import { FindAllProductQueryDto } from './dto/findAll-product.dto';
-import { env } from 'src/common/config';
+import { env } from '../../common/config';
 import { faker } from '@faker-js/faker';
 import { ProductType } from '@prisma/client';
 

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateSaleTodoDto } from './dto/create-sale-todo.dto';
 import { UpdateSaleTodoDto } from './dto/update-sale-todo.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 import { FindAllSaleTodoDto } from './dto/findAll-sale-todo.dto';
 import { Prisma, SaleFeedbackResult, SaleFeedbackState } from '@prisma/client';
 import { TodoService } from '../todo/todo.service';

@@ -1,12 +1,12 @@
 import { Injectable, Optional } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { env } from 'src/common/config';
+import { env } from '../../common/config';
 import Axios from 'axios';
-import { encrypt } from 'src/common/utils/hash/hashing.utils';
+import { encrypt } from '../../common/utils/hash/hashing.utils';
 import { Cron } from '@nestjs/schedule';
 import { EskizService } from '../eskiz/eskiz.service';
 import { FeatureFlagService } from '../feature-flag/feature-flag.service';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 import { FindAllSmsQueryDto } from './dtos/findAll-sms-query.dto';
 import { Prisma } from '@prisma/client';
 

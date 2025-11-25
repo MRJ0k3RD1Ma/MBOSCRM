@@ -12,8 +12,8 @@ import {
 import { SubscribeService } from './subscribe.service';
 import { CreateSubscribeDto } from './dto/create-subscribe.dto';
 import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { FindAllSubscribeQueryDto } from './dto/findAll-subscribe-query.dto';
 
 @Controller('subscribe')

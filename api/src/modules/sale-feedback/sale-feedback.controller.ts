@@ -18,8 +18,8 @@ import {
   UpdateStateDto,
 } from './dto/update-sale-feedback.dto';
 import { FindAllSaleFeedbackDto } from './dto/findAll-sale-feedback.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 
 @Controller('sale-feedback')
 export class SaleFeedbackController {

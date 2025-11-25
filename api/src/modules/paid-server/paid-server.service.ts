@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePaidServerDto } from './dto/create-paid-server.dto';
 import { UpdatePaidServerDto } from './dto/update-paid-server.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 import { FindAllQueryPaidServerDto } from './dto/findAll-query-paid-server.dto';
 import { Prisma, ServerState } from '@prisma/client';
 

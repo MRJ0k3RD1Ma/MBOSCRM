@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { env } from 'src/common/config';
+import { env } from '../../common/config';
 import { faker } from '@faker-js/faker';
 import { CreateTodoDto } from './dto/create-todo.dto';
 

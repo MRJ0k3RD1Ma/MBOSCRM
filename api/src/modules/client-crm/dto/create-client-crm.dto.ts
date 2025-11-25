@@ -1,8 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsOptional, Matches } from 'class-validator';
-import { IsId } from 'src/common/dtos/id.dto';
-import { IsName } from 'src/common/dtos/name.dto';
+import { IsId } from '../../../common/dtos/id.dto';
+import { IsName } from '../../../common/dtos/name.dto';
 
 export class CreateClientCrmDto {
   @IsId()

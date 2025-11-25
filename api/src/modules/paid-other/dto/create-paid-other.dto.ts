@@ -8,7 +8,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { IsId } from 'src/common/dtos/id.dto';
+import { IsId } from '../../../common/dtos/id.dto';
 
 export class CreatePaidOtherDto {
   @IsId()

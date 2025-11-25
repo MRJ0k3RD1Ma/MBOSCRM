@@ -14,8 +14,8 @@ import { SaleService } from './sale.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
 import { Request } from 'express';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
 
 @Controller('sale')

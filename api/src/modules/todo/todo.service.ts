@@ -3,7 +3,7 @@ import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllTodoDto } from './dto/finAll-todo.dto';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 
 @Injectable()
 export class TodoService {

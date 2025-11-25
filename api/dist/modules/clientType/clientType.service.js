@@ -11,9 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClientTypeService = void 0;
 const common_1 = require("@nestjs/common");
-const http_error_1 = require("src/common/exception/http.error");
+const http_error_1 = require("../../common/exception/http.error");
 const prisma_service_1 = require("../prisma/prisma.service");
-const config_1 = require("src/common/config");
+const config_1 = require("../../common/config");
 const faker_1 = require("@faker-js/faker");
 let ClientTypeService = class ClientTypeService {
     constructor(prisma) {

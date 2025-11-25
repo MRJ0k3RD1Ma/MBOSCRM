@@ -13,8 +13,8 @@ import { PaidOtherService } from './paid-other.service';
 import { CreatePaidOtherDto } from './dto/create-paid-other.dto';
 import { UpdatePaidOtherDto } from './dto/update-paid-other.dto';
 import { FindAllQueryPaidOtherDto } from './dto/findAll-query-paid-other.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 
 @Controller('paid-other')
 export class PaidOtherController {

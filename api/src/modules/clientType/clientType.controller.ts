@@ -9,8 +9,8 @@ import {
   ParseIntPipe,
   Delete,
 } from '@nestjs/common';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { ClientTypeService } from './clientType.service';
 import { CreateClientTypeDto } from './dto/create-client-type.dto';
 import { FindAllClientTypeQueryDto } from './dto/findAll-client-type.dto';

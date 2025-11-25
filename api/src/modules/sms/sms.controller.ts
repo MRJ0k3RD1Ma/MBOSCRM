@@ -9,10 +9,10 @@ import {
 } from '@nestjs/common';
 import { FeatureFlag } from '../feature-flag/feature-flag.decorator';
 import { SmsService } from './sms.service';
-import { CrmAuthGuard } from 'src/common/auth/crm-auth.guard';
+import { CrmAuthGuard } from '../../common/auth/crm-auth.guard';
 import { SendMessageDto } from './dtos/send-message.dto';
 import { Request } from 'express';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
 import { FindAllSmsQueryDto } from './dtos/findAll-sms-query.dto';
 
 @Controller('sms')

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { Role } from 'src/common/auth/roles/role.enum';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
 import { ApiTags } from '@nestjs/swagger';
 import { SaleTodoService } from './saleTodo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';

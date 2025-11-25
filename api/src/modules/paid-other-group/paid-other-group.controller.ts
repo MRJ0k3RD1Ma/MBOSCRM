@@ -9,8 +9,8 @@ import {
   ParseIntPipe,
   Delete,
 } from '@nestjs/common';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { PaidOtherGroupService } from './paid-other-group.service';
 import { CreatePaidOtherGroupDto } from './dto/create-paid-other-group.dto';
 import { FindAllPaidOtherGroupQueryDto } from './dto/findAll-paid-other-group.dto';

@@ -14,8 +14,8 @@ import { PaidClientService } from './paid-client.service';
 import { CreatePaidClientDto } from './dto/create-paid-client.dto';
 import { UpdatePaidClientDto } from './dto/update-paid-client.dto';
 import { FindAllQueryPaidClientDto } from './dto/findAll-query-paid-client.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { Request } from 'express';
 
 @Controller('paid-client')

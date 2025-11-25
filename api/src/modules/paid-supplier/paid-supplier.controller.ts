@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { PaidSupplierService } from './paid-supplier.service';
 import { FindAllPaidSupplierQueryDto } from './dto/findAll-paid-supplier.dto';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { CreatePaidSupplierDto } from './dto/create-paid-supplier.dto';
 import { UpdatePaidSupplierDto } from './dto/update-paid-supplier.dto';
 import { Request } from 'express';

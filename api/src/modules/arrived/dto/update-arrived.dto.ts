@@ -8,8 +8,8 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { IsId } from 'src/common/dtos/id.dto';
-import { UpdateArrivedProductDto } from 'src/modules/arrived-product/dto/update-arrived-product.dto';
+import { IsId } from '../../../common/dtos/id.dto';
+import { UpdateArrivedProductDto } from '../../arrived-product/dto/update-arrived-product.dto';
 
 export class UpdateArrivedDto {
   @ApiPropertyOptional({ example: '2025-07-29T12:12:44.882Z' })

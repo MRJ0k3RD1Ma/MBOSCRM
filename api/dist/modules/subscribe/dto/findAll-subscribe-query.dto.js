@@ -14,8 +14,8 @@ const swagger_1 = require("@nestjs/swagger");
 const client_1 = require("@prisma/client");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
-const id_dto_1 = require("src/common/dtos/id.dto");
-const pagination_dto_1 = require("src/common/dtos/pagination.dto");
+const id_dto_1 = require("../../../common/dtos/id.dto");
+const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
 class FindAllSubscribeQueryDto extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllSubscribeQueryDto = FindAllSubscribeQueryDto;

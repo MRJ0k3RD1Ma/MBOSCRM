@@ -8,8 +8,8 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { IsId } from 'src/common/dtos/id.dto';
-import { CreateSaleProductDto } from 'src/modules/sale-product/dto/create-sale-product.dto';
+import { IsId } from '../../../common/dtos/id.dto';
+import { CreateSaleProductDto } from '../../sale-product/dto/create-sale-product.dto';
 
 export class CreateSaleDto {
   @ApiPropertyOptional({ example: '2025-07-29T12:12:44.882Z' })

@@ -1,4 +1,4 @@
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { PaginationDto } from '../../../common/dtos/pagination.dto';
 export declare class FindAllClientQueryDto extends PaginationDto {
     name?: string;
     address?: string;

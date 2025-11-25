@@ -13,8 +13,8 @@ import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { FindAllPaymentQueryDto } from './dto/findAll-payment-query.dto';
-import { Role } from 'src/common/auth/roles/role.enum';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('payment')

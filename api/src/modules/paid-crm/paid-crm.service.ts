@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePaidCrmDto } from './dto/create-paid-crm.dto';
 import { UpdatePaidCrmDto } from './dto/update-paid-crm.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 import { FindAllQueryPaidCrmDto } from './dto/findAll-query-paid-crm.dto';
 import { Prisma } from '@prisma/client';
 

@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientCrm, Prisma } from '@prisma/client';
-import { HttpError } from 'src/common/exception/http.error';
+import { HttpError } from '../../common/exception/http.error';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateClientCrmDto } from './dto/create-client-crm.dto';
 import { v4 as uuidv4 } from 'uuid';

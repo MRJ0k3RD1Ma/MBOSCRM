@@ -17,8 +17,8 @@ const common_1 = require("@nestjs/common");
 const subscribe_service_1 = require("./subscribe.service");
 const create_subscribe_dto_1 = require("./dto/create-subscribe.dto");
 const update_subscribe_dto_1 = require("./dto/update-subscribe.dto");
-const decorator_auth_1 = require("src/common/auth/decorator.auth");
-const role_enum_1 = require("src/common/auth/roles/role.enum");
+const decorator_auth_1 = require("../../common/auth/decorator.auth");
+const role_enum_1 = require("../../common/auth/roles/role.enum");
 const findAll_subscribe_query_dto_1 = require("./dto/findAll-subscribe-query.dto");
 let SubscribeController = class SubscribeController {
     constructor(subscribeService) {

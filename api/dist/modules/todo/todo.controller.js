@@ -17,7 +17,7 @@ const common_1 = require("@nestjs/common");
 const todo_service_1 = require("./todo.service");
 const create_todo_dto_1 = require("./dto/create-todo.dto");
 const finAll_todo_dto_1 = require("./dto/finAll-todo.dto");
-const decorator_auth_1 = require("src/common/auth/decorator.auth");
+const decorator_auth_1 = require("../../common/auth/decorator.auth");
 let TodoController = class TodoController {
     constructor(todoService) {
         this.todoService = todoService;

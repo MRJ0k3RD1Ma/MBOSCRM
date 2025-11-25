@@ -14,8 +14,8 @@ import { ArrivedService } from './arrived.service';
 import { CreateArrivedDto } from './dto/create-arrived.dto';
 import { UpdateArrivedDto } from './dto/update-arrived.dto';
 import { Request } from 'express';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
 import { FindAllArrivedQueryDto } from './dto/findAll-arrived-query.dto';
 
 @Controller('arrived')

@@ -13,8 +13,8 @@ import { ProductUnitService } from './product-unit.service';
 import { CreateProductUnitDto } from './dto/create-product-unit.dto';
 import { UpdateProductUnitDto } from './dto/update-product-unit.dto';
 import { FindAllProductUnitQueryDto } from './dto/findAll-product-unit-query.dto';
-import { Role } from 'src/common/auth/roles/role.enum';
-import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
+import { Role } from '../../common/auth/roles/role.enum';
+import { DecoratorWrapper } from '../../common/auth/decorator.auth';
 
 @Controller('product-unit')
 export class ProductUnitController {

@@ -14,8 +14,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccessController = void 0;
 const common_1 = require("@nestjs/common");
-const decorator_auth_1 = require("src/common/auth/decorator.auth");
-const role_enum_1 = require("src/common/auth/roles/role.enum");
+const decorator_auth_1 = require("../../common/auth/decorator.auth");
+const role_enum_1 = require("../../common/auth/roles/role.enum");
 const swagger_1 = require("@nestjs/swagger");
 const access_service_1 = require("./access.service");
 const findAll_access_dto_1 = require("./dto/findAll-access.dto");

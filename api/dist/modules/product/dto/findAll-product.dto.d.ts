@@ -1,5 +1,5 @@
 import { ProductType } from '@prisma/client';
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { PaginationDto } from '../../../common/dtos/pagination.dto';
 export declare class FindAllProductQueryDto extends PaginationDto {
     minPrice?: number;
     maxPrice?: number;

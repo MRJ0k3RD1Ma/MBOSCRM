@@ -3,8 +3,8 @@ import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllPaymentQueryDto } from './dto/findAll-payment-query.dto';
-import { HttpError } from 'src/common/exception/http.error';
-import { env } from 'src/common/config';
+import { HttpError } from '../../common/exception/http.error';
+import { env } from '../../common/config';
 import { faker } from '@faker-js/faker';
 
 @Injectable()

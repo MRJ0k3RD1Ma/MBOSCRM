@@ -18,8 +18,8 @@ const sale_feedback_service_1 = require("./sale-feedback.service");
 const create_sale_feedback_dto_1 = require("./dto/create-sale-feedback.dto");
 const update_sale_feedback_dto_1 = require("./dto/update-sale-feedback.dto");
 const findAll_sale_feedback_dto_1 = require("./dto/findAll-sale-feedback.dto");
-const decorator_auth_1 = require("src/common/auth/decorator.auth");
-const role_enum_1 = require("src/common/auth/roles/role.enum");
+const decorator_auth_1 = require("../../common/auth/decorator.auth");
+const role_enum_1 = require("../../common/auth/roles/role.enum");
 let SaleFeedbackController = class SaleFeedbackController {
     constructor(saleFeedbackService) {
         this.saleFeedbackService = saleFeedbackService;
