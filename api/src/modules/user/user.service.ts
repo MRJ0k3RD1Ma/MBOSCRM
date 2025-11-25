@@ -7,17 +7,17 @@ import { sign, verify } from "jsonwebtoken";
 import {
 	getTokenVersion,
 	incrementTokenVersion,
-} from "src/common/auth/token-version.store";
+} from "../../common/auth/token-version.store";
 import {
 	getRefreshTokenVersion,
 	incrementRefreshTokenVersion,
-} from "src/common/auth/refresh-token-version.store";
+} from "../../common/auth/refresh-token-version.store";
 import { env } from "src/common/config";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { RefreshUserDto } from "./dto/refresh-user.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { Role } from "src/common/auth/roles/role.enum";
+import { Role } from "../../common/auth/roles/role.enum";
 import { Prisma, User, UserRole } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 
