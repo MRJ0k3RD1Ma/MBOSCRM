@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from "@nestjs/common";
 import { CreateSubscribeDto } from "./dto/create-subscribe.dto";
 import { UpdateSubscribeDto } from "./dto/update-subscribe.dto";
 import { PrismaService } from "../prisma/prisma.service";
-import { HttpError } from "src/common/exception/http.error";
+import { HttpError } from "../../common/exception/http.error";
 import { FindAllSubscribeQueryDto } from "./dto/findAll-subscribe-query.dto";
 import { Prisma, ProductType, Sale, SubscribeState } from "@prisma/client";
 import { Cron } from "@nestjs/schedule";

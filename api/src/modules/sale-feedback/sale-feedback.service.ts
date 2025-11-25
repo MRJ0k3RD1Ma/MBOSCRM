@@ -5,13 +5,13 @@ import {
 	UpdateStateDto,
 } from "./dto/update-sale-feedback.dto";
 import { PrismaService } from "../prisma/prisma.service";
-import { HttpError } from "src/common/exception/http.error";
+import { HttpError } from "../../common/exception/http.error";
 import { Prisma, SaleFeedbackResult, SaleFeedbackState } from "@prisma/client";
 import { FindAllSaleFeedbackDto } from "./dto/findAll-sale-feedback.dto";
 import { hash } from "crypto";
 import { v4 as uuidv4 } from "uuid";
 import { SmsService } from "../sms/sms.service";
-import { env } from "src/common/config";
+import { env } from "../../common/config";
 
 @Injectable()
 export class SaleFeedbackService {

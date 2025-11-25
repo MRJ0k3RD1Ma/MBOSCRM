@@ -1,5 +1,5 @@
 import * as CryptoJS from 'crypto-js';
-import { env } from 'src/common/config';
+import { env } from '../../config';
 
 export function encrypt(text: string) {
   const ciphertext = CryptoJS.AES.encrypt(text.toString(), env.PASSPHRASE);

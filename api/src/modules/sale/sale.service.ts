@@ -2,11 +2,11 @@ import { Injectable, OnModuleInit } from "@nestjs/common";
 import { CreateSaleDto } from "./dto/create-sale.dto";
 import { UpdateSaleDto } from "./dto/update-sale.dto";
 import { PrismaService } from "../prisma/prisma.service";
-import { HttpError } from "src/common/exception/http.error";
+import { HttpError } from "../../common/exception/http.error";
 import { FindAllSaleQueryDto } from "./dto/findAll-sale-query.dto";
 import { Prisma, ProductType, SaleFeedback, SaleState } from "@prisma/client";
 import { SaleProductService } from "../sale-product/sale-product.service";
-import { env } from "src/common/config";
+import { env } from "../../common/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { SaleFeedbackService } from "../sale-feedback/sale-feedback.service";
 

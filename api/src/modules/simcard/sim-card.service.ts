@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { Prisma, SimCard } from "@prisma/client";
-import { HttpError } from "src/common/exception/http.error";
+import { HttpError } from "../../common/exception/http.error";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateSimCardDto } from "./dto/create-sim-card.dto";
 import { FindAllSimCardQueryDto } from "./dto/findAll-sim-card.dto";

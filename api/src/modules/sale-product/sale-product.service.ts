@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CreateSaleProductDto } from "./dto/create-sale-product.dto";
 import { UpdateSaleProductDto } from "./dto/update-sale-product.dto";
 import { PrismaService } from "../prisma/prisma.service";
-import { HttpError } from "src/common/exception/http.error";
+import { HttpError } from "../../common/exception/http.error";
 import { FindAllSaleProductQueryDto } from "./dto/findAll-sale-product-query.dto";
 import { Prisma, ProductType, SaleState } from "@prisma/client";
 import { EventEmitter2 } from "@nestjs/event-emitter";

@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { HttpError } from "src/common/exception/http.error";
+import { HttpError } from "../../common/exception/http.error";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateSupplierDto } from "./dto/create-supplier.dto";
 import { FindAllSupplierQueryDto } from "./dto/findAll-supplier.dto";
 import { UpdateSupplierDto } from "./dto/update-supplier.dto";
 import { Prisma, Supplier } from "@prisma/client";
-import { env } from "src/common/config";
+import { env } from "../../common/config";
 import { faker } from "@faker-js/faker";
 import { OnEvent } from "@nestjs/event-emitter";
 

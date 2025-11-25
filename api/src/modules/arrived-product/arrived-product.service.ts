@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
-import { HttpError } from "src/common/exception/http.error";
+import { HttpError } from "../../common/exception/http.error";
 import { Prisma } from "@prisma/client";
 import { CreateArrivedProductDto } from "./dto/create-arrived-product.dto";
 import { FindAllArrivedProductQueryDto } from "./dto/findAll-arrived-product-query.dto";

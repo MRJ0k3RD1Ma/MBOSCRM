@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RolesGuard = void 0;
 const jsonwebtoken_1 = require("jsonwebtoken");
-const http_error_1 = require("src/common/exception/http.error");
+const http_error_1 = require("../../../common/exception/http.error");
 const roles_decorator_1 = require("./roles.decorator");
-const config_1 = require("src/common/config");
+const config_1 = require("../../config");
 const token_version_store_1 = require("../token-version.store");
 const refresh_token_version_store_1 = require("../refresh-token-version.store");
 class RolesGuard {
@@ -15,19 +15,19 @@ class RolesGuard {
         try {
             const requiredRoles = this.reflector.getAllAndOverride(roles_decorator_1.ROLES_KEY, [context.getHandler(), context.getClass()]);
             const request = context.switchToHttp().getRequest();
-            let bearerToken = request.headers['authorization'];
+            let bearerToken = request.headers["authorization"];
             if (!bearerToken) {
-                (0, http_error_1.HttpError)({ code: 'BEARER_TOKEN_NOT_PROVIDED' });
+                (0, http_error_1.HttpError)({ code: "BEARER_TOKEN_NOT_PROVIDED" });
             }
-            bearerToken = bearerToken.split(' ')[1];
+            bearerToken = bearerToken.split(" ")[1];
             const validUser = (0, jsonwebtoken_1.verify)(bearerToken, config_1.env.ACCESS_TOKEN_SECRET);
             if (!validUser)
-                (0, http_error_1.HttpError)({ code: 'LOGIN_FAILED' });
+                (0, http_error_1.HttpError)({ code: "LOGIN_FAILED" });
             const storedTokenVersion = (0, token_version_store_1.getTokenVersion)(validUser.id);
             const storedRefreshTokenVersion = (0, refresh_token_version_store_1.getRefreshTokenVersion)(validUser.id);
             if (!validUser.ignoreVersion &&
                 validUser.tokenVersion !== storedTokenVersion) {
-                (0, http_error_1.HttpError)({ code: 'TOKEN_INVALIDATED', statusCode: 401 });
+                (0, http_error_1.HttpError)({ code: "TOKEN_INVALIDATED", statusCode: 401 });
             }
             request.user = {
                 ...validUser,
@@ -36,10 +36,10 @@ class RolesGuard {
             return requiredRoles?.includes(validUser.role);
         }
         catch (error) {
-            if (error.message == 'jwt expired')
-                (0, http_error_1.HttpError)({ code: 'JWT_EXPIRED', statusCode: 401 });
+            if (error.message == "jwt expired")
+                (0, http_error_1.HttpError)({ code: "JWT_EXPIRED", statusCode: 401 });
             if (error instanceof jsonwebtoken_1.JsonWebTokenError)
-                (0, http_error_1.HttpError)({ code: 'JWT_INVALID', statusCode: 401 });
+                (0, http_error_1.HttpError)({ code: "JWT_INVALID", statusCode: 401 });
             throw error;
         }
     }

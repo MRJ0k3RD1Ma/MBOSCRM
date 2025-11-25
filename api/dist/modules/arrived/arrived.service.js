@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArrivedService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const http_error_1 = require("src/common/exception/http.error");
+const http_error_1 = require("../../common/exception/http.error");
 const arrived_product_service_1 = require("../arrived-product/arrived-product.service");
-const config_1 = require("src/common/config");
+const config_1 = require("../../common/config");
 const event_emitter_1 = require("@nestjs/event-emitter");
 let ArrivedService = class ArrivedService {
     constructor(prisma, arrivedProductService, eventEmitter) {

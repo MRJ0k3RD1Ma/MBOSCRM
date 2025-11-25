@@ -2,11 +2,11 @@ import { Injectable } from "@nestjs/common";
 import { CreateArrivedDto } from "./dto/create-arrived.dto";
 import { UpdateArrivedDto } from "./dto/update-arrived.dto";
 import { PrismaService } from "../prisma/prisma.service";
-import { HttpError } from "src/common/exception/http.error";
+import { HttpError } from "../../common/exception/http.error";
 import { FindAllArrivedQueryDto } from "./dto/findAll-arrived-query.dto";
 import { Prisma } from "@prisma/client";
 import { ArrivedProductService } from "../arrived-product/arrived-product.service";
-import { env } from "src/common/config";
+import { env } from "../../common/config";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 
 @Injectable()

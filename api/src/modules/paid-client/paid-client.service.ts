@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CreatePaidClientDto } from "./dto/create-paid-client.dto";
 import { UpdatePaidClientDto } from "./dto/update-paid-client.dto";
 import { PrismaService } from "../prisma/prisma.service";
-import { HttpError } from "src/common/exception/http.error";
+import { HttpError } from "../../common/exception/http.error";
 import { FindAllQueryPaidClientDto } from "./dto/findAll-query-paid-client.dto";
 import { Prisma, SubscribeState } from "@prisma/client";
 import { EventEmitter2 } from "@nestjs/event-emitter";

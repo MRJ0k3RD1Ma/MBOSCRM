@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { PaidSupplier, Prisma } from "@prisma/client";
-import { HttpError } from "src/common/exception/http.error";
+import { HttpError } from "../../common/exception/http.error";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreatePaidSupplierDto } from "./dto/create-paid-supplier.dto";
 import { FindAllPaidSupplierQueryDto } from "./dto/findAll-paid-supplier.dto";
 import { UpdatePaidSupplierDto } from "./dto/update-paid-supplier.dto";
-import { env } from "src/common/config";
+import { env } from "../../common/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 
 @Injectable()
