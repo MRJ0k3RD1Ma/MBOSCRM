@@ -13,7 +13,7 @@ exports.PrismaService = void 0;
 const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 const pg_listen_1 = __importDefault(require("pg-listen"));
-const config_1 = require("src/common/config");
+const config_1 = require("../../common/config/");
 let PrismaService = class PrismaService extends client_1.PrismaClient {
     async onModuleInit() {
         this.subscriber = (0, pg_listen_1.default)({ connectionString: config_1.env.DATABASE_URL });
