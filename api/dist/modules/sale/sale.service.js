@@ -24,6 +24,38 @@ let SaleService = class SaleService {
         this.saleFeedback = saleFeedback;
         this.eventEmitter = eventEmitter;
     }
+    async onModuleInit() {
+        (async () => {
+            const sales = await this.prisma.sale.findMany({
+                where: { isDeleted: false },
+                select: { id: true },
+            });
+            for (let sale of sales) {
+                await this.recalculateSale(sale.id);
+            }
+        })();
+    }
+    async recalculateSale(saleId) {
+        const saleProducts = await this.prisma.saleProduct.findMany({
+            where: { saleId, isDeleted: false },
+            select: { priceCount: true },
+        });
+        const totalPrice = saleProducts.reduce((sum, sp) => sum + sp.priceCount, 0);
+        const sale = await this.prisma.sale.findFirst({
+            where: { id: saleId },
+        });
+        if (!sale)
+            return;
+        const currentDept = sale.dept || 0;
+        const newCredit = Math.max(0, totalPrice - currentDept);
+        await this.prisma.sale.update({
+            where: { id: saleId },
+            data: {
+                price: totalPrice,
+                credit: newCredit,
+            },
+        });
+    }
     async create(createSaleDto, creatorId) {
         const { date, clientId, products, subscribe_begin_date, subscribe_generate_day, } = createSaleDto;
         const client = await this.prisma.client.findFirst({

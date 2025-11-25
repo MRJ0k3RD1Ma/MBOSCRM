@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, OnModuleInit } from "@nestjs/common";
 import { CreateSaleDto } from "./dto/create-sale.dto";
 import { UpdateSaleDto } from "./dto/update-sale.dto";
 import { PrismaService } from "../prisma/prisma.service";
@@ -11,13 +11,54 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { SaleFeedbackService } from "../sale-feedback/sale-feedback.service";
 
 @Injectable()
-export class SaleService {
+export class SaleService implements OnModuleInit {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly saleProductService: SaleProductService,
 		private readonly saleFeedback: SaleFeedbackService,
 		private readonly eventEmitter: EventEmitter2,
-	) {}
+	) { }
+
+	async onModuleInit() {
+		(async () => {
+			const sales = await this.prisma.sale.findMany({
+				where: { isDeleted: false },
+				select: { id: true },
+			});
+			for (let sale of sales) {
+				await this.recalculateSale(sale.id);
+			}
+		})();
+	}
+
+	async recalculateSale(saleId: number) {
+		const saleProducts = await this.prisma.saleProduct.findMany({
+			where: { saleId, isDeleted: false },
+			select: { priceCount: true },
+		});
+
+		const totalPrice = saleProducts.reduce(
+			(sum, sp) => sum + sp.priceCount,
+			0,
+		);
+
+		const sale = await this.prisma.sale.findFirst({
+			where: { id: saleId },
+		});
+
+		if (!sale) return;
+
+		const currentDept = sale.dept || 0;
+		const newCredit = Math.max(0, totalPrice - currentDept);
+
+		await this.prisma.sale.update({
+			where: { id: saleId },
+			data: {
+				price: totalPrice,
+				credit: newCredit,
+			},
+		});
+	}
 
 	async create(createSaleDto: CreateSaleDto, creatorId: number) {
 		const {
