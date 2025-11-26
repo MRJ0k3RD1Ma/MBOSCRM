@@ -65,9 +65,9 @@ export declare class ArrivedService {
                 price: number | null;
                 registerId: number | null;
                 modifyId: number | null;
-                arrivedId: number | null;
                 productId: number | null;
                 priceCount: number | null;
+                arrivedId: number | null;
             }[];
         } & {
             description: string | null;
@@ -120,9 +120,9 @@ export declare class ArrivedService {
             price: number | null;
             registerId: number | null;
             modifyId: number | null;
-            arrivedId: number | null;
             productId: number | null;
             priceCount: number | null;
+            arrivedId: number | null;
         }[];
     } & {
         description: string | null;
@@ -207,9 +207,9 @@ export declare class ArrivedService {
             price: number | null;
             registerId: number | null;
             modifyId: number | null;
-            arrivedId: number | null;
             productId: number | null;
             priceCount: number | null;
+            arrivedId: number | null;
         })[];
     } & {
         description: string | null;

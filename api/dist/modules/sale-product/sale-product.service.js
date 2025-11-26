@@ -84,6 +84,7 @@ let SaleProductService = class SaleProductService {
                 },
             });
         }
+        this.eventEmitter.emit("recalculate.product", product.id);
         return saleProduct;
     }
     async findAll(dto) {
@@ -167,13 +168,13 @@ let SaleProductService = class SaleProductService {
                 });
             }
         }
-        const finalPrice = product.price ?? updateSaleProductDto.price ?? saleProduct.price;
+        const finalPrice = product?.price ?? updateSaleProductDto.price ?? saleProduct.price;
         const finalCount = updateSaleProductDto.count ?? saleProduct.count;
         const totalPriceCount = finalPrice * finalCount;
         const isSubscribe = product
             ? product.type === "SUBSCRIPTION" || product.type === "SERVICE"
             : saleProduct.is_subscribe;
-        return this.prisma.saleProduct.update({
+        const updatedProduct = await this.prisma.saleProduct.update({
             where: { id },
             data: {
                 saleId: updateSaleProductDto.saleId ?? saleProduct.saleId,
@@ -185,6 +186,8 @@ let SaleProductService = class SaleProductService {
                 modifyId: modifyId,
             },
         });
+        this.eventEmitter.emit("recalculate.product", updateSaleProductDto.productId ?? saleProduct.productId);
+        return updatedProduct;
     }
     async remove(id) {
         const saleProduct = await this.prisma.saleProduct.findFirst({
@@ -224,6 +227,7 @@ let SaleProductService = class SaleProductService {
             });
         }
         this.eventEmitter.emit("recalculate.client", sale.clientId);
+        this.eventEmitter.emit("recalculate.product", saleProduct.productId);
         return await this.prisma.saleProduct.update({
             where: { id },
             data: { isDeleted: true },

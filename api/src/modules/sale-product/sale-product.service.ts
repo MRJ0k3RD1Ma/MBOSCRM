@@ -12,7 +12,7 @@ export class SaleProductService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly eventEmitter: EventEmitter2,
-	) {}
+	) { }
 
 	async create(createSaleProductDto: CreateSaleProductDto, creatorId: number) {
 		const sale = await this.prisma.sale.findFirst({
@@ -87,6 +87,8 @@ export class SaleProductService {
 				},
 			});
 		}
+
+		this.eventEmitter.emit("recalculate.product", product.id);
 
 		return saleProduct;
 	}
@@ -196,7 +198,7 @@ export class SaleProductService {
 		}
 
 		const finalPrice =
-			product.price ?? updateSaleProductDto.price ?? saleProduct.price;
+			product?.price ?? updateSaleProductDto.price ?? saleProduct.price;
 		const finalCount = updateSaleProductDto.count ?? saleProduct.count;
 		const totalPriceCount = finalPrice * finalCount;
 
@@ -204,7 +206,7 @@ export class SaleProductService {
 			? product.type === "SUBSCRIPTION" || product.type === "SERVICE"
 			: saleProduct.is_subscribe;
 
-		return this.prisma.saleProduct.update({
+		const updatedProduct = await this.prisma.saleProduct.update({
 			where: { id },
 			data: {
 				saleId: updateSaleProductDto.saleId ?? saleProduct.saleId,
@@ -216,6 +218,13 @@ export class SaleProductService {
 				modifyId: modifyId,
 			},
 		});
+
+		this.eventEmitter.emit(
+			"recalculate.product",
+			updateSaleProductDto.productId ?? saleProduct.productId,
+		);
+
+		return updatedProduct;
 	}
 
 	async remove(id: number) {
@@ -262,6 +271,7 @@ export class SaleProductService {
 		}
 
 		this.eventEmitter.emit("recalculate.client", sale.clientId);
+		this.eventEmitter.emit("recalculate.product", saleProduct.productId);
 
 		return await this.prisma.saleProduct.update({
 			where: { id },

@@ -65,6 +65,7 @@ let ArrivedProductService = class ArrivedProductService {
             },
         });
         this.eventEmitter.emit("recalculate.arrived", arrived.id);
+        this.eventEmitter.emit("recalculate.product", productId);
         return arrivedproduct;
     }
     async findAll(dto) {
@@ -147,6 +148,7 @@ let ArrivedProductService = class ArrivedProductService {
             },
         });
         this.eventEmitter.emit("recalculate.arrived", arrivedproduct.arrivedId);
+        this.eventEmitter.emit("recalculate.product", arrivedproduct.productId);
         return arrivedproduct;
     }
     async remove(id) {
@@ -166,6 +168,7 @@ let ArrivedProductService = class ArrivedProductService {
             data: { isDeleted: true },
         });
         this.eventEmitter.emit("recalculate.arrived", arrivedproduct.arrivedId);
+        this.eventEmitter.emit("recalculate.product", arrivedproduct.productId);
         return arrivedproduct;
     }
 };

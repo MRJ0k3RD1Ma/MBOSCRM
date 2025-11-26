@@ -16,9 +16,9 @@ export declare class ArrivedProductService {
         price: number | null;
         registerId: number | null;
         modifyId: number | null;
-        arrivedId: number | null;
         productId: number | null;
         priceCount: number | null;
+        arrivedId: number | null;
     }>;
     findAll(dto: FindAllArrivedProductQueryDto): Promise<{
         total: number;
@@ -105,9 +105,9 @@ export declare class ArrivedProductService {
             price: number | null;
             registerId: number | null;
             modifyId: number | null;
-            arrivedId: number | null;
             productId: number | null;
             priceCount: number | null;
+            arrivedId: number | null;
         })[];
     }>;
     findOne(id: number): Promise<{
@@ -119,9 +119,9 @@ export declare class ArrivedProductService {
         price: number | null;
         registerId: number | null;
         modifyId: number | null;
-        arrivedId: number | null;
         productId: number | null;
         priceCount: number | null;
+        arrivedId: number | null;
     }>;
     update(id: number, updateArrivedProductDto: UpdateArrivedProductDto): Promise<any>;
     remove(id: number): Promise<any>;

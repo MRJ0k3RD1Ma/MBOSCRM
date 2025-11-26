@@ -1,10 +1,12 @@
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { FindAllProductQueryDto } from './dto/findAll-product.dto';
-export declare class ProductService {
+import { OnModuleInit } from "@nestjs/common";
+import { CreateProductDto } from "./dto/create-product.dto";
+import { UpdateProductDto } from "./dto/update-product.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { FindAllProductQueryDto } from "./dto/findAll-product.dto";
+export declare class ProductService implements OnModuleInit {
     private readonly prisma;
     constructor(prisma: PrismaService);
+    recalculate(productId: number): Promise<void>;
     onModuleInit(): Promise<void>;
     create(createProductDto: CreateProductDto, creatorId: number): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
