@@ -27,6 +27,7 @@ import { Layout, Menu, message } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import Logo from "../../public/LogoMbos.svg";
+import LogoM from "../../public/LogoM.png";
 import { TokenManager } from "../config/token-manager";
 import { useMemo } from "react";
 
@@ -212,7 +213,7 @@ const menuItems = [
   {
     key: "/sms",
     label: "SMS xabarlar",
-    icon: <MessageOutlined />, 
+    icon: <MessageOutlined />,
   },
   {
     key: "/simcards",
@@ -304,9 +305,25 @@ export default function SiderMenu({ collapsed, setCollapsed }: Props) {
         flexDirection: "column",
       }}
     >
-      <div className="flex items-center justify-center py-4 px-3">
-        {!collapsed && <img src={Logo} alt="Logo" className="max-w-full" />}
+      <div className="flex items-center justify-center py-4 px-3 w-full !h-[90px] relative">
+        <img
+          src={Logo}
+          alt="Logo"
+          className={`
+             absolute max-w-full transition-opacity duration-300 
+             ${collapsed ? "opacity-0" : "opacity-100"}
+          `}
+        />
+        <img
+          src={LogoM}
+          alt="Logo"
+          className={`
+              absolute w-[45px] transition-opacity duration-300
+             ${collapsed ? "opacity-100" : "opacity-0"}
+         `}
+        />
       </div>
+
       <Menu
         theme="dark"
         mode="inline"
