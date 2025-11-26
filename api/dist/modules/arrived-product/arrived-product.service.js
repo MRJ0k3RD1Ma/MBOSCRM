@@ -42,7 +42,7 @@ let ArrivedProductService = class ArrivedProductService {
                 message: `Product with ID ${productId} not found`,
             });
         }
-        price = price | product.priceIncome;
+        price = price || product.priceIncome;
         const arrivedproduct = await this.prisma.arrivedProduct.create({
             data: {
                 count,
@@ -137,7 +137,7 @@ let ArrivedProductService = class ArrivedProductService {
                 message: `ArrivedProduct with ID ${id} not found`,
             });
         }
-        arrivedproduct = this.prisma.arrivedProduct.update({
+        arrivedproduct = await this.prisma.arrivedProduct.update({
             where: { id },
             data: {
                 price: updateArrivedProductDto.price || arrivedproduct.price,

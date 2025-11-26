@@ -12,7 +12,7 @@ export class ArrivedProductService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly eventEmitter: EventEmitter2,
-	) { }
+	) {}
 	async create(
 		createArrivedProductDto: CreateArrivedProductDto,
 		registerId: number,
@@ -43,7 +43,7 @@ export class ArrivedProductService {
 			});
 		}
 
-		price = price | product.priceIncome;
+		price = price || product.priceIncome;
 
 		const arrivedproduct = await this.prisma.arrivedProduct.create({
 			data: {
@@ -160,17 +160,18 @@ export class ArrivedProductService {
 			});
 		}
 
-		arrivedproduct = this.prisma.arrivedProduct.update({
+		arrivedproduct = await this.prisma.arrivedProduct.update({
 			where: { id },
 			data: {
 				price: updateArrivedProductDto.price || arrivedproduct.price,
 				count: updateArrivedProductDto.count || arrivedproduct.count,
 				priceCount:
 					(updateArrivedProductDto.price || arrivedproduct.price) *
-					(updateArrivedProductDto.count || arrivedproduct.count) ||
+						(updateArrivedProductDto.count || arrivedproduct.count) ||
 					arrivedproduct.priceCount,
 			},
 		});
+
 		this.eventEmitter.emit("recalculate.arrived", arrivedproduct.arrivedId);
 		this.eventEmitter.emit("recalculate.product", arrivedproduct.productId);
 		return arrivedproduct;

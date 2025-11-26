@@ -26,15 +26,25 @@ export class ArrivedService {
 
 		const arrivedPrice = arrivedProductAgg._sum.priceCount || 0;
 
-		await this.prisma.arrived.update({
+		const arrived = await this.prisma.arrived.update({
 			where: { id: arrivedId },
 			data: { price: arrivedPrice },
 		});
 
-		this.eventEmitter.emit("recalculate.supplier", arrivedId);
+		this.eventEmitter.emit("recalculate.supplier", arrived.supplierId);
 	}
 
 	async onModuleInit() {
+		(async () => {
+			const arriveds = await this.prisma.arrived.findMany({
+				where: { isDeleted: false },
+				select: { id: true },
+			});
+			for (const arrived of arriveds) {
+				await this.recalculate(arrived.id);
+			}
+		})();
+
 		if (env.ENV != "prod") {
 			const count = await this.prisma.arrived.count();
 			const requiredCount = 5;
@@ -119,6 +129,8 @@ export class ArrivedService {
 			data: { price: totalPrice },
 			include: { ArrivedProduct: { include: { Product: true } } },
 		});
+
+		this.recalculate(arrived.id);
 
 		return arrived;
 	}
