@@ -11,7 +11,7 @@ import { OnEvent } from "@nestjs/event-emitter";
 
 @Injectable()
 export class ProductService implements OnModuleInit {
-	constructor(private readonly prisma: PrismaService) { }
+	constructor(private readonly prisma: PrismaService) {}
 
 	@OnEvent("recalculate.product")
 	async recalculate(productId: number) {
@@ -219,7 +219,7 @@ export class ProductService implements OnModuleInit {
 	}
 
 	async findOne(id: number) {
-		const product = await this.prisma.product.findFirst({
+		let product = await this.prisma.product.findFirst({
 			where: {
 				id,
 				isDeleted: false,
@@ -228,6 +228,15 @@ export class ProductService implements OnModuleInit {
 		if (!product) {
 			throw new HttpError({ code: "Product not found" });
 		}
+		await this.recalculate(product.id);
+
+		product = await this.prisma.product.findFirst({
+			where: {
+				id,
+				isDeleted: false,
+			},
+		});
+
 		return product;
 	}
 

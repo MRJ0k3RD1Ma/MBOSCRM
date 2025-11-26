@@ -187,7 +187,7 @@ let ProductService = class ProductService {
         };
     }
     async findOne(id) {
-        const product = await this.prisma.product.findFirst({
+        let product = await this.prisma.product.findFirst({
             where: {
                 id,
                 isDeleted: false,
@@ -196,6 +196,13 @@ let ProductService = class ProductService {
         if (!product) {
             throw new http_error_1.HttpError({ code: "Product not found" });
         }
+        await this.recalculate(product.id);
+        product = await this.prisma.product.findFirst({
+            where: {
+                id,
+                isDeleted: false,
+            },
+        });
         return product;
     }
     async update(id, dto) {
