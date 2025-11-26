@@ -198,8 +198,8 @@ export declare class SaleService implements OnModuleInit {
             saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            feedbackId: number | null;
             isCompleted: boolean;
+            feedbackId: number | null;
         }[];
     } & {
         isDeleted: boolean | null;

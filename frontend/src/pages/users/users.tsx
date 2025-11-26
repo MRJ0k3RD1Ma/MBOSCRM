@@ -1,28 +1,15 @@
 import { useState } from "react";
-import {
-  Button,
-  Card,
-  Dropdown,
-  Form,
-  Input,
-  Space,
-  Table,
-  Tooltip,
-  type MenuProps,
-} from "antd";
+import { Button, Card, Form, Input, Space } from "antd";
 import {
   useCreateUser,
-  useDeleteUser,
-  useGetAllUsers,
   useUpdateUser,
   type User,
   type CreateUserInput,
 } from "../../config/queries/users/users-querys";
-import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
+import { PlusOutlined, FilterOutlined } from "@ant-design/icons";
 import UserFormModal from "./ui/user-form-modal";
 import UsersFilterModal from "./ui/user-filter-modal";
-import { indexColumn } from "../../components/tables/indexColumn";
+import UsersTable from "./ui/users-table";
 
 export default function Users() {
   const [form] = Form.useForm();
@@ -32,18 +19,9 @@ export default function Users() {
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
-
-  const { data, isLoading } = useGetAllUsers({
-    page,
-    limit,
-    ...(search ? { name: search } : {}),
-    ...filters,
-  });
 
   const createUser = useCreateUser();
   const updateUser = useUpdateUser();
-  const deleteUser = useDeleteUser();
 
   const onSubmit = (values: CreateUserInput) => {
     if (editing) {
@@ -54,74 +32,6 @@ export default function Users() {
     setOpen(false);
     setEditing(null);
   };
-
-  const handleEdit = (user: User) => {
-    setEditing(user);
-    form.setFieldsValue(user);
-    setOpen(true);
-  };
-
-  const handleDelete = (id: number) => {
-    deleteUser.mutate(id);
-  };
-
-  const columns = [
-    indexColumn(page, limit),
-    { title: "Nomi", dataIndex: "name" },
-    { title: "Username", dataIndex: "username" },
-    {
-      title: "Telefon",
-      dataIndex: "phone",
-      render: (text: string) => (text ? text : "-"),
-    },
-    {
-      title: "Role",
-      dataIndex: ["UserRole", "name"],
-      render: (text: string) => (text ? text : "-"),
-    },
-    {
-      title: "Yaratilgan vaqti",
-      dataIndex: "createdAt",
-      render: (text: string) =>
-        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
-    },
-    {
-      title: "Yangilangan vaqti",
-      dataIndex: "updatedAt",
-      render: (text: string) =>
-        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (_: any, row: User) => {
-        const items: MenuProps["items"] = [
-          {
-            key: "edit",
-            label: "Tahrirlash",
-            onClick: () => handleEdit(row),
-          },
-          {
-            key: "delete",
-            label: "O‘chirish",
-            danger: true,
-            onClick: () => handleDelete(row.id),
-          },
-        ];
-
-        return (
-          <div onClick={(e) => e.stopPropagation()}>
-            <Dropdown menu={{ items }} trigger={["click"]}>
-              <Tooltip title="Boshqarish">
-                <Button icon={<MoreOutlined />} />
-              </Tooltip>
-            </Dropdown>
-          </div>
-        );
-      },
-    },
-  ];
-
   return (
     <Card>
       <Space
@@ -173,17 +83,14 @@ export default function Users() {
         }}
         initialValues={filters}
       />
-      <Table
-        columns={columns}
-        dataSource={data?.data || []}
-        loading={isLoading}
-        rowKey="id"
-        pagination={{
-          current: page,
-          pageSize: limit,
-          total: data?.total,
-          onChange: (page) => setPage(page),
-        }}
+      <UsersTable
+        form={form}
+        search={search}
+        filters={filters}
+        setEditing={setEditing}
+        setOpen={setOpen}
+        page={page}
+        setPage={setPage}
       />
       <UserFormModal
         open={open}
