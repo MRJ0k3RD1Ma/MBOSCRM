@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EskizController = void 0;
 const common_1 = require("@nestjs/common");
@@ -15,12 +18,16 @@ const eskiz_service_1 = require("./eskiz.service");
 const feature_flag_decorator_1 = require("../feature-flag/feature-flag.decorator");
 const decorator_auth_1 = require("../../common/auth/decorator.auth");
 const role_enum_1 = require("../../common/auth/roles/role.enum");
+const eskiz_callback_dto_1 = require("./dtos/eskiz-callback.dto");
 let EskizController = class EskizController {
     constructor(eskizService) {
         this.eskizService = eskizService;
     }
     getTemplates() {
         return this.eskizService.getTemplates();
+    }
+    callback(dto) {
+        return this.eskizService.callback(dto);
     }
 };
 exports.EskizController = EskizController;
@@ -31,6 +38,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], EskizController.prototype, "getTemplates", null);
+__decorate([
+    (0, common_1.Post)("callback"),
+    (0, decorator_auth_1.DecoratorWrapper)('get templates', true, [role_enum_1.Role.Admin]),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [eskiz_callback_dto_1.EskizCallbackDto]),
+    __metadata("design:returntype", void 0)
+], EskizController.prototype, "callback", null);
 exports.EskizController = EskizController = __decorate([
     (0, common_1.Controller)('eskiz'),
     (0, feature_flag_decorator_1.FeatureFlag)('ESKIZ'),

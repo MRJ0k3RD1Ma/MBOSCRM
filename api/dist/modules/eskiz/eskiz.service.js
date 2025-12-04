@@ -20,7 +20,7 @@ const config_1 = require("../../common/config");
 let EskizService = class EskizService {
     constructor(prisma) {
         this.prisma = prisma;
-        this.axios = axios_1.default.create({ baseURL: 'https://notify.eskiz.uz/api/' });
+        this.axios = axios_1.default.create({ baseURL: "https://notify.eskiz.uz/api/" });
     }
     async onModuleInit() {
         await this.getToken();
@@ -33,7 +33,7 @@ let EskizService = class EskizService {
                     return await this.axios(originalRequest);
                 }
                 catch (refreshError) {
-                    console.error('Failed to refresh token:', refreshError);
+                    console.error("Failed to refresh token:", refreshError);
                     return Promise.reject(refreshError);
                 }
             }
@@ -41,7 +41,6 @@ let EskizService = class EskizService {
         });
     }
     async callback(dto) {
-        console.log(dto);
         await this.prisma.detailization.update({
             where: { messageId: dto.message_id },
             data: { state: dto.status },
@@ -51,14 +50,14 @@ let EskizService = class EskizService {
     async sendMessage(message) {
         try {
             const callback_url = `${config_1.env.BACKEND_URL}/eskiz/callback`;
-            const { data } = await this.axios.post('message/sms/send', {
+            const { data } = await this.axios.post("message/sms/send", {
                 mobile_phone: message.phone_number,
                 message: message.message,
                 callback_url,
             });
             await this.prisma.detailization.update({
                 where: { id: message.id },
-                data: { messageId: data.id, state: 'WAITING' },
+                data: { messageId: data.id, state: "WAITING" },
             });
             return data;
         }
@@ -66,21 +65,30 @@ let EskizService = class EskizService {
             console.log(e);
             await this.prisma.detailization.update({
                 where: { id: message.id },
-                data: { state: 'REJECTED' },
+                data: { state: "REJECTED" },
             });
             throw e;
         }
     }
     async getTemplates() {
-        return (await this.axios.get('/user/templates')).data;
+        return (await this.axios.get("/user/templates")).data;
+    }
+    async getSmsStatusByMessageId(messageId) {
+        try {
+            const { data } = await this.axios.get(`sms/status_by_id/${messageId}`);
+            return data.status;
+        }
+        catch (e) {
+            return "FAILED";
+        }
     }
     async getToken() {
         try {
             const form = new FormData();
-            form.append('email', config_1.env.ESKIZ_EMAIL);
-            form.append('password', config_1.env.ESKIZ_PASSWORD);
-            const { data } = await this.axios.post('/auth/login', form);
-            this.axios.defaults.headers.common['Authorization'] =
+            form.append("email", config_1.env.ESKIZ_EMAIL);
+            form.append("password", config_1.env.ESKIZ_PASSWORD);
+            const { data } = await this.axios.post("/auth/login", form);
+            this.axios.defaults.headers.common["Authorization"] =
                 `Bearer ${data.data.token}`;
         }
         catch (e) {
