@@ -75,11 +75,16 @@ let EskizService = class EskizService {
     }
     async getSmsStatusByMessageId(messageId) {
         try {
-            const { data } = await this.axios.get(`sms/status_by_id/${messageId}`);
-            return data.status;
+            const { data } = await this.axios.get(`/message/sms/status_by_id/${messageId}`);
+            const status = data.data.status;
+            if (status === "DELIVERED") {
+                return "DELIVRD";
+            }
+            return data.data.status;
         }
         catch (e) {
-            return "FAILED";
+            console.log(e);
+            return "REJECTED";
         }
     }
     async getToken() {

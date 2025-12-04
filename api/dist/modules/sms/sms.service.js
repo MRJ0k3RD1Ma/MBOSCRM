@@ -48,7 +48,7 @@ let SmsService = class SmsService {
             await this.eskizService.sendMessage(message);
         }
         const messagesToCheck = await this.prisma.detailization.findMany({
-            where: { state: 'WAITING', updatedAt: { gt: new Date(Date.now() + 1000 * 60 * 5) } },
+            where: { state: 'WAITING', updatedAt: { lt: new Date(Date.now() - 1000 * 60 * 5) } },
         });
         for (let message of messagesToCheck) {
             const status = await this.eskizService.getSmsStatusByMessageId(message.messageId);
