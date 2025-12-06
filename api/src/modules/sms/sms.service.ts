@@ -26,7 +26,7 @@ export class SmsService {
         headers: { 'x-api-key': encrypt(env.MAIN_KEY) },
       });
 
-  @Cron('0 * * * * *')
+  @Cron('0 */30 * * * *')
   async cron() {
     console.log('cron');
     if (!env.IS_MAIN) return;
