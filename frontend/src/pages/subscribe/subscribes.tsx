@@ -79,7 +79,11 @@ export default function Subscribes() {
       render: (price: number) =>
         price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
     },
-    { title: "To‘langan", dataIndex: "paid" },
+    {
+      title: "To‘langan", dataIndex: "paid",
+      render: (paid: number) =>
+        paid ? paid.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
     {
       title: "Holat",
       dataIndex: "state",

@@ -31,9 +31,21 @@ import { useThemeContext } from "../../providers/theme-provider";
 
 const { Title, Text } = Typography;
 
+function formatDashboardNumber(number: number) {
+  if (Math.abs(number) >= 1000) {
+    const inThousands = number / 1000;
+    return new Intl.NumberFormat("ru-RU", {
+      maximumFractionDigits: 0,
+    }).format(inThousands) + "k";
+  }
+  return new Intl.NumberFormat("ru-RU", {
+    maximumFractionDigits: 0,
+  }).format(number);
+}
+
 function formatMoney(value?: number) {
   if (value == null) return "0 so'm";
-  return new Intl.NumberFormat("ru-RU").format(value) + " so'm";
+  return formatDashboardNumber(value) + " so'm";
 }
 
 type StatCardProps = {
@@ -207,7 +219,7 @@ export default function Dashboard() {
   };
 
   const moneyTooltip = (v: any) =>
-    v == null ? "-" : new Intl.NumberFormat("ru-RU").format(v) + " so'm";
+    v == null ? "-" : formatMoney(v);
 
   const titleColor = isDark ? "" : "text-gray-800";
   const subtitleColor = isDark ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.65)";
@@ -292,15 +304,11 @@ export default function Dashboard() {
             <div className="space-y-1">
               <div className="!font-semibold text-xl">
                 {year} - yil:{" "}
-                {new Intl.NumberFormat("ru-RU").format(stats.yearlyIncome || 0)}{" "}
-                so'm
+                {formatMoney(stats.yearlyIncome || 0)}
               </div>
               <div className="!text-sm !opacity-80">
                 {year - 1} - yil:{" "}
-                {new Intl.NumberFormat("ru-RU").format(
-                  stats.lastYearIncome || 0
-                )}{" "}
-                so'm
+                {formatMoney(stats.lastYearIncome || 0)}
               </div>
             </div>
           }
@@ -323,7 +331,7 @@ export default function Dashboard() {
           isDark={isDark}
           link="/monthly-expenses"
         />
-        {/* <StatCard
+        <StatCard
           title={`${currentMonthName}dagi qarzdorlik`}
           value={formatMoney(data?.month?.credit)}
           icon={<TrendingDown size={32} color="white" />}
@@ -331,7 +339,7 @@ export default function Dashboard() {
           textColor={titleColor}
           isDark={isDark}
           link="/clients-credit"
-        /> */}
+        />
       </div>
       <Row gutter={0} style={{ marginTop: 24 }}>
         <Col span={24} style={{ display: "flex", padding: 0 }}>
@@ -363,7 +371,7 @@ export default function Dashboard() {
               }}
             >
               <Title level={5} style={{ margin: 0, color: cardTitleColor }}>
-                Oylik: Tushum / Chiqim / Qarzdorlik
+                Oylik: Tushum / Chiqim / Obuna qarzdorlik
               </Title>
               <AntdTooltip title="Har bir ustun oylik qiymatni ko'rsatadi">
                 <Text type="secondary">Ma'lumotlar</Text>
@@ -389,7 +397,7 @@ export default function Dashboard() {
                     stroke={chartTextColor}
                     fontSize={12}
                     tickFormatter={(v) =>
-                      v ? `${Math.round(v / 1000)}k` : "0"
+                      v ? formatDashboardNumber(v) : "0"
                     }
                   />
                   <Tooltip
@@ -426,14 +434,112 @@ export default function Dashboard() {
                       radius={[4, 4, 0, 0]}
                     />
                   </Link>
-                  <Link to={"/clients-credit"}>
-                    <Bar
-                      dataKey="qarzdorlik"
-                      name="Qarzdorlik"
-                      fill="#ef4444"
-                      radius={[4, 4, 0, 0]}
-                    />
-                  </Link>
+                  <Bar
+                    dataKey="credit"
+                    name="Obuna qarzdorligi"
+                    fill="#ef4444"
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+        </Col>
+
+        <Col span={24} style={{ display: "flex", padding: 0, marginTop: 24 }}>
+          <Card
+            style={{
+              width: "100%",
+              borderRadius: 12,
+              backgroundColor: cardBgColor,
+              borderColor: cardBorderColor,
+              padding: 0,
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+            }}
+            bodyStyle={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+              flex: 1,
+              padding: 12,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 8,
+              }}
+            >
+              <Title level={5} style={{ margin: 0, color: cardTitleColor }}>
+                Oylik sotilgan: Mahsulotlar / Xizmatlar / Obunalar
+              </Title>
+              <AntdTooltip title="Har bir ustun oylik qiymatni ko'rsatadi">
+                <Text type="secondary">Ma'lumotlar</Text>
+              </AntdTooltip>
+            </div>
+
+            <div
+              style={{ flex: 1, minHeight: 360 }}
+              className="!overflow-hidden"
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={monthlyData}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke={chartGridColor}
+                  />
+                  <XAxis
+                    dataKey="monthLabel"
+                    stroke={chartTextColor}
+                    fontSize={12}
+                  />
+                  <YAxis
+                    stroke={chartTextColor}
+                    fontSize={12}
+                    tickFormatter={(v) =>
+                      v ? formatDashboardNumber(v) : "0"
+                    }
+                  />
+                  <Tooltip
+                    formatter={(v: any) => moneyTooltip(v)}
+                    contentStyle={{
+                      backgroundColor: isDark
+                        ? "rgba(0,0,0,0.8)"
+                        : "rgba(255,255,255,0.95)",
+                      border: `1px solid ${isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                        }`,
+                      borderRadius: "8px",
+                      color: isDark ? "#fff" : "#000",
+                    }}
+                  />
+                  <Legend
+                    wrapperStyle={{
+                      color: chartTextColor,
+                      fontSize: "12px",
+                    }}
+                  />
+                  <Bar
+                    dataKey="productsSold"
+                    name="Mahsulotlar"
+                    fill="#22c55e"
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="servicesSold"
+                    name="Xizmatlar"
+                    fill="#db15ba"
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="subscriptionSold"
+                    name="Obunalar"
+                    fill="#3B82F6"
+                    radius={[4, 4, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -499,7 +605,7 @@ export default function Dashboard() {
                     stroke={chartTextColor}
                     fontSize={12}
                     tickFormatter={(v) =>
-                      v ? `${Math.round(v / 1000)}k` : "0"
+                      v ? formatDashboardNumber(v) : "0"
                     }
                   />
                   <Tooltip
