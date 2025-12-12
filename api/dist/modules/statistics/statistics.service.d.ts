@@ -29,6 +29,7 @@ export declare class StatisticsService {
                 expectedSubscription: number;
                 productsSold: any;
                 servicesSold: any;
+                subscriptionSold: any;
                 credit: any;
             }[];
             subscriptionForecast: number[];

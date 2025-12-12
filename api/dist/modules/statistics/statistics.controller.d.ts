@@ -29,6 +29,7 @@ export declare class StatisticsController {
                 expectedSubscription: number;
                 productsSold: any;
                 servicesSold: any;
+                subscriptionSold: any;
                 credit: any;
             }[];
             subscriptionForecast: number[];

@@ -313,6 +313,7 @@ export class StatisticsService {
 						expectedSubscription,
 						productsSold: sumOrZero(productsSold, "count"),
 						servicesSold: sumOrZero(servicesSold, "count"),
+						subscriptionSold: subPrice,
 						credit: monthCredit,
 					};
 				});
