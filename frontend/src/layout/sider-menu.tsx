@@ -39,6 +39,11 @@ const menuItems = [
     icon: <HomeOutlined />,
   },
   {
+    key: "/reports",
+    label: "Hisobotlar",
+    icon: <FileTextOutlined />,
+  },
+  {
     key: "/subscribes",
     label: "Obunalar",
     icon: <TagsOutlined />,

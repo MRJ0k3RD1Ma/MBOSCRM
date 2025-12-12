@@ -39,6 +39,7 @@ import Sale from "../pages/sale/sale";
 import SaleCredit from "../pages/sale/sale-credit";
 import Sales from "../pages/sale/sales";
 import SalesFormPage from "../pages/sale/ui/sales-form-page";
+import Reports from "../pages/reports/reports";
 import Server from "../pages/server/server";
 import Servers from "../pages/server/servers";
 import SimCardDetail from "../pages/simcard/simcard-detail";
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
           {
             path: "dashboard",
             element: <Dashboard />,
+          },
+          {
+            path: "reports",
+            element: <Reports />,
           },
           {
             path: "clients",
