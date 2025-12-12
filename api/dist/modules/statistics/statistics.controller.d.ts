@@ -19,6 +19,7 @@ export declare class StatisticsController {
             name: string;
             income: any;
             outcome: any;
+            credit: any;
         };
         charts: {
             monthlyStats: {
@@ -26,6 +27,9 @@ export declare class StatisticsController {
                 tushum: any;
                 chiqim: any;
                 expectedSubscription: number;
+                productsSold: any;
+                servicesSold: any;
+                credit: any;
             }[];
             subscriptionForecast: number[];
         };

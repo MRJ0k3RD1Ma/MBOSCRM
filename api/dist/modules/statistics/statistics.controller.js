@@ -28,7 +28,7 @@ let StatisticsController = class StatisticsController {
 exports.StatisticsController = StatisticsController;
 __decorate([
     (0, common_1.Get)(),
-    (0, decorator_auth_1.DecoratorWrapper)('Get Statistics', true, [role_enum_1.Role.Admin]),
+    (0, decorator_auth_1.DecoratorWrapper)('Get Statistics', false, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Query)('year', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),

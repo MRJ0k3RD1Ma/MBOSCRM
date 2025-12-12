@@ -8,7 +8,7 @@ export class StatisticsController {
   constructor(private readonly statisticsService: StatisticsService) {}
 
   @Get()
-  @DecoratorWrapper('Get Statistics', true, [Role.Admin])
+  @DecoratorWrapper('Get Statistics', false, [Role.Admin])
   findOne(@Query('year', ParseIntPipe) year?: number) {
     return this.statisticsService.getStatistics(year);
   }

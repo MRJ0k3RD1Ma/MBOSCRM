@@ -138,7 +138,7 @@ let SmsService = class SmsService {
 };
 exports.SmsService = SmsService;
 __decorate([
-    (0, schedule_1.Cron)('0 * * * * *'),
+    (0, schedule_1.Cron)('0 */30 * * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

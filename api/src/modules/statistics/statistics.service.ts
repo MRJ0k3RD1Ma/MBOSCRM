@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 
 @Injectable()
 export class StatisticsService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(private readonly prisma: PrismaService) { }
 
 	async getStatistics(year: number = new Date().getFullYear()) {
 		if (year == 0) year = new Date().getFullYear();
@@ -262,7 +262,37 @@ export class StatisticsService {
 							client: { isDeleted: false },
 						},
 					}),
-				]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg]) => {
+
+					this.prisma.saleProduct.aggregate({
+						_sum: { count: true },
+						where: {
+							sale: {
+								date: { gte: mStart, lte: mEnd },
+								isDeleted: false,
+							},
+							product: {
+								type: { in: ["DEVICE"] },
+								isDeleted: false,
+							},
+							isDeleted: false,
+						},
+					}),
+
+					this.prisma.saleProduct.aggregate({
+						_sum: { count: true },
+						where: {
+							sale: {
+								date: { gte: mStart, lte: mEnd },
+								isDeleted: false,
+							},
+							product: {
+								type: "SERVICE",
+								isDeleted: false,
+							},
+							isDeleted: false,
+						},
+					}),
+				]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold]) => {
 					const incomeMonth =
 						sumOrZero(pc, "price") + sumOrZero(poInc, "price");
 					const expenseMonth =
@@ -273,12 +303,17 @@ export class StatisticsService {
 					const subPrice = sumOrZero(subAgg, "price");
 					const subPaid = sumOrZero(subAgg, "paid");
 					const expectedSubscription = Math.max(0, subPrice - subPaid);
+					const saleCredit = sumOrZero(saleDebtMonth, "credit");
+					const monthCredit = saleCredit + expectedSubscription;
 
 					return {
 						month: i + 1,
 						tushum: incomeMonth,
 						chiqim: expenseMonth,
 						expectedSubscription,
+						productsSold: sumOrZero(productsSold, "count"),
+						servicesSold: sumOrZero(servicesSold, "count"),
+						credit: monthCredit,
 					};
 				});
 			}),
@@ -306,6 +341,7 @@ export class StatisticsService {
 				name: dayjs().format("MMMM"),
 				income: currentMonth.tushum,
 				outcome: currentMonth.chiqim,
+				credit: currentMonth.credit,
 			},
 			charts: {
 				monthlyStats,
