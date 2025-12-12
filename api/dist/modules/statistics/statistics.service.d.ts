@@ -1,7 +1,9 @@
+import { StreamableFile } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 export declare class StatisticsService {
     private readonly prisma;
     constructor(prisma: PrismaService);
+    export(year?: number, month?: number): Promise<StreamableFile>;
     getStatistics(year?: number): Promise<{
         balance: number;
         totals: {

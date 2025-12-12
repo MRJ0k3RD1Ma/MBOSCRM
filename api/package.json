@@ -41,6 +41,7 @@
 		"dayjs": "^1.11.18",
 		"dotenv": "^16.6.1",
 		"envalid": "^8.1.0",
+		"exceljs": "^4.4.0",
 		"grammy": "^1.38.2",
 		"helmet": "^6.2.0",
 		"jsonwebtoken": "^8.5.1",

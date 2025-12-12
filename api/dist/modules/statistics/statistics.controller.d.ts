@@ -35,4 +35,5 @@ export declare class StatisticsController {
             subscriptionForecast: number[];
         };
     }>;
+    export(year?: number, month?: number): Promise<import("@nestjs/common").StreamableFile>;
 }

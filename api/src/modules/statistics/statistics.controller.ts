@@ -12,4 +12,11 @@ export class StatisticsController {
   findOne(@Query('year', ParseIntPipe) year?: number) {
     return this.statisticsService.getStatistics(year);
   }
+
+  @Get("export")
+    @DecoratorWrapper('Export as Excel', false, [Role.Admin])
+  export(@Query('year', ParseIntPipe) year?: number,@Query('month',ParseIntPipe) month?:number) {
+    return this.statisticsService.export(year,month);
+  }
+
 }

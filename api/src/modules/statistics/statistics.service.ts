@@ -1,10 +1,266 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, StreamableFile } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import dayjs from "dayjs";
+import { Workbook } from "exceljs";
 
 @Injectable()
 export class StatisticsService {
 	constructor(private readonly prisma: PrismaService) {}
+
+	async export(year: number = new Date().getFullYear(), month?: number) {
+		const excel = new Workbook();
+		const sheet = excel.addWorksheet("Hisobot");
+		sheet.columns = [
+			{
+				header: "#",
+				width: 5,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Mahsulot Nomi",
+				width: 20,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Mahsulot Turi",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Oy Boshlanishiga qoldiq",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Sotilgan",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Ummumiy Summasi",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Kelgan",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Ummumiy Summasi",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Foyda",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Oy Oxiridagi Qoldiq",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+		];
+
+		let sheetIndex = 1;
+
+		let priceOfTotalSold = 0;
+		let priceOfTotalArrived = 0;
+
+		//Get devices
+		const devices = await this.prisma.product.findMany({
+			where: { isDeleted: false, type: "DEVICE" },
+			orderBy: { name: "asc" },
+		});
+
+		for (let device of devices) {
+			//calculate the number of reminders in the start of the month
+			let remiderInStartOfMonth = device.countReminder;
+
+			const saleProducts = await this.prisma.saleProduct.aggregate({
+				_sum: { count: true, priceCount: true },
+				where: {
+					isDeleted: false,
+					sale: {
+						date: {
+							gte: new Date(year, month - 1, 1),
+						},
+					},
+					product: { id: device.id },
+				},
+			});
+
+			const arrivedProducts = await this.prisma.arrivedProduct.aggregate({
+				_sum: { count: true, priceCount: true },
+				where: {
+					isDeleted: false,
+					Arrived: {
+						date: {
+							gte: new Date(year, month - 1, 1),
+						},
+					},
+					Product: { id: device.id },
+				},
+			});
+
+			const saleProductsMonth = await this.prisma.saleProduct.aggregate({
+				_sum: { count: true, priceCount: true },
+				where: {
+					isDeleted: false,
+					sale: {
+						date: {
+							gte: new Date(year, month - 1, 1),
+							lte: new Date(year, month, 0),
+						},
+					},
+					product: { id: device.id },
+				},
+			});
+
+			const arrivedProductsMonth = await this.prisma.arrivedProduct.aggregate({
+				_sum: { count: true, priceCount: true },
+				where: {
+					isDeleted: false,
+					Arrived: {
+						date: {
+							gte: new Date(year, month - 1, 1),
+							lte: new Date(year, month, 0),
+						},
+					},
+					Product: { id: device.id },
+				},
+			});
+
+			remiderInStartOfMonth += saleProducts._sum.count;
+			remiderInStartOfMonth -= arrivedProducts._sum.count;
+
+			//calculate the number of sold devices in the month
+			const numberOfDevicesSold = saleProductsMonth._sum.count;
+			const priceOfDevicesSold = saleProductsMonth._sum.priceCount;
+
+			const numberOfDevicesArrived = arrivedProductsMonth._sum.count;
+			const priceOfDevicesArrived = arrivedProductsMonth._sum.priceCount;
+
+			let remiderInEndOfMonth =
+				remiderInStartOfMonth + numberOfDevicesArrived - numberOfDevicesSold;
+
+			priceOfTotalSold += priceOfDevicesSold;
+			priceOfTotalArrived += priceOfDevicesArrived;
+
+			sheet.addRow([
+				sheetIndex,
+				device.name,
+				device.type,
+				remiderInStartOfMonth,
+				numberOfDevicesSold,
+				priceOfDevicesSold,
+				numberOfDevicesArrived,
+				priceOfDevicesArrived,
+				0,
+				remiderInEndOfMonth,
+			]);
+			sheetIndex++;
+		}
+
+		const subscriptionProducts = await this.prisma.product.findMany({
+			where: { isDeleted: false, type: "SUBSCRIPTION" },
+			orderBy: { name: "asc" },
+		});
+
+		for (let subscriptionProduct of subscriptionProducts) {
+			const subsciptions = await this.prisma.subscribe.aggregate({
+				where: {
+					isDeleted: false,
+					sale: {
+						SaleProduct: { some: { product: { id: subscriptionProduct.id } } },
+					},
+					paying_date: {
+						gte: new Date(year, month - 1, 1),
+						lte: new Date(year, month, 0),
+					},
+				},
+				_sum: { price: true, paid: true },
+				_count: { id: true },
+			});
+			const numberOfSubscriptionsSold = subsciptions._count.id;
+			const priceOfSubscriptionsSold = subsciptions._sum.price;
+
+			priceOfTotalSold += priceOfSubscriptionsSold;
+
+			sheet.addRow([
+				sheetIndex,
+				subscriptionProduct.name,
+				subscriptionProduct.type,
+				0,
+				numberOfSubscriptionsSold,
+				priceOfSubscriptionsSold,
+				0,
+				0,
+				priceOfSubscriptionsSold,
+				0,
+			]);
+			sheetIndex++;
+		}
+
+		const services = await this.prisma.product.findMany({
+			where: { isDeleted: false, type: "SERVICE" },
+			orderBy: { name: "asc" },
+		});
+
+		for (let service of services) {
+			const serviceSales = await this.prisma.saleProduct.aggregate({
+				where: {
+					isDeleted: false,
+					product: { id: service.id },
+					sale: {
+						date: {
+							gte: new Date(year, month - 1, 1),
+							lte: new Date(year, month, 0),
+						},
+					},
+				},
+				_sum: { priceCount: true, count: true },
+			});
+			const numberOfServicesSold = serviceSales._sum.count;
+			const priceOfServicesSold = serviceSales._sum.priceCount;
+
+			priceOfTotalSold += priceOfServicesSold;
+
+			sheet.addRow([
+				sheetIndex,
+				service.name,
+				service.type,
+				0,
+				numberOfServicesSold,
+				priceOfServicesSold,
+				0,
+				0,
+				priceOfServicesSold,
+				0,
+			]);
+			sheetIndex++;
+		}
+
+		sheet.addRow([
+			null,
+			null,
+			null,
+			null,
+			"Jami:",
+			priceOfTotalSold,
+			null,
+			priceOfTotalArrived,
+			0,
+			null,
+		]);
+
+		const buffer = await excel.xlsx.writeBuffer();
+		const rawData = new Uint8Array(buffer);
+		return new StreamableFile(rawData, {
+			type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+		});
+	}
 
 	async getStatistics(year: number = new Date().getFullYear()) {
 		if (year == 0) year = new Date().getFullYear();

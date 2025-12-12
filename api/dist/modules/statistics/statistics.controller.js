@@ -24,6 +24,9 @@ let StatisticsController = class StatisticsController {
     findOne(year) {
         return this.statisticsService.getStatistics(year);
     }
+    export(year, month) {
+        return this.statisticsService.export(year, month);
+    }
 };
 exports.StatisticsController = StatisticsController;
 __decorate([
@@ -34,6 +37,15 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], StatisticsController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Get)("export"),
+    (0, decorator_auth_1.DecoratorWrapper)('Export as Excel', false, [role_enum_1.Role.Admin]),
+    __param(0, (0, common_1.Query)('year', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Query)('month', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:returntype", void 0)
+], StatisticsController.prototype, "export", null);
 exports.StatisticsController = StatisticsController = __decorate([
     (0, common_1.Controller)('statistics'),
     __metadata("design:paramtypes", [statistics_service_1.StatisticsService])
