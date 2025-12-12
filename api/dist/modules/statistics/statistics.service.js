@@ -224,7 +224,7 @@ let StatisticsService = class StatisticsService {
                     },
                 }),
                 this.prisma.saleProduct.aggregate({
-                    _sum: { count: true },
+                    _sum: { count: true, priceCount: true },
                     where: {
                         sale: {
                             date: { gte: mStart, lte: mEnd },
@@ -238,7 +238,7 @@ let StatisticsService = class StatisticsService {
                     },
                 }),
                 this.prisma.saleProduct.aggregate({
-                    _sum: { count: true },
+                    _sum: { count: true, priceCount: true },
                     where: {
                         sale: {
                             date: { gte: mStart, lte: mEnd },
@@ -251,7 +251,7 @@ let StatisticsService = class StatisticsService {
                         isDeleted: false,
                     },
                 }),
-            ]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold]) => {
+            ]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold,]) => {
                 const incomeMonth = sumOrZero(pc, "price") + sumOrZero(poInc, "price");
                 const expenseMonth = sumOrZero(psup, "price") +
                     sumOrZero(pserv, "price") +
@@ -266,8 +266,8 @@ let StatisticsService = class StatisticsService {
                     tushum: incomeMonth,
                     chiqim: expenseMonth,
                     expectedSubscription,
-                    productsSold: sumOrZero(productsSold, "count"),
-                    servicesSold: sumOrZero(servicesSold, "count"),
+                    productsSold: sumOrZero(productsSold, "priceCount"),
+                    servicesSold: sumOrZero(servicesSold, "priceCount"),
                     subscriptionSold: subPrice,
                     credit: monthCredit,
                 };

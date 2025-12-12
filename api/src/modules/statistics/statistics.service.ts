@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 
 @Injectable()
 export class StatisticsService {
-	constructor(private readonly prisma: PrismaService) { }
+	constructor(private readonly prisma: PrismaService) {}
 
 	async getStatistics(year: number = new Date().getFullYear()) {
 		if (year == 0) year = new Date().getFullYear();
@@ -264,7 +264,7 @@ export class StatisticsService {
 					}),
 
 					this.prisma.saleProduct.aggregate({
-						_sum: { count: true },
+						_sum: { count: true, priceCount: true },
 						where: {
 							sale: {
 								date: { gte: mStart, lte: mEnd },
@@ -279,7 +279,7 @@ export class StatisticsService {
 					}),
 
 					this.prisma.saleProduct.aggregate({
-						_sum: { count: true },
+						_sum: { count: true, priceCount: true },
 						where: {
 							sale: {
 								date: { gte: mStart, lte: mEnd },
@@ -292,31 +292,43 @@ export class StatisticsService {
 							isDeleted: false,
 						},
 					}),
-				]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold]) => {
-					const incomeMonth =
-						sumOrZero(pc, "price") + sumOrZero(poInc, "price");
-					const expenseMonth =
-						sumOrZero(psup, "price") +
-						sumOrZero(pserv, "price") +
-						sumOrZero(poOut, "price");
+				]).then(
+					([
+						pc,
+						poInc,
+						psup,
+						pserv,
+						poOut,
+						saleDebtMonth,
+						subAgg,
+						productsSold,
+						servicesSold,
+					]) => {
+						const incomeMonth =
+							sumOrZero(pc, "price") + sumOrZero(poInc, "price");
+						const expenseMonth =
+							sumOrZero(psup, "price") +
+							sumOrZero(pserv, "price") +
+							sumOrZero(poOut, "price");
 
-					const subPrice = sumOrZero(subAgg, "price");
-					const subPaid = sumOrZero(subAgg, "paid");
-					const expectedSubscription = Math.max(0, subPrice - subPaid);
-					const saleCredit = sumOrZero(saleDebtMonth, "credit");
-					const monthCredit = saleCredit + expectedSubscription;
+						const subPrice = sumOrZero(subAgg, "price");
+						const subPaid = sumOrZero(subAgg, "paid");
+						const expectedSubscription = Math.max(0, subPrice - subPaid);
+						const saleCredit = sumOrZero(saleDebtMonth, "credit");
+						const monthCredit = saleCredit + expectedSubscription;
 
-					return {
-						month: i + 1,
-						tushum: incomeMonth,
-						chiqim: expenseMonth,
-						expectedSubscription,
-						productsSold: sumOrZero(productsSold, "count"),
-						servicesSold: sumOrZero(servicesSold, "count"),
-						subscriptionSold: subPrice,
-						credit: monthCredit,
-					};
-				});
+						return {
+							month: i + 1,
+							tushum: incomeMonth,
+							chiqim: expenseMonth,
+							expectedSubscription,
+							productsSold: sumOrZero(productsSold, "priceCount"),
+							servicesSold: sumOrZero(servicesSold, "priceCount"),
+							subscriptionSold: subPrice,
+							credit: monthCredit,
+						};
+					},
+				);
 			}),
 		);
 
