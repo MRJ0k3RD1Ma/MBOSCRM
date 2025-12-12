@@ -7,75 +7,17 @@ import { Workbook } from "exceljs";
 export class StatisticsService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	async export(year: number = new Date().getFullYear(), month?: number) {
-		const excel = new Workbook();
-		const sheet = excel.addWorksheet("Hisobot");
-		sheet.columns = [
-			{
-				header: "#",
-				width: 5,
-				alignment: { horizontal: "center", vertical: "middle" },
-			},
-			{
-				header: "Mahsulot Nomi",
-				width: 20,
-				alignment: { horizontal: "center", vertical: "middle" },
-			},
-			{
-				header: "Mahsulot Turi",
-				width: 10,
-				alignment: { horizontal: "center", vertical: "middle" },
-			},
-			{
-				header: "Oy Boshlanishiga qoldiq",
-				width: 10,
-				alignment: { horizontal: "center", vertical: "middle" },
-			},
-			{
-				header: "Sotilgan",
-				width: 10,
-				alignment: { horizontal: "center", vertical: "middle" },
-			},
-			{
-				header: "Ummumiy Summasi",
-				width: 10,
-				alignment: { horizontal: "center", vertical: "middle" },
-			},
-			{
-				header: "Kelgan",
-				width: 10,
-				alignment: { horizontal: "center", vertical: "middle" },
-			},
-			{
-				header: "Ummumiy Summasi",
-				width: 10,
-				alignment: { horizontal: "center", vertical: "middle" },
-			},
-			{
-				header: "Foyda",
-				width: 10,
-				alignment: { horizontal: "center", vertical: "middle" },
-			},
-			{
-				header: "Oy Oxiridagi Qoldiq",
-				width: 10,
-				alignment: { horizontal: "center", vertical: "middle" },
-			},
-		];
-
-		let sheetIndex = 1;
-
+	async exportAsJson(year: number = new Date().getFullYear(), month?: number) {
+		const rows = [];
 		let priceOfTotalSold = 0;
 		let priceOfTotalArrived = 0;
 
-		//Get devices
 		const devices = await this.prisma.product.findMany({
 			where: { isDeleted: false, type: "DEVICE" },
 			orderBy: { name: "asc" },
 		});
 
 		for (let device of devices) {
-			//calculate the number of reminders in the start of the month
 			let remiderInStartOfMonth = device.countReminder;
 
 			const saleProducts = await this.prisma.saleProduct.aggregate({
@@ -132,15 +74,14 @@ export class StatisticsService {
 				},
 			});
 
-			remiderInStartOfMonth += saleProducts._sum.count;
-			remiderInStartOfMonth -= arrivedProducts._sum.count;
+			remiderInStartOfMonth += saleProducts._sum.count || 0;
+			remiderInStartOfMonth -= arrivedProducts._sum.count || 0;
 
-			//calculate the number of sold devices in the month
-			const numberOfDevicesSold = saleProductsMonth._sum.count;
-			const priceOfDevicesSold = saleProductsMonth._sum.priceCount;
+			const numberOfDevicesSold = saleProductsMonth._sum.count || 0;
+			const priceOfDevicesSold = saleProductsMonth._sum.priceCount || 0;
 
-			const numberOfDevicesArrived = arrivedProductsMonth._sum.count;
-			const priceOfDevicesArrived = arrivedProductsMonth._sum.priceCount;
+			const numberOfDevicesArrived = arrivedProductsMonth._sum.count || 0;
+			const priceOfDevicesArrived = arrivedProductsMonth._sum.priceCount || 0;
 
 			let remiderInEndOfMonth =
 				remiderInStartOfMonth + numberOfDevicesArrived - numberOfDevicesSold;
@@ -148,19 +89,17 @@ export class StatisticsService {
 			priceOfTotalSold += priceOfDevicesSold;
 			priceOfTotalArrived += priceOfDevicesArrived;
 
-			sheet.addRow([
-				sheetIndex,
-				device.name,
-				device.type,
+			rows.push({
+				name: device.name,
+				type: device.type,
 				remiderInStartOfMonth,
-				numberOfDevicesSold,
-				priceOfDevicesSold,
-				numberOfDevicesArrived,
-				priceOfDevicesArrived,
-				0,
+				numberOfSold: numberOfDevicesSold,
+				priceOfSold: priceOfDevicesSold,
+				numberOfArrived: numberOfDevicesArrived,
+				priceOfArrived: priceOfDevicesArrived,
+				profit: 0,
 				remiderInEndOfMonth,
-			]);
-			sheetIndex++;
+			});
 		}
 
 		const subscriptionProducts = await this.prisma.product.findMany({
@@ -183,24 +122,22 @@ export class StatisticsService {
 				_sum: { price: true, paid: true },
 				_count: { id: true },
 			});
-			const numberOfSubscriptionsSold = subsciptions._count.id;
-			const priceOfSubscriptionsSold = subsciptions._sum.price;
+			const numberOfSubscriptionsSold = subsciptions._count.id || 0;
+			const priceOfSubscriptionsSold = subsciptions._sum.price || 0;
 
 			priceOfTotalSold += priceOfSubscriptionsSold;
 
-			sheet.addRow([
-				sheetIndex,
-				subscriptionProduct.name,
-				subscriptionProduct.type,
-				0,
-				numberOfSubscriptionsSold,
-				priceOfSubscriptionsSold,
-				0,
-				0,
-				priceOfSubscriptionsSold,
-				0,
-			]);
-			sheetIndex++;
+			rows.push({
+				name: subscriptionProduct.name,
+				type: subscriptionProduct.type,
+				remiderInStartOfMonth: 0,
+				numberOfSold: numberOfSubscriptionsSold,
+				priceOfSold: priceOfSubscriptionsSold,
+				numberOfArrived: 0,
+				priceOfArrived: 0,
+				profit: priceOfSubscriptionsSold,
+				remiderInEndOfMonth: 0,
+			});
 		}
 
 		const services = await this.prisma.product.findMany({
@@ -222,22 +159,105 @@ export class StatisticsService {
 				},
 				_sum: { priceCount: true, count: true },
 			});
-			const numberOfServicesSold = serviceSales._sum.count;
-			const priceOfServicesSold = serviceSales._sum.priceCount;
+			const numberOfServicesSold = serviceSales._sum.count || 0;
+			const priceOfServicesSold = serviceSales._sum.priceCount || 0;
 
 			priceOfTotalSold += priceOfServicesSold;
 
+			rows.push({
+				name: service.name,
+				type: service.type,
+				remiderInStartOfMonth: 0,
+				numberOfSold: numberOfServicesSold,
+				priceOfSold: priceOfServicesSold,
+				numberOfArrived: 0,
+				priceOfArrived: 0,
+				profit: priceOfServicesSold,
+				remiderInEndOfMonth: 0,
+			});
+		}
+
+		return {
+			rows,
+			totals: {
+				priceOfTotalSold,
+				priceOfTotalArrived,
+				profit: 0,
+			},
+		};
+	}
+
+	async exportAsExcel(year: number = new Date().getFullYear(), month?: number) {
+		const data = await this.exportAsJson(year, month);
+
+		const excel = new Workbook();
+		const sheet = excel.addWorksheet("Hisobot");
+		sheet.columns = [
+			{
+				header: "#",
+				width: 5,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Mahsulot Nomi",
+				width: 20,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Mahsulot Turi",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Oy Boshlanishiga qoldiq",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Sotilgan",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Ummumiy Summasi",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Kelgan",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Ummumiy Summasi",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Foyda",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+			{
+				header: "Oy Oxiridagi Qoldiq",
+				width: 10,
+				alignment: { horizontal: "center", vertical: "middle" },
+			},
+		];
+
+		let sheetIndex = 1;
+		for (let row of data.rows) {
 			sheet.addRow([
 				sheetIndex,
-				service.name,
-				service.type,
-				0,
-				numberOfServicesSold,
-				priceOfServicesSold,
-				0,
-				0,
-				priceOfServicesSold,
-				0,
+				row.name,
+				row.type,
+				row.remiderInStartOfMonth,
+				row.numberOfSold,
+				row.priceOfSold,
+				row.numberOfArrived,
+				row.priceOfArrived,
+				row.profit,
+				row.remiderInEndOfMonth,
 			]);
 			sheetIndex++;
 		}
@@ -248,10 +268,10 @@ export class StatisticsService {
 			null,
 			null,
 			"Jami:",
-			priceOfTotalSold,
+			data.totals.priceOfTotalSold,
 			null,
-			priceOfTotalArrived,
-			0,
+			data.totals.priceOfTotalArrived,
+			data.totals.profit,
 			null,
 		]);
 

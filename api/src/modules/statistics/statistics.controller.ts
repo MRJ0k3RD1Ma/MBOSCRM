@@ -5,7 +5,7 @@ import { StatisticsService } from './statistics.service';
 
 @Controller('statistics')
 export class StatisticsController {
-  constructor(private readonly statisticsService: StatisticsService) {}
+  constructor(private readonly statisticsService: StatisticsService) { }
 
   @Get()
   @DecoratorWrapper('Get Statistics', false, [Role.Admin])
@@ -13,10 +13,17 @@ export class StatisticsController {
     return this.statisticsService.getStatistics(year);
   }
 
-  @Get("export")
-    @DecoratorWrapper('Export as Excel', false, [Role.Admin])
-  export(@Query('year', ParseIntPipe) year?: number,@Query('month',ParseIntPipe) month?:number) {
-    return this.statisticsService.export(year,month);
+  @Get("export/excel")
+  @DecoratorWrapper('Export as Excel', false, [Role.Admin])
+  exportExcel(@Query('year', ParseIntPipe) year?: number, @Query('month', ParseIntPipe) month?: number) {
+    return this.statisticsService.exportAsExcel(year, month);
   }
+
+  @Get("export/json")
+  @DecoratorWrapper('Export as Json', false, [Role.Admin])
+  exportJson(@Query('year', ParseIntPipe) year?: number, @Query('month', ParseIntPipe) month?: number) {
+    return this.statisticsService.exportAsJson(year, month);
+  }
+
 
 }

@@ -3,7 +3,15 @@ import { PrismaService } from "../prisma/prisma.service";
 export declare class StatisticsService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    export(year?: number, month?: number): Promise<StreamableFile>;
+    exportAsJson(year?: number, month?: number): Promise<{
+        rows: any[];
+        totals: {
+            priceOfTotalSold: number;
+            priceOfTotalArrived: number;
+            profit: number;
+        };
+    }>;
+    exportAsExcel(year?: number, month?: number): Promise<StreamableFile>;
     getStatistics(year?: number): Promise<{
         balance: number;
         totals: {

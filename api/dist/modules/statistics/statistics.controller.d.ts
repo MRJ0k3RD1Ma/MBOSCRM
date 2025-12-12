@@ -35,5 +35,13 @@ export declare class StatisticsController {
             subscriptionForecast: number[];
         };
     }>;
-    export(year?: number, month?: number): Promise<import("@nestjs/common").StreamableFile>;
+    exportExcel(year?: number, month?: number): Promise<import("@nestjs/common").StreamableFile>;
+    exportJson(year?: number, month?: number): Promise<{
+        rows: any[];
+        totals: {
+            priceOfTotalSold: number;
+            priceOfTotalArrived: number;
+            profit: number;
+        };
+    }>;
 }
