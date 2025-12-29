@@ -25,7 +25,7 @@ async function bootstrap() {
             return new common_1.BadRequestException(messages.join(" | "));
         },
     }));
-    if (config_1.env.ENV == "dev" || config_1.env.ENV == "prod") {
+    if (config_1.env.ENV == "dev") {
         const ApiDocs = swagger_1.SwaggerModule.createDocument(app, config_swagger_1.ApiSwaggerOptions);
         swagger_1.SwaggerModule.setup("docs", app, ApiDocs, {
             customCssUrl: "./public/swagger.css",

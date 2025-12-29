@@ -137,7 +137,7 @@ let PaidClientService = class PaidClientService {
         return { remainingPayment, currentBalance };
     }
     async findAll(dto) {
-        const { minPrice, maxPrice, fromDate, toDate, clientId, saleId, paymentId, limit = 10, page = 1, } = dto;
+        const { minPrice, maxPrice, fromDate, toDate, clientId, saleId, paymentId, clientName, limit = 10, page = 1, } = dto;
         const where = {
             isDeleted: false,
         };
@@ -146,6 +146,18 @@ let PaidClientService = class PaidClientService {
                 ...(minPrice !== undefined && { gte: minPrice }),
                 ...(maxPrice !== undefined && { lte: maxPrice }),
             };
+        }
+        if (clientName) {
+            where.OR = [
+                {
+                    Client: {
+                        name: { contains: clientName.trim(), mode: "insensitive" },
+                    },
+                },
+                {
+                    Client: { inn: { contains: clientName.trim(), mode: "insensitive" } },
+                },
+            ];
         }
         if (fromDate || toDate) {
             where.paidDate = {

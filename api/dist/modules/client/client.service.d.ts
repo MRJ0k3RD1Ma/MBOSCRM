@@ -1,8 +1,8 @@
-import { OnModuleInit } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateClientDto } from './dto/create-client.dto';
-import { FindAllClientQueryDto } from './dto/findAll-client.dto';
-import { UpdateClientDto } from './dto/update-client.dto';
+import { OnModuleInit } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateClientDto } from "./dto/create-client.dto";
+import { FindAllClientQueryDto } from "./dto/findAll-client.dto";
+import { UpdateClientDto } from "./dto/update-client.dto";
 export declare class ClientService implements OnModuleInit {
     private readonly prisma;
     constructor(prisma: PrismaService);

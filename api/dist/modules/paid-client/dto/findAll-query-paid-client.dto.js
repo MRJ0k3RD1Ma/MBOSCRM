@@ -15,6 +15,7 @@ const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const id_dto_1 = require("../../../common/dtos/id.dto");
 const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
+const name_dto_1 = require("../../../common/dtos/name.dto");
 class FindAllQueryPaidClientDto extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllQueryPaidClientDto = FindAllQueryPaidClientDto;
@@ -31,14 +32,18 @@ __decorate([
     __metadata("design:type", Number)
 ], FindAllQueryPaidClientDto.prototype, "maxPrice", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-01' }),
+    (0, name_dto_1.IsName)(false),
+    __metadata("design:type", String)
+], FindAllQueryPaidClientDto.prototype, "clientName", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-01" }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
 ], FindAllQueryPaidClientDto.prototype, "fromDate", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-30' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-30" }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),

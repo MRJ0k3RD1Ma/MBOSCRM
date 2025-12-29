@@ -171,6 +171,7 @@ export class PaidClientService {
 			clientId,
 			saleId,
 			paymentId,
+			clientName,
 			limit = 10,
 			page = 1,
 		} = dto;
@@ -184,6 +185,19 @@ export class PaidClientService {
 				...(minPrice !== undefined && { gte: minPrice }),
 				...(maxPrice !== undefined && { lte: maxPrice }),
 			};
+		}
+
+		if (clientName) {
+			where.OR = [
+				{
+					Client: {
+						name: { contains: clientName.trim(), mode: "insensitive" },
+					},
+				},
+				{
+					Client: { inn: { contains: clientName.trim(), mode: "insensitive" } },
+				},
+			];
 		}
 
 		if (fromDate || toDate) {
