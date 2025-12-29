@@ -150,10 +150,10 @@ export class ClientService implements OnModuleInit {
 			isDeleted: false,
 		};
 
-		if (name?.trim()) {
+		if (name) {
 			where.OR = [
-				{ name: { contains: name.trim(), mode: "insensitive" } },
-				{ inn: { contains: inn.trim(), mode: "insensitive" } },
+				{ name: { contains: name?.trim(), mode: "insensitive" } },
+				{ inn: { contains: name?.trim(), mode: "insensitive" } },
 			];
 		}
 
