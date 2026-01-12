@@ -35,10 +35,10 @@ export default function PaidOtherFilterModal({
   const handleFinish = (values: any) => {
     const filters = {
       ...values,
-      paidDateFrom: values.paidDateRange?.[0]
+      fromDate: values.paidDateRange?.[0]
         ? dayjs(values.paidDateRange[0]).format("YYYY-MM-DD")
         : undefined,
-      paidDateTo: values.paidDateRange?.[1]
+      toDate: values.paidDateRange?.[1]
         ? dayjs(values.paidDateRange[1]).format("YYYY-MM-DD")
         : undefined,
     };

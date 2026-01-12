@@ -100,12 +100,18 @@ export default function SubscribesFilterModal({
           }}
         >
           <Form.Item label="Minimal narx" name="minPrice">
-            <InputNumber style={{ width: "100%" }} min={0} placeholder="0" />
+            <InputNumber
+              type="number"
+              style={{ width: "100%" }}
+              min={0}
+              placeholder="0"
+            />
           </Form.Item>
 
           <Form.Item label="Maksimal narx" name="maxPrice">
             <InputNumber
               style={{ width: "100%" }}
+              type="number"
               min={0}
               placeholder="10000"
             />

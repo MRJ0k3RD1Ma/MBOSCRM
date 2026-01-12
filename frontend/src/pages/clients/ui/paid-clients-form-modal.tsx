@@ -47,9 +47,12 @@ export default function PaidClientFormModal({
     { enabled: true }
   );
 
-  const { data: clients } = useGetAllClients({ page: 1, limit: 1000 }, {
-    enabled: !clientId,
-  });
+  const { data: clients } = useGetAllClients(
+    { page: 1, limit: 1000 },
+    {
+      enabled: !clientId,
+    }
+  );
 
   const [form] = Form.useForm<PaidClientFormValues>();
 
@@ -182,7 +185,12 @@ export default function PaidClientFormModal({
           label="To‘langan summa"
           rules={[{ required: true, message: "Summani kiriting" }]}
         >
-          <InputNumber style={{ width: "100%" }} min={0} placeholder="0" />
+          <InputNumber
+            type="number"
+            style={{ width: "100%" }}
+            min={0}
+            placeholder="0"
+          />
         </Form.Item>
 
         <Button type="primary" htmlType="submit" block>

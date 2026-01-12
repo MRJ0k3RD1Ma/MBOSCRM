@@ -136,7 +136,12 @@ export default function ProductsModal({
               label="Kelgan narxi"
               rules={[{ required: true, message: "Kelgan narxini kiriting" }]}
             >
-              <InputNumber min={0} className="!w-full" placeholder="5000" />
+              <InputNumber
+                type="number"
+                min={0}
+                className="!w-full"
+                placeholder="5000"
+              />
             </Form.Item>
           </Col>
 
@@ -149,6 +154,7 @@ export default function ProductsModal({
               ]}
             >
               <InputNumber
+                type="number"
                 min={0}
                 className="!w-full"
                 placeholder="50"
@@ -162,7 +168,12 @@ export default function ProductsModal({
               label="Sotuv narxi"
               rules={[{ required: true, message: "Narxini kiriting" }]}
             >
-              <InputNumber min={0} className="!w-full" placeholder="10000" />
+              <InputNumber
+                type="number"
+                min={0}
+                className="!w-full"
+                placeholder="10000"
+              />
             </Form.Item>
           </Col>
 

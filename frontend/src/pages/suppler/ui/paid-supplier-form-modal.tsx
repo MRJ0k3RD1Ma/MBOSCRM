@@ -53,7 +53,7 @@ export default function PaidSupplierFormModal({
     form.resetFields();
     onClose();
   };
-  
+
   return (
     <Drawer
       title={initialValues ? "To‘lovni tahrirlash" : "Yangi to‘lov qo‘shish"}
@@ -109,6 +109,7 @@ export default function PaidSupplierFormModal({
           rules={[{ required: true, message: "To‘lov summasini kiriting" }]}
         >
           <InputNumber
+            type="number"
             placeholder="0"
             style={{ width: "100%" }}
             min={0}

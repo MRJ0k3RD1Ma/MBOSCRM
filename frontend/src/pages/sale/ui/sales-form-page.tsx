@@ -340,6 +340,7 @@ export default function SalesFormPage() {
               return (
                 <Form.Item label="Qoldiq">
                   <InputNumber
+                    type="number"
                     value={countReminder}
                     placeholder="Qoldiq"
                     disabled
@@ -388,6 +389,7 @@ export default function SalesFormPage() {
                   >
                     <InputNumber
                       min={1}
+                      type="number"
                       className="!w-full"
                       placeholder="Soni"
                       onChange={(value: any) => {
@@ -411,6 +413,7 @@ export default function SalesFormPage() {
           >
             <InputNumber
               min={0}
+              type="number"
               className="!w-full"
               placeholder="Narxi"
               disabled={!isPriceEditable}
@@ -427,7 +430,12 @@ export default function SalesFormPage() {
             label="Umumiy narxi"
             className="min-w-[200px] grow"
           >
-            <InputNumber disabled className="!w-full" placeholder="Jami narx" />
+            <InputNumber
+              type="number"
+              disabled
+              className="!w-full"
+              placeholder="Jami narx"
+            />
           </Form.Item>
           <Form.Item label="Narxni o‘zgartirish" valuePropName="checked">
             <Switch
@@ -551,6 +559,7 @@ export default function SalesFormPage() {
                   className="min-w-[200px] grow"
                 >
                   <InputNumber
+                    type="number"
                     min={1}
                     max={
                       isSubscription
@@ -572,7 +581,12 @@ export default function SalesFormPage() {
             rules={[{ required: true }]}
             className="min-w-[200px] grow"
           >
-            <InputNumber min={0} className="w-full" placeholder="Narxi" />
+            <InputNumber
+              type="number"
+              min={0}
+              className="w-full"
+              placeholder="Narxi"
+            />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" block>

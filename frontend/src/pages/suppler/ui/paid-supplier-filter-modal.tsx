@@ -34,10 +34,10 @@ export default function PaidSupplierFilterUI({
     form.setFieldsValue({
       ...initialValues,
       paidDateRange:
-        initialValues.minPaidDate && initialValues.maxPaidDate
+        initialValues.fromDate && initialValues.toDate
           ? [
-              dayjs(initialValues.minPaidDate).tz("Asia/Tashkent"),
-              dayjs(initialValues.maxPaidDate).tz("Asia/Tashkent"),
+              dayjs(initialValues.fromDate).tz("Asia/Tashkent"),
+              dayjs(initialValues.toDate).tz("Asia/Tashkent"),
             ]
           : [],
     });
@@ -47,12 +47,12 @@ export default function PaidSupplierFilterUI({
     form.validateFields().then((values) => {
       const filters = {
         ...values,
-        minPaidDate: values.paidDateRange?.[0]
+        fromDate: values.paidDateRange?.[0]
           ? dayjs(values.paidDateRange[0])
               .tz("Asia/Tashkent")
               .format("YYYY-MM-DD")
           : undefined,
-        maxPaidDate: values.paidDateRange?.[1]
+        toDate: values.paidDateRange?.[1]
           ? dayjs(values.paidDateRange[1])
               .tz("Asia/Tashkent")
               .format("YYYY-MM-DD")

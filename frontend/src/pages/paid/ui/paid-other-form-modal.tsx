@@ -125,7 +125,12 @@ export default function PaidOtherFormDrawer({
           label="To‘lov miqdori"
           rules={[{ required: true, message: "Summani kiriting" }]}
         >
-          <InputNumber style={{ width: "100%" }} min={0} placeholder="0" />
+          <InputNumber
+            type="number"
+            style={{ width: "100%" }}
+            min={0}
+            placeholder="0"
+          />
         </Form.Item>
 
         <Form.Item

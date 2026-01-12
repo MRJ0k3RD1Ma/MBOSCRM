@@ -332,6 +332,7 @@ export default function ArrivedFormPage() {
             className="min-w-[100px] max-w-[150px] grow"
           >
             <InputNumber
+              type="number"
               min={1}
               className="!w-full"
               placeholder="Soni"
@@ -352,6 +353,7 @@ export default function ArrivedFormPage() {
             className="min-w-[200px] grow"
           >
             <InputNumber
+              type="number"
               min={0}
               className="!w-full"
               placeholder="Narxi"
@@ -368,7 +370,12 @@ export default function ArrivedFormPage() {
             label="Umumiy narxi"
             className="min-w-[200px] grow"
           >
-            <InputNumber disabled className="!w-full" placeholder="Jami narx" />
+            <InputNumber
+              disabled
+              type="number"
+              className="!w-full"
+              placeholder="Jami narx"
+            />
           </Form.Item>
           <Form.Item style={{ flexShrink: 0 }} label>
             <Button htmlType="submit" type="primary">
@@ -428,6 +435,7 @@ export default function ArrivedFormPage() {
             rules={[{ required: true, message: "Soni kerak" }]}
           >
             <InputNumber
+              type="number"
               min={1}
               className="!w-full"
               placeholder="Mahsulot sonini kiriting"
@@ -440,6 +448,7 @@ export default function ArrivedFormPage() {
             rules={[{ required: true, message: "Narxi kerak" }]}
           >
             <InputNumber
+              type="number"
               min={0}
               className="!w-full"
               placeholder="Mahsulot narxini kiriting"

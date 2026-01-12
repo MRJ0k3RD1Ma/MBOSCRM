@@ -2,7 +2,8 @@ import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import { useEffect } from "react";
 import { useToken } from "antd/es/theme/internal";
 import { useGetAllPayments } from "../../../config/queries/payment/payment-querys";
-import dayjs from "dayjs";
+
+const { RangePicker } = DatePicker;
 
 type Props = {
   open: boolean;
@@ -25,21 +26,21 @@ export default function PaidServersFilterModal({
     if (open) {
       form.setFieldsValue({
         ...initialValues,
-        fromDate: initialValues?.fromDate
-          ? dayjs(initialValues.fromDate)
-          : null,
       });
     }
   }, [open, initialValues, form]);
 
   const handleSubmit = () => {
     form.validateFields().then((values) => {
+      const { dateRange, ...rest } = values;
+      const [fromDate, toDate] = dateRange || [];
+
       onApply({
-        ...values,
-        fromDate: values.fromDate
-          ? values.fromDate.format("YYYY-MM-DD")
-          : undefined,
+        ...rest,
+        fromDate: fromDate ? fromDate.format("YYYY-MM-DD") : undefined,
+        toDate: toDate ? toDate.format("YYYY-MM-DD") : undefined,
       });
+
       onClose();
     });
   };
@@ -64,7 +65,7 @@ export default function PaidServersFilterModal({
         border: `1px solid ${token.colorBorderSecondary}`,
       }}
     >
-      <Form layout="vertical" form={form} initialValues={initialValues}>
+      <Form layout="vertical" form={form}>
         <div
           style={{
             display: "grid",
@@ -72,7 +73,7 @@ export default function PaidServersFilterModal({
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
           }}
         >
-          <Form.Item label="To‘lov turi " name="paymentId">
+          <Form.Item label="To‘lov turi" name="paymentId">
             <Select
               placeholder="To‘lovni tanlang"
               showSearch
@@ -85,9 +86,11 @@ export default function PaidServersFilterModal({
               ))}
             </Select>
           </Form.Item>
-          <Form.Item label="Sanasi" name="fromDate">
-            <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
+
+          <Form.Item label="Sanalar oralig‘i" name="dateRange">
+            <RangePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
           </Form.Item>
+
           <Form.Item label="Izoh" name="description">
             <Input placeholder="Izoh" />
           </Form.Item>

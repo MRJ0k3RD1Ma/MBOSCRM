@@ -107,19 +107,19 @@ export default function ProductFormDrawer({
 
           <Col span={12}>
             <Form.Item label="Kiruvchi narx" name="priceIncome">
-              <InputNumber style={{ width: "100%" }} placeholder="5000" />
+              <InputNumber type="number" style={{ width: "100%" }} placeholder="5000" />
             </Form.Item>
           </Col>
 
           <Col span={12}>
             <Form.Item label="Sotuv narxi" name="price">
-              <InputNumber style={{ width: "100%" }} placeholder="10000" />
+              <InputNumber type="number" style={{ width: "100%" }} placeholder="10000" />
             </Form.Item>
           </Col>
           {initialValues ? null : (
             <Col span={12}>
               <Form.Item label="Boshlang‘ich qoldiq" name="reminderFirst">
-                <InputNumber style={{ width: "100%" }} placeholder="50" />
+                <InputNumber type="number" style={{ width: "100%" }} placeholder="50" />
               </Form.Item>
             </Col>
           )}

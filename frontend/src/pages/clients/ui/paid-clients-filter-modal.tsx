@@ -33,10 +33,10 @@ export default function PaidClientFilter({
       const formattedInitial = {
         ...initialValues,
         payingDate:
-          initialValues.payingDateFrom && initialValues.payingDateTo
+          initialValues.fromDate && initialValues.toDate
             ? [
-                dayjs(initialValues.payingDateFrom).tz("Asia/Tashkent"),
-                dayjs(initialValues.payingDateTo).tz("Asia/Tashkent"),
+                dayjs(initialValues.fromDate).tz("Asia/Tashkent"),
+                dayjs(initialValues.toDate).tz("Asia/Tashkent"),
               ]
             : undefined,
       };
@@ -48,10 +48,10 @@ export default function PaidClientFilter({
     form.validateFields().then((values) => {
       const filters = {
         ...values,
-        payingDateFrom: values.payingDate?.[0]
+        fromDate: values.payingDate?.[0]
           ? dayjs(values.payingDate[0]).tz("Asia/Tashkent").format("YYYY-MM-DD")
           : undefined,
-        payingDateTo: values.payingDate?.[1]
+        toDate: values.payingDate?.[1]
           ? dayjs(values.payingDate[1]).tz("Asia/Tashkent").format("YYYY-MM-DD")
           : undefined,
       };
