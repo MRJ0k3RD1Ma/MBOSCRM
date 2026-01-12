@@ -173,30 +173,19 @@ let SaleService = class SaleService {
     }
     async findAll(dto) {
         const { limit = 10, page = 1, minPrice, maxPrice, fromDate, toDate, clientId, code, credit, } = dto;
-        const where = {
-            isDeleted: false,
-        };
-        if (clientId) {
+        const where = { isDeleted: false };
+        if (clientId !== undefined)
             where.clientId = clientId;
-        }
         if (credit !== undefined) {
-            if (credit === true) {
-                where.credit = { gt: 0 };
-            }
-            else {
-                where.credit = { equals: 0 };
-            }
+            where.credit = credit ? { gt: 0 } : { equals: 0 };
         }
-        if (code) {
-            where.code = {
-                startsWith: code,
-                mode: "insensitive",
-            };
+        if (code?.trim()) {
+            where.code = { startsWith: code.trim(), mode: "insensitive" };
         }
-        if (minPrice || maxPrice) {
+        if (minPrice !== undefined || maxPrice !== undefined) {
             where.price = {
-                ...(minPrice && { gte: minPrice }),
-                ...(maxPrice && { lte: maxPrice }),
+                ...(minPrice !== undefined && { gte: minPrice }),
+                ...(maxPrice !== undefined && { lte: maxPrice }),
             };
         }
         if (fromDate || toDate) {
@@ -216,18 +205,11 @@ let SaleService = class SaleService {
                     register: true,
                     client: true,
                 },
-                orderBy: {
-                    id: "desc",
-                },
+                orderBy: { id: "desc" },
             }),
             this.prisma.sale.count({ where }),
         ]);
-        return {
-            total,
-            page,
-            limit,
-            data,
-        };
+        return { total, page, limit, data };
     }
     async findOne(id) {
         const sale = await this.prisma.sale.findFirst({

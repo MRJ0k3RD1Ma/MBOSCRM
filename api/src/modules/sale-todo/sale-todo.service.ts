@@ -53,7 +53,7 @@ export class SaleTodoService {
   }
 
   async findAll(dto: FindAllSaleTodoDto) {
-    const { page, limit, name, isCompleted, saleId, feedbackId } = dto;
+    const { page = 1, limit = 10, name, isCompleted, saleId, feedbackId } = dto;
 
     const where: Prisma.SaleTodoWhereInput = { isDeleted: false };
 

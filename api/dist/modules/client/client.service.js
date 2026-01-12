@@ -130,30 +130,24 @@ let ClientService = class ClientService {
         };
         if (name) {
             where.OR = [
-                { name: { contains: name?.trim(), mode: "insensitive" } },
-                { inn: { contains: name?.trim(), mode: "insensitive" } },
+                { name: { contains: name.trim(), mode: "insensitive" } },
+                { inn: { contains: name.trim(), mode: "insensitive" } },
             ];
         }
-        if (districtId) {
+        if (districtId !== undefined)
             where.districtId = districtId;
-        }
-        if (regionId) {
+        if (regionId !== undefined)
             where.regionId = regionId;
-        }
-        if (address?.trim()) {
+        if (address?.trim())
             where.address = { contains: address.trim(), mode: "insensitive" };
-        }
-        if (isPositiveBalance !== undefined) {
-            where.balance = isPositiveBalance ? { gt: 0 } : { lt: 0 };
-        }
-        if (description?.trim()) {
+        if (description?.trim())
             where.description = { contains: description.trim(), mode: "insensitive" };
-        }
-        if (inn?.trim()) {
-            where.inn = { contains: inn.trim() };
-        }
-        if (phone?.trim()) {
-            where.phone = { contains: phone.trim() };
+        if (inn?.trim())
+            where.inn = { contains: inn.trim(), mode: "insensitive" };
+        if (phone?.trim())
+            where.phone = { contains: phone.trim(), mode: "insensitive" };
+        if (isPositiveBalance !== undefined) {
+            where.balance = isPositiveBalance ? { gte: 0 } : { lt: 0 };
         }
         const [data, total] = await this.prisma.$transaction([
             this.prisma.client.findMany({
@@ -162,12 +156,7 @@ let ClientService = class ClientService {
                 take: limit,
                 orderBy: { id: "desc" },
                 include: {
-                    ClientType: {
-                        select: {
-                            id: true,
-                            name: true,
-                        },
-                    },
+                    ClientType: { select: { id: true, name: true } },
                 },
             }),
             this.prisma.client.count({ where }),

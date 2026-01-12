@@ -9,14 +9,14 @@ export declare class AppealController {
     create(createAppealDto: CreateAppealDto): Promise<{
         name: string;
         phone: string;
+        subject: string;
+        detail: string;
+        state: import(".prisma/client").$Enums.AppealState;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         id: number;
         modifyId: number | null;
-        state: import(".prisma/client").$Enums.AppealState;
-        subject: string;
-        detail: string;
     }>;
     findAll(dto: FindAllAppealDto): Promise<{
         total: number;
@@ -25,50 +25,50 @@ export declare class AppealController {
         data: {
             name: string;
             phone: string;
+            subject: string;
+            detail: string;
+            state: import(".prisma/client").$Enums.AppealState;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
             id: number;
             modifyId: number | null;
-            state: import(".prisma/client").$Enums.AppealState;
-            subject: string;
-            detail: string;
         }[];
     }>;
     findOne(id: string): Promise<{
         name: string;
         phone: string;
+        subject: string;
+        detail: string;
+        state: import(".prisma/client").$Enums.AppealState;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         id: number;
         modifyId: number | null;
-        state: import(".prisma/client").$Enums.AppealState;
-        subject: string;
-        detail: string;
     }>;
     update(id: string, updateAppealDto: UpdateAppealDto, req: Request): Promise<{
         name: string;
         phone: string;
+        subject: string;
+        detail: string;
+        state: import(".prisma/client").$Enums.AppealState;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         id: number;
         modifyId: number | null;
-        state: import(".prisma/client").$Enums.AppealState;
-        subject: string;
-        detail: string;
     }>;
     remove(id: string): Promise<{
         name: string;
         phone: string;
+        subject: string;
+        detail: string;
+        state: import(".prisma/client").$Enums.AppealState;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
         id: number;
         modifyId: number | null;
-        state: import(".prisma/client").$Enums.AppealState;
-        subject: string;
-        detail: string;
     }>;
 }

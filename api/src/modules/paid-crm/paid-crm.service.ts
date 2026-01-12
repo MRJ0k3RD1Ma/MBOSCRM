@@ -71,48 +71,49 @@ export class PaidCrmService {
       limit = 10,
       page = 1,
     } = dto;
-
+  
     const where: Prisma.PaidCrmWhereInput = {
       isDeleted: false,
     };
-
-    if (minPrice || maxPrice) {
+  
+    // price
+    if (minPrice !== undefined || maxPrice !== undefined) {
       where.price = {
         ...(minPrice !== undefined && { gte: minPrice }),
         ...(maxPrice !== undefined && { lte: maxPrice }),
       };
     }
-
+  
+    // date
     if (fromDate || toDate) {
       where.paidDate = {
         ...(fromDate && { gte: fromDate }),
         ...(toDate && { lte: toDate }),
       };
     }
-
-    if (crmId) {
+  
+    if (crmId !== undefined) {
       where.crmId = crmId;
     }
-
-    if (paymentId) {
+  
+    if (paymentId !== undefined) {
       where.paymentId = paymentId;
     }
-
-    const paidCrms = await this.prisma.paidCrm.findMany({
-      where,
-      include: {},
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: {
-        id: 'desc',
-      },
-    });
-
-    const agg = await this.prisma.paidCrm.aggregate({
-      _sum: { price: true },
-      _count: { _all: true },
-    });
-
+  
+    const [paidCrms, agg] = await this.prisma.$transaction([
+      this.prisma.paidCrm.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { id: 'desc' },
+      }),
+      this.prisma.paidCrm.aggregate({
+        where,
+        _sum: { price: true },
+        _count: { _all: true },
+      }),
+    ]);
+  
     return {
       data: paidCrms,
       page,
@@ -121,6 +122,7 @@ export class PaidCrmService {
       price: agg._sum.price,
     };
   }
+  
 
   async findOne(id: number) {
     const paidCrm = await this.prisma.paidCrm.findFirst({

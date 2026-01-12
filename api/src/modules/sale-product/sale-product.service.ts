@@ -94,59 +94,34 @@ export class SaleProductService {
 	}
 
 	async findAll(dto: FindAllSaleProductQueryDto) {
-		const {
-			limit = 10,
-			page = 1,
-			saleId,
-			clientId,
-			productId,
-			isSubscribe,
-		} = dto;
-
-		const where: Prisma.SaleProductWhereInput = {
-			isDeleted: false,
-		};
-		if (saleId) {
-			where.saleId = saleId;
-		}
-
-		if (clientId) {
-			where.sale = { clientId };
-		}
-
-		if (productId) {
-			where.productId = productId;
-		}
-
-		if (isSubscribe !== undefined) {
-			where.is_subscribe = { equals: isSubscribe };
-		}
-
+		const { limit = 10, page = 1, saleId, clientId, productId, isSubscribe } = dto;
+	  
+		const where: Prisma.SaleProductWhereInput = { isDeleted: false };
+	  
+		if (saleId !== undefined) where.saleId = saleId;
+		if (clientId !== undefined) where.sale = { clientId };
+		if (productId !== undefined) where.productId = productId;
+		if (isSubscribe !== undefined) where.is_subscribe = { equals: isSubscribe };
+	  
 		const [data, total] = await this.prisma.$transaction([
-			this.prisma.saleProduct.findMany({
-				where,
-				skip: (page - 1) * limit,
-				take: limit,
-				include: {
-					product: { include: { ProductUnit: true } },
-					sale: true,
-					modify: true,
-					register: true,
-				},
-				orderBy: {
-					id: "desc",
-				},
-			}),
-			this.prisma.saleProduct.count({ where }),
+		  this.prisma.saleProduct.findMany({
+			where,
+			skip: (page - 1) * limit,
+			take: limit,
+			include: {
+			  product: { include: { ProductUnit: true } },
+			  sale: true,
+			  modify: true,
+			  register: true,
+			},
+			orderBy: { id: "desc" },
+		  }),
+		  this.prisma.saleProduct.count({ where }),
 		]);
-
-		return {
-			total,
-			page,
-			limit,
-			data,
-		};
-	}
+	  
+		return { total, page, limit, data };
+	  }
+	  
 
 	async findOne(id: number) {
 		const saleProduct = await this.prisma.saleProduct.findFirst({

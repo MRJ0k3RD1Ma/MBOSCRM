@@ -121,7 +121,7 @@ let ArrivedService = class ArrivedService {
         const where = {
             isDeleted: false,
         };
-        if (supplierId) {
+        if (supplierId !== undefined) {
             where.supplierId = supplierId;
         }
         if (code) {
@@ -130,10 +130,10 @@ let ArrivedService = class ArrivedService {
                 mode: "insensitive",
             };
         }
-        if (minPrice || maxPrice) {
+        if (minPrice !== undefined || maxPrice !== undefined) {
             where.price = {
-                ...(minPrice && { gte: minPrice }),
-                ...(maxPrice && { lte: maxPrice }),
+                ...(minPrice !== undefined && { gte: minPrice }),
+                ...(maxPrice !== undefined && { lte: maxPrice }),
             };
         }
         if (fromDate || toDate) {
@@ -148,9 +148,7 @@ let ArrivedService = class ArrivedService {
                 skip: (page - 1) * limit,
                 take: limit,
                 include: { ArrivedProduct: true, register: true, supplier: true },
-                orderBy: {
-                    id: "desc",
-                },
+                orderBy: { id: "desc" },
             }),
             this.prisma.arrived.count({ where }),
         ]);

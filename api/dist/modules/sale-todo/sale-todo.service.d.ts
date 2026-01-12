@@ -8,57 +8,57 @@ export declare class SaleTodoService {
     private readonly todo;
     constructor(prisma: PrismaService, todo: TodoService);
     create(createSaleTodoDto: CreateSaleTodoDto, user: number): Promise<{
+        id: number;
         name: string | null;
+        saleId: number | null;
+        feedbackId: number | null;
+        isCompleted: boolean;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        feedbackId: number | null;
-        isCompleted: boolean;
     }>;
     findAll(dto: FindAllSaleTodoDto): Promise<{
         data: {
+            id: number;
             name: string | null;
+            saleId: number | null;
+            feedbackId: number | null;
+            isCompleted: boolean;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
-            saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            feedbackId: number | null;
-            isCompleted: boolean;
         }[];
         total: number;
         page: number;
         limit: number;
     }>;
     findOne(id: number): Promise<{
+        id: number;
         name: string | null;
+        saleId: number | null;
+        feedbackId: number | null;
+        isCompleted: boolean;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        feedbackId: number | null;
-        isCompleted: boolean;
     }>;
     update(id: number, updateSaleTodoDto: UpdateSaleTodoDto): Promise<{
+        id: number;
         name: string | null;
+        saleId: number | null;
+        feedbackId: number | null;
+        isCompleted: boolean;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        feedbackId: number | null;
-        isCompleted: boolean;
     }>;
     remove(id: number): Promise<{
         message: string;

@@ -73,19 +73,19 @@ let ArrivedProductService = class ArrivedProductService {
         const where = {
             isDeleted: false,
         };
-        if (supplierId) {
+        if (supplierId !== undefined) {
             where.Arrived = { supplierId };
         }
-        if (arrivedId) {
+        if (arrivedId !== undefined) {
             where.arrivedId = arrivedId;
         }
-        if (productId) {
+        if (productId !== undefined) {
             where.productId = productId;
         }
-        if (minPrice || maxPrice) {
+        if (minPrice !== undefined || maxPrice !== undefined) {
             where.price = {
-                ...(minPrice && { gte: minPrice }),
-                ...(maxPrice && { lte: maxPrice }),
+                ...(minPrice !== undefined && { gte: minPrice }),
+                ...(maxPrice !== undefined && { lte: maxPrice }),
             };
         }
         const [data, total] = await this.prisma.$transaction([
@@ -98,9 +98,7 @@ let ArrivedProductService = class ArrivedProductService {
                     Product: { include: { ProductUnit: true } },
                     register: true,
                 },
-                orderBy: {
-                    id: "desc",
-                },
+                orderBy: { id: "desc" },
             }),
             this.prisma.arrivedProduct.count({ where }),
         ]);

@@ -13,6 +13,7 @@ exports.PaidOtherService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const http_error_1 = require("../../common/exception/http.error");
+const client_1 = require("@prisma/client");
 let PaidOtherService = class PaidOtherService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -66,7 +67,7 @@ let PaidOtherService = class PaidOtherService {
         const where = {
             isDeleted: false,
         };
-        if (minPrice || maxPrice) {
+        if (minPrice !== undefined || maxPrice !== undefined) {
             where.price = {
                 ...(minPrice !== undefined && { gte: minPrice }),
                 ...(maxPrice !== undefined && { lte: maxPrice }),
@@ -81,29 +82,32 @@ let PaidOtherService = class PaidOtherService {
         if (groupId) {
             where.groupId = groupId;
         }
-        if (description) {
-            where.description = { contains: description };
-        }
         if (type) {
-            where.type = { equals: type };
+            where.type = type;
         }
-        const paidOthers = await this.prisma.paidOther.findMany({
-            where,
-            include: {
-                group: true,
-                Payment: true,
-            },
-            skip: (page - 1) * limit,
-            take: limit,
-            orderBy: {
-                id: 'desc',
-            },
-        });
-        const agg = await this.prisma.paidOther.aggregate({
-            where: { type: type ? { equals: type } : {} },
-            _sum: { price: true },
-            _count: { _all: true },
-        });
+        if (description) {
+            where.description = {
+                contains: description,
+                mode: client_1.Prisma.QueryMode.insensitive,
+            };
+        }
+        const [paidOthers, agg] = await this.prisma.$transaction([
+            this.prisma.paidOther.findMany({
+                where,
+                include: {
+                    group: true,
+                    Payment: true,
+                },
+                skip: (page - 1) * limit,
+                take: limit,
+                orderBy: { id: 'desc' },
+            }),
+            this.prisma.paidOther.aggregate({
+                where,
+                _sum: { price: true },
+                _count: { _all: true },
+            }),
+        ]);
         return {
             data: paidOthers,
             page,

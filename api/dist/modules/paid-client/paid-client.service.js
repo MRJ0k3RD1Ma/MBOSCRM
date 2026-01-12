@@ -141,7 +141,7 @@ let PaidClientService = class PaidClientService {
         const where = {
             isDeleted: false,
         };
-        if (minPrice || maxPrice) {
+        if (minPrice !== undefined || maxPrice !== undefined) {
             where.price = {
                 ...(minPrice !== undefined && { gte: minPrice }),
                 ...(maxPrice !== undefined && { lte: maxPrice }),
@@ -151,11 +151,19 @@ let PaidClientService = class PaidClientService {
             where.OR = [
                 {
                     Client: {
-                        name: { contains: clientName.trim(), mode: "insensitive" },
+                        name: {
+                            contains: clientName.trim(),
+                            mode: client_1.Prisma.QueryMode.insensitive,
+                        },
                     },
                 },
                 {
-                    Client: { inn: { contains: clientName.trim(), mode: "insensitive" } },
+                    Client: {
+                        inn: {
+                            contains: clientName.trim(),
+                            mode: client_1.Prisma.QueryMode.insensitive,
+                        },
+                    },
                 },
             ];
         }
@@ -165,35 +173,35 @@ let PaidClientService = class PaidClientService {
                 ...(toDate && { lte: toDate }),
             };
         }
-        if (clientId) {
+        if (clientId !== undefined) {
             where.clientId = clientId;
         }
-        if (saleId) {
+        if (saleId !== undefined) {
             where.saleId = saleId;
         }
-        if (paymentId) {
+        if (paymentId !== undefined) {
             where.paymentId = paymentId;
         }
-        const paidClients = await this.prisma.paidClient.findMany({
-            where,
-            include: {
-                Client: true,
-                Sale: true,
-                Payment: true,
-                modify: true,
-                register: true,
-            },
-            skip: (page - 1) * limit,
-            take: limit,
-            orderBy: {
-                id: "desc",
-            },
-        });
-        const agg = await this.prisma.paidClient.aggregate({
-            _sum: { price: true },
-            _count: { _all: true },
-            where: { isDeleted: false },
-        });
+        const [paidClients, agg] = await this.prisma.$transaction([
+            this.prisma.paidClient.findMany({
+                where,
+                include: {
+                    Client: true,
+                    Sale: true,
+                    Payment: true,
+                    modify: true,
+                    register: true,
+                },
+                skip: (page - 1) * limit,
+                take: limit,
+                orderBy: { id: "desc" },
+            }),
+            this.prisma.paidClient.aggregate({
+                where,
+                _sum: { price: true },
+                _count: { _all: true },
+            }),
+        ]);
         return {
             data: paidClients,
             page,

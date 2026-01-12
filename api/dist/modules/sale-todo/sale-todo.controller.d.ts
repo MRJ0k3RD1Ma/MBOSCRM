@@ -7,57 +7,57 @@ export declare class SaleTodoController {
     private readonly saleTodoService;
     constructor(saleTodoService: SaleTodoService);
     create(createSaleTodoDto: CreateSaleTodoDto, req: Request): Promise<{
+        id: number;
         name: string | null;
+        saleId: number | null;
+        feedbackId: number | null;
+        isCompleted: boolean;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        feedbackId: number | null;
-        isCompleted: boolean;
     }>;
     findAll(dto: FindAllSaleTodoDto): Promise<{
         data: {
+            id: number;
             name: string | null;
+            saleId: number | null;
+            feedbackId: number | null;
+            isCompleted: boolean;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
-            saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            feedbackId: number | null;
-            isCompleted: boolean;
         }[];
         total: number;
         page: number;
         limit: number;
     }>;
     findOne(id: string): Promise<{
+        id: number;
         name: string | null;
+        saleId: number | null;
+        feedbackId: number | null;
+        isCompleted: boolean;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        feedbackId: number | null;
-        isCompleted: boolean;
     }>;
     update(id: string, updateSaleTodoDto: UpdateSaleTodoDto): Promise<{
+        id: number;
         name: string | null;
+        saleId: number | null;
+        feedbackId: number | null;
+        isCompleted: boolean;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
-        saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        feedbackId: number | null;
-        isCompleted: boolean;
     }>;
     remove(id: string): Promise<{
         message: string;

@@ -81,19 +81,19 @@ let PaidSupplierService = class PaidSupplierService {
         const where = {
             isDeleted: false,
         };
-        if (supplierId) {
+        if (supplierId !== undefined) {
             where.supplierId = supplierId;
+        }
+        if (paymentId !== undefined) {
+            where.paymentId = paymentId;
         }
         if (minPaidDate || maxPaidDate) {
             where.paidDate = {
-                ...(minPaidDate && { gt: minPaidDate }),
-                ...(maxPaidDate && { lt: maxPaidDate }),
+                ...(minPaidDate && { gte: minPaidDate }),
+                ...(maxPaidDate && { lte: maxPaidDate }),
             };
         }
-        if (paymentId) {
-            where.paymentId = paymentId;
-        }
-        const [data, total] = await this.prisma.$transaction([
+        const [data, agg] = await this.prisma.$transaction([
             this.prisma.paidSupplier.findMany({
                 where,
                 skip: (page - 1) * limit,
@@ -101,14 +101,15 @@ let PaidSupplierService = class PaidSupplierService {
                 orderBy: { id: "desc" },
                 include: { Payment: true, register: true, modify: true },
             }),
-            this.prisma.paidServer.aggregate({
+            this.prisma.paidSupplier.aggregate({
+                where,
                 _sum: { price: true },
                 _count: { _all: true },
             }),
         ]);
         return {
-            total: total._count._all,
-            price: total._sum.price,
+            total: agg._count._all,
+            price: agg._sum.price,
             page,
             limit,
             data,

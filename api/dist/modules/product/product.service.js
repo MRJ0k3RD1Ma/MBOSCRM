@@ -66,7 +66,7 @@ let ProductService = class ProductService {
                 await this.recalculate(product.id);
             }
         })();
-        if (config_1.env.ENV != "prod") {
+        if (config_1.env.ENV != 'prod') {
             const count = await this.prisma.product.count();
             const requiredCount = 5;
             if (count < requiredCount) {
@@ -90,17 +90,17 @@ let ProductService = class ProductService {
             where: { id: groupId, isDeleted: false },
         });
         if (!creatorId) {
-            throw (0, http_error_1.HttpError)({ message: "Creator not found" });
+            throw (0, http_error_1.HttpError)({ message: 'Creator not found' });
         }
         if (!existingGroup) {
-            throw (0, http_error_1.HttpError)({ message: "Group not found" });
+            throw (0, http_error_1.HttpError)({ message: 'Group not found' });
         }
         if (createProductDto.unitId) {
             const existingUnit = await this.prisma.productUnit.findFirst({
                 where: { id: unitId, isDeleted: false },
             });
             if (!existingUnit) {
-                throw (0, http_error_1.HttpError)({ message: "ProductUnit not found" });
+                throw (0, http_error_1.HttpError)({ message: 'ProductUnit not found' });
             }
         }
         let barcodeId = 0;
@@ -108,7 +108,7 @@ let ProductService = class ProductService {
             const max = await this.prisma.product.findMany({
                 where: { barcodeId: { not: null } },
                 take: 1,
-                orderBy: { barcodeId: "desc" },
+                orderBy: { barcodeId: 'desc' },
             });
             barcodeId = (max[0]?.barcodeId || 1_000_000) + 1;
             const product = await this.prisma.product.create({
@@ -151,40 +151,35 @@ let ProductService = class ProductService {
     }
     async findAll(dto) {
         const { limit = 10, page = 1, name, type, barcode, groupId, unitId, minPrice, maxPrice, minCount, maxCount, } = dto;
+        const where = {
+            isDeleted: false,
+            ...(name && {
+                name: {
+                    contains: name.trim(),
+                    mode: client_1.Prisma.QueryMode.insensitive,
+                }
+            }),
+            ...(type && { type }),
+            ...(barcode && { barcode: { contains: barcode } }),
+            ...(groupId && { groupId }),
+            ...(unitId && { unitId }),
+            ...(minPrice || maxPrice
+                ? { priceIncome: { gte: minPrice, lte: maxPrice } }
+                : {}),
+            ...(minCount || maxCount
+                ? { countArrived: { gte: minCount, lte: maxCount } }
+                : {}),
+        };
         const [data, total] = await this.prisma.$transaction([
             this.prisma.product.findMany({
-                where: {
-                    name: {
-                        contains: name?.trim() || "",
-                        mode: "insensitive",
-                    },
-                    type: { equals: type },
-                    barcode: { contains: barcode },
-                    groupId: { equals: groupId },
-                    unitId: { equals: unitId },
-                    priceIncome: { gte: minPrice, lte: maxPrice },
-                    countArrived: { gte: minCount, lte: maxCount },
-                    isDeleted: false,
-                },
+                where,
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { id: "desc" },
+                orderBy: { id: 'desc' },
             }),
-            this.prisma.product.count({
-                where: {
-                    name: {
-                        contains: name?.trim() || "",
-                        mode: "insensitive",
-                    },
-                },
-            }),
+            this.prisma.product.count({ where }),
         ]);
-        return {
-            total,
-            page,
-            limit,
-            data,
-        };
+        return { total, page, limit, data };
     }
     async findOne(id) {
         let product = await this.prisma.product.findFirst({
@@ -194,7 +189,7 @@ let ProductService = class ProductService {
             },
         });
         if (!product) {
-            throw new http_error_1.HttpError({ code: "Product not found" });
+            throw new http_error_1.HttpError({ code: 'Product not found' });
         }
         await this.recalculate(product.id);
         product = await this.prisma.product.findFirst({
@@ -247,17 +242,17 @@ let ProductService = class ProductService {
         }
         const updateData = {};
         const fields = [
-            "name",
-            "barcode",
-            "groupId",
-            "unitId",
-            "priceIncome",
-            "reminderFirst",
-            "price",
-            "type",
-            "countReminder",
-            "countArrived",
-            "countSale",
+            'name',
+            'barcode',
+            'groupId',
+            'unitId',
+            'priceIncome',
+            'reminderFirst',
+            'price',
+            'type',
+            'countReminder',
+            'countArrived',
+            'countSale',
         ];
         for (const field of fields) {
             if (dto[field] !== undefined) {
@@ -275,7 +270,7 @@ let ProductService = class ProductService {
             where: { id, isDeleted: false },
         });
         if (!product) {
-            throw new http_error_1.HttpError({ code: "Product not found" });
+            throw new http_error_1.HttpError({ code: 'Product not found' });
         }
         return this.prisma.product.update({
             where: { id },
@@ -287,7 +282,7 @@ let ProductService = class ProductService {
 };
 exports.ProductService = ProductService;
 __decorate([
-    (0, event_emitter_1.OnEvent)("recalculate.product"),
+    (0, event_emitter_1.OnEvent)('recalculate.product'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)

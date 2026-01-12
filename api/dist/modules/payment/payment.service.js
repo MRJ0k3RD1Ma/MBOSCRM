@@ -43,7 +43,7 @@ let PaymentService = class PaymentService {
         return payment;
     }
     async findAll(dto) {
-        const { page = 10, limit = 10, name } = dto;
+        const { page = 1, limit = 10, name } = dto;
         const [data, total] = await this.prisma.$transaction([
             this.prisma.payment.findMany({
                 where: {
@@ -63,6 +63,7 @@ let PaymentService = class PaymentService {
                         contains: name?.trim() || '',
                         mode: 'insensitive',
                     },
+                    isDeleted: false,
                 },
             }),
         ]);

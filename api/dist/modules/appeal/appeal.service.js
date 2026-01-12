@@ -24,20 +24,22 @@ let AppealService = class AppealService {
                 phone: createAppealDto.phone,
                 subject: createAppealDto.subject,
                 detail: createAppealDto.detail,
-                state: createAppealDto.state
-            }
+                state: createAppealDto.state,
+            },
         });
         return appeal;
     }
     async findAll(dto) {
         const { page = 1, limit = 10 } = dto;
+        const where = { isDeleted: false };
         const [data, total] = await this.prisma.$transaction([
             this.prisma.appeal.findMany({
+                where,
                 skip: (page - 1) * limit,
                 take: limit,
                 orderBy: { id: 'desc' },
             }),
-            this.prisma.appeal.count({}),
+            this.prisma.appeal.count({ where }),
         ]);
         return {
             total,
@@ -50,6 +52,7 @@ let AppealService = class AppealService {
         const appeal = await this.prisma.appeal.findFirst({
             where: {
                 id,
+                isDeleted: false,
             },
         });
         if (!appeal) {
@@ -60,9 +63,13 @@ let AppealService = class AppealService {
     async update(id, updateAppealDto, modifyId) {
         const appeal = await this.prisma.appeal.findFirst({
             where: {
-                id: id
-            }
+                id: id,
+                isDeleted: false,
+            },
         });
+        if (!appeal) {
+            throw new http_error_1.HttpError({ code: 'appeal not found' });
+        }
         const appealUpdate = await this.prisma.appeal.update({
             where: {
                 id,
@@ -73,8 +80,8 @@ let AppealService = class AppealService {
                 subject: updateAppealDto.subject ?? appeal.subject,
                 detail: updateAppealDto.detail ?? appeal.detail,
                 state: updateAppealDto.state ?? appeal.state,
-                modifyId: modifyId
-            }
+                modifyId: modifyId,
+            },
         });
         return appealUpdate;
     }
@@ -82,14 +89,18 @@ let AppealService = class AppealService {
         const appeal = await this.prisma.appeal.findFirst({
             where: {
                 id,
+                isDeleted: false,
             },
         });
         if (!appeal) {
             throw new http_error_1.HttpError({ code: 'appeal not found' });
         }
-        return this.prisma.appeal.delete({
+        return this.prisma.appeal.update({
             where: {
                 id,
+            },
+            data: {
+                isDeleted: true,
             },
         });
     }

@@ -57,49 +57,54 @@ export class PaidServerService {
       limit = 10,
       page = 1,
     } = dto;
-
+  
     const where: Prisma.PaidServerWhereInput = {
       isDeleted: false,
     };
-
-    if (minPrice || maxPrice) {
+  
+    if (minPrice !== undefined || maxPrice !== undefined) {
       where.price = {
         ...(minPrice !== undefined && { gte: minPrice }),
         ...(maxPrice !== undefined && { lte: maxPrice }),
       };
     }
-
+  
     if (fromDate || toDate) {
       where.endDate = {
         ...(fromDate && { gte: fromDate }),
         ...(toDate && { lte: toDate }),
       };
     }
-
+  
     if (serverId) {
       where.serverId = serverId;
     }
-
+  
     if (description) {
-      where.description = { contains: description };
+      where.description = {
+        contains: description,
+        mode: Prisma.QueryMode.insensitive,
+      };
     }
-
-    const paidServers = await this.prisma.paidServer.findMany({
-      where,
-      include: {
-        paymentType: true,
-        server: { select: { id: true, name: true } },
-      },
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: { id: 'desc' },
-    });
-
-    const agg = await this.prisma.paidServer.aggregate({
-      _sum: { price: true },
-      _count: { _all: true },
-    });
-
+  
+    const [paidServers, agg] = await this.prisma.$transaction([
+      this.prisma.paidServer.findMany({
+        where,
+        include: {
+          paymentType: true,
+          server: { select: { id: true, name: true } },
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { id: 'desc' },
+      }),
+      this.prisma.paidServer.aggregate({
+        where,
+        _sum: { price: true },
+        _count: { _all: true },
+      }),
+    ]);
+  
     return {
       data: paidServers,
       page,
@@ -108,6 +113,7 @@ export class PaidServerService {
       price: agg._sum.price,
     };
   }
+  
 
   async findOne(id: number) {
     const paidServer = await this.prisma.paidServer.findFirst({

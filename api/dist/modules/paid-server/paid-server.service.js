@@ -54,7 +54,7 @@ let PaidServerService = class PaidServerService {
         const where = {
             isDeleted: false,
         };
-        if (minPrice || maxPrice) {
+        if (minPrice !== undefined || maxPrice !== undefined) {
             where.price = {
                 ...(minPrice !== undefined && { gte: minPrice }),
                 ...(maxPrice !== undefined && { lte: maxPrice }),
@@ -70,22 +70,28 @@ let PaidServerService = class PaidServerService {
             where.serverId = serverId;
         }
         if (description) {
-            where.description = { contains: description };
+            where.description = {
+                contains: description,
+                mode: client_1.Prisma.QueryMode.insensitive,
+            };
         }
-        const paidServers = await this.prisma.paidServer.findMany({
-            where,
-            include: {
-                paymentType: true,
-                server: { select: { id: true, name: true } },
-            },
-            skip: (page - 1) * limit,
-            take: limit,
-            orderBy: { id: 'desc' },
-        });
-        const agg = await this.prisma.paidServer.aggregate({
-            _sum: { price: true },
-            _count: { _all: true },
-        });
+        const [paidServers, agg] = await this.prisma.$transaction([
+            this.prisma.paidServer.findMany({
+                where,
+                include: {
+                    paymentType: true,
+                    server: { select: { id: true, name: true } },
+                },
+                skip: (page - 1) * limit,
+                take: limit,
+                orderBy: { id: 'desc' },
+            }),
+            this.prisma.paidServer.aggregate({
+                where,
+                _sum: { price: true },
+                _count: { _all: true },
+            }),
+        ]);
         return {
             data: paidServers,
             page,

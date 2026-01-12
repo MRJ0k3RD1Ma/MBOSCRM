@@ -40,35 +40,20 @@ let PaidOtherGroupService = class PaidOtherGroupService {
     }
     async findAll(dto) {
         const { limit = 10, page = 1, name } = dto;
+        const where = {
+            isDeleted: false,
+            ...(name ? { name: { contains: name.trim(), mode: 'insensitive' } } : {}),
+        };
         const [data, total] = await this.prisma.$transaction([
             this.prisma.paidOtherGroup.findMany({
-                where: {
-                    name: {
-                        contains: name?.trim() || '',
-                        mode: 'insensitive',
-                    },
-                    isDeleted: false,
-                },
+                where,
                 skip: (page - 1) * limit,
                 take: limit,
                 orderBy: { id: 'desc' },
             }),
-            this.prisma.paidOtherGroup.count({
-                where: {
-                    name: {
-                        contains: name?.trim() || '',
-                        mode: 'insensitive',
-                    },
-                    isDeleted: false,
-                },
-            }),
+            this.prisma.paidOtherGroup.count({ where }),
         ]);
-        return {
-            total,
-            page,
-            limit,
-            data,
-        };
+        return { total, page, limit, data };
     }
     async findOne(id) {
         const paidOtherGroup = await this.prisma.paidOtherGroup.findUnique({

@@ -65,6 +65,7 @@ export class ProductGroupService {
             contains: name?.trim() || '',
             mode: 'insensitive',
           },
+          isDeleted: false,
         },
       }),
     ]);

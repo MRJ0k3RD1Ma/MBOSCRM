@@ -82,53 +82,57 @@ export class PaidSupplierService {
 
 	async findAll(dto: FindAllPaidSupplierQueryDto) {
 		const {
-			limit = 10,
-			page = 1,
-			maxPaidDate,
-			minPaidDate,
-			supplierId,
-			paymentId,
+		  limit = 10,
+		  page = 1,
+		  maxPaidDate,
+		  minPaidDate,
+		  supplierId,
+		  paymentId,
 		} = dto;
-
+	  
 		const where: Prisma.PaidSupplierWhereInput = {
-			isDeleted: false,
+		  isDeleted: false,
 		};
-
-		if (supplierId) {
-			where.supplierId = supplierId;
+	  
+		if (supplierId !== undefined) {
+		  where.supplierId = supplierId;
 		}
+	  
+		if (paymentId !== undefined) {
+		  where.paymentId = paymentId;
+		}
+	  
 		if (minPaidDate || maxPaidDate) {
-			where.paidDate = {
-				...(minPaidDate && { gt: minPaidDate }),
-				...(maxPaidDate && { lt: maxPaidDate }),
-			};
+		  where.paidDate = {
+			...(minPaidDate && { gte: minPaidDate }),
+			...(maxPaidDate && { lte: maxPaidDate }),
+		  };
 		}
-		if (paymentId) {
-			where.paymentId = paymentId;
-		}
-
-		const [data, total] = await this.prisma.$transaction([
-			this.prisma.paidSupplier.findMany({
-				where,
-				skip: (page - 1) * limit,
-				take: limit,
-				orderBy: { id: "desc" },
-				include: { Payment: true, register: true, modify: true },
-			}),
-			this.prisma.paidServer.aggregate({
-				_sum: { price: true },
-				_count: { _all: true },
-			}),
+	  
+		const [data, agg] = await this.prisma.$transaction([
+		  this.prisma.paidSupplier.findMany({
+			where,
+			skip: (page - 1) * limit,
+			take: limit,
+			orderBy: { id: "desc" },
+			include: { Payment: true, register: true, modify: true },
+		  }),
+		  this.prisma.paidSupplier.aggregate({
+			where,
+			_sum: { price: true },
+			_count: { _all: true },
+		  }),
 		]);
-
+	  
 		return {
-			total: total._count._all,
-			price: total._sum.price,
-			page,
-			limit,
-			data,
+		  total: agg._count._all,
+		  price: agg._sum.price,
+		  page,
+		  limit,
+		  data,
 		};
-	}
+	  }
+	  
 
 	async findOne(id: number) {
 		const paidSupplier = await this.prisma.paidSupplier.findFirst({

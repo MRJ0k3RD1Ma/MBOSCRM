@@ -6,6 +6,7 @@ import { FindAllPaidOtherGroupQueryDto } from './dto/findAll-paid-other-group.dt
 import { UpdatePaidOtherGroupDto } from './dto/update-paid-other-group.dto';
 import { env } from '../../common/config';
 import { faker } from '@faker-js/faker';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PaidOtherGroupService implements OnModuleInit {
@@ -34,36 +35,23 @@ export class PaidOtherGroupService implements OnModuleInit {
 
   async findAll(dto: FindAllPaidOtherGroupQueryDto) {
     const { limit = 10, page = 1, name } = dto;
+
+    const where: Prisma.PaidOtherGroupWhereInput = {
+      isDeleted: false,
+      ...(name ? { name: { contains: name.trim(), mode: 'insensitive' } } : {}),
+    };
+
     const [data, total] = await this.prisma.$transaction([
       this.prisma.paidOtherGroup.findMany({
-        where: {
-          name: {
-            contains: name?.trim() || '',
-            mode: 'insensitive',
-          },
-          isDeleted: false,
-        },
+        where,
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { id: 'desc' },
       }),
-      this.prisma.paidOtherGroup.count({
-        where: {
-          name: {
-            contains: name?.trim() || '',
-            mode: 'insensitive',
-          },
-          isDeleted: false,
-        },
-      }),
+      this.prisma.paidOtherGroup.count({ where }),
     ]);
 
-    return {
-      total,
-      page,
-      limit,
-      data,
-    };
+    return { total, page, limit, data };
   }
 
   async findOne(id: number) {

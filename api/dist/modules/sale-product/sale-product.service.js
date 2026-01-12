@@ -88,22 +88,16 @@ let SaleProductService = class SaleProductService {
         return saleProduct;
     }
     async findAll(dto) {
-        const { limit = 10, page = 1, saleId, clientId, productId, isSubscribe, } = dto;
-        const where = {
-            isDeleted: false,
-        };
-        if (saleId) {
+        const { limit = 10, page = 1, saleId, clientId, productId, isSubscribe } = dto;
+        const where = { isDeleted: false };
+        if (saleId !== undefined)
             where.saleId = saleId;
-        }
-        if (clientId) {
+        if (clientId !== undefined)
             where.sale = { clientId };
-        }
-        if (productId) {
+        if (productId !== undefined)
             where.productId = productId;
-        }
-        if (isSubscribe !== undefined) {
+        if (isSubscribe !== undefined)
             where.is_subscribe = { equals: isSubscribe };
-        }
         const [data, total] = await this.prisma.$transaction([
             this.prisma.saleProduct.findMany({
                 where,
@@ -115,18 +109,11 @@ let SaleProductService = class SaleProductService {
                     modify: true,
                     register: true,
                 },
-                orderBy: {
-                    id: "desc",
-                },
+                orderBy: { id: "desc" },
             }),
             this.prisma.saleProduct.count({ where }),
         ]);
-        return {
-            total,
-            page,
-            limit,
-            data,
-        };
+        return { total, page, limit, data };
     }
     async findOne(id) {
         const saleProduct = await this.prisma.saleProduct.findFirst({

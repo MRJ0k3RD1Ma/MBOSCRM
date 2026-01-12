@@ -56,7 +56,7 @@ let SaleTodoService = class SaleTodoService {
         });
     }
     async findAll(dto) {
-        const { page, limit, name, isCompleted, saleId, feedbackId } = dto;
+        const { page = 1, limit = 10, name, isCompleted, saleId, feedbackId } = dto;
         const where = { isDeleted: false };
         if (name) {
             where.name = { contains: name, mode: 'insensitive' };

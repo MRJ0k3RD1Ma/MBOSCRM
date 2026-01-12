@@ -203,75 +203,62 @@ export class SaleService implements OnModuleInit {
 
 	async findAll(dto: FindAllSaleQueryDto) {
 		const {
-			limit = 10,
-			page = 1,
-			minPrice,
-			maxPrice,
-			fromDate,
-			toDate,
-			clientId,
-			code,
-			credit,
+		  limit = 10,
+		  page = 1,
+		  minPrice,
+		  maxPrice,
+		  fromDate,
+		  toDate,
+		  clientId,
+		  code,
+		  credit,
 		} = dto;
-
-		const where: Prisma.SaleWhereInput = {
-			isDeleted: false,
-		};
-		if (clientId) {
-			where.clientId = clientId;
-		}
-
+	  
+		const where: Prisma.SaleWhereInput = { isDeleted: false };
+	  
+		if (clientId !== undefined) where.clientId = clientId;
+	  
 		if (credit !== undefined) {
-			if (credit === true) {
-				where.credit = { gt: 0 };
-			} else {
-				where.credit = { equals: 0 };
-			}
+		  where.credit = credit ? { gt: 0 } : { equals: 0 };
 		}
-		if (code) {
-			where.code = {
-				startsWith: code,
-				mode: "insensitive",
-			};
+	  
+		if (code?.trim()) {
+		  where.code = { startsWith: code.trim(), mode: "insensitive" };
 		}
-		if (minPrice || maxPrice) {
-			where.price = {
-				...(minPrice && { gte: minPrice }),
-				...(maxPrice && { lte: maxPrice }),
-			};
+	  
+		if (minPrice !== undefined || maxPrice !== undefined) {
+		  where.price = {
+			...(minPrice !== undefined && { gte: minPrice }),
+			...(maxPrice !== undefined && { lte: maxPrice }),
+		  };
 		}
+	  
 		if (fromDate || toDate) {
-			where.date = {
-				...(fromDate && { gte: fromDate }),
-				...(toDate && { lte: toDate }),
-			};
+		  where.date = {
+			...(fromDate && { gte: fromDate }),
+			...(toDate && { lte: toDate }),
+		  };
 		}
-
+	  
 		const [data, total] = await this.prisma.$transaction([
-			this.prisma.sale.findMany({
-				where,
-				skip: (page - 1) * limit,
-				take: limit,
-				include: {
-					SaleProduct: { include: { product: true } },
-					modifier: true,
-					register: true,
-					client: true,
-				},
-				orderBy: {
-					id: "desc",
-				},
-			}),
-			this.prisma.sale.count({ where }),
+		  this.prisma.sale.findMany({
+			where,
+			skip: (page - 1) * limit,
+			take: limit,
+			include: {
+			  SaleProduct: { include: { product: true } },
+			  modifier: true,
+			  register: true,
+			  client: true,
+			},
+			orderBy: { id: "desc" },
+		  }),
+		  this.prisma.sale.count({ where }),
 		]);
-
-		return {
-			total,
-			page,
-			limit,
-			data,
-		};
-	}
+	  
+		return { total, page, limit, data };
+	  }
+	  
 
 	async findOne(id: number) {
 		const sale = await this.prisma.sale.findFirst({

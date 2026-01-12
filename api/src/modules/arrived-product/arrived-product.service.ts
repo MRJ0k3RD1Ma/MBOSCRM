@@ -76,61 +76,61 @@ export class ArrivedProductService {
 
 	async findAll(dto: FindAllArrivedProductQueryDto) {
 		const {
-			limit = 10,
-			page = 1,
-			minPrice,
-			maxPrice,
-			productId,
-			supplierId,
-			arrivedId,
+		  limit = 10,
+		  page = 1,
+		  minPrice,
+		  maxPrice,
+		  productId,
+		  supplierId,
+		  arrivedId,
 		} = dto;
-
+	  
 		const where: Prisma.ArrivedProductWhereInput = {
-			isDeleted: false,
+		  isDeleted: false,
 		};
-		if (supplierId) {
-			where.Arrived = { supplierId };
+	  
+		if (supplierId !== undefined) {
+		  where.Arrived = { supplierId };
 		}
-
-		if (arrivedId) {
-			where.arrivedId = arrivedId;
+	  
+		if (arrivedId !== undefined) {
+		  where.arrivedId = arrivedId;
 		}
-
-		if (productId) {
-			where.productId = productId;
+	  
+		if (productId !== undefined) {
+		  where.productId = productId;
 		}
-
-		if (minPrice || maxPrice) {
-			where.price = {
-				...(minPrice && { gte: minPrice }),
-				...(maxPrice && { lte: maxPrice }),
-			};
+	  
+		if (minPrice !== undefined || maxPrice !== undefined) {
+		  where.price = {
+			...(minPrice !== undefined && { gte: minPrice }),
+			...(maxPrice !== undefined && { lte: maxPrice }),
+		  };
 		}
-
+	  
 		const [data, total] = await this.prisma.$transaction([
-			this.prisma.arrivedProduct.findMany({
-				where,
-				skip: (page - 1) * limit,
-				take: limit,
-				include: {
-					Arrived: { include: { supplier: true } },
-					Product: { include: { ProductUnit: true } },
-					register: true,
-				},
-				orderBy: {
-					id: "desc",
-				},
-			}),
-			this.prisma.arrivedProduct.count({ where }),
+		  this.prisma.arrivedProduct.findMany({
+			where,
+			skip: (page - 1) * limit,
+			take: limit,
+			include: {
+			  Arrived: { include: { supplier: true } },
+			  Product: { include: { ProductUnit: true } },
+			  register: true,
+			},
+			orderBy: { id: "desc" },
+		  }),
+		  this.prisma.arrivedProduct.count({ where }),
 		]);
-
+	  
 		return {
-			total,
-			page,
-			limit,
-			data,
+		  total,
+		  page,
+		  limit,
+		  data,
 		};
-	}
+	  }
+	  
 
 	async findOne(id: number) {
 		const arrivedproduct = await this.prisma.arrivedProduct.findFirst({

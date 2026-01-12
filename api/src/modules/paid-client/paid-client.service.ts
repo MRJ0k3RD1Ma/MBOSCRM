@@ -162,93 +162,104 @@ export class PaidClientService {
 		return { remainingPayment, currentBalance };
 	}
 
-	async findAll(dto: FindAllQueryPaidClientDto) {
-		const {
-			minPrice,
-			maxPrice,
-			fromDate,
-			toDate,
-			clientId,
-			saleId,
-			paymentId,
-			clientName,
-			limit = 10,
-			page = 1,
-		} = dto;
+async findAll(dto: FindAllQueryPaidClientDto) {
+  const {
+    minPrice,
+    maxPrice,
+    fromDate,
+    toDate,
+    clientId,
+    saleId,
+    paymentId,
+    clientName,
+    limit = 10,
+    page = 1,
+  } = dto;
 
-		const where: Prisma.PaidClientWhereInput = {
-			isDeleted: false,
-		};
+  const where: Prisma.PaidClientWhereInput = {
+    isDeleted: false,
+  };
 
-		if (minPrice || maxPrice) {
-			where.price = {
-				...(minPrice !== undefined && { gte: minPrice }),
-				...(maxPrice !== undefined && { lte: maxPrice }),
-			};
-		}
+  // price
+  if (minPrice !== undefined || maxPrice !== undefined) {
+    where.price = {
+      ...(minPrice !== undefined && { gte: minPrice }),
+      ...(maxPrice !== undefined && { lte: maxPrice }),
+    };
+  }
 
-		if (clientName) {
-			where.OR = [
-				{
-					Client: {
-						name: { contains: clientName.trim(), mode: "insensitive" },
-					},
-				},
-				{
-					Client: { inn: { contains: clientName.trim(), mode: "insensitive" } },
-				},
-			];
-		}
+  // client search (name or inn)
+  if (clientName) {
+    where.OR = [
+      {
+        Client: {
+          name: {
+            contains: clientName.trim(),
+            mode: Prisma.QueryMode.insensitive,
+          },
+        },
+      },
+      {
+        Client: {
+          inn: {
+            contains: clientName.trim(),
+            mode: Prisma.QueryMode.insensitive,
+          },
+        },
+      },
+    ];
+  }
 
-		if (fromDate || toDate) {
-			where.paidDate = {
-				...(fromDate && { gte: fromDate }),
-				...(toDate && { lte: toDate }),
-			};
-		}
+  // date
+  if (fromDate || toDate) {
+    where.paidDate = {
+      ...(fromDate && { gte: fromDate }),
+      ...(toDate && { lte: toDate }),
+    };
+  }
 
-		if (clientId) {
-			where.clientId = clientId;
-		}
+  if (clientId !== undefined) {
+    where.clientId = clientId;
+  }
 
-		if (saleId) {
-			where.saleId = saleId;
-		}
+  if (saleId !== undefined) {
+    where.saleId = saleId;
+  }
 
-		if (paymentId) {
-			where.paymentId = paymentId;
-		}
+  if (paymentId !== undefined) {
+    where.paymentId = paymentId;
+  }
 
-		const paidClients = await this.prisma.paidClient.findMany({
-			where,
-			include: {
-				Client: true,
-				Sale: true,
-				Payment: true,
-				modify: true,
-				register: true,
-			},
-			skip: (page - 1) * limit,
-			take: limit,
-			orderBy: {
-				id: "desc",
-			},
-		});
+  const [paidClients, agg] = await this.prisma.$transaction([
+    this.prisma.paidClient.findMany({
+      where,
+      include: {
+        Client: true,
+        Sale: true,
+        Payment: true,
+        modify: true,
+        register: true,
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { id: "desc" },
+    }),
+    this.prisma.paidClient.aggregate({
+      where,
+      _sum: { price: true },
+      _count: { _all: true },
+    }),
+  ]);
 
-		const agg = await this.prisma.paidClient.aggregate({
-			_sum: { price: true },
-			_count: { _all: true },
-			where: { isDeleted: false },
-		});
+  return {
+    data: paidClients,
+    page,
+    limit,
+    total: agg._count._all,
+    price: agg._sum.price,
+  };
+}
 
-		return {
-			data: paidClients,
-			page,
-			limit,
-			total: agg._count._all,
-			price: agg._sum.price,
-		};
-	}
 
 	async findOne(id: number) {
 		const paidClient = await this.prisma.paidClient.findFirst({

@@ -65,6 +65,7 @@ export class ProductUnitService {
             contains: name?.trim() || '',
             mode: 'insensitive',
           },
+          isDeleted: false,
         },
       }),
     ]);
