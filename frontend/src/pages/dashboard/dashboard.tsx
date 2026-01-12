@@ -18,7 +18,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
+  // LineChart,
   Line,
   ComposedChart,
 } from "recharts";
@@ -154,34 +154,34 @@ export default function Dashboard() {
     "Dekabr",
   ];
 
-  const forecastRaw = data?.charts?.subscriptionForecast || [];
-  const forecastData = useMemo(() => {
-    let lastVal = 0;
-    return forecastRaw.map((val: number, idx: number) => {
-      if (val && val > 0) {
-        lastVal = val; // agar shu oyda to‘lov boshlansa, keyingi oylar ham shu qiymat
-      }
-      return {
-        month: idx + 1,
-        monthLabel:
-          [
-            "Yan",
-            "Fev",
-            "Mar",
-            "Apr",
-            "May",
-            "Iyun",
-            "Iyul",
-            "Avg",
-            "Sen",
-            "Okt",
-            "Noy",
-            "Dek",
-          ][idx] || String(idx + 1),
-        expected: lastVal,
-      };
-    });
-  }, [forecastRaw]);
+  // const forecastRaw = data?.charts?.subscriptionForecast || [];
+  // const forecastData = useMemo(() => {
+  //   let lastVal = 0;
+  //   return forecastRaw.map((val: number, idx: number) => {
+  //     if (val && val > 0) {
+  //       lastVal = val; // agar shu oyda to‘lov boshlansa, keyingi oylar ham shu qiymat
+  //     }
+  //     return {
+  //       month: idx + 1,
+  //       monthLabel:
+  //         [
+  //           "Yan",
+  //           "Fev",
+  //           "Mar",
+  //           "Apr",
+  //           "May",
+  //           "Iyun",
+  //           "Iyul",
+  //           "Avg",
+  //           "Sen",
+  //           "Okt",
+  //           "Noy",
+  //           "Dek",
+  //         ][idx] || String(idx + 1),
+  //       expected: lastVal,
+  //     };
+  //   });
+  // }, [forecastRaw]);
   const currentMonthName = monthNames[dayjs().month()];
 
   const monthlyData = useMemo(() => {
@@ -234,6 +234,18 @@ export default function Dashboard() {
     yearlyIncome: 0,
     lastYearIncome: 0,
   };
+
+  const currentMonth = dayjs().month() + 1; // 1–12
+
+  const currentMonthDateFrom = `${currentYear}-${String(currentMonth).padStart(
+    2,
+    "0"
+  )}-01`;
+
+  const currentMonthDateTo = `${currentYear}-${String(currentMonth).padStart(
+    2,
+    "0"
+  )}-${dayjs(`${currentYear}-${currentMonth}-01`).daysInMonth()}`;
 
   const moneyTooltip = (v: any) => (v == null ? "-" : formatMoney(v));
 
@@ -334,7 +346,7 @@ export default function Dashboard() {
           bgColor="!bg-[#4CAF50]"
           textColor={titleColor}
           isDark={isDark}
-          link="/monthly-revenues"
+          link={`/monthly-revenues?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
         />
         <StatCard
           title={`${currentMonthName}dagi chiqimlar`}
@@ -343,7 +355,7 @@ export default function Dashboard() {
           bgColor="!bg-[#F59E0B]"
           textColor={titleColor}
           isDark={isDark}
-          link="/monthly-expenses"
+          link={`/monthly-expenses?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
         />
         <StatCard
           title={`${currentMonthName}dagi qarzdorlik`}
@@ -352,7 +364,7 @@ export default function Dashboard() {
           bgColor="!bg-[#EF4444]"
           textColor={titleColor}
           isDark={isDark}
-          link="/clients-credit"
+          link={`/monthly-credit?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
         />
       </div>
       <Row gutter={0} style={{ marginTop: 24 }}>
@@ -385,7 +397,8 @@ export default function Dashboard() {
               }}
             >
               <Title level={5} style={{ margin: 0, color: cardTitleColor }}>
-                Oylik: Tushum / Chiqim / Obuna qarzdorlik
+                Oylik: Tushum / Chiqim / Obuna qarzdorlik , Kutilayotgan obuna
+                tushumi
               </Title>
               <AntdTooltip title="Har bir ustun oylik qiymatni ko'rsatadi">
                 <Text type="secondary">Ma'lumotlar</Text>
@@ -599,7 +612,7 @@ export default function Dashboard() {
           </Card>
         </Col>
 
-        <Col
+        {/* <Col
           span={24}
           style={{
             display: "flex",
@@ -691,7 +704,7 @@ export default function Dashboard() {
               </ResponsiveContainer>
             </div>
           </Card>
-        </Col>
+        </Col> */}
       </Row>
     </Card>
   );
