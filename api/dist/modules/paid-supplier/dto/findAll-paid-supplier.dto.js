@@ -31,6 +31,7 @@ __decorate([
         example: '2022-01-01',
     }),
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
 ], FindAllPaidSupplierQueryDto.prototype, "fromDate", void 0);
@@ -39,6 +40,7 @@ __decorate([
         example: '2022-01-01',
     }),
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
 ], FindAllPaidSupplierQueryDto.prototype, "toDate", void 0);

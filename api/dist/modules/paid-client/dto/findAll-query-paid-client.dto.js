@@ -36,14 +36,14 @@ __decorate([
     __metadata("design:type", String)
 ], FindAllQueryPaidClientDto.prototype, "clientName", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-01" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-01' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
 ], FindAllQueryPaidClientDto.prototype, "fromDate", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "2025-07-30" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-30' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     (0, class_transformer_1.Type)(() => Date),
