@@ -43,6 +43,8 @@ export interface SupplierResponse {
 export const useGetAllSuppliers = (params?: {
   page?: number;
   limit?: number;
+  fromDate?: string;
+  toDate?: string;
   name?: string;
   phone?: string;
   description?: string;

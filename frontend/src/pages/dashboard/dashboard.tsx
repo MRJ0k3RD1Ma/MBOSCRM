@@ -20,13 +20,14 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
+  ComposedChart,
 } from "recharts";
 import dayjs from "dayjs";
 import {
   useGetStatistics,
   type StatisticsResponse,
 } from "../../config/queries/statistics/statistics-querys";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useThemeContext } from "../../providers/theme-provider";
 
 const { Title, Text } = Typography;
@@ -34,9 +35,11 @@ const { Title, Text } = Typography;
 function formatDashboardNumber(number: number) {
   if (Math.abs(number) >= 1000) {
     const inThousands = number / 1000;
-    return new Intl.NumberFormat("ru-RU", {
-      maximumFractionDigits: 0,
-    }).format(inThousands) + "k";
+    return (
+      new Intl.NumberFormat("ru-RU", {
+        maximumFractionDigits: 0,
+      }).format(inThousands) + "k"
+    );
   }
   return new Intl.NumberFormat("ru-RU", {
     maximumFractionDigits: 0,
@@ -70,10 +73,12 @@ const StatCard: React.FC<StatCardProps> = ({
   link,
 }) => {
   const navigate = useNavigate();
+
   return (
     <Card
-      className={`!border ${isDark ? "!border-white/20 !bg-white/10" : "!border-gray-200 !bg-white"
-        } !shadow-lg !hover:shadow-xl !transition-all !duration-300 hover:scale-[1.03] !backdrop-blur-xl !rounded-2xl`}
+      className={`!border ${
+        isDark ? "!border-white/20 !bg-white/10" : "!border-gray-200 !bg-white"
+      } !shadow-lg !hover:shadow-xl !transition-all !duration-300 hover:scale-[1.03] !backdrop-blur-xl !rounded-2xl`}
       bodyStyle={{
         padding: "16px",
       }}
@@ -112,6 +117,7 @@ const StatCard: React.FC<StatCardProps> = ({
 };
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const { theme } = useThemeContext();
   const isDark = theme === "dark";
   const currentYear = dayjs().year();
@@ -119,7 +125,9 @@ export default function Dashboard() {
 
   const years = useMemo(() => {
     const arr = [];
-    for (let y = 2024; y <= 2025; y++) {
+    const currentYear = dayjs().year();
+    const startYear = 2024;
+    for (let y = startYear; y <= currentYear; y++) {
       arr.push(y);
     }
     return arr;
@@ -131,7 +139,6 @@ export default function Dashboard() {
     setYear(y);
   };
 
-  const monthlyRaw = data?.charts?.monthlyStats || [];
   const monthNames = [
     "Yanvar",
     "Fevral",
@@ -146,27 +153,6 @@ export default function Dashboard() {
     "Noyabr",
     "Dekabr",
   ];
-
-  const monthlyData = useMemo(() => {
-    const monthNames = [
-      "Yan",
-      "Fev",
-      "Mar",
-      "Apr",
-      "May",
-      "Iyun",
-      "Iyul",
-      "Avg",
-      "Sen",
-      "Okt",
-      "Noy",
-      "Dek",
-    ];
-    return monthlyRaw.map((m: any) => ({
-      ...m,
-      monthLabel: monthNames[(m.month || 1) - 1] || String(m.month),
-    }));
-  }, [monthlyRaw]);
 
   const forecastRaw = data?.charts?.subscriptionForecast || [];
   const forecastData = useMemo(() => {
@@ -198,6 +184,37 @@ export default function Dashboard() {
   }, [forecastRaw]);
   const currentMonthName = monthNames[dayjs().month()];
 
+  const monthlyData = useMemo(() => {
+    const monthNames = [
+      "Yan",
+      "Fev",
+      "Mar",
+      "Apr",
+      "May",
+      "Iyun",
+      "Iyul",
+      "Avg",
+      "Sen",
+      "Okt",
+      "Noy",
+      "Dek",
+    ];
+
+    let lastExpected = 0;
+
+    return (data?.charts?.monthlyStats || []).map((m: any) => {
+      if (m.expectedSubscription && m.expectedSubscription > 0) {
+        lastExpected = m.expectedSubscription;
+      }
+
+      return {
+        ...m,
+        monthLabel: monthNames[(m.month || 1) - 1],
+        expected: lastExpected,
+      };
+    });
+  }, [data]);
+
   if (isLoading) {
     return (
       <div style={{ textAlign: "center", marginTop: 50 }}>
@@ -218,8 +235,7 @@ export default function Dashboard() {
     lastYearIncome: 0,
   };
 
-  const moneyTooltip = (v: any) =>
-    v == null ? "-" : formatMoney(v);
+  const moneyTooltip = (v: any) => (v == null ? "-" : formatMoney(v));
 
   const titleColor = isDark ? "" : "text-gray-800";
   const subtitleColor = isDark ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.65)";
@@ -303,12 +319,10 @@ export default function Dashboard() {
           subtitle={
             <div className="space-y-1">
               <div className="!font-semibold text-xl">
-                {year} - yil:{" "}
-                {formatMoney(stats.yearlyIncome || 0)}
+                {year} - yil: {formatMoney(stats.yearlyIncome || 0)}
               </div>
               <div className="!text-sm !opacity-80">
-                {year - 1} - yil:{" "}
-                {formatMoney(stats.lastYearIncome || 0)}
+                {year - 1} - yil: {formatMoney(stats.lastYearIncome || 0)}
               </div>
             </div>
           }
@@ -383,64 +397,104 @@ export default function Dashboard() {
               className="!overflow-hidden"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyData}>
+                <ComposedChart data={monthlyData}>
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke={chartGridColor}
                   />
-                  <XAxis
-                    dataKey="monthLabel"
-                    stroke={chartTextColor}
-                    fontSize={12}
-                  />
-                  <YAxis
-                    stroke={chartTextColor}
-                    fontSize={12}
-                    tickFormatter={(v) =>
-                      v ? formatDashboardNumber(v) : "0"
-                    }
-                  />
+
+                  <XAxis dataKey="monthLabel" stroke={chartTextColor} />
+                  <YAxis tickFormatter={(v) => formatDashboardNumber(v)} />
+
                   <Tooltip
-                    formatter={(v: any) => moneyTooltip(v)}
+                    formatter={(v) => moneyTooltip(v)}
                     contentStyle={{
                       backgroundColor: isDark
                         ? "rgba(0,0,0,0.8)"
                         : "rgba(255,255,255,0.95)",
-                      border: `1px solid ${isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
-                        }`,
+                      border: `1px solid ${
+                        isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                      }`,
                       borderRadius: "8px",
                       color: isDark ? "#fff" : "#000",
                     }}
                   />
-                  <Legend
-                    wrapperStyle={{
-                      color: chartTextColor,
-                      fontSize: "12px",
+                  <Legend />
+
+                  <Bar
+                    dataKey="tushum"
+                    name="Tushum"
+                    fill="#22c55e"
+                    className="!cursor-pointer"
+                    onClick={(data: any) => {
+                      const month = data.month;
+                      const dateFrom = `${year}-${String(month).padStart(
+                        2,
+                        "0"
+                      )}-01`;
+                      const dateTo = `${year}-${String(month).padStart(
+                        2,
+                        "0"
+                      )}-${new Date(year, month, 0).getDate()}`;
+
+                      navigate(
+                        `/monthly-revenues?dateFrom=${dateFrom}&dateTo=${dateTo}`
+                      );
                     }}
                   />
-                  <Link to={"/monthly-revenues"}>
-                    <Bar
-                      dataKey="tushum"
-                      name="Tushum"
-                      fill="#22c55e"
-                      radius={[4, 4, 0, 0]}
-                    />
-                  </Link>
-                  <Link to={"/monthly-expenses"}>
-                    <Bar
-                      dataKey="chiqim"
-                      name="Chiqim"
-                      fill="#f59e0b"
-                      radius={[4, 4, 0, 0]}
-                    />
-                  </Link>
+
+                  <Bar
+                    dataKey="chiqim"
+                    name="Chiqim"
+                    fill="#f59e0b"
+                    className="!cursor-pointer"
+                    onClick={(data: any) => {
+                      const month = data.month;
+                      const dateFrom = `${year}-${String(month).padStart(
+                        2,
+                        "0"
+                      )}-01`;
+                      const dateTo = `${year}-${String(month).padStart(
+                        2,
+                        "0"
+                      )}-${new Date(year, month, 0).getDate()}`;
+
+                      navigate(
+                        `/monthly-expenses?dateFrom=${dateFrom}&dateTo=${dateTo}`
+                      );
+                    }}
+                  />
                   <Bar
                     dataKey="credit"
-                    name="Obuna qarzdorligi"
+                    name="Qarzdorlik"
                     fill="#ef4444"
-                    radius={[4, 4, 0, 0]}
+                    className="!cursor-pointer"
+                    onClick={(data: any) => {
+                      const month = data.month;
+                      const dateFrom = `${year}-${String(month).padStart(
+                        2,
+                        "0"
+                      )}-01`;
+                      const dateTo = `${year}-${String(month).padStart(
+                        2,
+                        "0"
+                      )}-${new Date(year, month, 0).getDate()}`;
+
+                      navigate(
+                        `/monthly-credit?dateFrom=${dateFrom}&dateTo=${dateTo}`
+                      );
+                    }}
                   />
-                </BarChart>
+
+                  <Line
+                    type="monotone"
+                    dataKey="expected"
+                    name="Kutilayotgan obuna tushumi"
+                    stroke="#3b82f6"
+                    strokeWidth={3}
+                    dot={{ r: 4 }}
+                  />
+                </ComposedChart>
               </ResponsiveContainer>
             </div>
           </Card>
@@ -500,9 +554,7 @@ export default function Dashboard() {
                   <YAxis
                     stroke={chartTextColor}
                     fontSize={12}
-                    tickFormatter={(v) =>
-                      v ? formatDashboardNumber(v) : "0"
-                    }
+                    tickFormatter={(v) => (v ? formatDashboardNumber(v) : "0")}
                   />
                   <Tooltip
                     formatter={(v: any) => moneyTooltip(v)}
@@ -510,8 +562,9 @@ export default function Dashboard() {
                       backgroundColor: isDark
                         ? "rgba(0,0,0,0.8)"
                         : "rgba(255,255,255,0.95)",
-                      border: `1px solid ${isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
-                        }`,
+                      border: `1px solid ${
+                        isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                      }`,
                       borderRadius: "8px",
                       color: isDark ? "#fff" : "#000",
                     }}
@@ -604,9 +657,7 @@ export default function Dashboard() {
                   <YAxis
                     stroke={chartTextColor}
                     fontSize={12}
-                    tickFormatter={(v) =>
-                      v ? formatDashboardNumber(v) : "0"
-                    }
+                    tickFormatter={(v) => (v ? formatDashboardNumber(v) : "0")}
                   />
                   <Tooltip
                     formatter={(v: any) => moneyTooltip(v)}
@@ -614,8 +665,9 @@ export default function Dashboard() {
                       backgroundColor: isDark
                         ? "rgba(0,0,0,0.8)"
                         : "rgba(255,255,255,0.95)",
-                      border: `1px solid ${isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
-                        }`,
+                      border: `1px solid ${
+                        isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                      }`,
                       borderRadius: "8px",
                       color: isDark ? "#fff" : "#000",
                     }}

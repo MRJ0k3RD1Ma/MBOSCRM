@@ -1,72 +1,76 @@
 import { Card, DatePicker, Table } from "antd";
-import { useState } from "react";
-import {
-  useGetAllPaidOthers,
-  type PaidOther,
-} from "../../../config/queries/paid/paid-other";
 import { indexColumn } from "../../../components/tables/indexColumn";
+import { useState } from "react";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import dayjs from "dayjs";
 import Title from "antd/es/typography/Title";
+import { useGetAllSale } from "../../../config/queries/sale/sale-querys";
+import { useGetAllClients } from "../../../config/queries/clients/clients-querys";
 
 const { RangePicker } = DatePicker;
 
-export default function PaidOtherMonthly({
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+export default function SalesPaidTable({
   fromDate,
   toDate,
-  type,
   setDateFrom,
   setDateTo,
 }: {
   fromDate: string;
   toDate: string;
-  type: "INCOME" | "OUTCOME";
   setDateFrom: (date: string) => void;
   setDateTo: (date: string) => void;
 }) {
   const [page, setPage] = useState<number>(1);
   const [limit] = useState(10);
 
-  const { data, isLoading } = useGetAllPaidOthers({
+  const { data, isLoading } = useGetAllSale({
+    credit: true,
     page,
     limit,
-    type,
-    fromDate,
-    toDate,
+    fromDate: fromDate ? fromDate : undefined,
+    toDate: toDate ? toDate : undefined,
   });
+  const { data: clients } = useGetAllClients({ page: 1, limit: 1000 });
 
   const columns = [
-    indexColumn(page, limit),
+    indexColumn(page, 10),
     {
-      title: "Guruh",
-      dataIndex: "groupId",
-      render: (_: any, row: PaidOther) => row.group?.name || "–",
+      title: "Sana",
+      dataIndex: "date",
+      render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
+    },
+    { title: "Kod", dataIndex: "code" },
+    {
+      title: "Mijoz",
+      dataIndex: "clientId",
+      render: (clientId: number) => {
+        const client = clients?.data?.find((c) => c.id === clientId);
+        return client?.name || "—";
+      },
     },
     {
-      title: "Turi",
-      dataIndex: "type",
-      render: (type: PaidOther["type"]) =>
-        type === "INCOME" ? "Kirim" : "Chiqim",
-    },
-    {
-      title: "To‘lov miqdori",
+      title: "Narx",
       dataIndex: "price",
-      render: (priceCount: number) =>
-        priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
+      render: (price: number) =>
+        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
-      title: "To‘langan sana",
-      dataIndex: "paidDate",
-      render: (text: string) => (text ? dayjs(text).format("YYYY-MM-DD") : "–"),
+      title: "Qarz",
+      dataIndex: "credit",
+      render: (credit: number) =>
+        credit ? credit.toLocaleString("uz-UZ") + " so'm" : "0",
     },
-    { title: "Izoh", dataIndex: "description" },
   ];
 
   return (
     <Card>
       <div className="flex justify-between items-center mb-4">
         <Title level={5} className="w-[80%]">
-          Oylik boshqa {type === "INCOME" ? "daromadlari" : "chiqimlari"}{" "}
-          {data?.price.toLocaleString("uz-UZ")} so'm
+          {/* Oylik obuna qarzdorligi {data?.price.toLocaleString("uz-UZ")} so'm */}
         </Title>
         <RangePicker
           placeholder={["Boshlanish sanasi", "Tugash sanasi"]}

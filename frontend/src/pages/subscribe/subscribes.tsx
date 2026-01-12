@@ -35,7 +35,7 @@ export default function Subscribes() {
       title: "To‘lov sanasi",
       dataIndex: "paying_date",
       render: (date: string) =>
-        dayjs.utc(date).tz("Asia/Tashkent").format("YYYY-MM-DD HH:mm"),
+        dayjs.utc(date).tz("Asia/Tashkent").format("YYYY-MM-DD"),
     },
     {
       title: "Shartnoma raqami",
@@ -63,24 +63,14 @@ export default function Subscribes() {
       render: (sale: any) => sale?.id || "-",
     },
     {
-      title: "Sotuvdagi mahsulotlar",
-      render: (_: any, record: any) => {
-        if (!record?.sale?.SaleProduct?.length) return "-";
-
-        return record.sale.SaleProduct.map((item: any) => {
-          const name = item?.product?.name || "";
-          return name.length > 7 ? name.slice(0, 7) + "..." : name;
-        }).join(", ");
-      },
-    },
-    {
       title: "Narx",
       dataIndex: "price",
       render: (price: number) =>
         price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
-      title: "To‘langan", dataIndex: "paid",
+      title: "To‘langan",
+      dataIndex: "paid",
       render: (paid: number) =>
         paid ? paid.toLocaleString("uz-UZ") + " so'm" : "0",
     },

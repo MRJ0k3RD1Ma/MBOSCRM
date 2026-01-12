@@ -1,4 +1,4 @@
-import { Card, Table } from "antd";
+import { Card, DatePicker, Table } from "antd";
 
 import dayjs from "dayjs";
 import { indexColumn } from "../../../components/tables/indexColumn";
@@ -6,11 +6,24 @@ import timezone from "dayjs/plugin/timezone";
 import { useGetAllPaidServers } from "../../../config/queries/server/paid-servers-querys";
 import { useState } from "react";
 import utc from "dayjs/plugin/utc";
+import Title from "antd/es/typography/Title";
+
+const { RangePicker } = DatePicker;
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export default function ServerPaidTable() {
+export default function ServerPaidTable({
+  fromDate,
+  toDate,
+  setDateFrom,
+  setDateTo,
+}: {
+  fromDate: string;
+  toDate: string;
+  setDateFrom: (date: string) => void;
+  setDateTo: (date: string) => void;
+}) {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
@@ -45,12 +58,23 @@ export default function ServerPaidTable() {
     },
   ];
   return (
-    <Card
-      className="ClientsPaidTable"
-
-      title={` Oylik server chiqimlari ${data?.price ? data?.price.toLocaleString("uz-UZ") + " so'm" : "0"}`}
-
-    >
+    <Card className="ClientsPaidTable">
+      <div className="flex justify-between items-center mb-4">
+        <Title level={5} className="w-[80%]">
+          Oylik server chiqimlari {data?.price.toLocaleString("uz-UZ")} so'm
+        </Title>
+        <RangePicker
+          placeholder={["Boshlanish sanasi", "Tugash sanasi"]}
+          style={{ width: "100%" }}
+          format="YYYY-MM-DD"
+          value={fromDate && toDate ? [dayjs(fromDate), dayjs(toDate)] : null}
+          onChange={(dates, dateStrings) => {
+            setDateFrom(dateStrings[0]);
+            setDateTo(dateStrings[1]);
+            console.log(dates);
+          }}
+        />
+      </div>
       <Table
         columns={columns}
         dataSource={Array.isArray(data?.data) ? data.data : []}

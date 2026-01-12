@@ -71,13 +71,15 @@ export const useGetAllClients = (
     limit?: number;
     name?: string;
     address?: string;
+    fromDate?: string;
+    toDate?: string;
     description?: string;
     phone?: string;
     inn?: string;
     districtId?: number;
     isPositiveBalance?: boolean;
   },
-  options?: { enabled?: boolean } 
+  options?: { enabled?: boolean }
 ) => {
   return useQuery<ClientResponse>({
     queryKey: ["clients", params],
@@ -85,7 +87,7 @@ export const useGetAllClients = (
       const { data } = await axiosPrivate.get(clientEndpoints.all, { params });
       return data;
     },
-    enabled: options?.enabled ?? true, 
+    enabled: options?.enabled ?? true,
   });
 };
 

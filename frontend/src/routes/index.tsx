@@ -53,6 +53,7 @@ import SupplierOverPaid from "../pages/suppler/supplier-over-paid";
 import Suppliers from "../pages/suppler/suppliers";
 import { TokenManager } from "../config/token-manager";
 import Users from "../pages/users/users";
+import MonthlyCredit from "../pages/paid_statistic/monthly_creadit";
 
 const RedirectIfAuthenticated = () => {
   const token = TokenManager.getAccessToken();
@@ -237,8 +238,8 @@ export const router = createBrowserRouter([
             element: <MonthlyExpenses />,
           },
           {
-            path: "monthly-arrears",
-            element: <MonthlyRevenues />,
+            path: "monthly-credit",
+            element: <MonthlyCredit />,
           },
           {
             path: "feedbacks",

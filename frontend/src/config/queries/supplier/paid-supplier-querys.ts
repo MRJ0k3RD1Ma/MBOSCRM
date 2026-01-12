@@ -39,6 +39,8 @@ export interface PaidSupplierResponse {
 export const useGetAllPaidSuppliers = (params?: {
   page?: number;
   limit?: number;
+  fromDate?: string;
+  toDate?: string;
   supplierId?: number;
   paymentId?: number;
   minPaidDate?: string;

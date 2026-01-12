@@ -1,72 +1,57 @@
 import { Card, DatePicker, Table } from "antd";
-import { useState } from "react";
-import {
-  useGetAllPaidOthers,
-  type PaidOther,
-} from "../../../config/queries/paid/paid-other";
 import { indexColumn } from "../../../components/tables/indexColumn";
+import { useState } from "react";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import dayjs from "dayjs";
 import Title from "antd/es/typography/Title";
+import { useGetAllSuppliers } from "../../../config/queries/supplier/supplier-querys";
 
 const { RangePicker } = DatePicker;
 
-export default function PaidOtherMonthly({
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+export default function SupplierCreditTable({
   fromDate,
   toDate,
-  type,
   setDateFrom,
   setDateTo,
 }: {
   fromDate: string;
   toDate: string;
-  type: "INCOME" | "OUTCOME";
   setDateFrom: (date: string) => void;
   setDateTo: (date: string) => void;
 }) {
   const [page, setPage] = useState<number>(1);
   const [limit] = useState(10);
 
-  const { data, isLoading } = useGetAllPaidOthers({
+  const { data, isLoading } = useGetAllSuppliers({
+    isPositiveBalance: false,
     page,
     limit,
-    type,
-    fromDate,
-    toDate,
+    fromDate: fromDate ? fromDate : undefined,
+    toDate: toDate ? toDate : undefined,
   });
-
   const columns = [
     indexColumn(page, limit),
-    {
-      title: "Guruh",
-      dataIndex: "groupId",
-      render: (_: any, row: PaidOther) => row.group?.name || "–",
-    },
-    {
-      title: "Turi",
-      dataIndex: "type",
-      render: (type: PaidOther["type"]) =>
-        type === "INCOME" ? "Kirim" : "Chiqim",
-    },
-    {
-      title: "To‘lov miqdori",
-      dataIndex: "price",
-      render: (priceCount: number) =>
-        priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
-    },
-    {
-      title: "To‘langan sana",
-      dataIndex: "paidDate",
-      render: (text: string) => (text ? dayjs(text).format("YYYY-MM-DD") : "–"),
-    },
+    { title: "Nomi", dataIndex: "name" },
+    { title: "Telefon", dataIndex: "phone" },
+    { title: "Qo‘shimcha telefon", dataIndex: "phoneTwo" },
     { title: "Izoh", dataIndex: "description" },
+    {
+      title: "Balans",
+      dataIndex: "balance",
+      render: (dept: number) =>
+        dept ? dept.toLocaleString("uz-UZ") + " so'm" : "0",
+    },
   ];
 
   return (
     <Card>
       <div className="flex justify-between items-center mb-4">
         <Title level={5} className="w-[80%]">
-          Oylik boshqa {type === "INCOME" ? "daromadlari" : "chiqimlari"}{" "}
-          {data?.price.toLocaleString("uz-UZ")} so'm
+          {/* Oylik obuna qarzdorligi {data?.price.toLocaleString("uz-UZ")} so'm */}
         </Title>
         <RangePicker
           placeholder={["Boshlanish sanasi", "Tugash sanasi"]}

@@ -1,11 +1,12 @@
-import { Tabs, type TabsProps } from "antd";
-import PaidOtherMonthly from "./ui/paid_other_monthly";
-import SupplierPaidTable from "./ui/supplier_paid_table";
-import ServerPaidTable from "./ui/server_paid_table";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { Tabs } from "antd";
+import SubscribePaidTable from "./ui/subscribe_paid_table";
+import SalesPaidTable from "./ui/sales_paid_table";
+import ClientsCreditTable from "./ui/clients_credit_table";
+import SupplierCreditTable from "./ui/supplier_credit_table";
 
-export default function MonthlyExpenses() {
+export default function MonthlyCredit() {
   const [searchParams] = useSearchParams();
 
   const [dateFrom, setDateFrom] = useState(searchParams.get("dateFrom") || "");
@@ -16,12 +17,12 @@ export default function MonthlyExpenses() {
     setDateTo(searchParams.get("dateTo") || "");
   }, [searchParams]);
 
-  const tabItems: TabsProps["items"] = [
+  const tabItems = [
     {
       key: "1",
-      label: "Yetkazib beruvchilar",
+      label: "Obunalar",
       children: (
-        <SupplierPaidTable
+        <SubscribePaidTable
           fromDate={dateFrom}
           toDate={dateTo}
           setDateFrom={setDateFrom}
@@ -31,12 +32,11 @@ export default function MonthlyExpenses() {
     },
     {
       key: "2",
-      label: "Boshqalar",
+      label: "Sotuvlar",
       children: (
-        <PaidOtherMonthly
+        <SalesPaidTable
           fromDate={dateFrom}
           toDate={dateTo}
-          type={"OUTCOME"}
           setDateFrom={setDateFrom}
           setDateTo={setDateTo}
         />
@@ -44,9 +44,21 @@ export default function MonthlyExpenses() {
     },
     {
       key: "3",
-      label: "Serverlar",
+      label: "Mijozlar",
       children: (
-        <ServerPaidTable
+        <ClientsCreditTable
+          fromDate={dateFrom}
+          toDate={dateTo}
+          setDateFrom={setDateFrom}
+          setDateTo={setDateTo}
+        />
+      ),
+    },
+    {
+      key: "4",
+      label: "Yetkazib beruvchilar",
+      children: (
+        <SupplierCreditTable
           fromDate={dateFrom}
           toDate={dateTo}
           setDateFrom={setDateFrom}
@@ -57,7 +69,7 @@ export default function MonthlyExpenses() {
   ];
 
   return (
-    <div className="MonthlyRevenues">
+    <div>
       <Tabs defaultActiveKey="1" items={tabItems} />
     </div>
   );
