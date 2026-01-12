@@ -1,8 +1,8 @@
-import { PrismaService } from "../prisma/prisma.service";
-import { CreatePaidSupplierDto } from "./dto/create-paid-supplier.dto";
-import { FindAllPaidSupplierQueryDto } from "./dto/findAll-paid-supplier.dto";
-import { UpdatePaidSupplierDto } from "./dto/update-paid-supplier.dto";
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import { PrismaService } from '../prisma/prisma.service';
+import { CreatePaidSupplierDto } from './dto/create-paid-supplier.dto';
+import { FindAllPaidSupplierQueryDto } from './dto/findAll-paid-supplier.dto';
+import { UpdatePaidSupplierDto } from './dto/update-paid-supplier.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 export declare class PaidSupplierService {
     private readonly prisma;
     private readonly eventEmitter;

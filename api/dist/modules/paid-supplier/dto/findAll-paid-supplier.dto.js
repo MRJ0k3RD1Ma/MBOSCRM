@@ -33,7 +33,7 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
-], FindAllPaidSupplierQueryDto.prototype, "maxPaidDate", void 0);
+], FindAllPaidSupplierQueryDto.prototype, "fromDate", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         example: '2022-01-01',
@@ -41,5 +41,5 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
-], FindAllPaidSupplierQueryDto.prototype, "minPaidDate", void 0);
+], FindAllPaidSupplierQueryDto.prototype, "toDate", void 0);
 //# sourceMappingURL=findAll-paid-supplier.dto.js.map

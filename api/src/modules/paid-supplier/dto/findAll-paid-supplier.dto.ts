@@ -16,12 +16,12 @@ export class FindAllPaidSupplierQueryDto extends PaginationDto {
   })
   @IsOptional()
   @Type(() => Date)
-  maxPaidDate: Date;
+  fromDate: Date;
 
   @ApiPropertyOptional({
     example: '2022-01-01',
   })
   @IsOptional()
   @Type(() => Date)
-  minPaidDate: Date;
+  toDate: Date;
 }

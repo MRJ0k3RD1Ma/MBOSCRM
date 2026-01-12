@@ -510,7 +510,7 @@ export class StatisticsService {
           }),
           this.prisma.paidServer.aggregate({
             _sum: { price: true },
-            where: { createdAt: { gte: mStart, lte: mEnd }, isDeleted: false },
+            where: { endDate: { gte: mStart, lte: mEnd }, isDeleted: false },
           }),
           this.prisma.paidOther.aggregate({
             _sum: { price: true },
