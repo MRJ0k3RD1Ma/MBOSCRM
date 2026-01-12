@@ -70,40 +70,40 @@ export class PaidOtherService {
       limit = 10,
       page = 1,
     } = dto;
-  
+
     const where: Prisma.PaidOtherWhereInput = {
       isDeleted: false,
     };
-  
+
     if (minPrice !== undefined || maxPrice !== undefined) {
       where.price = {
         ...(minPrice !== undefined && { gte: minPrice }),
         ...(maxPrice !== undefined && { lte: maxPrice }),
       };
     }
-  
+
     if (fromDate || toDate) {
       where.paidDate = {
         ...(fromDate && { gte: fromDate }),
         ...(toDate && { lte: toDate }),
       };
     }
-  
+
     if (groupId) {
       where.groupId = groupId;
     }
-  
+
     if (type) {
       where.type = type;
     }
-  
+
     if (description) {
       where.description = {
         contains: description,
         mode: Prisma.QueryMode.insensitive,
       };
     }
-  
+
     const [paidOthers, agg] = await this.prisma.$transaction([
       this.prisma.paidOther.findMany({
         where,
@@ -121,7 +121,7 @@ export class PaidOtherService {
         _count: { _all: true },
       }),
     ]);
-  
+
     return {
       data: paidOthers,
       page,
@@ -130,7 +130,6 @@ export class PaidOtherService {
       price: agg._sum.price,
     };
   }
-  
 
   async findOne(id: number) {
     const paidOther = await this.prisma.paidOther.findFirst({

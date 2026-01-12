@@ -1,348 +1,347 @@
-import { Injectable } from "@nestjs/common";
-import { CreatePaidClientDto } from "./dto/create-paid-client.dto";
-import { UpdatePaidClientDto } from "./dto/update-paid-client.dto";
-import { PrismaService } from "../prisma/prisma.service";
-import { HttpError } from "../../common/exception/http.error";
-import { FindAllQueryPaidClientDto } from "./dto/findAll-query-paid-client.dto";
-import { Prisma, SubscribeState } from "@prisma/client";
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Injectable } from '@nestjs/common';
+import { CreatePaidClientDto } from './dto/create-paid-client.dto';
+import { UpdatePaidClientDto } from './dto/update-paid-client.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { HttpError } from '../../common/exception/http.error';
+import { FindAllQueryPaidClientDto } from './dto/findAll-query-paid-client.dto';
+import { Prisma, SubscribeState } from '@prisma/client';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class PaidClientService {
-	constructor(
-		private readonly prisma: PrismaService,
-		private readonly eventEmitter: EventEmitter2,
-	) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
-	async create(createPaidClientDto: CreatePaidClientDto, registerId: number) {
-		const { clientId, saleId, paymentId, paidDate, price } =
-			createPaidClientDto;
+  async create(createPaidClientDto: CreatePaidClientDto, registerId: number) {
+    const { clientId, saleId, paymentId, paidDate, price } =
+      createPaidClientDto;
 
-		const client = await this.prisma.client.findFirst({
-			where: { id: clientId, isDeleted: false },
-		});
-		if (!client) {
-			throw new HttpError({
-				message: `Client with ID ${clientId} not found or deleted`,
-			});
-		}
+    const client = await this.prisma.client.findFirst({
+      where: { id: clientId, isDeleted: false },
+    });
+    if (!client) {
+      throw new HttpError({
+        message: `Client with ID ${clientId} not found or deleted`,
+      });
+    }
 
-		if (paymentId) {
-			const payment = await this.prisma.payment.findFirst({
-				where: { id: paymentId, isDeleted: false },
-			});
-			if (!payment) {
-				throw new HttpError({
-					message: `Payment with ID ${paymentId} not found or deleted`,
-				});
-			}
-		}
+    if (paymentId) {
+      const payment = await this.prisma.payment.findFirst({
+        where: { id: paymentId, isDeleted: false },
+      });
+      if (!payment) {
+        throw new HttpError({
+          message: `Payment with ID ${paymentId} not found or deleted`,
+        });
+      }
+    }
 
-		const paidClient = await this.prisma.paidClient.create({
-			data: {
-				clientId,
-				saleId,
-				paymentId,
-				paidDate,
-				price,
-				registerId,
-			},
-		});
-		await this.prisma.setting.update({
-			where: { id: 1 },
-			data: {
-				balance: {
-					increment: price,
-				},
-			},
-		});
-		await this.processPayment(client.id, price, saleId);
+    const paidClient = await this.prisma.paidClient.create({
+      data: {
+        clientId,
+        saleId,
+        paymentId,
+        paidDate,
+        price,
+        registerId,
+      },
+    });
+    await this.prisma.setting.update({
+      where: { id: 1 },
+      data: {
+        balance: {
+          increment: price,
+        },
+      },
+    });
+    await this.processPayment(client.id, price, saleId);
 
-		this.eventEmitter.emit("recalculate.client", clientId);
+    this.eventEmitter.emit('recalculate.client', clientId);
 
-		return paidClient;
-	}
+    return paidClient;
+  }
 
-	async processPayment(
-		clientId: number,
-		paymentAmount: number,
-		saleId?: number,
-	) {
-		const client = await this.prisma.client.findUnique({
-			where: { id: clientId },
-		});
-		if (!client) throw new Error("Client not found");
-		let remainingPayment = paymentAmount;
-		let currentBalance = client.balance ?? 0;
+  async processPayment(
+    clientId: number,
+    paymentAmount: number,
+    saleId?: number,
+  ) {
+    const client = await this.prisma.client.findUnique({
+      where: { id: clientId },
+    });
+    if (!client) throw new Error('Client not found');
+    let remainingPayment = paymentAmount;
+    let currentBalance = client.balance ?? 0;
 
-		let sales = await this.prisma.sale.findMany({
-			where: { clientId, credit: { gt: 0 }, id: { not: saleId } },
-			orderBy: { createdAt: "asc" },
-		});
+    let sales = await this.prisma.sale.findMany({
+      where: { clientId, credit: { gt: 0 }, id: { not: saleId } },
+      orderBy: { createdAt: 'asc' },
+    });
 
-		if (saleId) {
-			const prioritySale = await this.prisma.sale.findFirst({
-				where: { id: saleId },
-			});
-			sales = [prioritySale, ...sales];
-		}
+    if (saleId) {
+      const prioritySale = await this.prisma.sale.findFirst({
+        where: { id: saleId },
+      });
+      sales = [prioritySale, ...sales];
+    }
 
-		for (const sale of sales) {
-			if (remainingPayment <= 0) break;
-			const payAmount = Math.min(sale.credit, remainingPayment);
+    for (const sale of sales) {
+      if (remainingPayment <= 0) break;
+      const payAmount = Math.min(sale.credit, remainingPayment);
 
-			await this.prisma.sale.update({
-				where: { id: sale.id },
-				data: {
-					credit: sale.credit - payAmount,
-					dept: (sale.dept ?? 0) + payAmount,
-					...(sale.credit - payAmount <= 0 ? { state: "CLOSED" } : {}),
-				},
-			});
+      await this.prisma.sale.update({
+        where: { id: sale.id },
+        data: {
+          credit: sale.credit - payAmount,
+          dept: (sale.dept ?? 0) + payAmount,
+          ...(sale.credit - payAmount <= 0 ? { state: 'CLOSED' } : {}),
+        },
+      });
 
-			remainingPayment -= payAmount;
-			currentBalance += payAmount;
-		}
-		const result = await this.checkSubscribtions(
-			clientId,
-			remainingPayment,
-			currentBalance,
-		);
-		remainingPayment = result.remainingPayment;
-		currentBalance = result.currentBalance;
+      remainingPayment -= payAmount;
+      currentBalance += payAmount;
+    }
+    const result = await this.checkSubscribtions(
+      clientId,
+      remainingPayment,
+      currentBalance,
+    );
+    remainingPayment = result.remainingPayment;
+    currentBalance = result.currentBalance;
 
-		if (remainingPayment > 0) {
-			currentBalance += remainingPayment;
-			remainingPayment = 0;
-		}
+    if (remainingPayment > 0) {
+      currentBalance += remainingPayment;
+      remainingPayment = 0;
+    }
 
-		await this.prisma.client.update({
-			where: { id: clientId },
-			data: { balance: currentBalance },
-		});
+    await this.prisma.client.update({
+      where: { id: clientId },
+      data: { balance: currentBalance },
+    });
 
-		return { paidAmount: paymentAmount, newBalance: currentBalance };
-	}
+    return { paidAmount: paymentAmount, newBalance: currentBalance };
+  }
 
-	async checkSubscribtions(
-		clientId: number,
-		paymentAmount: number,
-		currentBalance: number,
-	) {
-		const subscribtions = await this.prisma.subscribe.findMany({
-			where: { state: SubscribeState.NOTPAYING, clientId },
-		});
+  async checkSubscribtions(
+    clientId: number,
+    paymentAmount: number,
+    currentBalance: number,
+  ) {
+    const subscribtions = await this.prisma.subscribe.findMany({
+      where: { state: SubscribeState.NOTPAYING, clientId },
+    });
 
-		let remainingPayment = paymentAmount;
-		for (const subscribe of subscribtions) {
-			if (remainingPayment <= 0) break;
+    let remainingPayment = paymentAmount;
+    for (const subscribe of subscribtions) {
+      if (remainingPayment <= 0) break;
 
-			const credit = subscribe.price - subscribe.paid;
-			const payAmount = Math.min(credit, remainingPayment);
+      const credit = subscribe.price - subscribe.paid;
+      const payAmount = Math.min(credit, remainingPayment);
 
-			await this.prisma.subscribe.update({
-				where: { id: subscribe.id },
-				data: {
-					paid: subscribe.paid + payAmount,
-					state:
-						subscribe.paid + payAmount == subscribe.price
-							? SubscribeState.PAID
-							: SubscribeState.NOTPAYING,
-				},
-			});
+      await this.prisma.subscribe.update({
+        where: { id: subscribe.id },
+        data: {
+          paid: subscribe.paid + payAmount,
+          state:
+            subscribe.paid + payAmount == subscribe.price
+              ? SubscribeState.PAID
+              : SubscribeState.NOTPAYING,
+        },
+      });
 
-			remainingPayment -= payAmount;
-			currentBalance += payAmount;
-		}
+      remainingPayment -= payAmount;
+      currentBalance += payAmount;
+    }
 
-		this.prisma.client.update({
-			where: { id: clientId },
-			data: { balance: currentBalance },
-		});
-		return { remainingPayment, currentBalance };
-	}
+    this.prisma.client.update({
+      where: { id: clientId },
+      data: { balance: currentBalance },
+    });
+    return { remainingPayment, currentBalance };
+  }
 
-async findAll(dto: FindAllQueryPaidClientDto) {
-  const {
-    minPrice,
-    maxPrice,
-    fromDate,
-    toDate,
-    clientId,
-    saleId,
-    paymentId,
-    clientName,
-    limit = 10,
-    page = 1,
-  } = dto;
+  async findAll(dto: FindAllQueryPaidClientDto) {
+    const {
+      minPrice,
+      maxPrice,
+      fromDate,
+      toDate,
+      clientId,
+      saleId,
+      paymentId,
+      clientName,
+      limit = 10,
+      page = 1,
+    } = dto;
 
-  const where: Prisma.PaidClientWhereInput = {
-    isDeleted: false,
-  };
+    const where: Prisma.PaidClientWhereInput = {
+      isDeleted: false,
+    };
 
-  // price
-  if (minPrice !== undefined || maxPrice !== undefined) {
-    where.price = {
-      ...(minPrice !== undefined && { gte: minPrice }),
-      ...(maxPrice !== undefined && { lte: maxPrice }),
+    // price
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      where.price = {
+        ...(minPrice !== undefined && { gte: minPrice }),
+        ...(maxPrice !== undefined && { lte: maxPrice }),
+      };
+    }
+
+    // client search (name or inn)
+    if (clientName) {
+      where.OR = [
+        {
+          Client: {
+            name: {
+              contains: clientName.trim(),
+              mode: Prisma.QueryMode.insensitive,
+            },
+          },
+        },
+        {
+          Client: {
+            inn: {
+              contains: clientName.trim(),
+              mode: Prisma.QueryMode.insensitive,
+            },
+          },
+        },
+      ];
+    }
+
+    // date
+    if (fromDate || toDate) {
+      where.paidDate = {
+        ...(fromDate && { gte: fromDate }),
+        ...(toDate && { lte: toDate }),
+      };
+    }
+
+    if (clientId !== undefined) {
+      where.clientId = clientId;
+    }
+
+    if (saleId !== undefined) {
+      where.saleId = saleId;
+    }
+
+    if (paymentId !== undefined) {
+      where.paymentId = paymentId;
+    }
+
+    const [paidClients, agg] = await this.prisma.$transaction([
+      this.prisma.paidClient.findMany({
+        where,
+        include: {
+          Client: true,
+          Sale: true,
+          Payment: true,
+          modify: true,
+          register: true,
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { id: 'desc' },
+      }),
+      this.prisma.paidClient.aggregate({
+        where,
+        _sum: { price: true },
+        _count: { _all: true },
+      }),
+    ]);
+
+    return {
+      data: paidClients,
+      page,
+      limit,
+      total: agg._count._all,
+      price: agg._sum.price,
     };
   }
 
-  // client search (name or inn)
-  if (clientName) {
-    where.OR = [
-      {
-        Client: {
-          name: {
-            contains: clientName.trim(),
-            mode: Prisma.QueryMode.insensitive,
-          },
-        },
-      },
-      {
-        Client: {
-          inn: {
-            contains: clientName.trim(),
-            mode: Prisma.QueryMode.insensitive,
-          },
-        },
-      },
-    ];
-  }
-
-  // date
-  if (fromDate || toDate) {
-    where.paidDate = {
-      ...(fromDate && { gte: fromDate }),
-      ...(toDate && { lte: toDate }),
-    };
-  }
-
-  if (clientId !== undefined) {
-    where.clientId = clientId;
-  }
-
-  if (saleId !== undefined) {
-    where.saleId = saleId;
-  }
-
-  if (paymentId !== undefined) {
-    where.paymentId = paymentId;
-  }
-
-  const [paidClients, agg] = await this.prisma.$transaction([
-    this.prisma.paidClient.findMany({
-      where,
+  async findOne(id: number) {
+    const paidClient = await this.prisma.paidClient.findFirst({
+      where: { id, isDeleted: false },
       include: {
         Client: true,
         Sale: true,
         Payment: true,
-        modify: true,
-        register: true,
       },
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: { id: "desc" },
-    }),
-    this.prisma.paidClient.aggregate({
-      where,
-      _sum: { price: true },
-      _count: { _all: true },
-    }),
-  ]);
+    });
+    if (!paidClient) {
+      throw new HttpError({ message: `PaidClient with ID ${id} not found` });
+    }
+    return paidClient;
+  }
+  async update(id: number, updatePaidClientDto: UpdatePaidClientDto) {
+    const paidClient = await this.prisma.paidClient.findFirst({
+      where: {
+        id,
+        isDeleted: false,
+      },
+    });
 
-  return {
-    data: paidClients,
-    page,
-    limit,
-    total: agg._count._all,
-    price: agg._sum.price,
-  };
-}
+    if (!paidClient) {
+      throw new HttpError({ message: `PaidClient with ID ${id} not found` });
+    }
+    const { clientId, saleId, paymentId } = updatePaidClientDto;
+    if (clientId) {
+      const client = await this.prisma.client.findFirst({
+        where: { id: clientId, isDeleted: false },
+      });
+      if (!client) {
+        throw new HttpError({
+          message: `Client with ID ${clientId} not found`,
+        });
+      }
+    }
 
+    if (saleId) {
+      const sale = await this.prisma.sale.findFirst({
+        where: { id: saleId, isDeleted: false },
+      });
+      if (!sale) {
+        throw new HttpError({ message: `Sale with ID ${saleId} not found` });
+      }
+    }
 
-	async findOne(id: number) {
-		const paidClient = await this.prisma.paidClient.findFirst({
-			where: { id, isDeleted: false },
-			include: {
-				Client: true,
-				Sale: true,
-				Payment: true,
-			},
-		});
-		if (!paidClient) {
-			throw new HttpError({ message: `PaidClient with ID ${id} not found` });
-		}
-		return paidClient;
-	}
-	async update(id: number, updatePaidClientDto: UpdatePaidClientDto) {
-		const paidClient = await this.prisma.paidClient.findFirst({
-			where: {
-				id,
-				isDeleted: false,
-			},
-		});
+    if (paymentId) {
+      const payment = await this.prisma.payment.findFirst({
+        where: { id: paymentId, isDeleted: false },
+      });
+      if (!payment) {
+        throw new HttpError({
+          message: `Payment with ID ${paymentId} not found`,
+        });
+      }
+    }
 
-		if (!paidClient) {
-			throw new HttpError({ message: `PaidClient with ID ${id} not found` });
-		}
-		const { clientId, saleId, paymentId } = updatePaidClientDto;
-		if (clientId) {
-			const client = await this.prisma.client.findFirst({
-				where: { id: clientId, isDeleted: false },
-			});
-			if (!client) {
-				throw new HttpError({
-					message: `Client with ID ${clientId} not found`,
-				});
-			}
-		}
+    return this.prisma.paidClient.update({
+      where: { id },
+      data: {
+        clientId: updatePaidClientDto.clientId ?? paidClient.clientId,
+        saleId: updatePaidClientDto.saleId ?? paidClient.saleId,
+        paymentId: updatePaidClientDto.paymentId ?? paidClient.paymentId,
+        paidDate: updatePaidClientDto.paidDate ?? paidClient.paidDate,
+        price: updatePaidClientDto.price ?? paidClient.price,
+      },
+    });
+  }
 
-		if (saleId) {
-			const sale = await this.prisma.sale.findFirst({
-				where: { id: saleId, isDeleted: false },
-			});
-			if (!sale) {
-				throw new HttpError({ message: `Sale with ID ${saleId} not found` });
-			}
-		}
-
-		if (paymentId) {
-			const payment = await this.prisma.payment.findFirst({
-				where: { id: paymentId, isDeleted: false },
-			});
-			if (!payment) {
-				throw new HttpError({
-					message: `Payment with ID ${paymentId} not found`,
-				});
-			}
-		}
-
-		return this.prisma.paidClient.update({
-			where: { id },
-			data: {
-				clientId: updatePaidClientDto.clientId ?? paidClient.clientId,
-				saleId: updatePaidClientDto.saleId ?? paidClient.saleId,
-				paymentId: updatePaidClientDto.paymentId ?? paidClient.paymentId,
-				paidDate: updatePaidClientDto.paidDate ?? paidClient.paidDate,
-				price: updatePaidClientDto.price ?? paidClient.price,
-			},
-		});
-	}
-
-	async remove(id: number) {
-		throw new HttpError({ code: 404, message: "unavailable" });
-		const paidClient = await this.prisma.paidClient.findFirst({
-			where: { id, isDeleted: false },
-		});
-		if (!paidClient) {
-			throw new HttpError({ message: `PaidClient with ID ${id} not found` });
-		}
-		const result = await this.prisma.paidClient.update({
-			where: { id },
-			data: { isDeleted: true },
-		});
-		this.eventEmitter.emit("recalculate.client", paidClient.clientId);
-		return result;
-	}
+  async remove(id: number) {
+    throw new HttpError({ code: 404, message: 'unavailable' });
+    const paidClient = await this.prisma.paidClient.findFirst({
+      where: { id, isDeleted: false },
+    });
+    if (!paidClient) {
+      throw new HttpError({ message: `PaidClient with ID ${id} not found` });
+    }
+    const result = await this.prisma.paidClient.update({
+      where: { id },
+      data: { isDeleted: true },
+    });
+    this.eventEmitter.emit('recalculate.client', paidClient.clientId);
+    return result;
+  }
 }
