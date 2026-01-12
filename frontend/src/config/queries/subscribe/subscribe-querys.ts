@@ -39,6 +39,7 @@ export interface SubscribeResponse {
   total: number;
   page: number;
   limit: number;
+  price?: number;
 }
 
 export const useGetAllSubscribes = (params?: {

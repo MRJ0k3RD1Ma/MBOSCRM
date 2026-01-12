@@ -75,9 +75,9 @@ export default function ClientsPaidTable({
 
   return (
     <Card>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4">  
         <Title level={5} className="w-[80%]">
-          Oylik mijoz daromadlari {data?.price.toLocaleString("uz-UZ")} so'm
+          Oylik mijoz daromadlari {data?.price?.toLocaleString("uz-UZ") || "0"} so'm
         </Title>
         <RangePicker
           placeholder={["Boshlanish sanasi", "Tugash sanasi"]}

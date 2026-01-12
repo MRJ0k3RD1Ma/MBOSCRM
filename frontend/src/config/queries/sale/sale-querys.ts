@@ -63,6 +63,7 @@ export interface Sale {
 export interface SaleResponse {
   total: number;
   page: number;
+  price: number;
   limit: number;
   data: Sale[];
 }

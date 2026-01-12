@@ -70,7 +70,7 @@ export default function SalesPaidTable({
     <Card>
       <div className="flex justify-between items-center mb-4">
         <Title level={5} className="w-[80%]">
-          {/* Oylik obuna qarzdorligi {data?.price.toLocaleString("uz-UZ")} so'm */}
+          Oylik sotuv qarzdorligi {data?.price?.toLocaleString("uz-UZ") || "0"} so'm
         </Title>
         <RangePicker
           placeholder={["Boshlanish sanasi", "Tugash sanasi"]}

@@ -18,7 +18,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
+  // LineChart,
   Line,
   ComposedChart,
 } from "recharts";
@@ -154,34 +154,34 @@ export default function Dashboard() {
     "Dekabr",
   ];
 
-  const forecastRaw = data?.charts?.subscriptionForecast || [];
-  const forecastData = useMemo(() => {
-    let lastVal = 0;
-    return forecastRaw.map((val: number, idx: number) => {
-      if (val && val > 0) {
-        lastVal = val; // agar shu oyda to‘lov boshlansa, keyingi oylar ham shu qiymat
-      }
-      return {
-        month: idx + 1,
-        monthLabel:
-          [
-            "Yan",
-            "Fev",
-            "Mar",
-            "Apr",
-            "May",
-            "Iyun",
-            "Iyul",
-            "Avg",
-            "Sen",
-            "Okt",
-            "Noy",
-            "Dek",
-          ][idx] || String(idx + 1),
-        expected: lastVal,
-      };
-    });
-  }, [forecastRaw]);
+  // const forecastRaw = data?.charts?.subscriptionForecast || [];
+  // const forecastData = useMemo(() => {
+  //   let lastVal = 0;
+  //   return forecastRaw.map((val: number, idx: number) => {
+  //     if (val && val > 0) {
+  //       lastVal = val; // agar shu oyda to‘lov boshlansa, keyingi oylar ham shu qiymat
+  //     }
+  //     return {
+  //       month: idx + 1,
+  //       monthLabel:
+  //         [
+  //           "Yan",
+  //           "Fev",
+  //           "Mar",
+  //           "Apr",
+  //           "May",
+  //           "Iyun",
+  //           "Iyul",
+  //           "Avg",
+  //           "Sen",
+  //           "Okt",
+  //           "Noy",
+  //           "Dek",
+  //         ][idx] || String(idx + 1),
+  //       expected: lastVal,
+  //     };
+  //   });
+  // }, [forecastRaw]);
   const currentMonthName = monthNames[dayjs().month()];
 
   const monthlyData = useMemo(() => {
@@ -385,7 +385,8 @@ export default function Dashboard() {
               }}
             >
               <Title level={5} style={{ margin: 0, color: cardTitleColor }}>
-                Oylik: Tushum / Chiqim / Obuna qarzdorlik
+                Oylik: Tushum / Chiqim / Obuna qarzdorlik , Kutilayotgan obuna
+                tushumi
               </Title>
               <AntdTooltip title="Har bir ustun oylik qiymatni ko'rsatadi">
                 <Text type="secondary">Ma'lumotlar</Text>
@@ -599,7 +600,7 @@ export default function Dashboard() {
           </Card>
         </Col>
 
-        <Col
+        {/* <Col
           span={24}
           style={{
             display: "flex",
@@ -691,7 +692,7 @@ export default function Dashboard() {
               </ResponsiveContainer>
             </div>
           </Card>
-        </Col>
+        </Col> */}
       </Row>
     </Card>
   );

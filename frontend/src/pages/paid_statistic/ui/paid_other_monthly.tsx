@@ -65,8 +65,8 @@ export default function PaidOtherMonthly({
     <Card>
       <div className="flex justify-between items-center mb-4">
         <Title level={5} className="w-[80%]">
-          Oylik boshqa {type === "INCOME" ? "daromadlari" : "chiqimlari"}{" "}
-          {data?.price.toLocaleString("uz-UZ")} so'm
+          Oylik boshqa {type === "INCOME" ? "daromadlari " : "chiqimlari "}
+          {data?.price?.toLocaleString("uz-UZ") || "0"} so'm
         </Title>
         <RangePicker
           placeholder={["Boshlanish sanasi", "Tugash sanasi"]}
