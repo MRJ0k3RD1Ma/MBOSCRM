@@ -235,6 +235,18 @@ export default function Dashboard() {
     lastYearIncome: 0,
   };
 
+  const currentMonth = dayjs().month() + 1; // 1–12
+
+  const currentMonthDateFrom = `${currentYear}-${String(currentMonth).padStart(
+    2,
+    "0"
+  )}-01`;
+
+  const currentMonthDateTo = `${currentYear}-${String(currentMonth).padStart(
+    2,
+    "0"
+  )}-${dayjs(`${currentYear}-${currentMonth}-01`).daysInMonth()}`;
+
   const moneyTooltip = (v: any) => (v == null ? "-" : formatMoney(v));
 
   const titleColor = isDark ? "" : "text-gray-800";
@@ -334,7 +346,7 @@ export default function Dashboard() {
           bgColor="!bg-[#4CAF50]"
           textColor={titleColor}
           isDark={isDark}
-          link="/monthly-revenues"
+          link={`/monthly-revenues?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
         />
         <StatCard
           title={`${currentMonthName}dagi chiqimlar`}
@@ -343,7 +355,7 @@ export default function Dashboard() {
           bgColor="!bg-[#F59E0B]"
           textColor={titleColor}
           isDark={isDark}
-          link="/monthly-expenses"
+          link={`/monthly-expenses?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
         />
         <StatCard
           title={`${currentMonthName}dagi qarzdorlik`}
@@ -352,7 +364,7 @@ export default function Dashboard() {
           bgColor="!bg-[#EF4444]"
           textColor={titleColor}
           isDark={isDark}
-          link="/clients-credit"
+          link={`/clients-credit?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
         />
       </div>
       <Row gutter={0} style={{ marginTop: 24 }}>

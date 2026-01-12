@@ -30,6 +30,8 @@ export default function ServerPaidTable({
   const { data, isLoading } = useGetAllPaidServers({
     page,
     limit,
+    fromDate,
+    toDate,
   });
 
   const columns = [
@@ -61,7 +63,8 @@ export default function ServerPaidTable({
     <Card className="ClientsPaidTable">
       <div className="flex justify-between items-center mb-4">
         <Title level={5} className="w-[80%]">
-          Oylik server chiqimlari {data?.price?.toLocaleString("uz-UZ") || "0"} so'm
+          Oylik server chiqimlari {data?.price?.toLocaleString("uz-UZ") || "0"}{" "}
+          so'm
         </Title>
         <RangePicker
           placeholder={["Boshlanish sanasi", "Tugash sanasi"]}
