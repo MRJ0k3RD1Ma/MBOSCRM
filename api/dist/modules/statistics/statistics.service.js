@@ -26,8 +26,8 @@ let StatisticsService = class StatisticsService {
         let priceOfTotalSold = 0;
         let priceOfTotalArrived = 0;
         const devices = await this.prisma.product.findMany({
-            where: { isDeleted: false, type: "DEVICE" },
-            orderBy: { name: "asc" },
+            where: { isDeleted: false, type: 'DEVICE' },
+            orderBy: { name: 'asc' },
         });
         for (let device of devices) {
             let remiderInStartOfMonth = device.countReminder;
@@ -103,8 +103,8 @@ let StatisticsService = class StatisticsService {
             });
         }
         const subscriptionProducts = await this.prisma.product.findMany({
-            where: { isDeleted: false, type: "SUBSCRIPTION" },
-            orderBy: { name: "asc" },
+            where: { isDeleted: false, type: 'SUBSCRIPTION' },
+            orderBy: { name: 'asc' },
         });
         for (let subscriptionProduct of subscriptionProducts) {
             const subsciptions = await this.prisma.subscribe.aggregate({
@@ -137,8 +137,8 @@ let StatisticsService = class StatisticsService {
             });
         }
         const services = await this.prisma.product.findMany({
-            where: { isDeleted: false, type: "SERVICE" },
-            orderBy: { name: "asc" },
+            where: { isDeleted: false, type: 'SERVICE' },
+            orderBy: { name: 'asc' },
         });
         for (let service of services) {
             const serviceSales = await this.prisma.saleProduct.aggregate({
@@ -181,57 +181,57 @@ let StatisticsService = class StatisticsService {
     async exportAsExcel(year = new Date().getFullYear(), month) {
         const data = await this.exportAsJson(year, month);
         const excel = new exceljs_1.Workbook();
-        const sheet = excel.addWorksheet("Hisobot");
+        const sheet = excel.addWorksheet('Hisobot');
         sheet.columns = [
             {
-                header: "#",
+                header: '#',
                 width: 5,
-                alignment: { horizontal: "center", vertical: "middle" },
+                alignment: { horizontal: 'center', vertical: 'middle' },
             },
             {
-                header: "Mahsulot Nomi",
+                header: 'Mahsulot Nomi',
                 width: 20,
-                alignment: { horizontal: "center", vertical: "middle" },
+                alignment: { horizontal: 'center', vertical: 'middle' },
             },
             {
-                header: "Mahsulot Turi",
+                header: 'Mahsulot Turi',
                 width: 10,
-                alignment: { horizontal: "center", vertical: "middle" },
+                alignment: { horizontal: 'center', vertical: 'middle' },
             },
             {
-                header: "Oy Boshlanishiga qoldiq",
+                header: 'Oy Boshlanishiga qoldiq',
                 width: 10,
-                alignment: { horizontal: "center", vertical: "middle" },
+                alignment: { horizontal: 'center', vertical: 'middle' },
             },
             {
-                header: "Sotilgan",
+                header: 'Sotilgan',
                 width: 10,
-                alignment: { horizontal: "center", vertical: "middle" },
+                alignment: { horizontal: 'center', vertical: 'middle' },
             },
             {
-                header: "Ummumiy Summasi",
+                header: 'Ummumiy Summasi',
                 width: 10,
-                alignment: { horizontal: "center", vertical: "middle" },
+                alignment: { horizontal: 'center', vertical: 'middle' },
             },
             {
-                header: "Kelgan",
+                header: 'Kelgan',
                 width: 10,
-                alignment: { horizontal: "center", vertical: "middle" },
+                alignment: { horizontal: 'center', vertical: 'middle' },
             },
             {
-                header: "Ummumiy Summasi",
+                header: 'Ummumiy Summasi',
                 width: 10,
-                alignment: { horizontal: "center", vertical: "middle" },
+                alignment: { horizontal: 'center', vertical: 'middle' },
             },
             {
-                header: "Foyda",
+                header: 'Foyda',
                 width: 10,
-                alignment: { horizontal: "center", vertical: "middle" },
+                alignment: { horizontal: 'center', vertical: 'middle' },
             },
             {
-                header: "Oy Oxiridagi Qoldiq",
+                header: 'Oy Oxiridagi Qoldiq',
                 width: 10,
-                alignment: { horizontal: "center", vertical: "middle" },
+                alignment: { horizontal: 'center', vertical: 'middle' },
             },
         ];
         let sheetIndex = 1;
@@ -255,7 +255,7 @@ let StatisticsService = class StatisticsService {
             null,
             null,
             null,
-            "Jami:",
+            'Jami:',
             data.totals.priceOfTotalSold,
             null,
             data.totals.priceOfTotalArrived,
@@ -265,7 +265,7 @@ let StatisticsService = class StatisticsService {
         const buffer = await excel.xlsx.writeBuffer();
         const rawData = new Uint8Array(buffer);
         return new common_1.StreamableFile(rawData, {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         });
     }
     async getStatistics(year = new Date().getFullYear()) {
@@ -296,7 +296,7 @@ let StatisticsService = class StatisticsService {
                 _sum: { price: true },
                 where: {
                     paidDate: { gte: startOfYear, lte: endOfYear },
-                    type: "INCOME",
+                    type: 'INCOME',
                     isDeleted: false,
                 },
             }),
@@ -325,7 +325,7 @@ let StatisticsService = class StatisticsService {
                 _sum: { price: true },
                 where: {
                     paidDate: { gte: startOfYear, lte: endOfYear },
-                    type: "OUTCOME",
+                    type: 'OUTCOME',
                     isDeleted: false,
                 },
             }),
@@ -352,7 +352,7 @@ let StatisticsService = class StatisticsService {
                 _sum: { price: true },
                 where: {
                     paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
-                    type: "INCOME",
+                    type: 'INCOME',
                     isDeleted: false,
                 },
             }),
@@ -381,7 +381,7 @@ let StatisticsService = class StatisticsService {
                 _sum: { price: true },
                 where: {
                     paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
-                    type: "OUTCOME",
+                    type: 'OUTCOME',
                     isDeleted: false,
                 },
             }),
@@ -396,25 +396,25 @@ let StatisticsService = class StatisticsService {
                 _sum: { price: true },
                 where: {
                     paidDate: { gte: startOfLastYear, lte: endOfLastYear },
-                    type: "INCOME",
+                    type: 'INCOME',
                     isDeleted: false,
                 },
             }),
         ]);
-        const yearlyIncome = sumOrZero(paidClientYearAgg, "price") +
-            sumOrZero(paidOtherIncomeYearAgg, "price");
-        const yearlyExpenses = sumOrZero(paidSupplierYearAgg, "price") +
-            sumOrZero(arrivedYearAgg, "price") +
-            sumOrZero(paidServerYearAgg, "price") +
-            sumOrZero(paidOtherOutcomeYearAgg, "price");
-        const currentMonthIncome = sumOrZero(paidClientCurrentMonthAgg, "price") +
-            sumOrZero(paidOtherIncomeCurrentMonthAgg, "price");
-        const currentMonthExpenses = sumOrZero(paidSupplierCurrentMonthAgg, "price") +
-            sumOrZero(arrivedCurrentMonthAgg, "price") +
-            sumOrZero(paidServerCurrentMonthAgg, "price") +
-            sumOrZero(paidOtherOutcomeCurrentMonthAgg, "price");
-        const lastYearIncome = sumOrZero(lastYearPaidClientAgg, "price") +
-            sumOrZero(lastYearPaidOtherIncomeAgg, "price");
+        const yearlyIncome = sumOrZero(paidClientYearAgg, 'price') +
+            sumOrZero(paidOtherIncomeYearAgg, 'price');
+        const yearlyExpenses = sumOrZero(paidSupplierYearAgg, 'price') +
+            sumOrZero(arrivedYearAgg, 'price') +
+            sumOrZero(paidServerYearAgg, 'price') +
+            sumOrZero(paidOtherOutcomeYearAgg, 'price');
+        const currentMonthIncome = sumOrZero(paidClientCurrentMonthAgg, 'price') +
+            sumOrZero(paidOtherIncomeCurrentMonthAgg, 'price');
+        const currentMonthExpenses = sumOrZero(paidSupplierCurrentMonthAgg, 'price') +
+            sumOrZero(arrivedCurrentMonthAgg, 'price') +
+            sumOrZero(paidServerCurrentMonthAgg, 'price') +
+            sumOrZero(paidOtherOutcomeCurrentMonthAgg, 'price');
+        const lastYearIncome = sumOrZero(lastYearPaidClientAgg, 'price') +
+            sumOrZero(lastYearPaidOtherIncomeAgg, 'price');
         const clientDepts = await this.prisma.client.aggregate({
             _sum: { balance: true },
             where: {
@@ -435,7 +435,7 @@ let StatisticsService = class StatisticsService {
                     _sum: { price: true },
                     where: {
                         paidDate: { gte: mStart, lte: mEnd },
-                        type: "INCOME",
+                        type: 'INCOME',
                         isDeleted: false,
                     },
                 }),
@@ -451,7 +451,7 @@ let StatisticsService = class StatisticsService {
                     _sum: { price: true },
                     where: {
                         paidDate: { gte: mStart, lte: mEnd },
-                        type: "OUTCOME",
+                        type: 'OUTCOME',
                         isDeleted: false,
                     },
                 }),
@@ -479,7 +479,7 @@ let StatisticsService = class StatisticsService {
                             isDeleted: false,
                         },
                         product: {
-                            type: { in: ["DEVICE"] },
+                            type: { in: ['DEVICE'] },
                             isDeleted: false,
                         },
                         isDeleted: false,
@@ -493,29 +493,29 @@ let StatisticsService = class StatisticsService {
                             isDeleted: false,
                         },
                         product: {
-                            type: "SERVICE",
+                            type: 'SERVICE',
                             isDeleted: false,
                         },
                         isDeleted: false,
                     },
                 }),
             ]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold,]) => {
-                const incomeMonth = sumOrZero(pc, "price") + sumOrZero(poInc, "price");
-                const expenseMonth = sumOrZero(psup, "price") +
-                    sumOrZero(pserv, "price") +
-                    sumOrZero(poOut, "price");
-                const subPrice = sumOrZero(subAgg, "price");
-                const subPaid = sumOrZero(subAgg, "paid");
+                const incomeMonth = sumOrZero(pc, 'price') + sumOrZero(poInc, 'price');
+                const expenseMonth = sumOrZero(psup, 'price') +
+                    sumOrZero(pserv, 'price') +
+                    sumOrZero(poOut, 'price');
+                const subPrice = sumOrZero(subAgg, 'price');
+                const subPaid = sumOrZero(subAgg, 'paid');
                 const expectedSubscription = Math.max(0, subPrice - subPaid);
-                const saleCredit = sumOrZero(saleDebtMonth, "credit");
+                const saleCredit = sumOrZero(saleDebtMonth, 'credit');
                 const monthCredit = saleCredit + expectedSubscription;
                 return {
                     month: i + 1,
                     tushum: incomeMonth,
                     chiqim: expenseMonth,
                     expectedSubscription,
-                    productsSold: sumOrZero(productsSold, "priceCount"),
-                    servicesSold: sumOrZero(servicesSold, "priceCount"),
+                    productsSold: sumOrZero(productsSold, 'priceCount'),
+                    servicesSold: sumOrZero(servicesSold, 'priceCount'),
                     subscriptionSold: subPrice,
                     credit: monthCredit,
                 };
@@ -537,7 +537,7 @@ let StatisticsService = class StatisticsService {
                 lastYearIncome,
             },
             month: {
-                name: (0, dayjs_1.default)().format("MMMM"),
+                name: (0, dayjs_1.default)().format('MMMM'),
                 income: currentMonth.tushum,
                 outcome: currentMonth.chiqim,
                 credit: currentMonth.credit,

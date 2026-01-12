@@ -5,11 +5,11 @@ export declare class TodoService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(createTodoDto: CreateTodoDto): Promise<{
-        id: number;
         name: string | null;
+        id: number;
     }>;
     findAll(dto: FindAllTodoDto): Promise<{
-        id: number;
         name: string | null;
+        id: number;
     }[]>;
 }

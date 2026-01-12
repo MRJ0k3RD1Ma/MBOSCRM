@@ -15,7 +15,7 @@ const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const id_dto_1 = require("../../../common/dtos/id.dto");
 const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
-const name_dto_1 = require("../../../common/dtos/name.dto");
+const name_dto_1 = require("src/common/dtos/name.dto");
 class FindAllQueryPaidClientDto extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllQueryPaidClientDto = FindAllQueryPaidClientDto;

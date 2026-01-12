@@ -17,8 +17,8 @@ export declare class ServerService {
         id: number;
         registerId: number | null;
         modifyId: number | null;
-        endDate: Date | null;
         state: import(".prisma/client").$Enums.ServerState;
+        endDate: Date | null;
         responsible: string | null;
         plan: string | null;
     }>;
@@ -37,8 +37,8 @@ export declare class ServerService {
         id: number;
         registerId: number | null;
         modifyId: number | null;
-        endDate: Date | null;
         state: import(".prisma/client").$Enums.ServerState;
+        endDate: Date | null;
         responsible: string | null;
         plan: string | null;
     }>;

@@ -1,5 +1,5 @@
-import { StreamableFile } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
+import { StreamableFile } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 export declare class StatisticsService {
     private readonly prisma;
     constructor(prisma: PrismaService);
