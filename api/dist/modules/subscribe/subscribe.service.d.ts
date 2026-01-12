@@ -1,11 +1,11 @@
-import { OnModuleInit } from "@nestjs/common";
-import { CreateSubscribeDto } from "./dto/create-subscribe.dto";
-import { UpdateSubscribeDto } from "./dto/update-subscribe.dto";
-import { PrismaService } from "../prisma/prisma.service";
-import { FindAllSubscribeQueryDto } from "./dto/findAll-subscribe-query.dto";
-import { Sale } from "@prisma/client";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { SmsService } from "../sms/sms.service";
+import { OnModuleInit } from '@nestjs/common';
+import { CreateSubscribeDto } from './dto/create-subscribe.dto';
+import { UpdateSubscribeDto } from './dto/update-subscribe.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { FindAllSubscribeQueryDto } from './dto/findAll-subscribe-query.dto';
+import { Sale } from '@prisma/client';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { SmsService } from '../sms/sms.service';
 export declare class SubscribeService implements OnModuleInit {
     private readonly prisma;
     private readonly eventEmitter;
@@ -31,6 +31,7 @@ export declare class SubscribeService implements OnModuleInit {
     }>;
     findAll(dto: FindAllSubscribeQueryDto): Promise<{
         total: number;
+        price: number;
         page: number;
         limit: number;
         data: ({

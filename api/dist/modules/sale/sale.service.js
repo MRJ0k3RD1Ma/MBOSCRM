@@ -73,7 +73,7 @@ let SaleService = class SaleService {
                     gt: new Date(new Date().getFullYear(), 0),
                 },
             },
-            orderBy: { codeId: "desc" },
+            orderBy: { codeId: 'desc' },
         });
         const codeId = (maxCode?.codeId || 0) + 1;
         const productIds = products.map((product) => product.productId);
@@ -164,8 +164,8 @@ let SaleService = class SaleService {
             }
         });
         await this.saleFeedback.create({ saleId: sale.id });
-        this.eventEmitter.emit("recalculate.client", sale.clientId);
-        this.eventEmitter.emit("recalculate.subscribe", await this.prisma.sale.findUnique({
+        this.eventEmitter.emit('recalculate.client', sale.clientId);
+        this.eventEmitter.emit('recalculate.subscribe', await this.prisma.sale.findUnique({
             where: { id: sale.id },
             include: { SaleProduct: true },
         }));
@@ -180,7 +180,7 @@ let SaleService = class SaleService {
             where.credit = credit ? { gt: 0 } : { equals: 0 };
         }
         if (code?.trim()) {
-            where.code = { startsWith: code.trim(), mode: "insensitive" };
+            where.code = { startsWith: code.trim(), mode: 'insensitive' };
         }
         if (minPrice !== undefined || maxPrice !== undefined) {
             where.price = {
@@ -205,11 +205,21 @@ let SaleService = class SaleService {
                     register: true,
                     client: true,
                 },
-                orderBy: { id: "desc" },
+                orderBy: { id: 'desc' },
             }),
-            this.prisma.sale.count({ where }),
+            this.prisma.sale.aggregate({
+                where,
+                _sum: { price: true },
+                _count: { _all: true },
+            }),
         ]);
-        return { total, page, limit, data };
+        return {
+            total: total._count._all,
+            price: total._sum.price,
+            page,
+            limit,
+            data,
+        };
     }
     async findOne(id) {
         const sale = await this.prisma.sale.findFirst({
@@ -277,7 +287,7 @@ let SaleService = class SaleService {
             where: { id },
             data: { isDeleted: true },
         });
-        this.eventEmitter.emit("recalculate.client", sale.clientId);
+        this.eventEmitter.emit('recalculate.client', sale.clientId);
     }
 };
 exports.SaleService = SaleService;

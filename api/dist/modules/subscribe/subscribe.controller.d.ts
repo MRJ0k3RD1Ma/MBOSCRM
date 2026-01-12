@@ -20,6 +20,7 @@ export declare class SubscribeController {
     }>;
     findAll(dto: FindAllSubscribeQueryDto): Promise<{
         total: number;
+        price: number;
         page: number;
         limit: number;
         data: ({

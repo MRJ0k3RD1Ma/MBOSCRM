@@ -27,6 +27,7 @@ export declare class SaleController {
     }>;
     findAll(dto: FindAllSaleQueryDto): Promise<{
         total: number;
+        price: number;
         page: number;
         limit: number;
         data: ({
