@@ -25,14 +25,21 @@ export declare class ClientController {
     }>;
     findAll(query: FindAllClientQueryDto): Promise<{
         total: number;
+        totals: {
+            subscribe: number;
+            device: number;
+            service: number;
+        };
         page: number;
         limit: number;
-        data: ({
+        totalData: Promise<{
+            totalPaid: number;
+            totalSale: number;
+            totalSubscription: number;
             ClientType: {
                 name: string;
                 id: number;
             };
-        } & {
             description: string | null;
             name: string;
             phone: string;
@@ -48,7 +55,7 @@ export declare class ClientController {
             typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
-        })[];
+        }[]>;
     }>;
     findOne(id: string): Promise<{
         District: {

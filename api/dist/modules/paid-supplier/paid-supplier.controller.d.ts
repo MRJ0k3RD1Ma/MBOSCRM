@@ -24,7 +24,7 @@ export declare class PaidSupplierController {
         page: number;
         limit: number;
         data: ({
-            modify: {
+            register: {
                 name: string;
                 phone: string | null;
                 username: string;
@@ -36,7 +36,7 @@ export declare class PaidSupplierController {
                 updatedAt: Date;
                 id: number;
             };
-            register: {
+            modify: {
                 name: string;
                 phone: string | null;
                 username: string;
@@ -72,7 +72,7 @@ export declare class PaidSupplierController {
         })[];
     }>;
     findOne(id: string): Promise<{
-        modify: {
+        register: {
             name: string;
             phone: string | null;
             username: string;
@@ -84,7 +84,7 @@ export declare class PaidSupplierController {
             updatedAt: Date;
             id: number;
         };
-        register: {
+        modify: {
             name: string;
             phone: string | null;
             username: string;

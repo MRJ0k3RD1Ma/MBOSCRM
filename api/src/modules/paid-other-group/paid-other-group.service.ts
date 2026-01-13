@@ -34,7 +34,7 @@ export class PaidOtherGroupService implements OnModuleInit {
   }
 
   async findAll(dto: FindAllPaidOtherGroupQueryDto) {
-    const { limit = 10, page = 1, name } = dto;
+    const { limit = 10, page = 1, name, fromDate, toDate } = dto;
 
     const where: Prisma.PaidOtherGroupWhereInput = {
       isDeleted: false,
@@ -51,7 +51,36 @@ export class PaidOtherGroupService implements OnModuleInit {
       this.prisma.paidOtherGroup.count({ where }),
     ]);
 
-    return { total, page, limit, data };
+    const totalData = await Promise.all(
+      data.map(async (group) => {
+        const totalOutcode = await this.prisma.paidOther.aggregate({
+          where: {
+            group: { id: group.id },
+            type: 'OUTCOME',
+            isDeleted: false,
+            paidDate: { lte: toDate, gte: fromDate },
+          },
+          _sum: { price: true },
+        });
+        const totalIncode = await this.prisma.paidOther.aggregate({
+          where: {
+            group: { id: group.id },
+            type: 'INCOME',
+            isDeleted: false,
+            paidDate: { lte: toDate, gte: fromDate },
+          },
+          _sum: { price: true },
+        });
+
+        return {
+          ...group,
+          totalIncome: totalIncode._sum.price,
+          totalOutcome: totalOutcode._sum.price,
+        };
+      }),
+    );
+
+    return { total, page, limit, totalData };
   }
 
   async findOne(id: number) {

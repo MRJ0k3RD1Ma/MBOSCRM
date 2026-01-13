@@ -19,10 +19,10 @@ export declare class ArrivedService {
         registerId: number | null;
         modifyId: number | null;
         codeId: number | null;
-        supplierId: number;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
+        supplierId: number;
+        waybillNumber: string | null;
         created: Date;
         updated: Date;
     }>;
@@ -65,8 +65,8 @@ export declare class ArrivedService {
                 price: number | null;
                 registerId: number | null;
                 modifyId: number | null;
-                productId: number | null;
                 priceCount: number | null;
+                productId: number | null;
                 arrivedId: number | null;
             }[];
         } & {
@@ -77,10 +77,10 @@ export declare class ArrivedService {
             registerId: number | null;
             modifyId: number | null;
             codeId: number | null;
-            supplierId: number;
             date: Date | null;
-            waybillNumber: string | null;
             code: string | null;
+            supplierId: number;
+            waybillNumber: string | null;
             created: Date;
             updated: Date;
         })[];
@@ -120,8 +120,8 @@ export declare class ArrivedService {
             price: number | null;
             registerId: number | null;
             modifyId: number | null;
-            productId: number | null;
             priceCount: number | null;
+            productId: number | null;
             arrivedId: number | null;
         }[];
     } & {
@@ -132,10 +132,10 @@ export declare class ArrivedService {
         registerId: number | null;
         modifyId: number | null;
         codeId: number | null;
-        supplierId: number;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
+        supplierId: number;
+        waybillNumber: string | null;
         created: Date;
         updated: Date;
     }>;
@@ -152,18 +152,6 @@ export declare class ArrivedService {
             registerId: number | null;
             modifyId: number | null;
             phoneTwo: string | null;
-        };
-        modify: {
-            name: string;
-            phone: string | null;
-            username: string;
-            roleId: number | null;
-            chatId: string | null;
-            password: string;
-            isDeleted: boolean | null;
-            createdAt: Date;
-            updatedAt: Date;
-            id: number;
         };
         register: {
             name: string;
@@ -189,11 +177,11 @@ export declare class ArrivedService {
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
+                barcodeId: number | null;
                 groupId: number;
                 unitId: number | null;
                 priceIncome: number;
                 reminderFirst: number;
-                barcodeId: number | null;
                 countReminder: number;
                 countArrived: number;
                 countSale: number;
@@ -207,10 +195,22 @@ export declare class ArrivedService {
             price: number | null;
             registerId: number | null;
             modifyId: number | null;
-            productId: number | null;
             priceCount: number | null;
+            productId: number | null;
             arrivedId: number | null;
         })[];
+        modify: {
+            name: string;
+            phone: string | null;
+            username: string;
+            roleId: number | null;
+            chatId: string | null;
+            password: string;
+            isDeleted: boolean | null;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+        };
     } & {
         description: string | null;
         isDeleted: boolean | null;
@@ -219,10 +219,10 @@ export declare class ArrivedService {
         registerId: number | null;
         modifyId: number | null;
         codeId: number | null;
-        supplierId: number;
         date: Date | null;
-        waybillNumber: string | null;
         code: string | null;
+        supplierId: number;
+        waybillNumber: string | null;
         created: Date;
         updated: Date;
     }>;

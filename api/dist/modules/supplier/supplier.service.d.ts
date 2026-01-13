@@ -1,7 +1,7 @@
-import { PrismaService } from "../prisma/prisma.service";
-import { CreateSupplierDto } from "./dto/create-supplier.dto";
-import { FindAllSupplierQueryDto } from "./dto/findAll-supplier.dto";
-import { UpdateSupplierDto } from "./dto/update-supplier.dto";
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateSupplierDto } from './dto/create-supplier.dto';
+import { FindAllSupplierQueryDto } from './dto/findAll-supplier.dto';
+import { UpdateSupplierDto } from './dto/update-supplier.dto';
 export declare class SupplierService {
     private readonly prisma;
     constructor(prisma: PrismaService);
@@ -22,21 +22,13 @@ export declare class SupplierService {
     }>;
     findAll(dto: FindAllSupplierQueryDto): Promise<{
         total: number;
+        totals: {
+            price: number;
+        };
         page: number;
         limit: number;
-        data: ({
-            modify: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                id: number;
-            };
+        totalData: {
+            paidPrice: number;
             register: {
                 name: string;
                 phone: string | null;
@@ -49,7 +41,18 @@ export declare class SupplierService {
                 updatedAt: Date;
                 id: number;
             };
-        } & {
+            modify: {
+                name: string;
+                phone: string | null;
+                username: string;
+                roleId: number | null;
+                chatId: string | null;
+                password: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+            };
             description: string | null;
             name: string;
             phone: string;
@@ -61,10 +64,10 @@ export declare class SupplierService {
             registerId: number | null;
             modifyId: number | null;
             phoneTwo: string | null;
-        })[];
+        }[];
     }>;
     findOne(id: number): Promise<{
-        modify: {
+        register: {
             name: string;
             phone: string | null;
             username: string;
@@ -76,7 +79,7 @@ export declare class SupplierService {
             updatedAt: Date;
             id: number;
         };
-        register: {
+        modify: {
             name: string;
             phone: string | null;
             username: string;

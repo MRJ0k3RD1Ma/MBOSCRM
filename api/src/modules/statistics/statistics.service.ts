@@ -612,9 +612,10 @@ export class StatisticsService {
     );
 
     const currentMonthIndex = today.getMonth();
-    const currentMonthExpectedSubscription = year === today.getFullYear()
-      ? monthlyStats[currentMonthIndex]?.expectedSubscription || 0
-      : 0;
+    const currentMonthExpectedSubscription =
+      year === today.getFullYear()
+        ? monthlyStats[currentMonthIndex]?.expectedSubscription || 0
+        : 0;
 
     const subscriptionForecast = monthlyStats.map((m, index) => {
       if (year < today.getFullYear()) {
@@ -651,7 +652,10 @@ export class StatisticsService {
 
     const currentMonthSubPrice = sumOrZero(currentMonthSubAgg, 'price');
     const currentMonthSubPaid = sumOrZero(currentMonthSubAgg, 'paid');
-    const currentMonthExpectedSub = Math.max(0, currentMonthSubPrice - currentMonthSubPaid);
+    const currentMonthExpectedSub = Math.max(
+      0,
+      currentMonthSubPrice - currentMonthSubPaid,
+    );
     const currentMonthSaleCredit = sumOrZero(currentMonthSaleDebt, 'credit');
     const currentMonthCredit = currentMonthSaleCredit + currentMonthExpectedSub;
 

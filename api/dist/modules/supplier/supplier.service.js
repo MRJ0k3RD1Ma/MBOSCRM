@@ -38,13 +38,13 @@ let SupplierService = class SupplierService {
         });
     }
     async onModuleInit() {
-        if (config_1.env.ENV != "prod") {
+        if (config_1.env.ENV != 'prod') {
             const count = await this.prisma.supplier.count();
             const requiredCount = 5;
             if (count < requiredCount) {
                 for (let i = count; i < requiredCount; i++) {
                     await this.create({
-                        description: "supplier description",
+                        description: 'supplier description',
                         name: faker_1.faker.person.fullName(),
                         phone: faker_1.faker.phone.number(),
                     }, 1);
@@ -54,14 +54,14 @@ let SupplierService = class SupplierService {
     }
     async create(createSupplierDto, creatorId) {
         if (!creatorId) {
-            throw (0, http_error_1.HttpError)({ code: "Creator not found" });
+            throw (0, http_error_1.HttpError)({ code: 'Creator not found' });
         }
         if (createSupplierDto.phone) {
             const existingPhone = await this.prisma.supplier.findFirst({
                 where: { phone: createSupplierDto.phone, isDeleted: false },
             });
             if (existingPhone) {
-                throw (0, http_error_1.HttpError)({ code: "Phone already exists" });
+                throw (0, http_error_1.HttpError)({ code: 'Phone already exists' });
             }
         }
         const supplier = await this.prisma.supplier.create({
@@ -78,7 +78,7 @@ let SupplierService = class SupplierService {
         return supplier;
     }
     async findAll(dto) {
-        const { limit = 10, page = 1, name, description, phone, isPositiveBalance, } = dto;
+        const { limit = 10, page = 1, name, description, phone, isPositiveBalance, fromDate, toDate, } = dto;
         const where = {
             isDeleted: false,
         };
@@ -102,18 +102,41 @@ let SupplierService = class SupplierService {
                 where,
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { id: "desc" },
+                orderBy: { id: 'desc' },
                 include: { register: true, modify: true },
             }),
             this.prisma.supplier.count({
                 where,
             }),
         ]);
+        const totalData = await Promise.all(data.map(async (supplier) => {
+            const paidSupplierPrice = await this.prisma.paidSupplier.aggregate({
+                where: {
+                    supplier: { id: supplier.id },
+                    isDeleted: false,
+                    paidDate: { lte: toDate, gte: fromDate },
+                },
+                _sum: { price: true },
+            });
+            return { ...supplier, paidPrice: paidSupplierPrice._sum.price };
+        }));
+        const paidSupplierPrice = await this.prisma.paidSupplier.aggregate({
+            where: {
+                supplier: where,
+                isDeleted: false,
+                paidDate: { lte: toDate, gte: fromDate },
+            },
+            _sum: { price: true },
+        });
+        const totals = {
+            price: paidSupplierPrice._sum.price,
+        };
         return {
             total,
+            totals,
             page,
             limit,
-            data,
+            totalData,
         };
     }
     async findOne(id) {
@@ -122,7 +145,7 @@ let SupplierService = class SupplierService {
             include: { register: true, modify: true },
         });
         if (!supplier) {
-            throw (0, http_error_1.HttpError)({ code: "Supplier not found" });
+            throw (0, http_error_1.HttpError)({ code: 'Supplier not found' });
         }
         return supplier;
     }
@@ -131,7 +154,7 @@ let SupplierService = class SupplierService {
             where: { id, isDeleted: false },
         });
         if (!supplier)
-            throw (0, http_error_1.HttpError)({ code: "Supplier not found" });
+            throw (0, http_error_1.HttpError)({ code: 'Supplier not found' });
         const updateData = {
             name: dto.name ?? supplier.name,
             description: dto.description ?? supplier.description,
@@ -150,7 +173,7 @@ let SupplierService = class SupplierService {
             where: { id: id },
         });
         if (!supplier) {
-            throw (0, http_error_1.HttpError)({ code: "Supplier not found" });
+            throw (0, http_error_1.HttpError)({ code: 'Supplier not found' });
         }
         return await this.prisma.supplier.update({
             where: { id: id },
@@ -160,7 +183,7 @@ let SupplierService = class SupplierService {
 };
 exports.SupplierService = SupplierService;
 __decorate([
-    (0, event_emitter_1.OnEvent)("recalculate.supplier"),
+    (0, event_emitter_1.OnEvent)('recalculate.supplier'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)

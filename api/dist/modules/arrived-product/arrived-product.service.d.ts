@@ -16,8 +16,8 @@ export declare class ArrivedProductService {
         price: number | null;
         registerId: number | null;
         modifyId: number | null;
-        productId: number | null;
         priceCount: number | null;
+        productId: number | null;
         arrivedId: number | null;
     }>;
     findAll(dto: FindAllArrivedProductQueryDto): Promise<{
@@ -25,6 +25,18 @@ export declare class ArrivedProductService {
         page: number;
         limit: number;
         data: ({
+            register: {
+                name: string;
+                phone: string | null;
+                username: string;
+                roleId: number | null;
+                chatId: string | null;
+                password: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+            };
             Product: {
                 ProductUnit: {
                     name: string;
@@ -46,26 +58,14 @@ export declare class ArrivedProductService {
                 registerId: number | null;
                 modifyId: number | null;
                 barcode: string | null;
+                barcodeId: number | null;
                 groupId: number;
                 unitId: number | null;
                 priceIncome: number;
                 reminderFirst: number;
-                barcodeId: number | null;
                 countReminder: number;
                 countArrived: number;
                 countSale: number;
-            };
-            register: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                id: number;
             };
             Arrived: {
                 supplier: {
@@ -89,10 +89,10 @@ export declare class ArrivedProductService {
                 registerId: number | null;
                 modifyId: number | null;
                 codeId: number | null;
-                supplierId: number;
                 date: Date | null;
-                waybillNumber: string | null;
                 code: string | null;
+                supplierId: number;
+                waybillNumber: string | null;
                 created: Date;
                 updated: Date;
             };
@@ -105,8 +105,8 @@ export declare class ArrivedProductService {
             price: number | null;
             registerId: number | null;
             modifyId: number | null;
-            productId: number | null;
             priceCount: number | null;
+            productId: number | null;
             arrivedId: number | null;
         })[];
     }>;
@@ -119,8 +119,8 @@ export declare class ArrivedProductService {
         price: number | null;
         registerId: number | null;
         modifyId: number | null;
-        productId: number | null;
         priceCount: number | null;
+        productId: number | null;
         arrivedId: number | null;
     }>;
     update(id: number, updateArrivedProductDto: UpdateArrivedProductDto): Promise<any>;

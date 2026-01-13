@@ -1,8 +1,8 @@
-import { OnModuleInit } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { CreateClientDto } from "./dto/create-client.dto";
-import { FindAllClientQueryDto } from "./dto/findAll-client.dto";
-import { UpdateClientDto } from "./dto/update-client.dto";
+import { OnModuleInit } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateClientDto } from './dto/create-client.dto';
+import { FindAllClientQueryDto } from './dto/findAll-client.dto';
+import { UpdateClientDto } from './dto/update-client.dto';
 export declare class ClientService implements OnModuleInit {
     private readonly prisma;
     constructor(prisma: PrismaService);
@@ -27,14 +27,21 @@ export declare class ClientService implements OnModuleInit {
     }>;
     findAll(dto: FindAllClientQueryDto): Promise<{
         total: number;
+        totals: {
+            subscribe: number;
+            device: number;
+            service: number;
+        };
         page: number;
         limit: number;
-        data: ({
+        totalData: Promise<{
+            totalPaid: number;
+            totalSale: number;
+            totalSubscription: number;
             ClientType: {
                 name: string;
                 id: number;
             };
-        } & {
             description: string | null;
             name: string;
             phone: string;
@@ -50,7 +57,7 @@ export declare class ClientService implements OnModuleInit {
             typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
-        })[];
+        }[]>;
     }>;
     findOne(id: number): Promise<{
         District: {

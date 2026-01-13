@@ -120,7 +120,7 @@ Mas'ul shaxs: ${server.responsible}`);
         return server;
     }
     async findAll(dto) {
-        const { page = 1, limit = 10, name, responsible, plan } = dto;
+        const { page = 1, limit = 10, name, responsible, plan, fromDate, toDate, } = dto;
         const where = { isDeleted: false };
         if (name) {
             where.name = {
@@ -151,12 +151,32 @@ Mas'ul shaxs: ${server.responsible}`);
             }),
             this.prisma.server.count({ where }),
         ]);
-        data = data.map((server) => {
+        data = await Promise.all(data.map(async (server) => {
             server.daysLeft = (0, dayjs_1.default)(server.endDate).diff(new Date(), 'day');
-            return server;
+            const totalPaidServer = await this.prisma.paidServer.aggregate({
+                where: {
+                    server: { id: server.id },
+                    isDeleted: false,
+                    endDate: { lte: toDate, gte: fromDate },
+                },
+                _sum: { price: true },
+            });
+            return { ...server, totalPrice: totalPaidServer._sum.price };
+        }));
+        const totalPaidServer = await this.prisma.paidServer.aggregate({
+            where: {
+                server: where,
+                isDeleted: false,
+                endDate: { lte: toDate, gte: fromDate },
+            },
+            _sum: { price: true },
         });
+        const totals = {
+            price: totalPaidServer._sum.price,
+        };
         return {
             total,
+            totals,
             page,
             limit,
             data,

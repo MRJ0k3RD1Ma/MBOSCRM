@@ -20,7 +20,9 @@ export declare class PaidOtherGroupService implements OnModuleInit {
         total: number;
         page: number;
         limit: number;
-        data: {
+        totalData: {
+            totalIncome: number;
+            totalOutcome: number;
             name: string;
             isDeleted: boolean;
             createdAt: Date;

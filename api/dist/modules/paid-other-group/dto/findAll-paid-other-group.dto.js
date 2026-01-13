@@ -13,6 +13,7 @@ exports.FindAllPaidOtherGroupQueryDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
+const class_transformer_1 = require("class-transformer");
 class FindAllPaidOtherGroupQueryDto extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllPaidOtherGroupQueryDto = FindAllPaidOtherGroupQueryDto;
@@ -22,4 +23,18 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], FindAllPaidOtherGroupQueryDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-01' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], FindAllPaidOtherGroupQueryDto.prototype, "fromDate", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-30' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], FindAllPaidOtherGroupQueryDto.prototype, "toDate", void 0);
 //# sourceMappingURL=findAll-paid-other-group.dto.js.map

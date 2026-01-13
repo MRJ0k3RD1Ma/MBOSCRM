@@ -10,8 +10,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FindAllQueryServer = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const name_dto_1 = require("../../../common/dtos/name.dto");
 const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
+const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
 class FindAllQueryServer extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllQueryServer = FindAllQueryServer;
@@ -27,4 +30,18 @@ __decorate([
     (0, name_dto_1.IsName)(false),
     __metadata("design:type", String)
 ], FindAllQueryServer.prototype, "plan", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-01' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], FindAllQueryServer.prototype, "fromDate", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-30' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], FindAllQueryServer.prototype, "toDate", void 0);
 //# sourceMappingURL=findAll-query-server.dto.js.map

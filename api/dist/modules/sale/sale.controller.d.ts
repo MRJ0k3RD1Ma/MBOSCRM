@@ -48,18 +48,6 @@ export declare class SaleController {
                 registerId: number | null;
                 modifyId: number | null;
             };
-            register: {
-                name: string;
-                phone: string | null;
-                username: string;
-                roleId: number | null;
-                chatId: string | null;
-                password: string;
-                isDeleted: boolean | null;
-                createdAt: Date;
-                updatedAt: Date;
-                id: number;
-            };
             SaleProduct: ({
                 product: {
                     type: import(".prisma/client").$Enums.ProductType;
@@ -72,11 +60,11 @@ export declare class SaleController {
                     registerId: number | null;
                     modifyId: number | null;
                     barcode: string | null;
+                    barcodeId: number | null;
                     groupId: number;
                     unitId: number | null;
                     priceIncome: number;
                     reminderFirst: number;
-                    barcodeId: number | null;
                     countReminder: number;
                     countArrived: number;
                     countSale: number;
@@ -91,11 +79,23 @@ export declare class SaleController {
                 saleId: number | null;
                 registerId: number | null;
                 modifyId: number | null;
-                productId: number | null;
                 priceCount: number | null;
+                productId: number | null;
                 is_subscribe: boolean | null;
             })[];
             modifier: {
+                name: string;
+                phone: string | null;
+                username: string;
+                roleId: number | null;
+                chatId: string | null;
+                password: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+            };
+            register: {
                 name: string;
                 phone: string | null;
                 username: string;
@@ -165,8 +165,8 @@ export declare class SaleController {
             saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            productId: number | null;
             priceCount: number | null;
+            productId: number | null;
             is_subscribe: boolean | null;
         }[];
         SaleFeedback: {

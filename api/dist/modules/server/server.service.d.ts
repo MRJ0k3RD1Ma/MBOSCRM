@@ -24,6 +24,9 @@ export declare class ServerService {
     }>;
     findAll(dto: FindAllQueryServer): Promise<{
         total: any;
+        totals: {
+            price: number;
+        };
         page: number;
         limit: number;
         data: any;

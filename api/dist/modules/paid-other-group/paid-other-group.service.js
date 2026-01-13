@@ -39,7 +39,7 @@ let PaidOtherGroupService = class PaidOtherGroupService {
         return paidOtherGroup;
     }
     async findAll(dto) {
-        const { limit = 10, page = 1, name } = dto;
+        const { limit = 10, page = 1, name, fromDate, toDate } = dto;
         const where = {
             isDeleted: false,
             ...(name ? { name: { contains: name.trim(), mode: 'insensitive' } } : {}),
@@ -53,7 +53,32 @@ let PaidOtherGroupService = class PaidOtherGroupService {
             }),
             this.prisma.paidOtherGroup.count({ where }),
         ]);
-        return { total, page, limit, data };
+        const totalData = await Promise.all(data.map(async (group) => {
+            const totalOutcode = await this.prisma.paidOther.aggregate({
+                where: {
+                    group: { id: group.id },
+                    type: 'OUTCOME',
+                    isDeleted: false,
+                    paidDate: { lte: toDate, gte: fromDate },
+                },
+                _sum: { price: true },
+            });
+            const totalIncode = await this.prisma.paidOther.aggregate({
+                where: {
+                    group: { id: group.id },
+                    type: 'INCOME',
+                    isDeleted: false,
+                    paidDate: { lte: toDate, gte: fromDate },
+                },
+                _sum: { price: true },
+            });
+            return {
+                ...group,
+                totalIncome: totalIncode._sum.price,
+                totalOutcome: totalOutcode._sum.price,
+            };
+        }));
+        return { total, page, limit, totalData };
     }
     async findOne(id) {
         const paidOtherGroup = await this.prisma.paidOtherGroup.findUnique({

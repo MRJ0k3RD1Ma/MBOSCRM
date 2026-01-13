@@ -19,6 +19,20 @@ class FindAllSupplierQueryDto extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllSupplierQueryDto = FindAllSupplierQueryDto;
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-01' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], FindAllSupplierQueryDto.prototype, "fromDate", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-30' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], FindAllSupplierQueryDto.prototype, "toDate", void 0);
+__decorate([
     (0, name_dto_1.IsName)(false),
     __metadata("design:type", String)
 ], FindAllSupplierQueryDto.prototype, "name", void 0);

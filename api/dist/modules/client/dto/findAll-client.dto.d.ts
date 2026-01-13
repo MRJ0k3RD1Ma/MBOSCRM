@@ -1,5 +1,7 @@
 import { PaginationDto } from '../../../common/dtos/pagination.dto';
 export declare class FindAllClientQueryDto extends PaginationDto {
+    fromDate?: Date;
+    toDate?: Date;
     name?: string;
     address?: string;
     description?: string;

@@ -20,6 +20,20 @@ class FindAllClientQueryDto extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllClientQueryDto = FindAllClientQueryDto;
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-01' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], FindAllClientQueryDto.prototype, "fromDate", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '2025-07-30' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
+], FindAllClientQueryDto.prototype, "toDate", void 0);
+__decorate([
     (0, name_dto_1.IsName)(false),
     __metadata("design:type", String)
 ], FindAllClientQueryDto.prototype, "name", void 0);

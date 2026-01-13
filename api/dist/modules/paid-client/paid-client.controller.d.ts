@@ -57,7 +57,7 @@ export declare class PaidClientController {
                 registerId: number | null;
                 modifyId: number | null;
             };
-            modify: {
+            register: {
                 name: string;
                 phone: string | null;
                 username: string;
@@ -69,7 +69,7 @@ export declare class PaidClientController {
                 updatedAt: Date;
                 id: number;
             };
-            register: {
+            modify: {
                 name: string;
                 phone: string | null;
                 username: string;

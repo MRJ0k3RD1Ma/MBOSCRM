@@ -13,8 +13,8 @@ export declare class PaidCrmService {
         price: number;
         clientId: number;
         paymentId: number;
-        paidDate: Date;
         state: string | null;
+        paidDate: Date;
         crmId: number;
         transactionId: string | null;
     }>;
@@ -27,8 +27,8 @@ export declare class PaidCrmService {
             price: number;
             clientId: number;
             paymentId: number;
-            paidDate: Date;
             state: string | null;
+            paidDate: Date;
             crmId: number;
             transactionId: string | null;
         }[];
@@ -45,8 +45,8 @@ export declare class PaidCrmService {
         price: number;
         clientId: number;
         paymentId: number;
-        paidDate: Date;
         state: string | null;
+        paidDate: Date;
         crmId: number;
         transactionId: string | null;
     }>;
@@ -58,8 +58,8 @@ export declare class PaidCrmService {
         price: number;
         clientId: number;
         paymentId: number;
-        paidDate: Date;
         state: string | null;
+        paidDate: Date;
         crmId: number;
         transactionId: string | null;
     }>;
@@ -71,8 +71,8 @@ export declare class PaidCrmService {
         price: number;
         clientId: number;
         paymentId: number;
-        paidDate: Date;
         state: string | null;
+        paidDate: Date;
         crmId: number;
         transactionId: string | null;
     }>;

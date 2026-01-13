@@ -1,183 +1,214 @@
-import { Injectable } from "@nestjs/common";
-import { HttpError } from "../../common/exception/http.error";
-import { PrismaService } from "../prisma/prisma.service";
-import { CreateSupplierDto } from "./dto/create-supplier.dto";
-import { FindAllSupplierQueryDto } from "./dto/findAll-supplier.dto";
-import { UpdateSupplierDto } from "./dto/update-supplier.dto";
-import { Prisma, Supplier } from "@prisma/client";
-import { env } from "../../common/config";
-import { faker } from "@faker-js/faker";
-import { OnEvent } from "@nestjs/event-emitter";
+import { Injectable } from '@nestjs/common';
+import { HttpError } from '../../common/exception/http.error';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateSupplierDto } from './dto/create-supplier.dto';
+import { FindAllSupplierQueryDto } from './dto/findAll-supplier.dto';
+import { UpdateSupplierDto } from './dto/update-supplier.dto';
+import { Prisma, Supplier } from '@prisma/client';
+import { env } from '../../common/config';
+import { faker } from '@faker-js/faker';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class SupplierService {
-	constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-	@OnEvent("recalculate.supplier")
-	async recalculate(supplierId: number) {
-		const arrivedAgg = await this.prisma.arrived.aggregate({
-			_sum: { price: true },
-			where: { supplierId, isDeleted: false },
-		});
-		const paidSupplierAgg = await this.prisma.paidSupplier.aggregate({
-			_sum: { price: true },
-			where: { supplierId, isDeleted: false },
-		});
+  @OnEvent('recalculate.supplier')
+  async recalculate(supplierId: number) {
+    const arrivedAgg = await this.prisma.arrived.aggregate({
+      _sum: { price: true },
+      where: { supplierId, isDeleted: false },
+    });
+    const paidSupplierAgg = await this.prisma.paidSupplier.aggregate({
+      _sum: { price: true },
+      where: { supplierId, isDeleted: false },
+    });
 
-		const arrivedPrice = arrivedAgg._sum.price;
-		const paidSupplierPrice = paidSupplierAgg._sum.price;
+    const arrivedPrice = arrivedAgg._sum.price;
+    const paidSupplierPrice = paidSupplierAgg._sum.price;
 
-		const supplierBalance = paidSupplierPrice - arrivedPrice;
+    const supplierBalance = paidSupplierPrice - arrivedPrice;
 
-		await this.prisma.supplier.update({
-			where: { id: supplierId },
-			data: { balance: supplierBalance },
-		});
-	}
+    await this.prisma.supplier.update({
+      where: { id: supplierId },
+      data: { balance: supplierBalance },
+    });
+  }
 
-	async onModuleInit() {
-		if (env.ENV != "prod") {
-			const count = await this.prisma.supplier.count();
-			const requiredCount = 5;
-			if (count < requiredCount) {
-				for (let i = count; i < requiredCount; i++) {
-					await this.create(
-						{
-							description: "supplier description",
-							name: faker.person.fullName(),
-							phone: faker.phone.number(),
-						},
-						1,
-					);
-				}
-			}
-		}
-	}
+  async onModuleInit() {
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.supplier.count();
+      const requiredCount = 5;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create(
+            {
+              description: 'supplier description',
+              name: faker.person.fullName(),
+              phone: faker.phone.number(),
+            },
+            1,
+          );
+        }
+      }
+    }
+  }
 
-	async create(createSupplierDto: CreateSupplierDto, creatorId: number) {
-		if (!creatorId) {
-			throw HttpError({ code: "Creator not found" });
-		}
-		if (createSupplierDto.phone) {
-			const existingPhone = await this.prisma.supplier.findFirst({
-				where: { phone: createSupplierDto.phone, isDeleted: false },
-			});
-			if (existingPhone) {
-				throw HttpError({ code: "Phone already exists" });
-			}
-		}
+  async create(createSupplierDto: CreateSupplierDto, creatorId: number) {
+    if (!creatorId) {
+      throw HttpError({ code: 'Creator not found' });
+    }
+    if (createSupplierDto.phone) {
+      const existingPhone = await this.prisma.supplier.findFirst({
+        where: { phone: createSupplierDto.phone, isDeleted: false },
+      });
+      if (existingPhone) {
+        throw HttpError({ code: 'Phone already exists' });
+      }
+    }
 
-		const supplier = await this.prisma.supplier.create({
-			data: {
-				name: createSupplierDto.name,
-				balance: 0,
-				description: createSupplierDto.description,
-				phone: createSupplierDto.phone,
-				phoneTwo: createSupplierDto.phoneTwo,
-				modifyId: creatorId,
-				registerId: creatorId,
-			},
-		});
-		return supplier;
-	}
+    const supplier = await this.prisma.supplier.create({
+      data: {
+        name: createSupplierDto.name,
+        balance: 0,
+        description: createSupplierDto.description,
+        phone: createSupplierDto.phone,
+        phoneTwo: createSupplierDto.phoneTwo,
+        modifyId: creatorId,
+        registerId: creatorId,
+      },
+    });
+    return supplier;
+  }
 
-	async findAll(dto: FindAllSupplierQueryDto) {
-		const {
-			limit = 10,
-			page = 1,
-			name,
-			description,
-			phone,
-			isPositiveBalance,
-		} = dto;
+  async findAll(dto: FindAllSupplierQueryDto) {
+    const {
+      limit = 10,
+      page = 1,
+      name,
+      description,
+      phone,
+      isPositiveBalance,
+      fromDate,
+      toDate,
+    } = dto;
 
-		const where: Prisma.SupplierWhereInput = {
-			isDeleted: false,
-		};
+    const where: Prisma.SupplierWhereInput = {
+      isDeleted: false,
+    };
 
-		if (name?.trim()) {
-			where.name = { contains: name.trim() };
-		}
+    if (name?.trim()) {
+      where.name = { contains: name.trim() };
+    }
 
-		if (description?.trim()) {
-			where.description = { contains: description.trim() };
-		}
+    if (description?.trim()) {
+      where.description = { contains: description.trim() };
+    }
 
-		if (isPositiveBalance !== undefined) {
-			where.balance = isPositiveBalance ? { gt: 0 } : { lt: 0 };
-		}
+    if (isPositiveBalance !== undefined) {
+      where.balance = isPositiveBalance ? { gt: 0 } : { lt: 0 };
+    }
 
-		if (phone?.trim()) {
-			where.OR = [
-				{ phone: { contains: phone.trim() } },
-				{ phoneTwo: { contains: phone.trim() } },
-			];
-		}
+    if (phone?.trim()) {
+      where.OR = [
+        { phone: { contains: phone.trim() } },
+        { phoneTwo: { contains: phone.trim() } },
+      ];
+    }
 
-		const [data, total] = await this.prisma.$transaction([
-			this.prisma.supplier.findMany({
-				where,
-				skip: (page - 1) * limit,
-				take: limit,
-				orderBy: { id: "desc" },
-				include: { register: true, modify: true },
-			}),
-			this.prisma.supplier.count({
-				where,
-			}),
-		]);
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.supplier.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { id: 'desc' },
+        include: { register: true, modify: true },
+      }),
+      this.prisma.supplier.count({
+        where,
+      }),
+    ]);
 
-		return {
-			total,
-			page,
-			limit,
-			data,
-		};
-	}
+    const totalData = await Promise.all(
+      data.map(async (supplier) => {
+        const paidSupplierPrice = await this.prisma.paidSupplier.aggregate({
+          where: {
+            supplier: { id: supplier.id },
+            isDeleted: false,
+            paidDate: { lte: toDate, gte: fromDate },
+          },
+          _sum: { price: true },
+        });
 
-	async findOne(id: number) {
-		const supplier = await this.prisma.supplier.findFirst({
-			where: { id, isDeleted: false },
-			include: { register: true, modify: true },
-		});
-		if (!supplier) {
-			throw HttpError({ code: "Supplier not found" });
-		}
-		return supplier;
-	}
+        return { ...supplier, paidPrice: paidSupplierPrice._sum.price };
+      }),
+    );
 
-	async update(id: number, dto: UpdateSupplierDto, creatorId: number) {
-		const supplier = await this.prisma.supplier.findFirst({
-			where: { id, isDeleted: false },
-		});
-		if (!supplier) throw HttpError({ code: "Supplier not found" });
+    const paidSupplierPrice = await this.prisma.paidSupplier.aggregate({
+      where: {
+        supplier: where,
+        isDeleted: false,
+        paidDate: { lte: toDate, gte: fromDate },
+      },
+      _sum: { price: true },
+    });
 
-		const updateData: Partial<Supplier> = {
-			name: dto.name ?? supplier.name,
-			description: dto.description ?? supplier.description,
-			phone: dto.phone ?? supplier.phone,
-			phoneTwo: dto.phoneTwo ?? supplier.phoneTwo,
-			modifyId: creatorId,
-		};
+    const totals = {
+      price: paidSupplierPrice._sum.price,
+    };
 
-		const updatedSupplier = await this.prisma.supplier.update({
-			where: { id },
-			data: updateData,
-		});
+    return {
+      total,
+      totals,
+      page,
+      limit,
+      totalData,
+    };
+  }
 
-		return updatedSupplier;
-	}
+  async findOne(id: number) {
+    const supplier = await this.prisma.supplier.findFirst({
+      where: { id, isDeleted: false },
+      include: { register: true, modify: true },
+    });
+    if (!supplier) {
+      throw HttpError({ code: 'Supplier not found' });
+    }
+    return supplier;
+  }
 
-	async remove(id: number) {
-		const supplier = await this.prisma.supplier.findFirst({
-			where: { id: id },
-		});
-		if (!supplier) {
-			throw HttpError({ code: "Supplier not found" });
-		}
-		return await this.prisma.supplier.update({
-			where: { id: id },
-			data: { isDeleted: true },
-		});
-	}
+  async update(id: number, dto: UpdateSupplierDto, creatorId: number) {
+    const supplier = await this.prisma.supplier.findFirst({
+      where: { id, isDeleted: false },
+    });
+    if (!supplier) throw HttpError({ code: 'Supplier not found' });
+
+    const updateData: Partial<Supplier> = {
+      name: dto.name ?? supplier.name,
+      description: dto.description ?? supplier.description,
+      phone: dto.phone ?? supplier.phone,
+      phoneTwo: dto.phoneTwo ?? supplier.phoneTwo,
+      modifyId: creatorId,
+    };
+
+    const updatedSupplier = await this.prisma.supplier.update({
+      where: { id },
+      data: updateData,
+    });
+
+    return updatedSupplier;
+  }
+
+  async remove(id: number) {
+    const supplier = await this.prisma.supplier.findFirst({
+      where: { id: id },
+    });
+    if (!supplier) {
+      throw HttpError({ code: 'Supplier not found' });
+    }
+    return await this.prisma.supplier.update({
+      where: { id: id },
+      data: { isDeleted: true },
+    });
+  }
 }

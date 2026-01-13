@@ -419,6 +419,7 @@ model PaidSupplier {
   modifyId   Int?
   modify     User?     @relation("PaidSupplier_modifyId", fields: [modifyId], references: [id])
   Payment    Payment?  @relation(fields: [paymentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  supplier   Supplier? @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   register   User?     @relation("PaidSupplier_registerId", fields: [registerId], references: [id])
 
   @@index([paymentId], map: "payment_id")
@@ -426,20 +427,21 @@ model PaidSupplier {
 }
 
 model Supplier {
-  id          Int       @id @default(autoincrement())
-  name        String    @db.VarChar(255)
-  phone       String    @db.VarChar(255)
-  phoneTwo    String?   @map("phone_two") @db.VarChar(255)
-  description String?
-  balance     Float     @default(0)
-  isDeleted   Boolean?  @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt
-  registerId  Int?
-  modifyId    Int?
-  arrived     Arrived[]
-  modify      User?     @relation("Supplier_modifyId", fields: [modifyId], references: [id])
-  register    User?     @relation("Supplier_registerId", fields: [registerId], references: [id])
+  id            Int            @id @default(autoincrement())
+  name          String         @db.VarChar(255)
+  phone         String         @db.VarChar(255)
+  phoneTwo      String?        @map("phone_two") @db.VarChar(255)
+  description   String?
+  balance       Float          @default(0)
+  isDeleted     Boolean?       @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+  registerId    Int?
+  modifyId      Int?
+  arrived       Arrived[]
+  modify        User?          @relation("Supplier_modifyId", fields: [modifyId], references: [id])
+  register      User?          @relation("Supplier_registerId", fields: [registerId], references: [id])
+  paidSuppliers PaidSupplier[]
 
   @@map("suppler")
 }

@@ -165,11 +165,11 @@ export declare class SubscribeService implements OnModuleInit {
                     registerId: number | null;
                     modifyId: number | null;
                     barcode: string | null;
+                    barcodeId: number | null;
                     groupId: number;
                     unitId: number | null;
                     priceIncome: number;
                     reminderFirst: number;
-                    barcodeId: number | null;
                     countReminder: number;
                     countArrived: number;
                     countSale: number;
@@ -184,8 +184,8 @@ export declare class SubscribeService implements OnModuleInit {
                 saleId: number | null;
                 registerId: number | null;
                 modifyId: number | null;
-                productId: number | null;
                 priceCount: number | null;
+                productId: number | null;
                 is_subscribe: boolean | null;
             })[];
         } & {

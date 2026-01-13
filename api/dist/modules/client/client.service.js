@@ -54,7 +54,7 @@ let ClientService = class ClientService {
                 await this.recalculate(client.id);
             }
         })();
-        if (config_1.env.ENV != "prod") {
+        if (config_1.env.ENV != 'prod') {
             const clientCount = await this.prisma.client.count();
             const requiredCount = 3;
             if (clientCount < requiredCount) {
@@ -79,14 +79,14 @@ let ClientService = class ClientService {
             where: { id: creatorId, isDeleted: false },
         });
         if (!creator) {
-            throw (0, http_error_1.HttpError)({ message: "Creator not found" });
+            throw (0, http_error_1.HttpError)({ message: 'Creator not found' });
         }
         if (createClientDto.districtId) {
             const district = await this.prisma.district.findUnique({
                 where: { id: createClientDto.districtId },
             });
             if (!district) {
-                throw (0, http_error_1.HttpError)({ code: "District not found" });
+                throw (0, http_error_1.HttpError)({ code: 'District not found' });
             }
         }
         if (createClientDto.regionId) {
@@ -94,7 +94,7 @@ let ClientService = class ClientService {
                 where: { id: createClientDto.regionId },
             });
             if (!region) {
-                throw (0, http_error_1.HttpError)({ code: "Region not found" });
+                throw (0, http_error_1.HttpError)({ code: 'Region not found' });
             }
         }
         let type;
@@ -103,7 +103,7 @@ let ClientService = class ClientService {
                 where: { id: createClientDto.typeId, isDeleted: false },
             });
             if (!type) {
-                throw (0, http_error_1.HttpError)({ code: "type Not Found" });
+                throw (0, http_error_1.HttpError)({ code: 'type Not Found' });
             }
         }
         const client = await this.prisma.client.create({
@@ -124,14 +124,14 @@ let ClientService = class ClientService {
         return client;
     }
     async findAll(dto) {
-        const { limit = 10, page = 1, name, districtId, regionId, address, description, inn, phone, isPositiveBalance, } = dto;
+        const { limit = 10, page = 1, name, districtId, regionId, address, description, inn, phone, isPositiveBalance, fromDate, toDate, } = dto;
         const where = {
             isDeleted: false,
         };
         if (name) {
             where.OR = [
-                { name: { contains: name.trim(), mode: "insensitive" } },
-                { inn: { contains: name.trim(), mode: "insensitive" } },
+                { name: { contains: name.trim(), mode: 'insensitive' } },
+                { inn: { contains: name.trim(), mode: 'insensitive' } },
             ];
         }
         if (districtId !== undefined)
@@ -139,13 +139,13 @@ let ClientService = class ClientService {
         if (regionId !== undefined)
             where.regionId = regionId;
         if (address?.trim())
-            where.address = { contains: address.trim(), mode: "insensitive" };
+            where.address = { contains: address.trim(), mode: 'insensitive' };
         if (description?.trim())
-            where.description = { contains: description.trim(), mode: "insensitive" };
+            where.description = { contains: description.trim(), mode: 'insensitive' };
         if (inn?.trim())
-            where.inn = { contains: inn.trim(), mode: "insensitive" };
+            where.inn = { contains: inn.trim(), mode: 'insensitive' };
         if (phone?.trim())
-            where.phone = { contains: phone.trim(), mode: "insensitive" };
+            where.phone = { contains: phone.trim(), mode: 'insensitive' };
         if (isPositiveBalance !== undefined) {
             where.balance = isPositiveBalance ? { gte: 0 } : { lt: 0 };
         }
@@ -154,18 +154,86 @@ let ClientService = class ClientService {
                 where,
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: { id: "desc" },
+                orderBy: { id: 'desc' },
                 include: {
                     ClientType: { select: { id: true, name: true } },
                 },
             }),
-            this.prisma.client.count({ where }),
+            this.prisma.client.aggregate({ where, _count: { _all: true } }),
         ]);
+        const totalData = Promise.all(data.map(async (client) => {
+            const totalPaidClient = await this.prisma.paidClient.aggregate({
+                where: {
+                    paidDate: { lte: toDate, gte: fromDate },
+                    Client: { id: client.id },
+                    isDeleted: false,
+                },
+                _sum: { price: true },
+            });
+            const totalSalePrice = await this.prisma.sale.aggregate({
+                where: {
+                    date: { lte: toDate, gte: fromDate },
+                    isDeleted: false,
+                    client: { id: client.id },
+                },
+                _sum: { price: true },
+            });
+            const totalSubPrice = await this.prisma.subscribe.aggregate({
+                where: {
+                    paying_date: { lte: toDate, gte: fromDate },
+                    client: { id: client.id },
+                },
+                _sum: { price: true },
+            });
+            return {
+                ...client,
+                totalPaid: totalPaidClient._sum.price,
+                totalSale: totalSalePrice._sum.price,
+                totalSubscription: totalSubPrice._sum.price,
+            };
+        }));
+        const totalSubPrice = await this.prisma.subscribe.aggregate({
+            where: {
+                paying_date: { lte: toDate, gte: fromDate },
+                client: where,
+            },
+            _sum: { price: true },
+        });
+        const totalDevicePrice = await this.prisma.saleProduct.aggregate({
+            where: {
+                isDeleted: false,
+                sale: {
+                    date: { lte: toDate, gte: fromDate },
+                    isDeleted: false,
+                    client: where,
+                },
+                product: { type: 'DEVICE' },
+            },
+            _sum: { priceCount: true },
+        });
+        const totalServicePrice = await this.prisma.saleProduct.aggregate({
+            where: {
+                isDeleted: false,
+                sale: {
+                    date: { lte: toDate, gte: fromDate },
+                    isDeleted: false,
+                    client: where,
+                },
+                product: { type: 'SERVICE' },
+            },
+            _sum: { priceCount: true },
+        });
+        const totals = {
+            subscribe: totalSubPrice._sum.price,
+            device: totalDevicePrice._sum.priceCount,
+            service: totalServicePrice._sum.priceCount,
+        };
         return {
-            total,
+            total: total._count._all,
+            totals,
             page,
             limit,
-            data,
+            totalData,
         };
     }
     async findOne(id) {
@@ -174,7 +242,7 @@ let ClientService = class ClientService {
             include: { ClientType: true, District: true, Region: true },
         });
         if (!client) {
-            throw (0, http_error_1.HttpError)({ code: "Client not found" });
+            throw (0, http_error_1.HttpError)({ code: 'Client not found' });
         }
         return client;
     }
@@ -183,7 +251,7 @@ let ClientService = class ClientService {
             where: { id, isDeleted: false },
         });
         if (!client)
-            throw (0, http_error_1.HttpError)({ code: "Client not found" });
+            throw (0, http_error_1.HttpError)({ code: 'Client not found' });
         const updateData = {
             name: dto.name ?? client.name,
             address: dto.address ?? client.address,
@@ -202,7 +270,7 @@ let ClientService = class ClientService {
                 where: { id: updateData.typeId, isDeleted: false },
             });
             if (!type) {
-                throw (0, http_error_1.HttpError)({ code: "type Not Found" });
+                throw (0, http_error_1.HttpError)({ code: 'type Not Found' });
             }
             updateData.typeId = type.id;
         }
@@ -217,7 +285,7 @@ let ClientService = class ClientService {
             where: { id: id, isDeleted: false },
         });
         if (!client) {
-            throw (0, http_error_1.HttpError)({ code: "Client not found" });
+            throw (0, http_error_1.HttpError)({ code: 'Client not found' });
         }
         return await this.prisma.client.update({
             where: { id: id },
@@ -227,7 +295,7 @@ let ClientService = class ClientService {
 };
 exports.ClientService = ClientService;
 __decorate([
-    (0, event_emitter_1.OnEvent)("recalculate.client"),
+    (0, event_emitter_1.OnEvent)('recalculate.client'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
