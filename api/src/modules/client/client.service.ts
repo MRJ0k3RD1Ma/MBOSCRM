@@ -8,7 +8,6 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import { env } from '../../common/config';
 import { faker } from '@faker-js/faker';
 import { OnEvent } from '@nestjs/event-emitter';
-import { fr } from 'date-fns/locale';
 
 @Injectable()
 export class ClientService implements OnModuleInit {
@@ -147,6 +146,8 @@ export class ClientService implements OnModuleInit {
       isPositiveBalance,
       fromDate,
       toDate,
+      sortBy,
+      sortOrder = 'desc',
     } = dto;
 
     const where: Prisma.ClientWhereInput = {
@@ -216,12 +217,33 @@ export class ClientService implements OnModuleInit {
 
         return {
           ...client,
-          totalPaid: totalPaidClient._sum.price,
-          totalSale: totalSalePrice._sum.price,
-          totalSubscription: totalSubPrice._sum.price,
+          totalPaid: totalPaidClient._sum.price || 0,
+          totalSale: totalSalePrice._sum.price || 0,
+          totalSubscription: totalSubPrice._sum.price || 0,
         };
       }),
     );
+
+    if (sortBy) {
+      const sortMultiplier = sortOrder === 'asc' ? 1 : -1;
+      totalData.sort((a, b) => {
+        let valueA = 0;
+        let valueB = 0;
+
+        if (sortBy === 'totalPaid') {
+          valueA = a.totalPaid;
+          valueB = b.totalPaid;
+        } else if (sortBy === 'totalSale') {
+          valueA = a.totalSale;
+          valueB = b.totalSale;
+        } else if (sortBy === 'totalSub') {
+          valueA = a.totalSubscription;
+          valueB = b.totalSubscription;
+        }
+
+        return (valueA - valueB) * sortMultiplier;
+      });
+    }
 
     const totalSubPrice = await this.prisma.subscribe.aggregate({
       where: {

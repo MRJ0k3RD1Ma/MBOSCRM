@@ -1,9 +1,20 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsOptional } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsOptional } from 'class-validator';
 import { IsId } from '../../../common/dtos/id.dto';
 import { IsName } from '../../../common/dtos/name.dto';
 import { PaginationDto } from '../../../common/dtos/pagination.dto';
+
+export enum ClientSortBy {
+  TOTAL_PAID = 'totalPaid',
+  TOTAL_SALE = 'totalSale',
+  TOTAL_SUB = 'totalSub',
+}
+
+export enum SortOrder {
+  ASC = 'asc',
+  DESC = 'desc',
+}
 
 export class FindAllClientQueryDto extends PaginationDto {
   @ApiPropertyOptional({ example: '2025-07-01' })
@@ -44,4 +55,14 @@ export class FindAllClientQueryDto extends PaginationDto {
   @IsBoolean()
   @Transform((params) => (params.value == 'true' ? true : false))
   isPositiveBalance?: boolean;
+
+  @ApiPropertyOptional({ enum: ClientSortBy })
+  @IsOptional()
+  @IsEnum(ClientSortBy)
+  sortBy?: ClientSortBy;
+
+  @ApiPropertyOptional({ enum: SortOrder, default: SortOrder.DESC })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  sortOrder?: SortOrder;
 }

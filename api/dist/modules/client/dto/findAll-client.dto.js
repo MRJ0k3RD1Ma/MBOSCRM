@@ -9,13 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FindAllClientQueryDto = void 0;
+exports.FindAllClientQueryDto = exports.SortOrder = exports.ClientSortBy = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const id_dto_1 = require("../../../common/dtos/id.dto");
 const name_dto_1 = require("../../../common/dtos/name.dto");
 const pagination_dto_1 = require("../../../common/dtos/pagination.dto");
+var ClientSortBy;
+(function (ClientSortBy) {
+    ClientSortBy["TOTAL_PAID"] = "totalPaid";
+    ClientSortBy["TOTAL_SALE"] = "totalSale";
+    ClientSortBy["TOTAL_SUB"] = "totalSub";
+})(ClientSortBy || (exports.ClientSortBy = ClientSortBy = {}));
+var SortOrder;
+(function (SortOrder) {
+    SortOrder["ASC"] = "asc";
+    SortOrder["DESC"] = "desc";
+})(SortOrder || (exports.SortOrder = SortOrder = {}));
 class FindAllClientQueryDto extends pagination_dto_1.PaginationDto {
 }
 exports.FindAllClientQueryDto = FindAllClientQueryDto;
@@ -68,4 +79,16 @@ __decorate([
     (0, class_transformer_1.Transform)((params) => (params.value == 'true' ? true : false)),
     __metadata("design:type", Boolean)
 ], FindAllClientQueryDto.prototype, "isPositiveBalance", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ enum: ClientSortBy }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(ClientSortBy),
+    __metadata("design:type", String)
+], FindAllClientQueryDto.prototype, "sortBy", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ enum: SortOrder, default: SortOrder.DESC }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(SortOrder),
+    __metadata("design:type", String)
+], FindAllClientQueryDto.prototype, "sortOrder", void 0);
 //# sourceMappingURL=findAll-client.dto.js.map

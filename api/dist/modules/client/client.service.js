@@ -124,7 +124,7 @@ let ClientService = class ClientService {
         return client;
     }
     async findAll(dto) {
-        const { limit = 10, page = 1, name, districtId, regionId, address, description, inn, phone, isPositiveBalance, fromDate, toDate, } = dto;
+        const { limit = 10, page = 1, name, districtId, regionId, address, description, inn, phone, isPositiveBalance, fromDate, toDate, sortBy, sortOrder = 'desc', } = dto;
         const where = {
             isDeleted: false,
         };
@@ -187,11 +187,31 @@ let ClientService = class ClientService {
             });
             return {
                 ...client,
-                totalPaid: totalPaidClient._sum.price,
-                totalSale: totalSalePrice._sum.price,
-                totalSubscription: totalSubPrice._sum.price,
+                totalPaid: totalPaidClient._sum.price || 0,
+                totalSale: totalSalePrice._sum.price || 0,
+                totalSubscription: totalSubPrice._sum.price || 0,
             };
         }));
+        if (sortBy) {
+            const sortMultiplier = sortOrder === 'asc' ? 1 : -1;
+            totalData.sort((a, b) => {
+                let valueA = 0;
+                let valueB = 0;
+                if (sortBy === 'totalPaid') {
+                    valueA = a.totalPaid;
+                    valueB = b.totalPaid;
+                }
+                else if (sortBy === 'totalSale') {
+                    valueA = a.totalSale;
+                    valueB = b.totalSale;
+                }
+                else if (sortBy === 'totalSub') {
+                    valueA = a.totalSubscription;
+                    valueB = b.totalSubscription;
+                }
+                return (valueA - valueB) * sortMultiplier;
+            });
+        }
         const totalSubPrice = await this.prisma.subscribe.aggregate({
             where: {
                 paying_date: { lte: toDate, gte: fromDate },
