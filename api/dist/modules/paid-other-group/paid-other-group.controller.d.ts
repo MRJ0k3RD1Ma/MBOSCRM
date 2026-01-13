@@ -18,7 +18,7 @@ export declare class PaidOtherGroupController {
         total: number;
         page: number;
         limit: number;
-        totalData: {
+        data: {
             totalIncome: number;
             totalOutcome: number;
             name: string;

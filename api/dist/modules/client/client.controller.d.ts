@@ -32,7 +32,7 @@ export declare class ClientController {
         };
         page: number;
         limit: number;
-        totalData: {
+        data: {
             totalPaid: number;
             totalSale: number;
             totalSubscription: number;

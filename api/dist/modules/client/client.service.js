@@ -233,7 +233,7 @@ let ClientService = class ClientService {
             totals,
             page,
             limit,
-            totalData,
+            data: totalData,
         };
     }
     async findOne(id) {

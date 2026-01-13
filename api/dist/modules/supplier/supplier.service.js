@@ -136,7 +136,7 @@ let SupplierService = class SupplierService {
             totals,
             page,
             limit,
-            totalData,
+            data: totalData,
         };
     }
     async findOne(id) {

@@ -26,7 +26,7 @@ export declare class SupplierController {
         };
         page: number;
         limit: number;
-        totalData: {
+        data: {
             paidPrice: number;
             register: {
                 name: string;

@@ -78,7 +78,7 @@ let PaidOtherGroupService = class PaidOtherGroupService {
                 totalOutcome: totalOutcode._sum.price,
             };
         }));
-        return { total, page, limit, totalData };
+        return { total, page, limit, data: totalData };
     }
     async findOne(id) {
         const paidOtherGroup = await this.prisma.paidOtherGroup.findUnique({

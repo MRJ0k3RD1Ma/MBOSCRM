@@ -34,7 +34,7 @@ export declare class ClientService implements OnModuleInit {
         };
         page: number;
         limit: number;
-        totalData: {
+        data: {
             totalPaid: number;
             totalSale: number;
             totalSubscription: number;

@@ -27,7 +27,7 @@ export declare class SupplierService {
         };
         page: number;
         limit: number;
-        totalData: {
+        data: {
             paidPrice: number;
             register: {
                 name: string;

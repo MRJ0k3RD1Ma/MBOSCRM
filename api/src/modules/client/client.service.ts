@@ -268,7 +268,7 @@ export class ClientService implements OnModuleInit {
       totals,
       page,
       limit,
-      totalData,
+      data: totalData,
     };
   }
 

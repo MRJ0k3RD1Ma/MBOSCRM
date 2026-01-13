@@ -80,7 +80,7 @@ export class PaidOtherGroupService implements OnModuleInit {
       }),
     );
 
-    return { total, page, limit, totalData };
+    return { total, page, limit, data: totalData };
   }
 
   async findOne(id: number) {

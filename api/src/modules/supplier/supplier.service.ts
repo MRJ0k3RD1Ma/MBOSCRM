@@ -162,7 +162,7 @@ export class SupplierService {
       totals,
       page,
       limit,
-      totalData,
+      data: totalData,
     };
   }
 
