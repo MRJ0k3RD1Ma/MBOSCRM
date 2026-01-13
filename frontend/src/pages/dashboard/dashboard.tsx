@@ -29,27 +29,12 @@ import {
 } from "../../config/queries/statistics/statistics-querys";
 import { useNavigate } from "react-router-dom";
 import { useThemeContext } from "../../providers/theme-provider";
+import {
+  formatDashboardNumber,
+  formatMoney,
+} from "../../hooks/format/format_money";
 
 const { Title, Text } = Typography;
-
-function formatDashboardNumber(number: number) {
-  if (Math.abs(number) >= 1000) {
-    const inThousands = number / 1000;
-    return (
-      new Intl.NumberFormat("ru-RU", {
-        maximumFractionDigits: 0,
-      }).format(inThousands) + "k"
-    );
-  }
-  return new Intl.NumberFormat("ru-RU", {
-    maximumFractionDigits: 0,
-  }).format(number);
-}
-
-function formatMoney(value?: number) {
-  if (value == null) return "0 so'm";
-  return formatDashboardNumber(value) + " so'm";
-}
 
 type StatCardProps = {
   title: string;
@@ -236,7 +221,7 @@ export default function Dashboard() {
   };
 
   const currentMonth = dayjs().month() + 1; // 1–12
-
+  const currenDay = dayjs().format("YYYY-MM-DD");
   const currentMonthDateFrom = `${currentYear}-${String(currentMonth).padStart(
     2,
     "0"
@@ -292,6 +277,7 @@ export default function Dashboard() {
           bgColor="!bg-[#0EAF69]"
           textColor={titleColor}
           isDark={isDark}
+          link={`/revenues?dateFrom=${currentMonthDateFrom}&dateTo=${currenDay}`}
         />
         <StatCard
           title="Chiqimlar"
@@ -300,6 +286,7 @@ export default function Dashboard() {
           bgColor="!bg-[#F59E0B]"
           textColor={titleColor}
           isDark={isDark}
+          link={`/expenses?dateFrom=${currentMonthDateFrom}&dateTo=${currenDay}`}
         />
         <StatCard
           title="Qarzdorlik"
@@ -308,6 +295,7 @@ export default function Dashboard() {
           bgColor="!bg-[#EF4444]"
           textColor={titleColor}
           isDark={isDark}
+          link={`/credit?dateFrom=${currentMonthDateFrom}&dateTo=${currenDay}`}
         />
       </div>
 
@@ -346,7 +334,7 @@ export default function Dashboard() {
           bgColor="!bg-[#4CAF50]"
           textColor={titleColor}
           isDark={isDark}
-          link={`/monthly-revenues?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
+          link={`/revenues?dateFrom=${currentYear}-01-01&dateTo=${currentMonthDateTo}`}
         />
         <StatCard
           title={`${currentMonthName}dagi chiqimlar`}
@@ -355,7 +343,7 @@ export default function Dashboard() {
           bgColor="!bg-[#F59E0B]"
           textColor={titleColor}
           isDark={isDark}
-          link={`/monthly-expenses?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
+          link={`/expenses?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
         />
         <StatCard
           title={`${currentMonthName}dagi qarzdorlik`}
@@ -364,7 +352,7 @@ export default function Dashboard() {
           bgColor="!bg-[#EF4444]"
           textColor={titleColor}
           isDark={isDark}
-          link={`/monthly-credit?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
+          link={`/credit?dateFrom=${currentMonthDateFrom}&dateTo=${currentMonthDateTo}`}
         />
       </div>
       <Row gutter={0} style={{ marginTop: 24 }}>
@@ -451,7 +439,7 @@ export default function Dashboard() {
                       )}-${new Date(year, month, 0).getDate()}`;
 
                       navigate(
-                        `/monthly-revenues?dateFrom=${dateFrom}&dateTo=${dateTo}`
+                        `/revenues?dateFrom=${dateFrom}&dateTo=${dateTo}`
                       );
                     }}
                   />
@@ -473,7 +461,7 @@ export default function Dashboard() {
                       )}-${new Date(year, month, 0).getDate()}`;
 
                       navigate(
-                        `/monthly-expenses?dateFrom=${dateFrom}&dateTo=${dateTo}`
+                        `/expenses?dateFrom=${dateFrom}&dateTo=${dateTo}`
                       );
                     }}
                   />
@@ -493,9 +481,7 @@ export default function Dashboard() {
                         "0"
                       )}-${new Date(year, month, 0).getDate()}`;
 
-                      navigate(
-                        `/monthly-credit?dateFrom=${dateFrom}&dateTo=${dateTo}`
-                      );
+                      navigate(`/credit?dateFrom=${dateFrom}&dateTo=${dateTo}`);
                     }}
                   />
 

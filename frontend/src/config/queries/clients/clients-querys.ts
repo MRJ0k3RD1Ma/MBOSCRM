@@ -48,6 +48,12 @@ export interface ClientType {
 export interface ClientResponse {
   data: Client[];
   total: number;
+  totals: {
+    device: number;
+    service: number;
+    subscribe: number;
+    price: number;
+  };
   limit: number;
   page: number;
 }
