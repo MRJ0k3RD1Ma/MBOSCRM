@@ -30,7 +30,7 @@ export default function ClientsPaidFilter({
 
   const handleFinish = (values: any) => {
     const filters = {
-      clientName: values.clientName || undefined,
+      name: values.name || undefined,
       phone: values.phone || undefined,
       sortBy: values.sortBy || undefined,
       sortOrder: values.sortOrder || undefined,

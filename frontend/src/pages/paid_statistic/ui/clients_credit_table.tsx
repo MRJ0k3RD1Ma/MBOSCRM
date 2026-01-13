@@ -9,7 +9,7 @@ import ClientsPaidFilter from "./clients_paid_filter";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export default function ClientsPaidTable({
+export default function ClientsCreditTable({
   clients,
   page,
   setPage,
@@ -24,18 +24,11 @@ export default function ClientsPaidTable({
   const columns = [
     indexColumn(page, limit),
     { title: "Mijoz", dataIndex: "name" },
+    { title: "Mijoz inn raqami", dataIndex: "inn" },
     { title: "Telefon raqami", dataIndex: "phone" },
-
+    { title: "Mijoz Turi", dataIndex: ["ClientType", "name"] },
     {
-      title: "Umumiy to‘lov",
-      dataIndex: "totalPaid",
-      sortName: "totalPaid",
-      sorter: true,
-      render: (v: number) =>
-        v ? v.toLocaleString("uz-UZ") + " so'm" : "0 so'm",
-    },
-    {
-      title: "Mahsulotlar",
+      title: "Sotuvlar",
       dataIndex: "totalSale",
       sortName: "totalSale",
       sorter: true,
@@ -57,6 +50,11 @@ export default function ClientsPaidTable({
       sorter: true,
       render: (v: number) =>
         v ? v.toLocaleString("uz-UZ") + " so'm" : "0 so'm",
+    },
+    {
+      title: "So‘nggi yangilanish",
+      dataIndex: "updatedAt",
+      render: (v: number) => (v ? dayjs(v).format("YYYY-MM-DD") : "–"),
     },
   ];
 
@@ -91,7 +89,7 @@ export default function ClientsPaidTable({
             sortOrder: sorter.order === "ascend" ? "asc" : "desc",
           }));
         }}
-        onRow={(record) => ({
+        onRow={(record: any) => ({
           onClick: (e) => {
             if (
               (e.target as HTMLElement).closest("button") ||

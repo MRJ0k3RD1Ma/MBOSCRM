@@ -1,14 +1,10 @@
-import { Card, DatePicker, Table } from "antd";
-
+import { DatePicker, Table } from "antd";
 import dayjs from "dayjs";
 import { indexColumn } from "../../../components/tables/indexColumn";
 import timezone from "dayjs/plugin/timezone";
-import { useGetAllPaidSuppliers } from "../../../config/queries/supplier/paid-supplier-querys";
-import { useGetAllPayments } from "../../../config/queries/payment/payment-querys";
 import { useGetAllSuppliers } from "../../../config/queries/supplier/supplier-querys";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import utc from "dayjs/plugin/utc";
-import Title from "antd/es/typography/Title";
 
 const { RangePicker } = DatePicker;
 
@@ -20,57 +16,73 @@ export default function ({
   toDate,
   setDateFrom,
   setDateTo,
+  statsValue,
+  setStatsValue,
 }: {
   fromDate: string;
   toDate: string;
   setDateFrom: (date: string) => void;
   setDateTo: (date: string) => void;
+  statsValue: {
+    totalSupplierPaid: number;
+    totalOtherPaid: number;
+    totalServerPaid: number;
+  };
+  setStatsValue: (stats: {
+    totalSupplierPaid: number;
+    totalOtherPaid: number;
+    totalServerPaid: number;
+  }) => void;
 }) {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const { data: suppliersData } = useGetAllSuppliers({ page: 1, limit: 1000 });
-  const { data: paymentsData } = useGetAllPayments({ page: 1, limit: 1000 });
-
-  const { data, isLoading } = useGetAllPaidSuppliers({
+  const { data, isLoading } = useGetAllSuppliers({
     page,
     limit,
     fromDate,
     toDate,
   });
 
+  useEffect(() => {
+    if (data) {
+      setStatsValue({
+        ...statsValue,
+        totalSupplierPaid: data.price || 0,
+      });
+    }
+  }, [data]);
   const columns = [
     indexColumn(page, limit),
     {
       title: "Yetkazuvchi",
-      dataIndex: "supplierId",
-      render: (supplierId: number) =>
-        suppliersData?.data.find((u) => u.id === supplierId)?.name || "–",
+      dataIndex: ["register", "name"],
     },
+    { title: "Telefon raqami", dataIndex: "phone" },
     {
-      title: "To‘lov miqdori",
-      dataIndex: "price",
+      title: "Yetkazuvchilarga to‘langan jami",
+      dataIndex: "totalPrice",
       render: (dept: number) =>
         dept ? dept.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
-      title: "To‘langan sana",
-      dataIndex: "paidDate",
-      render: (text: string) => dayjs(text).format("YYYY-MM-DD"),
+      title: "Umumiy to‘lov",
+      dataIndex: "totalPrice",
+      render: (dept: number) =>
+        dept ? dept.toLocaleString("uz-UZ") + " so'm" : "0",
     },
     {
-      title: "To‘lov turi",
-      dataIndex: "paymentId",
-      render: (paymentId: number) =>
-        paymentsData?.data.find((u) => u.id === paymentId)?.name || "–",
+      title: "Balansi",
+      dataIndex: "balance",
+      sortName: "totalBalance",
+      sorter: true,
+      render: (v: number) =>
+        v ? v.toLocaleString("uz-UZ") + " so'm" : "0 so'm",
     },
   ];
 
   return (
-    <Card className="ClientsPaidTable">
+    <div className="ClientsPaidTable">
       <div className="flex justify-between items-center mb-4">
-        <Title level={5} className="w-[80%]">
-          Oylik yetkazuvchilar chiqimlari {data?.price?.toLocaleString("uz-UZ") || "0"} so'm
-        </Title>
         <RangePicker
           placeholder={["Boshlanish sanasi", "Tugash sanasi"]}
           style={{ width: "100%" }}
@@ -95,6 +107,6 @@ export default function ({
           onChange: (page) => setPage(page),
         }}
       />
-    </Card>
+    </div>
   );
 }

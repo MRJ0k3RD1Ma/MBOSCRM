@@ -1,12 +1,11 @@
-import { Card, DatePicker, Table } from "antd";
-import { useState } from "react";
+import { DatePicker, Table } from "antd";
+import { useEffect, useState } from "react";
 import {
   useGetAllPaidOthers,
   type PaidOther,
 } from "../../../config/queries/paid/paid-other";
 import { indexColumn } from "../../../components/tables/indexColumn";
 import dayjs from "dayjs";
-import Title from "antd/es/typography/Title";
 
 const { RangePicker } = DatePicker;
 
@@ -16,12 +15,24 @@ export default function PaidOtherMonthly({
   type,
   setDateFrom,
   setDateTo,
+  statsValue,
+  setStatsValue,
 }: {
   fromDate: string;
   toDate: string;
   type: "INCOME" | "OUTCOME";
   setDateFrom: (date: string) => void;
   setDateTo: (date: string) => void;
+  statsValue: {
+    totalSupplierPaid: number;
+    totalOtherPaid: number;
+    totalServerPaid: number;
+  };
+  setStatsValue: (stats: {
+    totalSupplierPaid: number;
+    totalOtherPaid: number;
+    totalServerPaid: number;
+  }) => void;
 }) {
   const [page, setPage] = useState<number>(1);
   const [limit] = useState(10);
@@ -33,6 +44,15 @@ export default function PaidOtherMonthly({
     fromDate,
     toDate,
   });
+
+  useEffect(() => {
+    if (data) {
+      setStatsValue({
+        ...statsValue,
+        totalOtherPaid: data.price || 0,
+      });
+    }
+  }, [data]);
 
   const columns = [
     indexColumn(page, limit),
@@ -62,12 +82,8 @@ export default function PaidOtherMonthly({
   ];
 
   return (
-    <Card>
+    <div>
       <div className="flex justify-between items-center mb-4">
-        <Title level={5} className="w-[80%]">
-          Oylik boshqa {type === "INCOME" ? "daromadlari " : "chiqimlari "}
-          {data?.price?.toLocaleString("uz-UZ") || "0"} so'm
-        </Title>
         <RangePicker
           placeholder={["Boshlanish sanasi", "Tugash sanasi"]}
           style={{ width: "100%" }}
@@ -91,6 +107,6 @@ export default function PaidOtherMonthly({
           onChange: (page) => setPage(page),
         }}
       />
-    </Card>
+    </div>
   );
 }

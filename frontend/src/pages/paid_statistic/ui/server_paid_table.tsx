@@ -1,12 +1,11 @@
-import { Card, DatePicker, Table } from "antd";
+import { DatePicker, Table } from "antd";
 
 import dayjs from "dayjs";
 import { indexColumn } from "../../../components/tables/indexColumn";
 import timezone from "dayjs/plugin/timezone";
 import { useGetAllPaidServers } from "../../../config/queries/server/paid-servers-querys";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import utc from "dayjs/plugin/utc";
-import Title from "antd/es/typography/Title";
 
 const { RangePicker } = DatePicker;
 
@@ -18,11 +17,23 @@ export default function ServerPaidTable({
   toDate,
   setDateFrom,
   setDateTo,
+  statsValue,
+  setStatsValue,
 }: {
   fromDate: string;
   toDate: string;
   setDateFrom: (date: string) => void;
   setDateTo: (date: string) => void;
+  statsValue: {
+    totalSupplierPaid: number;
+    totalOtherPaid: number;
+    totalServerPaid: number;
+  };
+  setStatsValue: (stats: {
+    totalSupplierPaid: number;
+    totalOtherPaid: number;
+    totalServerPaid: number;
+  }) => void;
 }) {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -33,6 +44,15 @@ export default function ServerPaidTable({
     fromDate,
     toDate,
   });
+
+  useEffect(() => {
+    if (data) {
+      setStatsValue({
+        ...statsValue,
+        totalServerPaid: data.price || 0,
+      });
+    }
+  }, [data]);
 
   const columns = [
     indexColumn(page, limit),
@@ -60,12 +80,8 @@ export default function ServerPaidTable({
     },
   ];
   return (
-    <Card className="ClientsPaidTable">
+    <div className="ClientsPaidTable">
       <div className="flex justify-between items-center mb-4">
-        <Title level={5} className="w-[80%]">
-          Oylik server chiqimlari {data?.price?.toLocaleString("uz-UZ") || "0"}{" "}
-          so'm
-        </Title>
         <RangePicker
           placeholder={["Boshlanish sanasi", "Tugash sanasi"]}
           style={{ width: "100%" }}
@@ -90,6 +106,6 @@ export default function ServerPaidTable({
           onChange: (page) => setPage(page),
         }}
       />
-    </Card>
+    </div>
   );
 }

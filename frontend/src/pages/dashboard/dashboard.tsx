@@ -61,7 +61,7 @@ const StatCard: React.FC<StatCardProps> = ({
 
   return (
     <Card
-      className={`!border ${
+      className={`!border ${link ? "cursor-pointer" : "cursor-default"} ${
         isDark ? "!border-white/20 !bg-white/10" : "!border-gray-200 !bg-white"
       } !shadow-lg !hover:shadow-xl !transition-all !duration-300 hover:scale-[1.03] !backdrop-blur-xl !rounded-2xl`}
       bodyStyle={{
@@ -69,10 +69,7 @@ const StatCard: React.FC<StatCardProps> = ({
       }}
       onClick={link ? () => navigate(link) : undefined}
     >
-      <div
-        className="flex items-center justify-between"
-        style={{ cursor: link ? "pointer" : "default" }}
-      >
+      <div className="flex items-center justify-between" style={{}}>
         <div className="flex-1">
           <p
             className={`text-sm ${textColor} opacity-90 mb-1`}

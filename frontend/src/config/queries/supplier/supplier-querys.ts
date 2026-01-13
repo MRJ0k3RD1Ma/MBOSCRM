@@ -37,6 +37,7 @@ export interface SupplierResponse {
   total: number;
   page: number;
   limit: number;
+  price: number;
   data: Supplier[];
 }
 
