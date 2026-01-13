@@ -61,7 +61,7 @@ let PaidServerService = class PaidServerService {
             };
         }
         if (fromDate || toDate) {
-            where.endDate = {
+            where.createdAt = {
                 ...(fromDate && { gte: fromDate }),
                 ...(toDate && { lte: toDate }),
             };
