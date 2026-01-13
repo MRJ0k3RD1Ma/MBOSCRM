@@ -1,8 +1,14 @@
 import { StreamableFile } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { GetOutcomeQueryDto } from './dto/get-outcome.dto';
 export declare class StatisticsService {
     private readonly prisma;
     constructor(prisma: PrismaService);
+    outcome(query: GetOutcomeQueryDto): Promise<{
+        paidOther: number;
+        paidSupplier: number;
+        paidServer: number;
+    }>;
     exportAsJson(year?: number, month?: number): Promise<{
         rows: any[];
         totals: {

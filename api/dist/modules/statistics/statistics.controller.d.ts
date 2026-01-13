@@ -1,4 +1,5 @@
 import { StatisticsService } from './statistics.service';
+import { GetOutcomeQueryDto } from './dto/get-outcome.dto';
 export declare class StatisticsController {
     private readonly statisticsService;
     constructor(statisticsService: StatisticsService);
@@ -34,6 +35,11 @@ export declare class StatisticsController {
             }[];
             subscriptionForecast: number[];
         };
+    }>;
+    outcome(query: GetOutcomeQueryDto): Promise<{
+        paidOther: number;
+        paidSupplier: number;
+        paidServer: number;
     }>;
     exportExcel(year?: number, month?: number): Promise<import("@nestjs/common").StreamableFile>;
     exportJson(year?: number, month?: number): Promise<{

@@ -29,6 +29,7 @@ export declare class SupplierService {
         limit: number;
         data: {
             paidPrice: number;
+            arrivedPrice: number;
             register: {
                 name: string;
                 phone: string | null;

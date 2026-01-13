@@ -2,10 +2,35 @@ import { Injectable, StreamableFile } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import dayjs from 'dayjs';
 import { Workbook } from 'exceljs';
+import { GetOutcomeQueryDto } from './dto/get-outcome.dto';
 
 @Injectable()
 export class StatisticsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async outcome(query: GetOutcomeQueryDto) {
+    const { fromDate, toDate } = query;
+    const paidOther = await this.prisma.paidOther.aggregate({
+      where: { paidDate: { lte: toDate, gte: fromDate } },
+      _sum: { price: true },
+    });
+
+    const paidSupplier = await this.prisma.paidSupplier.aggregate({
+      where: { paidDate: { lte: toDate, gte: fromDate } },
+      _sum: { price: true },
+    });
+
+    const paidServer = await this.prisma.paidServer.aggregate({
+      where: { endDate: { lte: toDate, gte: fromDate } },
+      _sum: { price: true },
+    });
+
+    return {
+      paidOther: paidOther._sum.price || 0,
+      paidSupplier: paidSupplier._sum.price || 0,
+      paidServer: paidServer._sum.price || 0,
+    };
+  }
 
   async exportAsJson(year: number = new Date().getFullYear(), month?: number) {
     const rows = [];

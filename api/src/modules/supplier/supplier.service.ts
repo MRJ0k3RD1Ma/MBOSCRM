@@ -140,7 +140,22 @@ export class SupplierService {
           _sum: { price: true },
         });
 
-        return { ...supplier, paidPrice: paidSupplierPrice._sum.price };
+        const totalArrivedPrice = await this.prisma.arrivedProduct.aggregate({
+          where: {
+            Arrived: {
+              supplier: { id: supplier.id },
+              isDeleted: false,
+            },
+            isDeleted: false,
+          },
+          _sum: { priceCount: true },
+        });
+
+        return {
+          ...supplier,
+          paidPrice: paidSupplierPrice._sum.price || 0,
+          arrivedPrice: totalArrivedPrice._sum.priceCount || 0,
+        };
       }),
     );
 

@@ -2,10 +2,11 @@ import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { DecoratorWrapper } from '../../common/auth/decorator.auth';
 import { Role } from '../../common/auth/roles/role.enum';
 import { StatisticsService } from './statistics.service';
+import { GetOutcomeQueryDto } from './dto/get-outcome.dto';
 
 @Controller('statistics')
 export class StatisticsController {
-  constructor(private readonly statisticsService: StatisticsService) { }
+  constructor(private readonly statisticsService: StatisticsService) {}
 
   @Get()
   @DecoratorWrapper('Get Statistics', false, [Role.Admin])
@@ -13,17 +14,27 @@ export class StatisticsController {
     return this.statisticsService.getStatistics(year);
   }
 
-  @Get("export/excel")
+  @Get('/outcome')
+  @DecoratorWrapper('Get Statistics', false, [Role.Admin])
+  outcome(@Query() query: GetOutcomeQueryDto) {
+    return this.statisticsService.outcome(query);
+  }
+
+  @Get('export/excel')
   @DecoratorWrapper('Export as Excel', false, [Role.Admin])
-  exportExcel(@Query('year', ParseIntPipe) year?: number, @Query('month', ParseIntPipe) month?: number) {
+  exportExcel(
+    @Query('year', ParseIntPipe) year?: number,
+    @Query('month', ParseIntPipe) month?: number,
+  ) {
     return this.statisticsService.exportAsExcel(year, month);
   }
 
-  @Get("export/json")
+  @Get('export/json')
   @DecoratorWrapper('Export as Json', false, [Role.Admin])
-  exportJson(@Query('year', ParseIntPipe) year?: number, @Query('month', ParseIntPipe) month?: number) {
+  exportJson(
+    @Query('year', ParseIntPipe) year?: number,
+    @Query('month', ParseIntPipe) month?: number,
+  ) {
     return this.statisticsService.exportAsJson(year, month);
   }
-
-
 }

@@ -17,12 +17,16 @@ const common_1 = require("@nestjs/common");
 const decorator_auth_1 = require("../../common/auth/decorator.auth");
 const role_enum_1 = require("../../common/auth/roles/role.enum");
 const statistics_service_1 = require("./statistics.service");
+const get_outcome_dto_1 = require("./dto/get-outcome.dto");
 let StatisticsController = class StatisticsController {
     constructor(statisticsService) {
         this.statisticsService = statisticsService;
     }
     findOne(year) {
         return this.statisticsService.getStatistics(year);
+    }
+    outcome(query) {
+        return this.statisticsService.outcome(query);
     }
     exportExcel(year, month) {
         return this.statisticsService.exportAsExcel(year, month);
@@ -41,7 +45,15 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], StatisticsController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Get)("export/excel"),
+    (0, common_1.Get)('/outcome'),
+    (0, decorator_auth_1.DecoratorWrapper)('Get Statistics', false, [role_enum_1.Role.Admin]),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [get_outcome_dto_1.GetOutcomeQueryDto]),
+    __metadata("design:returntype", void 0)
+], StatisticsController.prototype, "outcome", null);
+__decorate([
+    (0, common_1.Get)('export/excel'),
     (0, decorator_auth_1.DecoratorWrapper)('Export as Excel', false, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Query)('year', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Query)('month', common_1.ParseIntPipe)),
@@ -50,7 +62,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], StatisticsController.prototype, "exportExcel", null);
 __decorate([
-    (0, common_1.Get)("export/json"),
+    (0, common_1.Get)('export/json'),
     (0, decorator_auth_1.DecoratorWrapper)('Export as Json', false, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Query)('year', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Query)('month', common_1.ParseIntPipe)),
