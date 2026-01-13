@@ -34,7 +34,7 @@ export declare class ClientService implements OnModuleInit {
         };
         page: number;
         limit: number;
-        totalData: Promise<{
+        totalData: {
             totalPaid: number;
             totalSale: number;
             totalSubscription: number;
@@ -57,7 +57,7 @@ export declare class ClientService implements OnModuleInit {
             typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
-        }[]>;
+        }[];
     }>;
     findOne(id: number): Promise<{
         District: {

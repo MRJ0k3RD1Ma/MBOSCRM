@@ -161,7 +161,7 @@ let ClientService = class ClientService {
             }),
             this.prisma.client.aggregate({ where, _count: { _all: true } }),
         ]);
-        const totalData = Promise.all(data.map(async (client) => {
+        const totalData = await Promise.all(data.map(async (client) => {
             const totalPaidClient = await this.prisma.paidClient.aggregate({
                 where: {
                     paidDate: { lte: toDate, gte: fromDate },

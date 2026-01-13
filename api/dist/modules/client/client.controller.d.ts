@@ -32,7 +32,7 @@ export declare class ClientController {
         };
         page: number;
         limit: number;
-        totalData: Promise<{
+        totalData: {
             totalPaid: number;
             totalSale: number;
             totalSubscription: number;
@@ -55,7 +55,7 @@ export declare class ClientController {
             typeId: number | null;
             registerId: number | null;
             modifyId: number | null;
-        }[]>;
+        }[];
     }>;
     findOne(id: string): Promise<{
         District: {

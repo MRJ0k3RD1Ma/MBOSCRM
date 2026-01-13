@@ -187,7 +187,7 @@ export class ClientService implements OnModuleInit {
       this.prisma.client.aggregate({ where, _count: { _all: true } }),
     ]);
 
-    const totalData = Promise.all(
+    const totalData = await Promise.all(
       data.map(async (client) => {
         const totalPaidClient = await this.prisma.paidClient.aggregate({
           where: {
