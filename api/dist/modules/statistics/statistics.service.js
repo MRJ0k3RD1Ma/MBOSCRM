@@ -273,11 +273,11 @@ let StatisticsService = class StatisticsService {
             year = new Date().getFullYear();
         const today = new Date();
         const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        const currentMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
+        const currentMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 1);
         const startOfYear = new Date(year, 0, 1);
-        const endOfYear = new Date(year, 11, 31, 23, 59, 59, 999);
+        const endOfYear = new Date(year + 1, 0, 1);
         const startOfLastYear = new Date(year - 1, 0, 1);
-        const endOfLastYear = new Date(year - 1, 11, 31, 23, 59, 59, 999);
+        const endOfLastYear = new Date(year, 0, 1);
         const sumOrZero = (agg, field) => (agg && agg._sum && (agg._sum[field] ?? 0)) || 0;
         const [settings, totalClients, totalSales] = await Promise.all([
             this.prisma.setting.findUnique({ where: { id: 1 } }),
@@ -288,14 +288,14 @@ let StatisticsService = class StatisticsService {
             this.prisma.paidClient.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfYear, lte: endOfYear },
+                    paidDate: { gte: startOfYear, lt: endOfYear },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidOther.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfYear, lte: endOfYear },
+                    paidDate: { gte: startOfYear, lt: endOfYear },
                     type: 'INCOME',
                     isDeleted: false,
                 },
@@ -303,28 +303,28 @@ let StatisticsService = class StatisticsService {
             this.prisma.paidSupplier.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfYear, lte: endOfYear },
+                    paidDate: { gte: startOfYear, lt: endOfYear },
                     isDeleted: false,
                 },
             }),
             this.prisma.arrived.aggregate({
                 _sum: { price: true },
                 where: {
-                    created: { gte: startOfYear, lte: endOfYear },
+                    created: { gte: startOfYear, lt: endOfYear },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidServer.aggregate({
                 _sum: { price: true },
                 where: {
-                    createdAt: { gte: startOfYear, lte: endOfYear },
+                    createdAt: { gte: startOfYear, lt: endOfYear },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidOther.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfYear, lte: endOfYear },
+                    paidDate: { gte: startOfYear, lt: endOfYear },
                     type: 'OUTCOME',
                     isDeleted: false,
                 },
@@ -344,14 +344,14 @@ let StatisticsService = class StatisticsService {
             this.prisma.paidClient.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
+                    paidDate: { gte: currentMonthStart, lt: currentMonthEnd },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidOther.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
+                    paidDate: { gte: currentMonthStart, lt: currentMonthEnd },
                     type: 'INCOME',
                     isDeleted: false,
                 },
@@ -359,28 +359,28 @@ let StatisticsService = class StatisticsService {
             this.prisma.paidSupplier.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
+                    paidDate: { gte: currentMonthStart, lt: currentMonthEnd },
                     isDeleted: false,
                 },
             }),
             this.prisma.arrived.aggregate({
                 _sum: { price: true },
                 where: {
-                    created: { gte: currentMonthStart, lte: currentMonthEnd },
+                    created: { gte: currentMonthStart, lt: currentMonthEnd },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidServer.aggregate({
                 _sum: { price: true },
                 where: {
-                    createdAt: { gte: currentMonthStart, lte: currentMonthEnd },
+                    createdAt: { gte: currentMonthStart, lt: currentMonthEnd },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidOther.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
+                    paidDate: { gte: currentMonthStart, lt: currentMonthEnd },
                     type: 'OUTCOME',
                     isDeleted: false,
                 },
@@ -388,14 +388,14 @@ let StatisticsService = class StatisticsService {
             this.prisma.paidClient.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfLastYear, lte: endOfLastYear },
+                    paidDate: { gte: startOfLastYear, lt: endOfLastYear },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidOther.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfLastYear, lte: endOfLastYear },
+                    paidDate: { gte: startOfLastYear, lt: endOfLastYear },
                     type: 'INCOME',
                     isDeleted: false,
                 },
@@ -429,28 +429,32 @@ let StatisticsService = class StatisticsService {
             return Promise.all([
                 this.prisma.paidClient.aggregate({
                     _sum: { price: true },
-                    where: { paidDate: { gte: mStart, lte: mEnd }, isDeleted: false },
+                    where: { paidDate: { gte: mStart, lt: mEnd }, isDeleted: false },
                 }),
                 this.prisma.paidOther.aggregate({
                     _sum: { price: true },
                     where: {
-                        paidDate: { gte: mStart, lte: mEnd },
+                        paidDate: { gte: mStart, lt: mEnd },
                         type: 'INCOME',
                         isDeleted: false,
                     },
                 }),
                 this.prisma.paidSupplier.aggregate({
                     _sum: { price: true },
-                    where: { paidDate: { gte: mStart, lte: mEnd }, isDeleted: false },
+                    where: { paidDate: { gte: mStart, lt: mEnd }, isDeleted: false },
+                }),
+                this.prisma.arrived.aggregate({
+                    _sum: { price: true },
+                    where: { created: { gte: mStart, lt: mEnd }, isDeleted: false },
                 }),
                 this.prisma.paidServer.aggregate({
                     _sum: { price: true },
-                    where: { endDate: { gte: mStart, lte: mEnd }, isDeleted: false },
+                    where: { createdAt: { gte: mStart, lt: mEnd }, isDeleted: false },
                 }),
                 this.prisma.paidOther.aggregate({
                     _sum: { price: true },
                     where: {
-                        paidDate: { gte: mStart, lte: mEnd },
+                        paidDate: { gte: mStart, lt: mEnd },
                         type: 'OUTCOME',
                         isDeleted: false,
                     },
@@ -458,7 +462,7 @@ let StatisticsService = class StatisticsService {
                 this.prisma.sale.aggregate({
                     _sum: { credit: true },
                     where: {
-                        createdAt: { gte: mStart, lte: mEnd },
+                        createdAt: { gte: mStart, lt: mEnd },
                         isDeleted: false,
                         client: { isDeleted: false },
                     },
@@ -466,16 +470,17 @@ let StatisticsService = class StatisticsService {
                 this.prisma.subscribe.aggregate({
                     _sum: { price: true, paid: true },
                     where: {
-                        paying_date: { gte: mStart, lte: mEnd },
+                        paying_date: { gte: mStart, lt: mEnd },
                         isDeleted: false,
                         client: { isDeleted: false },
+                        sale: { isDeleted: false },
                     },
                 }),
                 this.prisma.saleProduct.aggregate({
                     _sum: { count: true, priceCount: true },
                     where: {
                         sale: {
-                            date: { gte: mStart, lte: mEnd },
+                            date: { gte: mStart, lt: mEnd },
                             isDeleted: false,
                         },
                         product: {
@@ -489,7 +494,7 @@ let StatisticsService = class StatisticsService {
                     _sum: { count: true, priceCount: true },
                     where: {
                         sale: {
-                            date: { gte: mStart, lte: mEnd },
+                            date: { gte: mStart, lt: mEnd },
                             isDeleted: false,
                         },
                         product: {
@@ -499,9 +504,10 @@ let StatisticsService = class StatisticsService {
                         isDeleted: false,
                     },
                 }),
-            ]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold,]) => {
+            ]).then(([pc, poInc, psup, arrivedMonth, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold,]) => {
                 const incomeMonth = sumOrZero(pc, 'price') + sumOrZero(poInc, 'price');
                 const expenseMonth = sumOrZero(psup, 'price') +
+                    sumOrZero(arrivedMonth, 'price') +
                     sumOrZero(pserv, 'price') +
                     sumOrZero(poOut, 'price');
                 const subPrice = sumOrZero(subAgg, 'price');
@@ -521,8 +527,46 @@ let StatisticsService = class StatisticsService {
                 };
             });
         }));
-        const subscriptionForecast = monthlyStats.map((m) => m.expectedSubscription);
-        const currentMonth = monthlyStats[(0, dayjs_1.default)().month()];
+        const currentMonthIndex = today.getMonth();
+        const currentMonthExpectedSubscription = year === today.getFullYear()
+            ? monthlyStats[currentMonthIndex]?.expectedSubscription || 0
+            : 0;
+        const subscriptionForecast = monthlyStats.map((m, index) => {
+            if (year < today.getFullYear()) {
+                return m.expectedSubscription;
+            }
+            if (year > today.getFullYear()) {
+                return currentMonthExpectedSubscription;
+            }
+            if (index <= currentMonthIndex) {
+                return m.expectedSubscription;
+            }
+            return currentMonthExpectedSubscription;
+        });
+        const [currentMonthSaleDebt, currentMonthSubAgg] = await Promise.all([
+            this.prisma.sale.aggregate({
+                _sum: { credit: true },
+                where: {
+                    createdAt: { gte: currentMonthStart, lt: currentMonthEnd },
+                    isDeleted: false,
+                    client: { isDeleted: false },
+                },
+            }),
+            this.prisma.subscribe.aggregate({
+                _sum: { price: true, paid: true },
+                where: {
+                    paying_date: { gte: currentMonthStart, lt: currentMonthEnd },
+                    isDeleted: false,
+                    client: { isDeleted: false },
+                    sale: { isDeleted: false },
+                },
+            }),
+        ]);
+        const currentMonthSubPrice = sumOrZero(currentMonthSubAgg, 'price');
+        const currentMonthSubPaid = sumOrZero(currentMonthSubAgg, 'paid');
+        const currentMonthExpectedSub = Math.max(0, currentMonthSubPrice - currentMonthSubPaid);
+        const currentMonthSaleCredit = sumOrZero(currentMonthSaleDebt, 'credit');
+        const currentMonthCredit = currentMonthSaleCredit + currentMonthExpectedSub;
         return {
             balance: settings?.balance ?? 0,
             totals: {
@@ -538,9 +582,9 @@ let StatisticsService = class StatisticsService {
             },
             month: {
                 name: (0, dayjs_1.default)().format('MMMM'),
-                income: currentMonth.tushum,
-                outcome: currentMonth.chiqim,
-                credit: currentMonth.credit,
+                income: currentMonthIncome,
+                outcome: currentMonthExpenses,
+                credit: currentMonthCredit,
             },
             charts: {
                 monthlyStats,
