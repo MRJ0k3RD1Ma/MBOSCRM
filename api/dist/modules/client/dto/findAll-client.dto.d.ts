@@ -2,7 +2,8 @@ import { PaginationDto } from '../../../common/dtos/pagination.dto';
 export declare enum ClientSortBy {
     TOTAL_PAID = "totalPaid",
     TOTAL_SALE = "totalSale",
-    TOTAL_SUB = "totalSub"
+    TOTAL_SUB = "totalSub",
+    TOTAL_BALANCE = "totalBalance"
 }
 export declare enum SortOrder {
     ASC = "asc",

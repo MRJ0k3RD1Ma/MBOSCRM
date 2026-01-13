@@ -21,6 +21,7 @@ var ClientSortBy;
     ClientSortBy["TOTAL_PAID"] = "totalPaid";
     ClientSortBy["TOTAL_SALE"] = "totalSale";
     ClientSortBy["TOTAL_SUB"] = "totalSub";
+    ClientSortBy["TOTAL_BALANCE"] = "totalBalance";
 })(ClientSortBy || (exports.ClientSortBy = ClientSortBy = {}));
 var SortOrder;
 (function (SortOrder) {

@@ -9,6 +9,7 @@ export enum ClientSortBy {
   TOTAL_PAID = 'totalPaid',
   TOTAL_SALE = 'totalSale',
   TOTAL_SUB = 'totalSub',
+  TOTAL_BALANCE = 'totalBalance',
 }
 
 export enum SortOrder {

@@ -239,8 +239,10 @@ export class ClientService implements OnModuleInit {
         } else if (sortBy === 'totalSub') {
           valueA = a.totalSubscription;
           valueB = b.totalSubscription;
+        } else if (sortBy == 'totalBalance') {
+          valueA = a.balance;
+          valueB = b.balance;
         }
-
         return (valueA - valueB) * sortMultiplier;
       });
     }

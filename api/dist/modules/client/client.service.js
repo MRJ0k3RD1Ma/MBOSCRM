@@ -209,6 +209,10 @@ let ClientService = class ClientService {
                     valueA = a.totalSubscription;
                     valueB = b.totalSubscription;
                 }
+                else if (sortBy == 'totalBalance') {
+                    valueA = a.balance;
+                    valueB = b.balance;
+                }
                 return (valueA - valueB) * sortMultiplier;
             });
         }
