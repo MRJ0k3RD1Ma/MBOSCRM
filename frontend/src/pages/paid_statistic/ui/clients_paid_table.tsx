@@ -1,107 +1,142 @@
-import { Card, DatePicker, Table } from "antd";
+import { Button, DatePicker, Space, Table } from "antd";
 import { indexColumn } from "../../../components/tables/indexColumn";
-import { useGetAllClients } from "../../../config/queries/clients/clients-querys";
-import { useGetAllSale } from "../../../config/queries/sale/sale-querys";
-import { useGetAllPayments } from "../../../config/queries/payment/payment-querys";
-import { useGetAllPaidClients } from "../../../config/queries/clients/paid-client-querys";
-import { useState } from "react";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import dayjs from "dayjs";
-import Title from "antd/es/typography/Title";
+import { useNavigate } from "react-router-dom";
+import ClientsPaidFilter from "./clients_paid_filter";
+import { FilterOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-
 export default function ClientsPaidTable({
+  clients,
   fromDate,
   toDate,
   setDateFrom,
   setDateTo,
-}: {
-  fromDate: string;
-  toDate: string;
-  setDateFrom: (date: string) => void;
-  setDateTo: (date: string) => void;
-}) {
-  const [page, setPage] = useState<number>(1);
-  const [limit] = useState(10);
-
-  const { data, isLoading } = useGetAllPaidClients({
-    page,
-    limit,
-    fromDate: fromDate ? fromDate : undefined,
-    toDate: toDate ? toDate : undefined,
-  });
-  const { data: clients } = useGetAllClients({ page: 1, limit: 1000 });
-  const { data: sales } = useGetAllSale({ page: 1, limit: 1000 });
-  const { data: payments } = useGetAllPayments({ page: 1, limit: 1000 });
+  page,
+  setPage,
+  limit,
+  filters,
+  setFilters,
+  filterOpen,
+  setFilterOpen,
+}: any) {
+  const navigate = useNavigate();
 
   const columns = [
     indexColumn(page, limit),
-    {
-      title: "Mijoz",
-      dataIndex: "clientId",
-      render: (clientId: number) =>
-        clients?.data.find((u) => u.id === clientId)?.name || "–",
-    },
+    { title: "Mijoz", dataIndex: "name" },
+    { title: "Telefon raqami", dataIndex: "phone" },
 
     {
-      title: "Sotuv",
-      dataIndex: "saleId",
-      render: (saleId: number) =>
-        sales?.data.find((u) => u.id === saleId)?.code || "–",
+      title: "Umumiy to‘lov",
+      dataIndex: "totalPaid",
+      sortName: "totalPaid",
+      sorter: true,
+      render: (v: number) =>
+        v ? v.toLocaleString("uz-UZ") + " so'm" : "0 so'm",
     },
     {
-      title: "To'lov turi",
-      dataIndex: "paymentId",
-      render: (paymentId: number) =>
-        payments?.data.find((u) => u.id === paymentId)?.name || "–",
+      title: "Mahsulotlar",
+      dataIndex: "totalSale",
+      sortName: "totalSale",
+      sorter: true,
+      render: (v: number) =>
+        v ? v.toLocaleString("uz-UZ") + " so'm" : "0 so'm",
     },
     {
-      title: "To‘lov sanasi",
-      dataIndex: "paidDate",
-      render: (text: string) => (text ? dayjs(text).format("YYYY-MM-DD") : "–"),
+      title: "Obuna",
+      dataIndex: "totalSubscription",
+      sortName: "totalSub",
+      sorter: true,
+      render: (v: number) =>
+        v ? v.toLocaleString("uz-UZ") + " so'm" : "0 so'm",
     },
     {
-      title: "Narxi",
-      dataIndex: "price",
-      render: (price: number) =>
-        price ? price.toLocaleString("uz-UZ") + " so'm" : "0",
+      title: "Balansi",
+      dataIndex: "balance",
+      sortName: "totalBalance",
+      sorter: true,
+      render: (v: number) =>
+        v ? v.toLocaleString("uz-UZ") + " so'm" : "0 so'm",
     },
   ];
 
   return (
-    <Card>
-      <div className="flex justify-between items-center mb-4">  
-        <Title level={5} className="w-[80%]">
-          Oylik mijoz daromadlari {data?.price?.toLocaleString("uz-UZ") || "0"} so'm
-        </Title>
+    <div>
+      <Space
+        style={{
+          width: "100%",
+          marginBottom: 16,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Space>
+          <Button
+            icon={<FilterOutlined />}
+            onClick={() => setFilterOpen(!filterOpen)}
+          >
+            Filter
+          </Button>
+        </Space>
         <RangePicker
-          placeholder={["Boshlanish sanasi", "Tugash sanasi"]}
           style={{ width: "100%" }}
           format="YYYY-MM-DD"
           value={fromDate && toDate ? [dayjs(fromDate), dayjs(toDate)] : null}
-          onChange={(dates, dateStrings) => {
-            setDateFrom(dateStrings[0]);
-            setDateTo(dateStrings[1]);
-            console.log(dates);
+          onChange={(_, [from, to]) => {
+            setDateFrom(from);
+            setDateTo(to);
+            setPage(1);
           }}
         />
-      </div>
+      </Space>
+
+      <ClientsPaidFilter
+        open={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        initialValues={filters}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+      />
+
       <Table
+        rowKey="id"
         columns={columns}
-        dataSource={data?.data || []}
-        loading={isLoading}
+        dataSource={clients?.data || []}
         pagination={{
           current: page,
           pageSize: limit,
-          total: data?.total || 0,
-          onChange: (page) => setPage(page),
+          total: clients?.total || 0,
+          onChange: setPage,
         }}
+        onChange={(_, __, sorter: any) => {
+          if (!sorter.field) return;
+
+          setFilters((prev: any) => ({
+            ...prev,
+            sortBy: sorter.column.sortName,
+            sortOrder: sorter.order === "ascend" ? "asc" : "desc",
+          }));
+        }}
+        onRow={(record) => ({
+          onClick: (e) => {
+            if (
+              (e.target as HTMLElement).closest("button") ||
+              (e.target as HTMLElement).closest("svg")
+            )
+              return;
+            navigate(`/client/${record.id}`);
+          },
+        })}
       />
-    </Card>
+    </div>
   );
 }

@@ -230,15 +230,15 @@ export const router = createBrowserRouter([
             element: <Users />,
           },
           {
-            path: "monthly-revenues",
+            path: "revenues",
             element: <MonthlyRevenues />,
           },
           {
-            path: "monthly-expenses",
+            path: "expenses",
             element: <MonthlyExpenses />,
           },
           {
-            path: "monthly-credit",
+            path: "credit",
             element: <MonthlyCredit />,
           },
           {
