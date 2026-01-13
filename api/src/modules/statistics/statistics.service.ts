@@ -489,7 +489,7 @@ export class StatisticsService {
     const monthlyStats = await Promise.all(
       Array.from({ length: 12 }, (_, i) => {
         const mStart = new Date(year, i, 1);
-        const mEnd = new Date(year, i + 1, 0, 23, 59, 59, 999);
+        const mEnd = new Date(year, i + 1, 1);
 
         return Promise.all([
           this.prisma.paidClient.aggregate({
