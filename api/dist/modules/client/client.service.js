@@ -223,10 +223,18 @@ let ClientService = class ClientService {
             },
             _sum: { priceCount: true },
         });
+        const totalClientPaid = await this.prisma.paidClient.aggregate({
+            where: {
+                isDeleted: false,
+                Client: where,
+            },
+            _sum: { price: true },
+        });
         const totals = {
             subscribe: totalSubPrice._sum.price,
             device: totalDevicePrice._sum.priceCount,
             service: totalServicePrice._sum.priceCount,
+            price: totalClientPaid._sum.price,
         };
         return {
             total: total._count._all,

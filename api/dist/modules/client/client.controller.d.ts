@@ -29,6 +29,7 @@ export declare class ClientController {
             subscribe: number;
             device: number;
             service: number;
+            price: number;
         };
         page: number;
         limit: number;
