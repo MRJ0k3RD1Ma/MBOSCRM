@@ -150,59 +150,59 @@ export class ClientService implements OnModuleInit {
       sortOrder = 'desc',
     } = dto;
 
-    const whereConditions: string[] = ['"Client"."isDeleted" = false'];
+    const whereConditions: string[] = ['c."isDeleted" = false'];
     const params: any[] = [];
     let paramIndex = 1;
 
     if (name) {
       whereConditions.push(
-        `(LOWER("Client"."name") LIKE LOWER($${paramIndex}) OR LOWER("Client"."inn") LIKE LOWER($${paramIndex}))`,
+        `(LOWER(c."name") LIKE LOWER($${paramIndex}) OR LOWER(c."inn") LIKE LOWER($${paramIndex}))`,
       );
       params.push(`%${name.trim()}%`);
       paramIndex++;
     }
 
     if (districtId !== undefined) {
-      whereConditions.push(`"Client"."districtId" = $${paramIndex}`);
+      whereConditions.push(`c."districtId" = $${paramIndex}`);
       params.push(districtId);
       paramIndex++;
     }
 
     if (regionId !== undefined) {
-      whereConditions.push(`"Client"."regionId" = $${paramIndex}`);
+      whereConditions.push(`c."regionId" = $${paramIndex}`);
       params.push(regionId);
       paramIndex++;
     }
 
     if (address?.trim()) {
-      whereConditions.push(`LOWER("Client"."address") LIKE LOWER($${paramIndex})`);
+      whereConditions.push(`LOWER(c."address") LIKE LOWER($${paramIndex})`);
       params.push(`%${address.trim()}%`);
       paramIndex++;
     }
 
     if (description?.trim()) {
-      whereConditions.push(`LOWER("Client"."description") LIKE LOWER($${paramIndex})`);
+      whereConditions.push(`LOWER(c."description") LIKE LOWER($${paramIndex})`);
       params.push(`%${description.trim()}%`);
       paramIndex++;
     }
 
     if (inn?.trim()) {
-      whereConditions.push(`LOWER("Client"."inn") LIKE LOWER($${paramIndex})`);
+      whereConditions.push(`LOWER(c."inn") LIKE LOWER($${paramIndex})`);
       params.push(`%${inn.trim()}%`);
       paramIndex++;
     }
 
     if (phone?.trim()) {
-      whereConditions.push(`LOWER("Client"."phone") LIKE LOWER($${paramIndex})`);
+      whereConditions.push(`LOWER(c."phone") LIKE LOWER($${paramIndex})`);
       params.push(`%${phone.trim()}%`);
       paramIndex++;
     }
 
     if (isPositiveBalance !== undefined) {
       if (isPositiveBalance) {
-        whereConditions.push(`"Client"."balance" >= 0`);
+        whereConditions.push(`c."balance" >= 0`);
       } else {
-        whereConditions.push(`"Client"."balance" < 0`);
+        whereConditions.push(`c."balance" < 0`);
       }
     }
 
@@ -213,7 +213,7 @@ export class ClientService implements OnModuleInit {
     let dateFilterSub = '';
 
     if (fromDate) {
-      dateFilterPaid += ` AND pc."paidDate" >= $${paramIndex}`;
+      dateFilterPaid += ` AND pc."paid_date" >= $${paramIndex}`;
       dateFilterSale += ` AND s."date" >= $${paramIndex}`;
       dateFilterSub += ` AND sub."paying_date" >= $${paramIndex}`;
       params.push(fromDate);
@@ -221,14 +221,14 @@ export class ClientService implements OnModuleInit {
     }
 
     if (toDate) {
-      dateFilterPaid += ` AND pc."paidDate" <= $${paramIndex}`;
+      dateFilterPaid += ` AND pc."paid_date" <= $${paramIndex}`;
       dateFilterSale += ` AND s."date" <= $${paramIndex}`;
       dateFilterSub += ` AND sub."paying_date" <= $${paramIndex}`;
       params.push(toDate);
       paramIndex++;
     }
 
-    let orderByClause = '"Client"."id" DESC';
+    let orderByClause = 'c."id" DESC';
     if (sortBy) {
       const direction = sortOrder === 'asc' ? 'ASC' : 'DESC';
       if (sortBy === 'totalPaid') {
@@ -238,7 +238,7 @@ export class ClientService implements OnModuleInit {
       } else if (sortBy === 'totalSub') {
         orderByClause = `"totalSubscription" ${direction} NULLS LAST`;
       } else if (sortBy === 'totalBalance') {
-        orderByClause = `"Client"."balance" ${direction} NULLS LAST`;
+        orderByClause = `c."balance" ${direction} NULLS LAST`;
       }
     }
 
@@ -248,32 +248,32 @@ export class ClientService implements OnModuleInit {
     const offsetParam = paramIndex + 1;
 
     const query = `
-      SELECT 
-        "Client".*,
+      SELECT
+        c.*,
         json_build_object('id', ct."id", 'name', ct."name") as "ClientType",
         COALESCE(paid_agg."totalPaid", 0) as "totalPaid",
         COALESCE(sale_agg."totalSale", 0) as "totalSale",
         COALESCE(sub_agg."totalSubscription", 0) as "totalSubscription"
-      FROM "Client"
-      LEFT JOIN "ClientType" ct ON "Client"."typeId" = ct."id"
+      FROM "client" c
+      LEFT JOIN "client_type" ct ON c."typeId" = ct."id"
       LEFT JOIN LATERAL (
         SELECT COALESCE(SUM(pc."price"), 0) as "totalPaid"
         FROM "PaidClient" pc
-        WHERE pc."clientId" = "Client"."id" 
+        WHERE pc."client_id" = c."id"
           AND pc."isDeleted" = false
           ${dateFilterPaid}
       ) paid_agg ON true
       LEFT JOIN LATERAL (
         SELECT COALESCE(SUM(s."price"), 0) as "totalSale"
         FROM "Sale" s
-        WHERE s."clientId" = "Client"."id"
+        WHERE s."client_id" = c."id"
           AND s."isDeleted" = false
           ${dateFilterSale}
       ) sale_agg ON true
       LEFT JOIN LATERAL (
         SELECT COALESCE(SUM(sub."price"), 0) as "totalSubscription"
         FROM "Subscribe" sub
-        WHERE sub."clientId" = "Client"."id"
+        WHERE sub."clientId" = c."id"
           ${dateFilterSub}
       ) sub_agg ON true
       WHERE ${whereClause}
@@ -283,7 +283,7 @@ export class ClientService implements OnModuleInit {
 
     const countQuery = `
       SELECT COUNT(*) as total
-      FROM "Client"
+      FROM "client" c
       WHERE ${whereClause}
     `;
 
@@ -291,7 +291,10 @@ export class ClientService implements OnModuleInit {
 
     const [rawData, countResult] = await this.prisma.$transaction([
       this.prisma.$queryRawUnsafe<any[]>(query, ...params),
-      this.prisma.$queryRawUnsafe<{ total: bigint }[]>(countQuery, ...countParams),
+      this.prisma.$queryRawUnsafe<{ total: bigint }[]>(
+        countQuery,
+        ...countParams,
+      ),
     ]);
 
     const data = rawData.map((row) => ({
