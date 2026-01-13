@@ -150,17 +150,166 @@ export class ClientService implements OnModuleInit {
       sortOrder = 'desc',
     } = dto;
 
-    const where: Prisma.ClientWhereInput = {
-      isDeleted: false,
-    };
+    const whereConditions: string[] = ['"Client"."isDeleted" = false'];
+    const params: any[] = [];
+    let paramIndex = 1;
 
+    if (name) {
+      whereConditions.push(
+        `(LOWER("Client"."name") LIKE LOWER($${paramIndex}) OR LOWER("Client"."inn") LIKE LOWER($${paramIndex}))`,
+      );
+      params.push(`%${name.trim()}%`);
+      paramIndex++;
+    }
+
+    if (districtId !== undefined) {
+      whereConditions.push(`"Client"."districtId" = $${paramIndex}`);
+      params.push(districtId);
+      paramIndex++;
+    }
+
+    if (regionId !== undefined) {
+      whereConditions.push(`"Client"."regionId" = $${paramIndex}`);
+      params.push(regionId);
+      paramIndex++;
+    }
+
+    if (address?.trim()) {
+      whereConditions.push(`LOWER("Client"."address") LIKE LOWER($${paramIndex})`);
+      params.push(`%${address.trim()}%`);
+      paramIndex++;
+    }
+
+    if (description?.trim()) {
+      whereConditions.push(`LOWER("Client"."description") LIKE LOWER($${paramIndex})`);
+      params.push(`%${description.trim()}%`);
+      paramIndex++;
+    }
+
+    if (inn?.trim()) {
+      whereConditions.push(`LOWER("Client"."inn") LIKE LOWER($${paramIndex})`);
+      params.push(`%${inn.trim()}%`);
+      paramIndex++;
+    }
+
+    if (phone?.trim()) {
+      whereConditions.push(`LOWER("Client"."phone") LIKE LOWER($${paramIndex})`);
+      params.push(`%${phone.trim()}%`);
+      paramIndex++;
+    }
+
+    if (isPositiveBalance !== undefined) {
+      if (isPositiveBalance) {
+        whereConditions.push(`"Client"."balance" >= 0`);
+      } else {
+        whereConditions.push(`"Client"."balance" < 0`);
+      }
+    }
+
+    const whereClause = whereConditions.join(' AND ');
+
+    let dateFilterPaid = '';
+    let dateFilterSale = '';
+    let dateFilterSub = '';
+
+    if (fromDate) {
+      dateFilterPaid += ` AND pc."paidDate" >= $${paramIndex}`;
+      dateFilterSale += ` AND s."date" >= $${paramIndex}`;
+      dateFilterSub += ` AND sub."paying_date" >= $${paramIndex}`;
+      params.push(fromDate);
+      paramIndex++;
+    }
+
+    if (toDate) {
+      dateFilterPaid += ` AND pc."paidDate" <= $${paramIndex}`;
+      dateFilterSale += ` AND s."date" <= $${paramIndex}`;
+      dateFilterSub += ` AND sub."paying_date" <= $${paramIndex}`;
+      params.push(toDate);
+      paramIndex++;
+    }
+
+    let orderByClause = '"Client"."id" DESC';
+    if (sortBy) {
+      const direction = sortOrder === 'asc' ? 'ASC' : 'DESC';
+      if (sortBy === 'totalPaid') {
+        orderByClause = `"totalPaid" ${direction} NULLS LAST`;
+      } else if (sortBy === 'totalSale') {
+        orderByClause = `"totalSale" ${direction} NULLS LAST`;
+      } else if (sortBy === 'totalSub') {
+        orderByClause = `"totalSubscription" ${direction} NULLS LAST`;
+      } else if (sortBy === 'totalBalance') {
+        orderByClause = `"Client"."balance" ${direction} NULLS LAST`;
+      }
+    }
+
+    const offset = (page - 1) * limit;
+    params.push(limit, offset);
+    const limitParam = paramIndex;
+    const offsetParam = paramIndex + 1;
+
+    const query = `
+      SELECT 
+        "Client".*,
+        json_build_object('id', ct."id", 'name', ct."name") as "ClientType",
+        COALESCE(paid_agg."totalPaid", 0) as "totalPaid",
+        COALESCE(sale_agg."totalSale", 0) as "totalSale",
+        COALESCE(sub_agg."totalSubscription", 0) as "totalSubscription"
+      FROM "Client"
+      LEFT JOIN "ClientType" ct ON "Client"."typeId" = ct."id"
+      LEFT JOIN LATERAL (
+        SELECT COALESCE(SUM(pc."price"), 0) as "totalPaid"
+        FROM "PaidClient" pc
+        WHERE pc."clientId" = "Client"."id" 
+          AND pc."isDeleted" = false
+          ${dateFilterPaid}
+      ) paid_agg ON true
+      LEFT JOIN LATERAL (
+        SELECT COALESCE(SUM(s."price"), 0) as "totalSale"
+        FROM "Sale" s
+        WHERE s."clientId" = "Client"."id"
+          AND s."isDeleted" = false
+          ${dateFilterSale}
+      ) sale_agg ON true
+      LEFT JOIN LATERAL (
+        SELECT COALESCE(SUM(sub."price"), 0) as "totalSubscription"
+        FROM "Subscribe" sub
+        WHERE sub."clientId" = "Client"."id"
+          ${dateFilterSub}
+      ) sub_agg ON true
+      WHERE ${whereClause}
+      ORDER BY ${orderByClause}
+      LIMIT $${limitParam} OFFSET $${offsetParam}
+    `;
+
+    const countQuery = `
+      SELECT COUNT(*) as total
+      FROM "Client"
+      WHERE ${whereClause}
+    `;
+
+    const countParams = params.slice(0, -2);
+
+    const [rawData, countResult] = await this.prisma.$transaction([
+      this.prisma.$queryRawUnsafe<any[]>(query, ...params),
+      this.prisma.$queryRawUnsafe<{ total: bigint }[]>(countQuery, ...countParams),
+    ]);
+
+    const data = rawData.map((row) => ({
+      ...row,
+      totalPaid: Number(row.totalPaid),
+      totalSale: Number(row.totalSale),
+      totalSubscription: Number(row.totalSubscription),
+    }));
+
+    const total = Number(countResult[0]?.total || 0);
+
+    const where: Prisma.ClientWhereInput = { isDeleted: false };
     if (name) {
       where.OR = [
         { name: { contains: name.trim(), mode: 'insensitive' } },
         { inn: { contains: name.trim(), mode: 'insensitive' } },
       ];
     }
-
     if (districtId !== undefined) where.districtId = districtId;
     if (regionId !== undefined) where.regionId = regionId;
     if (address?.trim())
@@ -170,81 +319,8 @@ export class ClientService implements OnModuleInit {
     if (inn?.trim()) where.inn = { contains: inn.trim(), mode: 'insensitive' };
     if (phone?.trim())
       where.phone = { contains: phone.trim(), mode: 'insensitive' };
-
     if (isPositiveBalance !== undefined) {
       where.balance = isPositiveBalance ? { gte: 0 } : { lt: 0 };
-    }
-
-    const [data, total] = await this.prisma.$transaction([
-      this.prisma.client.findMany({
-        where,
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: { id: 'desc' },
-        include: {
-          ClientType: { select: { id: true, name: true } },
-        },
-      }),
-      this.prisma.client.aggregate({ where, _count: { _all: true } }),
-    ]);
-
-    const totalData = await Promise.all(
-      data.map(async (client) => {
-        const totalPaidClient = await this.prisma.paidClient.aggregate({
-          where: {
-            paidDate: { lte: toDate, gte: fromDate },
-            Client: { id: client.id },
-            isDeleted: false,
-          },
-          _sum: { price: true },
-        });
-
-        const totalSalePrice = await this.prisma.sale.aggregate({
-          where: {
-            date: { lte: toDate, gte: fromDate },
-            isDeleted: false,
-            client: { id: client.id },
-          },
-          _sum: { price: true },
-        });
-        const totalSubPrice = await this.prisma.subscribe.aggregate({
-          where: {
-            paying_date: { lte: toDate, gte: fromDate },
-            client: { id: client.id },
-          },
-          _sum: { price: true },
-        });
-
-        return {
-          ...client,
-          totalPaid: totalPaidClient._sum.price || 0,
-          totalSale: totalSalePrice._sum.price || 0,
-          totalSubscription: totalSubPrice._sum.price || 0,
-        };
-      }),
-    );
-
-    if (sortBy) {
-      const sortMultiplier = sortOrder === 'asc' ? 1 : -1;
-      totalData.sort((a, b) => {
-        let valueA = 0;
-        let valueB = 0;
-
-        if (sortBy === 'totalPaid') {
-          valueA = a.totalPaid;
-          valueB = b.totalPaid;
-        } else if (sortBy === 'totalSale') {
-          valueA = a.totalSale;
-          valueB = b.totalSale;
-        } else if (sortBy === 'totalSub') {
-          valueA = a.totalSubscription;
-          valueB = b.totalSubscription;
-        } else if (sortBy == 'totalBalance') {
-          valueA = a.balance;
-          valueB = b.balance;
-        }
-        return (valueA - valueB) * sortMultiplier;
-      });
     }
 
     const totalSubPrice = await this.prisma.subscribe.aggregate({
@@ -297,11 +373,11 @@ export class ClientService implements OnModuleInit {
     };
 
     return {
-      total: total._count._all,
+      total,
       totals,
       page,
       limit,
-      data: totalData,
+      data,
     };
   }
 

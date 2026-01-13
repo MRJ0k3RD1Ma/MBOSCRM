@@ -35,30 +35,7 @@ export declare class ClientService implements OnModuleInit {
         };
         page: number;
         limit: number;
-        data: {
-            totalPaid: number;
-            totalSale: number;
-            totalSubscription: number;
-            ClientType: {
-                name: string;
-                id: number;
-            };
-            description: string | null;
-            name: string;
-            phone: string;
-            isDeleted: boolean | null;
-            createdAt: Date;
-            updatedAt: Date;
-            id: number;
-            balance: number;
-            inn: string;
-            address: string | null;
-            regionId: number | null;
-            districtId: number | null;
-            typeId: number | null;
-            registerId: number | null;
-            modifyId: number | null;
-        }[];
+        data: any[];
     }>;
     findOne(id: number): Promise<{
         District: {
