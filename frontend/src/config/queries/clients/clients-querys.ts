@@ -53,6 +53,7 @@ export interface ClientResponse {
     service: number;
     subscribe: number;
     price: number;
+    credit: number;
   };
   limit: number;
   page: number;

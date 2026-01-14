@@ -40,7 +40,7 @@ export default function MonthlyCredit() {
   const statsCards = [
     {
       title: "Mijozlar qarzdorligi",
-      value: formatMoney(clients?.totals.price || 0),
+      value: formatMoney(clients?.totals.credit || 0),
       icon: <TrendingDown size={32} color="white" />,
       bgColor: "!bg-[#EF4444]",
       textColor: titleColor,
