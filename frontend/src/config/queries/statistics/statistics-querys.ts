@@ -33,11 +33,32 @@ export interface StatisticsResponse {
   };
 }
 
+export interface StatisticsOutcomeResponse {
+  paidSupplier: number;
+  paidOther: number;
+  paidServer: number;
+}
+
 export const useGetStatistics = (params?: { year?: number }) => {
   return useQuery<StatisticsResponse>({
     queryKey: ["statistics", params?.year],
     queryFn: async () => {
       const { data } = await axiosPrivate.get(statisticsEndpoints.get, {
+        params,
+      });
+      return data;
+    },
+  });
+};
+
+export const useGetStatisticsOutcome = (params?: {
+  fromDate?: string;
+  toDate?: string;
+}) => {
+  return useQuery<StatisticsOutcomeResponse>({
+    queryKey: ["statistics-outcome", params?.fromDate, params?.toDate],
+    queryFn: async () => {
+      const { data } = await axiosPrivate.get(statisticsEndpoints.getOutcome, {
         params,
       });
       return data;

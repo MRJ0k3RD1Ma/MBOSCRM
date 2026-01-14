@@ -8,6 +8,7 @@ export interface Server {
   name: string;
   responsible: string;
   plan: string;
+  payments: [{ name: string; price: number }];
   endDate: string;
   isDeleted: boolean;
   createdAt: string;
@@ -23,6 +24,9 @@ export interface ServerResponse {
   total: number;
   page: number;
   limit: number;
+  totals: {
+    price: number;
+  };
   data: Server[];
 }
 export interface CreateServerInput {
@@ -43,6 +47,8 @@ export const useGetAllServers = (params?: {
   name?: string;
   responsible?: string;
   plan?: string;
+  fromDate?: string;
+  toDate?: string;
 }) => {
   return useQuery<ServerResponse>({
     queryKey: ["servers", params],

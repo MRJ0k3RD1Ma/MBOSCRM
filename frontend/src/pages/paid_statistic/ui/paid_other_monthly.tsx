@@ -1,65 +1,31 @@
-import { DatePicker, Table } from "antd";
-import { useEffect, useState } from "react";
-import {
-  useGetAllPaidOthers,
-  type PaidOther,
-} from "../../../config/queries/paid/paid-other";
+import { Table } from "antd";
+import { useState } from "react";
+import { type PaidOther } from "../../../config/queries/paid/paid-other";
 import { indexColumn } from "../../../components/tables/indexColumn";
-import dayjs from "dayjs";
-
-const { RangePicker } = DatePicker;
+import { useGetAllPaidOtherGroups } from "../../../config/queries/paid/paid-other-group";
 
 export default function PaidOtherMonthly({
   fromDate,
   toDate,
-  type,
-  setDateFrom,
-  setDateTo,
-  statsValue,
-  setStatsValue,
 }: {
   fromDate: string;
   toDate: string;
-  type: "INCOME" | "OUTCOME";
-  setDateFrom: (date: string) => void;
-  setDateTo: (date: string) => void;
-  statsValue: {
-    totalSupplierPaid: number;
-    totalOtherPaid: number;
-    totalServerPaid: number;
-  };
-  setStatsValue: (stats: {
-    totalSupplierPaid: number;
-    totalOtherPaid: number;
-    totalServerPaid: number;
-  }) => void;
 }) {
   const [page, setPage] = useState<number>(1);
   const [limit] = useState(10);
 
-  const { data, isLoading } = useGetAllPaidOthers({
+  const { data, isLoading } = useGetAllPaidOtherGroups({
     page,
     limit,
-    type,
-    fromDate,
-    toDate,
+    fromDate: fromDate || undefined,
+    toDate: toDate || undefined,
   });
-
-  useEffect(() => {
-    if (data) {
-      setStatsValue({
-        ...statsValue,
-        totalOtherPaid: data.price || 0,
-      });
-    }
-  }, [data]);
 
   const columns = [
     indexColumn(page, limit),
     {
-      title: "Guruh",
-      dataIndex: "groupId",
-      render: (_: any, row: PaidOther) => row.group?.name || "–",
+      title: "Guruh nomi",
+      dataIndex: "name",
     },
     {
       title: "Turi",
@@ -68,34 +34,15 @@ export default function PaidOtherMonthly({
         type === "INCOME" ? "Kirim" : "Chiqim",
     },
     {
-      title: "To‘lov miqdori",
-      dataIndex: "price",
+      title: "Jami chiqim",
+      dataIndex: "totalOutcome",
       render: (priceCount: number) =>
         priceCount ? priceCount.toLocaleString("uz-UZ") + " so'm" : "0",
     },
-    {
-      title: "To‘langan sana",
-      dataIndex: "paidDate",
-      render: (text: string) => (text ? dayjs(text).format("YYYY-MM-DD") : "–"),
-    },
-    { title: "Izoh", dataIndex: "description" },
   ];
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <RangePicker
-          placeholder={["Boshlanish sanasi", "Tugash sanasi"]}
-          style={{ width: "100%" }}
-          format="YYYY-MM-DD"
-          value={fromDate && toDate ? [dayjs(fromDate), dayjs(toDate)] : null}
-          onChange={(dates, dateStrings) => {
-            setDateFrom(dateStrings[0]);
-            setDateTo(dateStrings[1]);
-            console.log(dates);
-          }}
-        />
-      </div>
       <Table
         columns={columns}
         dataSource={data?.data || []}

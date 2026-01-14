@@ -28,10 +28,10 @@ export const settingsEndpoints = {
 };
 export const statisticsEndpoints = {
   get: "statistics",
+  getOutcome: "statistics/outcome",
   exportJson: "statistics/export/json",
   exportExcel: "statistics/export/excel",
 };
-
 
 export const locationEndpoints = {
   region: "location/region",

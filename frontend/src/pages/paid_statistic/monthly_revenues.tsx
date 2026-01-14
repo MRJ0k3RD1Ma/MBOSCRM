@@ -9,6 +9,7 @@ import { useGetAllClients } from "../../config/queries/clients/clients-querys";
 import { StatCard } from "./ui/stat-card";
 import dayjs from "dayjs";
 import { FilterOutlined } from "@ant-design/icons";
+import ClientsPaidFilter from "./ui/clients_paid_filter";
 
 const { RangePicker } = DatePicker;
 
@@ -115,6 +116,16 @@ export default function MonthlyRevenues() {
           />
         ))}
       </div>
+      <ClientsPaidFilter
+        open={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        initialValues={filters}
+        onApply={(values) => {
+          setFilters(values);
+          setPage(1);
+        }}
+      />
+
       <ClientsPaidTable
         clients={clients}
         fromDate={dateFrom}
@@ -124,10 +135,7 @@ export default function MonthlyRevenues() {
         page={page}
         setPage={setPage}
         limit={limit}
-        filters={filters}
         setFilters={setFilters}
-        filterOpen={filterOpen}
-        setFilterOpen={setFilterOpen}
       />
     </Card>
   );

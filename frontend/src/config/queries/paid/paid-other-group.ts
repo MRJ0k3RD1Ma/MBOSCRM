@@ -21,6 +21,8 @@ export interface PaidOtherGroupQueryParams {
   page?: number;
   limit?: number;
   name?: string;
+  fromDate?: string;
+  toDate?: string;
 }
 
 export const useGetAllPaidOtherGroups = (

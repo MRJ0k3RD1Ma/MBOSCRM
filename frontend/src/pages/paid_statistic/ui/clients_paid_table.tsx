@@ -4,7 +4,6 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import ClientsPaidFilter from "./clients_paid_filter";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -14,10 +13,7 @@ export default function ClientsPaidTable({
   page,
   setPage,
   limit,
-  filters,
   setFilters,
-  filterOpen,
-  setFilterOpen,
 }: any) {
   const navigate = useNavigate();
 
@@ -62,16 +58,6 @@ export default function ClientsPaidTable({
 
   return (
     <div>
-      <ClientsPaidFilter
-        open={filterOpen}
-        onClose={() => setFilterOpen(false)}
-        initialValues={filters}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
-      />
-
       <Table
         rowKey="id"
         columns={columns}

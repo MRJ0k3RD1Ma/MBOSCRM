@@ -1,99 +1,77 @@
-import { DatePicker, Table } from "antd";
-
+import { Table } from "antd";
 import dayjs from "dayjs";
 import { indexColumn } from "../../../components/tables/indexColumn";
 import timezone from "dayjs/plugin/timezone";
-import { useGetAllPaidServers } from "../../../config/queries/server/paid-servers-querys";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import utc from "dayjs/plugin/utc";
-
-const { RangePicker } = DatePicker;
+import { useGetAllServers } from "../../../config/queries/server/servers-querys";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+type Payment = {
+  id: number;
+  name: string;
+};
+
 export default function ServerPaidTable({
   fromDate,
   toDate,
-  setDateFrom,
-  setDateTo,
-  statsValue,
-  setStatsValue,
 }: {
   fromDate: string;
   toDate: string;
-  setDateFrom: (date: string) => void;
-  setDateTo: (date: string) => void;
-  statsValue: {
-    totalSupplierPaid: number;
-    totalOtherPaid: number;
-    totalServerPaid: number;
-  };
-  setStatsValue: (stats: {
-    totalSupplierPaid: number;
-    totalOtherPaid: number;
-    totalServerPaid: number;
-  }) => void;
 }) {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
-  const { data, isLoading } = useGetAllPaidServers({
+  const { data, isLoading } = useGetAllServers({
     page,
     limit,
-    fromDate,
-    toDate,
+    fromDate: fromDate || undefined,
+    toDate: toDate || undefined,
   });
 
-  useEffect(() => {
-    if (data) {
-      setStatsValue({
-        ...statsValue,
-        totalServerPaid: data.price || 0,
+  // 🔥 barcha payment turlarini yig‘ib olamiz
+  const paymentTypes: Payment[] = useMemo(() => {
+    const map = new Map<number, Payment>();
+
+    data?.data?.forEach((server: any) => {
+      server.payments?.forEach((p: Payment) => {
+        map.set(p.id, p);
       });
-    }
+    });
+
+    return Array.from(map.values());
   }, [data]);
 
-  const columns = [
-    indexColumn(page, limit),
-    {
-      title: "To'lov turi",
-      dataIndex: ["server", "name"],
-    },
-    {
-      title: "To'lov turi",
-      dataIndex: ["paymentType", "name"],
-    },
-    {
-      title: "Narxi",
-      dataIndex: "price",
-      render: (price: number) => `${price.toLocaleString()} so'm`,
-    },
-    {
-      title: "Sanasi",
-      dataIndex: "createdAt",
-      render: (val: string) => dayjs(val).format("YYYY-MM-DD"),
-    },
-    {
-      title: "Izoh",
-      dataIndex: "description",
-    },
-  ];
+  const columns = useMemo(() => {
+    return [
+      indexColumn(page, limit),
+      {
+        title: "Server nomi",
+        dataIndex: "name",
+      },
+      {
+        title: "Umumiy to‘lov",
+        dataIndex: "totalPrice",
+        render: (v: number) => (v ? `${v.toLocaleString("uz-UZ")} so'm` : "0"),
+      },
+
+      ...paymentTypes.map((payment) => ({
+        title: payment.name,
+        key: `payment-${payment.id}`,
+        render: (_: any, row: any) => {
+          const found = row.payments?.find((p: any) => p.id === payment.id);
+          return found?.price
+            ? `${found.price.toLocaleString("uz-UZ")} so'm`
+            : "0";
+        },
+      })),
+    ];
+  }, [page, limit, paymentTypes]);
+
   return (
     <div className="ClientsPaidTable">
-      <div className="flex justify-between items-center mb-4">
-        <RangePicker
-          placeholder={["Boshlanish sanasi", "Tugash sanasi"]}
-          style={{ width: "100%" }}
-          format="YYYY-MM-DD"
-          value={fromDate && toDate ? [dayjs(fromDate), dayjs(toDate)] : null}
-          onChange={(dates, dateStrings) => {
-            setDateFrom(dateStrings[0]);
-            setDateTo(dateStrings[1]);
-            console.log(dates);
-          }}
-        />
-      </div>
       <Table
         columns={columns}
         dataSource={Array.isArray(data?.data) ? data.data : []}
@@ -103,7 +81,7 @@ export default function ServerPaidTable({
           current: page,
           pageSize: limit,
           total: data?.total || 0,
-          onChange: (page) => setPage(page),
+          onChange: setPage,
         }}
       />
     </div>
