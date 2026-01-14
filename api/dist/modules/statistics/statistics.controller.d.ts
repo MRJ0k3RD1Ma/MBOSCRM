@@ -24,16 +24,15 @@ export declare class StatisticsController {
         };
         charts: {
             monthlyStats: {
+                expectedSubscription: number;
                 month: number;
                 tushum: any;
                 chiqim: any;
-                expectedSubscription: number;
                 productsSold: any;
                 servicesSold: any;
                 subscriptionSold: any;
                 credit: any;
             }[];
-            subscriptionForecast: number[];
         };
     }>;
     outcome(query: GetOutcomeQueryDto): Promise<{

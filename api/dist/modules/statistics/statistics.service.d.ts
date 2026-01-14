@@ -39,16 +39,15 @@ export declare class StatisticsService {
         };
         charts: {
             monthlyStats: {
+                expectedSubscription: number;
                 month: number;
                 tushum: any;
                 chiqim: any;
-                expectedSubscription: number;
                 productsSold: any;
                 servicesSold: any;
                 subscriptionSold: any;
                 credit: any;
             }[];
-            subscriptionForecast: number[];
         };
     }>;
 }
