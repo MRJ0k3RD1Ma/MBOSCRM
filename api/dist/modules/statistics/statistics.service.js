@@ -442,7 +442,28 @@ let StatisticsService = class StatisticsService {
                 isDeleted: false,
             },
         });
-        const totalDebts = clientDepts._sum.balance;
+        const totalSaleDept = this.prisma.sale.aggregate({
+            _sum: { credit: true },
+            where: {
+                date: { gte: startOfYear, lt: endOfYear },
+                isDeleted: false,
+                client: { isDeleted: false },
+            },
+        });
+        const totalSubDept = this.prisma.subscribe.aggregate({
+            _sum: { price: true, paid: true },
+            where: {
+                paying_date: { gte: startOfYear, lt: endOfYear },
+                isDeleted: false,
+                client: { isDeleted: false },
+                sale: { isDeleted: false },
+            },
+        });
+        const subPrice = sumOrZero(totalSubDept, 'price');
+        const subPaid = sumOrZero(totalSubDept, 'paid');
+        const expectedSubscription = Math.max(0, subPrice - subPaid);
+        const saleCredit = sumOrZero(totalSaleDept, 'credit');
+        const totalDebts = saleCredit + expectedSubscription;
         const monthlyStats = await Promise.all(Array.from({ length: 12 }, (_, i) => {
             const mStart = new Date(year, i, 1);
             const mEnd = new Date(year, i + 1, 1);
