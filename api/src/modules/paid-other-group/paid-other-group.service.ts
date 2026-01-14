@@ -80,6 +80,30 @@ export class PaidOtherGroupService implements OnModuleInit {
       }),
     );
 
+    const totalOutcode = await this.prisma.paidOther.aggregate({
+      where: {
+        group: where,
+        type: 'OUTCOME',
+        isDeleted: false,
+        paidDate: { lte: toDate, gte: fromDate },
+      },
+      _sum: { price: true },
+    });
+    const totalIncode = await this.prisma.paidOther.aggregate({
+      where: {
+        group: where,
+        type: 'INCOME',
+        isDeleted: false,
+        paidDate: { lte: toDate, gte: fromDate },
+      },
+      _sum: { price: true },
+    });
+
+    const totals = {
+      totalOutcome: totalOutcode._sum.price,
+      totalIncome: totalIncode._sum.price,
+    };
+
     return { total, page, limit, data: totalData };
   }
 
