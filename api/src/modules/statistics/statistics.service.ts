@@ -681,17 +681,20 @@ export class StatisticsService {
       }
     }
 
-    const subscriptionForecast = monthlyStats.map((m, index) => {
-      if (year < today.getFullYear()) {
-        return m.expectedSubscription;
+    const monthlyStatsWithForecast = monthlyStats.map((m, index) => {
+      let expectedForMonth = m.expectedSubscription;
+
+      if (
+        year > today.getFullYear() ||
+        (year === today.getFullYear() && index > currentMonthIndex)
+      ) {
+        expectedForMonth = currentMonthExpectedSubscription;
       }
-      if (year > today.getFullYear()) {
-        return currentMonthExpectedSubscription;
-      }
-      if (index <= currentMonthIndex) {
-        return m.expectedSubscription;
-      }
-      return currentMonthExpectedSubscription;
+
+      return {
+        ...m,
+        expectedSubscription: expectedForMonth,
+      };
     });
 
     const [currentMonthSaleDebt, currentMonthSubAgg] = await Promise.all([
@@ -743,8 +746,7 @@ export class StatisticsService {
         credit: currentMonthCredit,
       },
       charts: {
-        monthlyStats,
-        subscriptionForecast,
+        monthlyStats: monthlyStatsWithForecast,
       },
     };
   }
