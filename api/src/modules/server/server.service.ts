@@ -185,6 +185,37 @@ Mas'ul shaxs: ${server.responsible}`,
           },
           _sum: { price: true },
         });
+
+        const paymentTypes = await this.prisma.payment.findMany({
+          where: {
+            PaidServer: {
+              some: {
+                server: { id: server.id },
+                isDeleted: false,
+                endDate: { lte: toDate, gte: fromDate },
+              },
+            },
+          },
+        });
+
+        const payments = [];
+        for (let paymentType of paymentTypes) {
+          const totalPaidServer = await this.prisma.paidServer.aggregate({
+            where: {
+              server: { id: server.id },
+              paymentType: { id: paymentType.id },
+              isDeleted: false,
+              endDate: { lte: toDate, gte: fromDate },
+            },
+            _sum: { price: true },
+          });
+
+          payments.push({
+            name: paymentType.name,
+            price: totalPaidServer._sum.price,
+          });
+        }
+
         return { ...server, totalPrice: totalPaidServer._sum.price };
       }),
     );
