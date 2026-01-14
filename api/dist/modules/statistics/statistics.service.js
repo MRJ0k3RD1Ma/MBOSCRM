@@ -548,9 +548,31 @@ let StatisticsService = class StatisticsService {
             });
         }));
         const currentMonthIndex = today.getMonth();
-        const currentMonthExpectedSubscription = year === today.getFullYear()
+        let currentMonthExpectedSubscription = year === today.getFullYear()
             ? monthlyStats[currentMonthIndex]?.expectedSubscription || 0
             : 0;
+        if (currentMonthExpectedSubscription === 0) {
+            if (currentMonthIndex > 0) {
+                currentMonthExpectedSubscription =
+                    monthlyStats[currentMonthIndex - 1]?.expectedSubscription || 0;
+            }
+            else {
+                const lastYearDecStart = new Date(year - 1, 11, 1);
+                const lastYearDecEnd = new Date(year, 0, 1);
+                const lastYearDecSubAgg = await this.prisma.subscribe.aggregate({
+                    _sum: { price: true, paid: true },
+                    where: {
+                        paying_date: { gte: lastYearDecStart, lt: lastYearDecEnd },
+                        isDeleted: false,
+                        client: { isDeleted: false },
+                        sale: { isDeleted: false },
+                    },
+                });
+                const lastYearDecPrice = sumOrZero(lastYearDecSubAgg, 'price');
+                const lastYearDecPaid = sumOrZero(lastYearDecSubAgg, 'paid');
+                currentMonthExpectedSubscription = Math.max(0, lastYearDecPrice - lastYearDecPaid);
+            }
+        }
         const subscriptionForecast = monthlyStats.map((m, index) => {
             if (year < today.getFullYear()) {
                 return m.expectedSubscription;
