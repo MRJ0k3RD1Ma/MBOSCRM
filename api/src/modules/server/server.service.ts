@@ -216,7 +216,7 @@ Mas'ul shaxs: ${server.responsible}`,
           });
         }
 
-        return { ...server, totalPrice: totalPaidServer._sum.price };
+        return { ...server, totalPrice: totalPaidServer._sum.price, payments };
       }),
     );
 
