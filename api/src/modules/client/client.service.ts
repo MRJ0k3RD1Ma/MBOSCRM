@@ -368,11 +368,41 @@ export class ClientService implements OnModuleInit {
       _sum: { price: true },
     });
 
+    const totalSaleDept = this.prisma.sale.aggregate({
+      _sum: { credit: true },
+      where: {
+        date: { gte: fromDate, lte: toDate },
+        isDeleted: false,
+        client: where,
+      },
+    });
+
+    const totalSubDept = this.prisma.subscribe.aggregate({
+      _sum: { price: true, paid: true },
+      where: {
+        paying_date: { gte: fromDate, lte: toDate },
+        isDeleted: false,
+        client: where,
+        sale: { isDeleted: false },
+      },
+    });
+
+    const sumOrZero = (agg: any, field: string) =>
+      (agg && agg._sum && (agg._sum[field] ?? 0)) || 0;
+
+    const subPrice = sumOrZero(totalSubDept, 'price');
+    const subPaid = sumOrZero(totalSubDept, 'paid');
+    const expectedSubscription = Math.max(0, subPrice - subPaid);
+    const saleCredit = sumOrZero(totalSaleDept, 'credit');
+
+    const totalDebts = saleCredit + expectedSubscription;
+
     const totals = {
       subscribe: totalSubPrice._sum.price,
       device: totalDevicePrice._sum.priceCount,
       service: totalServicePrice._sum.priceCount,
       price: totalClientPaid._sum.price,
+      credit: totalDebts,
     };
 
     return {
