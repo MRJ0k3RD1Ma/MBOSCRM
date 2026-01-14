@@ -100,7 +100,7 @@ let PaidOtherGroupService = class PaidOtherGroupService {
             totalOutcome: totalOutcode._sum.price,
             totalIncome: totalIncode._sum.price,
         };
-        return { total, page, limit, data: totalData };
+        return { total, page, limit, data: totalData, totals };
     }
     async findOne(id) {
         const paidOtherGroup = await this.prisma.paidOtherGroup.findUnique({

@@ -104,7 +104,7 @@ export class PaidOtherGroupService implements OnModuleInit {
       totalIncome: totalIncode._sum.price,
     };
 
-    return { total, page, limit, data: totalData };
+    return { total, page, limit, data: totalData, totals };
   }
 
   async findOne(id: number) {

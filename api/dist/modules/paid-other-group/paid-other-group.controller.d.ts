@@ -29,6 +29,10 @@ export declare class PaidOtherGroupController {
             registerId: number | null;
             modifyId: number | null;
         }[];
+        totals: {
+            totalOutcome: number;
+            totalIncome: number;
+        };
     }>;
     findOne(id: string): Promise<{
         name: string;

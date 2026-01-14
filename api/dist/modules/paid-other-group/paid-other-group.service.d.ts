@@ -31,6 +31,10 @@ export declare class PaidOtherGroupService implements OnModuleInit {
             registerId: number | null;
             modifyId: number | null;
         }[];
+        totals: {
+            totalOutcome: number;
+            totalIncome: number;
+        };
     }>;
     findOne(id: number): Promise<{
         name: string;
