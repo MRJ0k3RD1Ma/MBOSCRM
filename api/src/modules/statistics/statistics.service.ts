@@ -643,27 +643,41 @@ export class StatisticsService {
         : 0;
 
     if (currentMonthExpectedSubscription === 0) {
-      if (currentMonthIndex > 0) {
-        currentMonthExpectedSubscription =
-          monthlyStats[currentMonthIndex - 1]?.expectedSubscription || 0;
-      } else {
-        const lastYearDecStart = new Date(year - 1, 11, 1);
-        const lastYearDecEnd = new Date(year, 0, 1);
-        const lastYearDecSubAgg = await this.prisma.subscribe.aggregate({
-          _sum: { price: true, paid: true },
-          where: {
-            paying_date: { gte: lastYearDecStart, lt: lastYearDecEnd },
-            isDeleted: false,
-            client: { isDeleted: false },
-            sale: { isDeleted: false },
-          },
-        });
-        const lastYearDecPrice = sumOrZero(lastYearDecSubAgg, 'price');
-        const lastYearDecPaid = sumOrZero(lastYearDecSubAgg, 'paid');
-        currentMonthExpectedSubscription = Math.max(
-          0,
-          lastYearDecPrice - lastYearDecPaid,
-        );
+      for (let i = 1; i <= 3; i++) {
+        const prevMonthIndex = currentMonthIndex - i;
+        if (prevMonthIndex >= 0) {
+          const val = monthlyStats[prevMonthIndex]?.expectedSubscription || 0;
+          if (val > 0) {
+            currentMonthExpectedSubscription = val;
+            break;
+          }
+        } else {
+          // If accessing previous year (e.g. Jan needing Dec/Nov/Oct)
+          // prevMonthIndex is -1 (Dec), -2 (Nov), -3 (Oct) => +12 to get 0-11 index
+          const targetMonth = 12 + prevMonthIndex;
+          const targetYear = year - 1;
+
+          const targetMonthStart = new Date(targetYear, targetMonth, 1);
+          const targetMonthEnd = new Date(targetYear, targetMonth + 1, 1);
+
+          const targetMonthSubAgg = await this.prisma.subscribe.aggregate({
+            _sum: { price: true, paid: true },
+            where: {
+              paying_date: { gte: targetMonthStart, lt: targetMonthEnd },
+              isDeleted: false,
+              client: { isDeleted: false },
+              sale: { isDeleted: false },
+            },
+          });
+          const targetPrice = sumOrZero(targetMonthSubAgg, 'price');
+          const targetPaid = sumOrZero(targetMonthSubAgg, 'paid');
+          const val = Math.max(0, targetPrice - targetPaid);
+
+          if (val > 0) {
+            currentMonthExpectedSubscription = val;
+            break;
+          }
+        }
       }
     }
 
