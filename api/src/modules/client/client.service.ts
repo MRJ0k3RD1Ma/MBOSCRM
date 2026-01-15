@@ -395,7 +395,7 @@ export class ClientService implements OnModuleInit {
     const expectedSubscription = Math.max(0, subPrice - subPaid);
     const saleCredit = sumOrZero(totalSaleDept, 'credit');
 
-    const totalDebts = saleCredit + expectedSubscription;
+    const totalDebts = saleCredit - expectedSubscription;
 
     const totals = {
       subscribe: totalSubPrice._sum.price,

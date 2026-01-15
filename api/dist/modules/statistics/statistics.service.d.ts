@@ -25,7 +25,7 @@ export declare class StatisticsService {
             contracts: number;
             income: any;
             expenses: any;
-            debts: any;
+            debts: number;
             currentMonthIncome: any;
             currentMonthExpenses: any;
             yearlyIncome: any;
