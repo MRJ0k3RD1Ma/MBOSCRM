@@ -21,7 +21,7 @@ export class StatisticsService {
     });
 
     const paidServer = await this.prisma.paidServer.aggregate({
-      where: { endDate: { lte: toDate, gte: fromDate }, isDeleted: false },
+      where: { createdAt: { lte: toDate, gte: fromDate }, isDeleted: false },
       _sum: { price: true },
     });
 

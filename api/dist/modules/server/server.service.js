@@ -146,7 +146,7 @@ Mas'ul shaxs: ${server.responsible}`);
                     paidServers: true,
                 },
                 orderBy: {
-                    endDate: 'desc',
+                    createdAt: 'desc',
                 },
             }),
             this.prisma.server.count({ where }),
@@ -157,7 +157,7 @@ Mas'ul shaxs: ${server.responsible}`);
                 where: {
                     server: { id: server.id },
                     isDeleted: false,
-                    endDate: { lte: toDate, gte: fromDate },
+                    createdAt: { lte: toDate, gte: fromDate },
                 },
                 _sum: { price: true },
             });
@@ -167,7 +167,7 @@ Mas'ul shaxs: ${server.responsible}`);
                         some: {
                             server: { id: server.id },
                             isDeleted: false,
-                            endDate: { lte: toDate, gte: fromDate },
+                            createdAt: { lte: toDate, gte: fromDate },
                         },
                     },
                 },
@@ -179,7 +179,7 @@ Mas'ul shaxs: ${server.responsible}`);
                         server: { id: server.id },
                         paymentType: { id: paymentType.id },
                         isDeleted: false,
-                        endDate: { lte: toDate, gte: fromDate },
+                        createdAt: { lte: toDate, gte: fromDate },
                     },
                     _sum: { price: true },
                 });
@@ -194,7 +194,7 @@ Mas'ul shaxs: ${server.responsible}`);
             where: {
                 server: where,
                 isDeleted: false,
-                endDate: { lte: toDate, gte: fromDate },
+                createdAt: { lte: toDate, gte: fromDate },
             },
             _sum: { price: true },
         });
