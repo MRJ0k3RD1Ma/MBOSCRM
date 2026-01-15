@@ -663,6 +663,7 @@ let StatisticsService = class StatisticsService {
                 expectedSubscription: expectedForMonth,
             };
         });
+        console.log(currentMonthStart, currentMonthEnd);
         const [currentMonthSaleDebt, currentMonthSubAgg] = await Promise.all([
             this.prisma.sale.aggregate({
                 _sum: { credit: true },
