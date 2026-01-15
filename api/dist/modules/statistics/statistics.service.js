@@ -669,7 +669,7 @@ let StatisticsService = class StatisticsService {
                 where: {
                     createdAt: { gte: currentMonthStart, lte: currentMonthEnd },
                     isDeleted: false,
-                    client: { isDeleted: false },
+                    client: { isDeleted: false, balance: { lte: 0 } },
                 },
             }),
             this.prisma.subscribe.aggregate({
@@ -682,7 +682,6 @@ let StatisticsService = class StatisticsService {
                 },
             }),
         ]);
-        console.log(currentMonthSaleDebt, currentMonthSubAgg);
         const currentMonthSubPrice = sumOrZero(currentMonthSubAgg, 'price');
         const currentMonthSubPaid = sumOrZero(currentMonthSubAgg, 'paid');
         const currentMonthExpectedSub = Math.max(0, currentMonthSubPrice - currentMonthSubPaid);
