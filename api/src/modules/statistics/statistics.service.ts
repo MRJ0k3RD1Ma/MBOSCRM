@@ -765,7 +765,7 @@ export class StatisticsService {
       this.prisma.sale.aggregate({
         _sum: { credit: true },
         where: {
-          createdAt: { gte: currentMonthStart, lt: currentMonthEnd },
+          createdAt: { gte: currentMonthStart, lte: currentMonthEnd },
           isDeleted: false,
           client: { isDeleted: false },
         },
@@ -773,7 +773,7 @@ export class StatisticsService {
       this.prisma.subscribe.aggregate({
         _sum: { price: true, paid: true },
         where: {
-          paying_date: { gte: currentMonthStart, lt: currentMonthEnd },
+          createdAt: { gte: currentMonthStart, lt: currentMonthEnd },
           isDeleted: false,
           client: { isDeleted: false },
           sale: { isDeleted: false },
