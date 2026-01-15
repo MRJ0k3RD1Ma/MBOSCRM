@@ -24,15 +24,15 @@ let StatisticsService = class StatisticsService {
     async outcome(query) {
         const { fromDate, toDate } = query;
         const paidOther = await this.prisma.paidOther.aggregate({
-            where: { paidDate: { lte: toDate, gte: fromDate } },
+            where: { paidDate: { lte: toDate, gte: fromDate }, isDeleted: false },
             _sum: { price: true },
         });
         const paidSupplier = await this.prisma.paidSupplier.aggregate({
-            where: { paidDate: { lte: toDate, gte: fromDate } },
+            where: { paidDate: { lte: toDate, gte: fromDate }, isDeleted: false },
             _sum: { price: true },
         });
         const paidServer = await this.prisma.paidServer.aggregate({
-            where: { endDate: { lte: toDate, gte: fromDate } },
+            where: { endDate: { lte: toDate, gte: fromDate }, isDeleted: false },
             _sum: { price: true },
         });
         return {
