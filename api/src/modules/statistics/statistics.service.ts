@@ -780,6 +780,7 @@ export class StatisticsService {
         },
       }),
     ]);
+    console.log(currentMonthSaleDebt, currentMonthSubAgg);
 
     const currentMonthSubPrice = sumOrZero(currentMonthSubAgg, 'price');
     const currentMonthSubPaid = sumOrZero(currentMonthSubAgg, 'paid');

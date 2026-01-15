@@ -682,6 +682,7 @@ let StatisticsService = class StatisticsService {
                 },
             }),
         ]);
+        console.log(currentMonthSaleDebt, currentMonthSubAgg);
         const currentMonthSubPrice = sumOrZero(currentMonthSubAgg, 'price');
         const currentMonthSubPaid = sumOrZero(currentMonthSubAgg, 'paid');
         const currentMonthExpectedSub = Math.max(0, currentMonthSubPrice - currentMonthSubPaid);
