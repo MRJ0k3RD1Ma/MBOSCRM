@@ -41,7 +41,7 @@ let StatisticsService = class StatisticsService {
             paidServer: paidServer._sum.price || 0,
         };
     }
-    async exportAsJson(year = new Date().getFullYear(), month) {
+    async exportAsJson(year = (0, dayjs_1.default)().year(), month) {
         const rows = [];
         let priceOfTotalSold = 0;
         let priceOfTotalArrived = 0;
@@ -57,7 +57,7 @@ let StatisticsService = class StatisticsService {
                     isDeleted: false,
                     sale: {
                         date: {
-                            gte: new Date(year, month - 1, 1),
+                            gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
                         },
                     },
                     product: { id: device.id },
@@ -69,7 +69,7 @@ let StatisticsService = class StatisticsService {
                     isDeleted: false,
                     Arrived: {
                         date: {
-                            gte: new Date(year, month - 1, 1),
+                            gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
                         },
                     },
                     Product: { id: device.id },
@@ -81,8 +81,12 @@ let StatisticsService = class StatisticsService {
                     isDeleted: false,
                     sale: {
                         date: {
-                            gte: new Date(year, month - 1, 1),
-                            lte: new Date(year, month, 0),
+                            gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
+                            lte: (0, dayjs_1.default)()
+                                .year(year)
+                                .month(month - 1)
+                                .endOf('month')
+                                .toDate(),
                         },
                     },
                     product: { id: device.id },
@@ -94,8 +98,12 @@ let StatisticsService = class StatisticsService {
                     isDeleted: false,
                     Arrived: {
                         date: {
-                            gte: new Date(year, month - 1, 1),
-                            lte: new Date(year, month, 0),
+                            gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
+                            lte: (0, dayjs_1.default)()
+                                .year(year)
+                                .month(month - 1)
+                                .endOf('month')
+                                .toDate(),
                         },
                     },
                     Product: { id: device.id },
@@ -134,8 +142,12 @@ let StatisticsService = class StatisticsService {
                         SaleProduct: { some: { product: { id: subscriptionProduct.id } } },
                     },
                     paying_date: {
-                        gte: new Date(year, month - 1, 1),
-                        lte: new Date(year, month, 0),
+                        gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
+                        lte: (0, dayjs_1.default)()
+                            .year(year)
+                            .month(month - 1)
+                            .endOf('month')
+                            .toDate(),
                     },
                 },
                 _sum: { price: true, paid: true },
@@ -167,8 +179,12 @@ let StatisticsService = class StatisticsService {
                     product: { id: service.id },
                     sale: {
                         date: {
-                            gte: new Date(year, month - 1, 1),
-                            lte: new Date(year, month, 0),
+                            gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
+                            lte: (0, dayjs_1.default)()
+                                .year(year)
+                                .month(month - 1)
+                                .endOf('month')
+                                .toDate(),
                         },
                     },
                 },
@@ -198,7 +214,7 @@ let StatisticsService = class StatisticsService {
             },
         };
     }
-    async exportAsExcel(year = new Date().getFullYear(), month) {
+    async exportAsExcel(year = (0, dayjs_1.default)().year(), month) {
         const data = await this.exportAsJson(year, month);
         const excel = new exceljs_1.Workbook();
         const sheet = excel.addWorksheet('Hisobot');
@@ -288,16 +304,20 @@ let StatisticsService = class StatisticsService {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         });
     }
-    async getStatistics(year = new Date().getFullYear()) {
+    async getStatistics(year = (0, dayjs_1.default)().year()) {
         if (year == 0)
-            year = new Date().getFullYear();
-        const today = new Date();
-        const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        const currentMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 1);
-        const startOfYear = new Date(year, 0, 1);
-        const endOfYear = new Date(year + 1, 0, 1);
-        const startOfLastYear = new Date(year - 1, 0, 1);
-        const endOfLastYear = new Date(year, 0, 1);
+            year = (0, dayjs_1.default)().year();
+        const today = (0, dayjs_1.default)();
+        const currentMonthStart = today.startOf('month').toDate();
+        const currentMonthEnd = today.add(1, 'month').startOf('month').toDate();
+        const startOfYear = (0, dayjs_1.default)().year(year).startOf('year').toDate();
+        const endOfYear = (0, dayjs_1.default)().year(year).add(1, 'year').startOf('year').toDate();
+        const startOfLastYear = (0, dayjs_1.default)()
+            .year(year)
+            .subtract(1, 'year')
+            .startOf('year')
+            .toDate();
+        const endOfLastYear = (0, dayjs_1.default)().year(year).startOf('year').toDate();
         const sumOrZero = (agg, field) => (agg && agg._sum && (agg._sum[field] ?? 0)) || 0;
         const [settings, totalClients, totalSales] = await Promise.all([
             this.prisma.setting.findUnique({ where: { id: 1 } }),
@@ -465,8 +485,13 @@ let StatisticsService = class StatisticsService {
         const saleCredit = sumOrZero(totalSaleDept, 'credit');
         const totalDebts = saleCredit + expectedSubscription;
         const monthlyStats = await Promise.all(Array.from({ length: 12 }, (_, i) => {
-            const mStart = new Date(year, i, 1);
-            const mEnd = new Date(year, i + 1, 1);
+            const mStart = (0, dayjs_1.default)().year(year).month(i).startOf('month').toDate();
+            const mEnd = (0, dayjs_1.default)()
+                .year(year)
+                .month(i)
+                .add(1, 'month')
+                .startOf('month')
+                .toDate();
             return Promise.all([
                 this.prisma.paidClient.aggregate({
                     _sum: { price: true },
@@ -568,8 +593,8 @@ let StatisticsService = class StatisticsService {
                 };
             });
         }));
-        const currentMonthIndex = today.getMonth();
-        let currentMonthExpectedSubscription = year === today.getFullYear()
+        const currentMonthIndex = today.month();
+        let currentMonthExpectedSubscription = year === today.year()
             ? monthlyStats[currentMonthIndex]?.expectedSubscription || 0
             : 0;
         if (currentMonthExpectedSubscription === 0) {
@@ -585,8 +610,17 @@ let StatisticsService = class StatisticsService {
                 else {
                     const targetMonth = 12 + prevMonthIndex;
                     const targetYear = year - 1;
-                    const targetMonthStart = new Date(targetYear, targetMonth, 1);
-                    const targetMonthEnd = new Date(targetYear, targetMonth + 1, 1);
+                    const targetMonthStart = (0, dayjs_1.default)()
+                        .year(targetYear)
+                        .month(targetMonth)
+                        .startOf('month')
+                        .toDate();
+                    const targetMonthEnd = (0, dayjs_1.default)()
+                        .year(targetYear)
+                        .month(targetMonth)
+                        .add(1, 'month')
+                        .startOf('month')
+                        .toDate();
                     const targetMonthSubAgg = await this.prisma.subscribe.aggregate({
                         _sum: { price: true, paid: true },
                         where: {
@@ -608,8 +642,8 @@ let StatisticsService = class StatisticsService {
         }
         const monthlyStatsWithForecast = monthlyStats.map((m, index) => {
             let expectedForMonth = m.expectedSubscription;
-            if (year > today.getFullYear() ||
-                (year === today.getFullYear() && index > currentMonthIndex)) {
+            if (year > today.year() ||
+                (year === today.year() && index > currentMonthIndex)) {
                 expectedForMonth = currentMonthExpectedSubscription;
             }
             return {
