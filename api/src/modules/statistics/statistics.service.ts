@@ -767,7 +767,7 @@ export class StatisticsService {
         where: {
           createdAt: { gte: currentMonthStart, lte: currentMonthEnd },
           isDeleted: false,
-          client: { isDeleted: false, balance: { lte: 0 } },
+          client: { isDeleted: false, balance: { lt: 0 } },
         },
       }),
       this.prisma.subscribe.aggregate({
