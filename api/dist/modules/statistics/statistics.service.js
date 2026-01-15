@@ -24,15 +24,15 @@ let StatisticsService = class StatisticsService {
     async outcome(query) {
         const { fromDate, toDate } = query;
         const paidOther = await this.prisma.paidOther.aggregate({
-            where: { paidDate: { lte: toDate, gte: fromDate } },
+            where: { paidDate: { lte: fromDate, gte: toDate } },
             _sum: { price: true },
         });
         const paidSupplier = await this.prisma.paidSupplier.aggregate({
-            where: { paidDate: { lte: toDate, gte: fromDate } },
+            where: { paidDate: { lte: fromDate, gte: toDate } },
             _sum: { price: true },
         });
         const paidServer = await this.prisma.paidServer.aggregate({
-            where: { endDate: { lte: toDate, gte: fromDate } },
+            where: { endDate: { lte: fromDate, gte: toDate } },
             _sum: { price: true },
         });
         return {
@@ -57,7 +57,11 @@ let StatisticsService = class StatisticsService {
                     isDeleted: false,
                     sale: {
                         date: {
-                            gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
+                            gte: (0, dayjs_1.default)()
+                                .year(year)
+                                .month(month - 1)
+                                .startOf('month')
+                                .toDate(),
                         },
                     },
                     product: { id: device.id },
@@ -69,7 +73,11 @@ let StatisticsService = class StatisticsService {
                     isDeleted: false,
                     Arrived: {
                         date: {
-                            gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
+                            gte: (0, dayjs_1.default)()
+                                .year(year)
+                                .month(month - 1)
+                                .startOf('month')
+                                .toDate(),
                         },
                     },
                     Product: { id: device.id },
@@ -81,7 +89,11 @@ let StatisticsService = class StatisticsService {
                     isDeleted: false,
                     sale: {
                         date: {
-                            gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
+                            gte: (0, dayjs_1.default)()
+                                .year(year)
+                                .month(month - 1)
+                                .startOf('month')
+                                .toDate(),
                             lte: (0, dayjs_1.default)()
                                 .year(year)
                                 .month(month - 1)
@@ -98,7 +110,11 @@ let StatisticsService = class StatisticsService {
                     isDeleted: false,
                     Arrived: {
                         date: {
-                            gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
+                            gte: (0, dayjs_1.default)()
+                                .year(year)
+                                .month(month - 1)
+                                .startOf('month')
+                                .toDate(),
                             lte: (0, dayjs_1.default)()
                                 .year(year)
                                 .month(month - 1)
@@ -142,7 +158,11 @@ let StatisticsService = class StatisticsService {
                         SaleProduct: { some: { product: { id: subscriptionProduct.id } } },
                     },
                     paying_date: {
-                        gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
+                        gte: (0, dayjs_1.default)()
+                            .year(year)
+                            .month(month - 1)
+                            .startOf('month')
+                            .toDate(),
                         lte: (0, dayjs_1.default)()
                             .year(year)
                             .month(month - 1)
@@ -179,7 +199,11 @@ let StatisticsService = class StatisticsService {
                     product: { id: service.id },
                     sale: {
                         date: {
-                            gte: (0, dayjs_1.default)().year(year).month(month - 1).startOf('month').toDate(),
+                            gte: (0, dayjs_1.default)()
+                                .year(year)
+                                .month(month - 1)
+                                .startOf('month')
+                                .toDate(),
                             lte: (0, dayjs_1.default)()
                                 .year(year)
                                 .month(month - 1)
@@ -328,14 +352,14 @@ let StatisticsService = class StatisticsService {
             this.prisma.paidClient.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfYear, lt: endOfYear },
+                    paidDate: { gte: startOfYear, lte: endOfYear },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidOther.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfYear, lt: endOfYear },
+                    paidDate: { gte: startOfYear, lte: endOfYear },
                     type: 'INCOME',
                     isDeleted: false,
                 },
@@ -343,28 +367,28 @@ let StatisticsService = class StatisticsService {
             this.prisma.paidSupplier.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfYear, lt: endOfYear },
+                    paidDate: { gte: startOfYear, lte: endOfYear },
                     isDeleted: false,
                 },
             }),
             this.prisma.arrived.aggregate({
                 _sum: { price: true },
                 where: {
-                    created: { gte: startOfYear, lt: endOfYear },
+                    created: { gte: startOfYear, lte: endOfYear },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidServer.aggregate({
                 _sum: { price: true },
                 where: {
-                    createdAt: { gte: startOfYear, lt: endOfYear },
+                    createdAt: { gte: startOfYear, lte: endOfYear },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidOther.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfYear, lt: endOfYear },
+                    paidDate: { gte: startOfYear, lte: endOfYear },
                     type: 'OUTCOME',
                     isDeleted: false,
                 },
@@ -384,14 +408,14 @@ let StatisticsService = class StatisticsService {
             this.prisma.paidClient.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: currentMonthStart, lt: currentMonthEnd },
+                    paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidOther.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: currentMonthStart, lt: currentMonthEnd },
+                    paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
                     type: 'INCOME',
                     isDeleted: false,
                 },
@@ -399,28 +423,28 @@ let StatisticsService = class StatisticsService {
             this.prisma.paidSupplier.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: currentMonthStart, lt: currentMonthEnd },
+                    paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
                     isDeleted: false,
                 },
             }),
             this.prisma.arrived.aggregate({
                 _sum: { price: true },
                 where: {
-                    created: { gte: currentMonthStart, lt: currentMonthEnd },
+                    created: { gte: currentMonthStart, lte: currentMonthEnd },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidServer.aggregate({
                 _sum: { price: true },
                 where: {
-                    createdAt: { gte: currentMonthStart, lt: currentMonthEnd },
+                    createdAt: { gte: currentMonthStart, lte: currentMonthEnd },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidOther.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: currentMonthStart, lt: currentMonthEnd },
+                    paidDate: { gte: currentMonthStart, lte: currentMonthEnd },
                     type: 'OUTCOME',
                     isDeleted: false,
                 },
@@ -428,14 +452,14 @@ let StatisticsService = class StatisticsService {
             this.prisma.paidClient.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfLastYear, lt: endOfLastYear },
+                    paidDate: { gte: startOfLastYear, lte: endOfLastYear },
                     isDeleted: false,
                 },
             }),
             this.prisma.paidOther.aggregate({
                 _sum: { price: true },
                 where: {
-                    paidDate: { gte: startOfLastYear, lt: endOfLastYear },
+                    paidDate: { gte: startOfLastYear, lte: endOfLastYear },
                     type: 'INCOME',
                     isDeleted: false,
                 },
@@ -444,7 +468,6 @@ let StatisticsService = class StatisticsService {
         const yearlyIncome = sumOrZero(paidClientYearAgg, 'price') +
             sumOrZero(paidOtherIncomeYearAgg, 'price');
         const yearlyExpenses = sumOrZero(paidSupplierYearAgg, 'price') +
-            sumOrZero(arrivedYearAgg, 'price') +
             sumOrZero(paidServerYearAgg, 'price') +
             sumOrZero(paidOtherOutcomeYearAgg, 'price');
         const currentMonthIncome = sumOrZero(paidClientCurrentMonthAgg, 'price') +
