@@ -368,12 +368,12 @@ export class ClientService implements OnModuleInit {
       _sum: { price: true },
     });
 
-    const totalSaleDept = this.prisma.sale.aggregate({
+    const totalSaleDept = await this.prisma.sale.aggregate({
       _sum: { credit: true },
       where: {
         date: { gte: fromDate, lte: toDate },
         isDeleted: false,
-        client: where,
+        client: { isDeleted: false, balance: { lt: 0 } },
       },
     });
 
