@@ -30,7 +30,7 @@ export declare class ClientController {
             device: number;
             service: number;
             price: number;
-            credit: number;
+            credit: any;
         };
         page: number;
         limit: number;

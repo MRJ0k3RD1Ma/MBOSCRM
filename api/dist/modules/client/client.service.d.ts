@@ -32,7 +32,7 @@ export declare class ClientService implements OnModuleInit {
             device: number;
             service: number;
             price: number;
-            credit: number;
+            credit: any;
         };
         page: number;
         limit: number;

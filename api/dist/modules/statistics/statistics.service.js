@@ -484,7 +484,6 @@ let StatisticsService = class StatisticsService {
         const totalSaleDept = this.prisma.sale.aggregate({
             _sum: { credit: true },
             where: {
-                date: { gte: startOfYear, lt: endOfYear },
                 isDeleted: false,
                 client: { isDeleted: false },
             },
@@ -492,7 +491,6 @@ let StatisticsService = class StatisticsService {
         const totalSubDept = this.prisma.subscribe.aggregate({
             _sum: { price: true, paid: true },
             where: {
-                paying_date: { gte: startOfYear, lt: endOfYear },
                 isDeleted: false,
                 client: { isDeleted: false },
                 sale: { isDeleted: false },
