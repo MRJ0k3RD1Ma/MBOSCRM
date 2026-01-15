@@ -24,15 +24,15 @@ let StatisticsService = class StatisticsService {
     async outcome(query) {
         const { fromDate, toDate } = query;
         const paidOther = await this.prisma.paidOther.aggregate({
-            where: { paidDate: { lte: fromDate, gte: toDate } },
+            where: { paidDate: { lte: toDate, gte: fromDate } },
             _sum: { price: true },
         });
         const paidSupplier = await this.prisma.paidSupplier.aggregate({
-            where: { paidDate: { lte: fromDate, gte: toDate } },
+            where: { paidDate: { lte: toDate, gte: fromDate } },
             _sum: { price: true },
         });
         const paidServer = await this.prisma.paidServer.aggregate({
-            where: { endDate: { lte: fromDate, gte: toDate } },
+            where: { endDate: { lte: toDate, gte: fromDate } },
             _sum: { price: true },
         });
         return {
@@ -333,22 +333,26 @@ let StatisticsService = class StatisticsService {
             year = (0, dayjs_1.default)().year();
         const today = (0, dayjs_1.default)();
         const currentMonthStart = today.startOf('month').toDate();
-        const currentMonthEnd = today.add(1, 'month').startOf('month').toDate();
+        const currentMonthEnd = today.endOf('month').toDate();
         const startOfYear = (0, dayjs_1.default)().year(year).startOf('year').toDate();
-        const endOfYear = (0, dayjs_1.default)().year(year).add(1, 'year').startOf('year').toDate();
+        const endOfYear = (0, dayjs_1.default)().year(year).endOf('year').toDate();
         const startOfLastYear = (0, dayjs_1.default)()
             .year(year)
             .subtract(1, 'year')
             .startOf('year')
             .toDate();
-        const endOfLastYear = (0, dayjs_1.default)().year(year).startOf('year').toDate();
+        const endOfLastYear = (0, dayjs_1.default)()
+            .year(year)
+            .subtract(1, 'year')
+            .endOf('year')
+            .toDate();
         const sumOrZero = (agg, field) => (agg && agg._sum && (agg._sum[field] ?? 0)) || 0;
         const [settings, totalClients, totalSales] = await Promise.all([
             this.prisma.setting.findUnique({ where: { id: 1 } }),
             this.prisma.client.count({ where: { isDeleted: false } }),
             this.prisma.sale.count({ where: { isDeleted: false } }),
         ]);
-        const [paidClientYearAgg, paidOtherIncomeYearAgg, paidSupplierYearAgg, arrivedYearAgg, paidServerYearAgg, paidOtherOutcomeYearAgg, saleDebtAgg, subscribeDeptAgg, paidClientCurrentMonthAgg, paidOtherIncomeCurrentMonthAgg, paidSupplierCurrentMonthAgg, arrivedCurrentMonthAgg, paidServerCurrentMonthAgg, paidOtherOutcomeCurrentMonthAgg, lastYearPaidClientAgg, lastYearPaidOtherIncomeAgg,] = await Promise.all([
+        const [paidClientYearAgg, paidOtherIncomeYearAgg, paidSupplierYearAgg, arrivedYearAgg, paidServerYearAgg, paidOtherOutcomeYearAgg, saleDebtAgg, subscribeDeptAgg, paidClientCurrentMonthAgg, paidOtherIncomeCurrentMonthAgg, paidSupplierCurrentMonthAgg, paidServerCurrentMonthAgg, paidOtherOutcomeCurrentMonthAgg, lastYearPaidClientAgg, lastYearPaidOtherIncomeAgg,] = await Promise.all([
             this.prisma.paidClient.aggregate({
                 _sum: { price: true },
                 where: {
@@ -427,13 +431,6 @@ let StatisticsService = class StatisticsService {
                     isDeleted: false,
                 },
             }),
-            this.prisma.arrived.aggregate({
-                _sum: { price: true },
-                where: {
-                    created: { gte: currentMonthStart, lte: currentMonthEnd },
-                    isDeleted: false,
-                },
-            }),
             this.prisma.paidServer.aggregate({
                 _sum: { price: true },
                 where: {
@@ -473,7 +470,6 @@ let StatisticsService = class StatisticsService {
         const currentMonthIncome = sumOrZero(paidClientCurrentMonthAgg, 'price') +
             sumOrZero(paidOtherIncomeCurrentMonthAgg, 'price');
         const currentMonthExpenses = sumOrZero(paidSupplierCurrentMonthAgg, 'price') +
-            sumOrZero(arrivedCurrentMonthAgg, 'price') +
             sumOrZero(paidServerCurrentMonthAgg, 'price') +
             sumOrZero(paidOtherOutcomeCurrentMonthAgg, 'price');
         const lastYearIncome = sumOrZero(lastYearPaidClientAgg, 'price') +
@@ -532,10 +528,6 @@ let StatisticsService = class StatisticsService {
                     _sum: { price: true },
                     where: { paidDate: { gte: mStart, lt: mEnd }, isDeleted: false },
                 }),
-                this.prisma.arrived.aggregate({
-                    _sum: { price: true },
-                    where: { created: { gte: mStart, lt: mEnd }, isDeleted: false },
-                }),
                 this.prisma.paidServer.aggregate({
                     _sum: { price: true },
                     where: { createdAt: { gte: mStart, lt: mEnd }, isDeleted: false },
@@ -593,10 +585,9 @@ let StatisticsService = class StatisticsService {
                         isDeleted: false,
                     },
                 }),
-            ]).then(([pc, poInc, psup, arrivedMonth, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold,]) => {
+            ]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold,]) => {
                 const incomeMonth = sumOrZero(pc, 'price') + sumOrZero(poInc, 'price');
                 const expenseMonth = sumOrZero(psup, 'price') +
-                    sumOrZero(arrivedMonth, 'price') +
                     sumOrZero(pserv, 'price') +
                     sumOrZero(poOut, 'price');
                 const subPrice = sumOrZero(subAgg, 'price');
