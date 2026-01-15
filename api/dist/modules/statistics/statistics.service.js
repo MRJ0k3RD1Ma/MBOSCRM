@@ -334,7 +334,6 @@ let StatisticsService = class StatisticsService {
         const today = (0, dayjs_1.default)();
         const currentMonthStart = today.startOf('month').toDate();
         const currentMonthEnd = today.endOf('month').startOf('day').toDate();
-        console.log(currentMonthStart, currentMonthEnd);
         const startOfYear = (0, dayjs_1.default)().year(year).startOf('year').toDate();
         const endOfYear = (0, dayjs_1.default)().year(year).endOf('year').toDate();
         const startOfLastYear = (0, dayjs_1.default)()
@@ -664,6 +663,7 @@ let StatisticsService = class StatisticsService {
                 expectedSubscription: expectedForMonth,
             };
         });
+        console.log(currentMonthStart, currentMonthEnd);
         const [currentMonthSaleDebt, currentMonthSubAgg] = await Promise.all([
             this.prisma.sale.aggregate({
                 _sum: { credit: true },

@@ -368,6 +368,7 @@ export class ClientService implements OnModuleInit {
       _sum: { price: true },
     });
 
+    console.log(fromDate, toDate, where);
     const totalSaleDept = this.prisma.sale.aggregate({
       _sum: { credit: true },
       where: {
