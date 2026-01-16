@@ -558,8 +558,9 @@ export class StatisticsService {
     const subPaid = sumOrZero(totalSubDept, 'paid');
     const expectedSubscription = Math.max(0, subPrice - subPaid);
     const saleCredit = sumOrZero(totalSaleDept, 'credit');
+    console.log(saleCredit);
 
-    const totalDebts = saleCredit - expectedSubscription;
+    const totalDebts = saleCredit + expectedSubscription;
 
     const monthlyStats = await Promise.all(
       Array.from({ length: 12 }, (_, i) => {
