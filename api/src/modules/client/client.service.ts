@@ -374,7 +374,7 @@ export class ClientService implements OnModuleInit {
       where: {
         date: { gte: fromDate, lte: toDate },
         isDeleted: false,
-        client: { isDeleted: false, balance: { lt: 0 } },
+        client: { isDeleted: false },
       },
     });
 

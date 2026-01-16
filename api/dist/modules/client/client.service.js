@@ -325,7 +325,7 @@ let ClientService = class ClientService {
             where: {
                 date: { gte: fromDate, lte: toDate },
                 isDeleted: false,
-                client: { isDeleted: false, balance: { lt: 0 } },
+                client: { isDeleted: false },
             },
         });
         const totalSubDept = this.prisma.subscribe.aggregate({

@@ -540,6 +540,7 @@ export class StatisticsService {
     const totalSaleDept = this.prisma.sale.aggregate({
       _sum: { credit: true },
       where: {
+        date: { gte: startOfYear, lte: endOfYear },
         isDeleted: false,
         client: { isDeleted: false },
       },
@@ -548,6 +549,7 @@ export class StatisticsService {
     const totalSubDept = this.prisma.subscribe.aggregate({
       _sum: { price: true, paid: true },
       where: {
+        createdAt: { gte: startOfYear, lte: endOfYear },
         isDeleted: false,
         client: { isDeleted: false },
         sale: { isDeleted: false },
@@ -558,7 +560,6 @@ export class StatisticsService {
     const subPaid = sumOrZero(totalSubDept, 'paid');
     const expectedSubscription = Math.max(0, subPrice - subPaid);
     const saleCredit = sumOrZero(totalSaleDept, 'credit');
-    console.log(saleCredit);
 
     const totalDebts = saleCredit + expectedSubscription;
 
