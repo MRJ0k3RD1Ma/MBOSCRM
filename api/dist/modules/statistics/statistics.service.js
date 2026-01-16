@@ -541,7 +541,7 @@ let StatisticsService = class StatisticsService {
                 this.prisma.sale.aggregate({
                     _sum: { credit: true },
                     where: {
-                        createdAt: { gte: mStart, lt: mEnd },
+                        date: { gte: mStart, lt: mEnd },
                         isDeleted: false,
                         client: { isDeleted: false },
                     },
