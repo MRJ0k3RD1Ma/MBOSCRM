@@ -655,7 +655,6 @@ export class StatisticsService {
             pc,
             poInc,
             psup,
-
             pserv,
             poOut,
             saleDebtMonth,

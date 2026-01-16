@@ -314,6 +314,7 @@ let ClientService = class ClientService {
         });
         const totalClientPaid = await this.prisma.paidClient.aggregate({
             where: {
+                paidDate: { lte: toDate, gte: fromDate },
                 isDeleted: false,
                 Client: where,
             },
