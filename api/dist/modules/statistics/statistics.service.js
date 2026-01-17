@@ -689,7 +689,7 @@ let StatisticsService = class StatisticsService {
                 where: {
                     createdAt: { gte: currentMonthStart, lt: currentMonthEnd },
                     isDeleted: false,
-                    client: { isDeleted: false },
+                    client: { isDeleted: false, balance: { lt: 0 } },
                     sale: { isDeleted: false },
                 },
             }),
@@ -698,7 +698,7 @@ let StatisticsService = class StatisticsService {
         const currentMonthSubPaid = sumOrZero(currentMonthSubAgg, 'paid');
         const currentMonthExpectedSub = Math.max(0, currentMonthSubPrice - currentMonthSubPaid);
         const currentMonthSaleCredit = sumOrZero(currentMonthSaleDebt, 'credit');
-        const currentMonthCredit = currentMonthSaleCredit + currentMonthExpectedSub;
+        const currentMonthCredit = currentMonthSaleCredit + currentMonthSubPaid;
         return {
             balance: settings?.balance ?? 0,
             totals: {

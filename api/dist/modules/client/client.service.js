@@ -333,7 +333,7 @@ let ClientService = class ClientService {
             where: {
                 createdAt: { gte: fromDate, lte: toDate },
                 isDeleted: false,
-                client: where,
+                client: { ...where, isDeleted: false, balance: { lt: 0 } },
                 sale: { isDeleted: false },
             },
         });
@@ -342,7 +342,7 @@ let ClientService = class ClientService {
         const subPaid = sumOrZero(totalSubDept, 'paid');
         const expectedSubscription = Math.max(0, subPrice - subPaid);
         const saleCredit = sumOrZero(totalSaleDept, 'credit');
-        const totalDebts = saleCredit + expectedSubscription;
+        const totalDebts = saleCredit + subPaid;
         const totals = {
             subscribe: totalSubPrice._sum.price,
             device: totalDevicePrice._sum.priceCount,
