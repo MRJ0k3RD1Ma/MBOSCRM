@@ -328,7 +328,7 @@ let ClientService = class ClientService {
                 client: { isDeleted: false },
             },
         });
-        const totalSubDept = this.prisma.subscribe.aggregate({
+        const totalSubDept = await this.prisma.subscribe.aggregate({
             _sum: { price: true, paid: true },
             where: {
                 createdAt: { gte: fromDate, lte: toDate },

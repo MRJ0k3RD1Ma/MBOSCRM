@@ -494,7 +494,7 @@ let StatisticsService = class StatisticsService {
             where: {
                 createdAt: { gte: startOfYear, lte: endOfYear },
                 isDeleted: false,
-                client: { isDeleted: false },
+                client: { isDeleted: false, balance: { lt: 0 } },
                 sale: { isDeleted: false },
             },
         });
@@ -502,7 +502,7 @@ let StatisticsService = class StatisticsService {
         const subPaid = sumOrZero(totalSubDept, 'paid');
         const expectedSubscription = Math.max(0, subPrice - subPaid);
         const saleCredit = sumOrZero(totalSaleDept, 'credit');
-        const totalDebts = saleCredit + expectedSubscription;
+        const totalDebts = saleCredit + subPaid;
         const monthlyStats = await Promise.all(Array.from({ length: 12 }, (_, i) => {
             const mStart = (0, dayjs_1.default)().year(year).month(i).startOf('month').toDate();
             const mEnd = (0, dayjs_1.default)()
@@ -585,7 +585,16 @@ let StatisticsService = class StatisticsService {
                         isDeleted: false,
                     },
                 }),
-            ]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold,]) => {
+                this.prisma.subscribe.aggregate({
+                    _sum: { paid: true },
+                    where: {
+                        paying_date: { gte: mStart, lt: mEnd },
+                        isDeleted: false,
+                        client: { isDeleted: false, balance: { lt: 0 } },
+                        sale: { isDeleted: false },
+                    },
+                }),
+            ]).then(([pc, poInc, psup, pserv, poOut, saleDebtMonth, subAgg, productsSold, servicesSold, subDeptAgg,]) => {
                 const incomeMonth = sumOrZero(pc, 'price') + sumOrZero(poInc, 'price');
                 const expenseMonth = sumOrZero(psup, 'price') +
                     sumOrZero(pserv, 'price') +
@@ -594,7 +603,8 @@ let StatisticsService = class StatisticsService {
                 const subPaid = sumOrZero(subAgg, 'paid');
                 const expectedSubscription = Math.max(0, subPrice - subPaid);
                 const saleCredit = sumOrZero(saleDebtMonth, 'credit');
-                const monthCredit = saleCredit + expectedSubscription;
+                const subDept = sumOrZero(subDeptAgg, 'paid');
+                const monthCredit = saleCredit + subDept;
                 return {
                     month: i + 1,
                     tushum: incomeMonth,
