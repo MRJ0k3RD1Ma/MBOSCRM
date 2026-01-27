@@ -30,6 +30,23 @@ let PaidClientService = class PaidClientService {
                 message: `Client with ID ${clientId} not found or deleted`,
             });
         }
+        const user = await this.prisma.user.findFirst({
+            where: { id: registerId, isDeleted: false },
+        });
+        if (!user) {
+            throw new http_error_1.HttpError({
+                message: `user is deleted`,
+            });
+        }
+        const role = await this.prisma.userRole.findFirst({
+            where: { id: user.roleId },
+        });
+        if (!role || role.name == 'superadmin') {
+            throw new http_error_1.HttpError({
+                message: `Forbidden`,
+                statusCode: 403,
+            });
+        }
         if (paymentId) {
             const payment = await this.prisma.payment.findFirst({
                 where: { id: paymentId, isDeleted: false },
