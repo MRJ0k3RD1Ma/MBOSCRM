@@ -337,12 +337,19 @@ let ClientService = class ClientService {
                 sale: { isDeleted: false },
             },
         });
+        const clientDepts = await this.prisma.client.aggregate({
+            _sum: { balance: true },
+            where: {
+                balance: { lt: 0 },
+                isDeleted: false,
+            },
+        });
         const sumOrZero = (agg, field) => (agg && agg._sum && (agg._sum[field] ?? 0)) || 0;
         const subPrice = sumOrZero(totalSubDept, 'price');
         const subPaid = sumOrZero(totalSubDept, 'paid');
         const expectedSubscription = Math.max(0, subPrice - subPaid);
         const saleCredit = sumOrZero(totalSaleDept, 'credit');
-        const totalDebts = saleCredit + subPaid;
+        const totalDebts = sumOrZero(clientDepts, 'balance');
         const totals = {
             subscribe: totalSubPrice._sum.price,
             device: totalDevicePrice._sum.priceCount,

@@ -502,7 +502,7 @@ let StatisticsService = class StatisticsService {
         const subPaid = sumOrZero(totalSubDept, 'paid');
         const expectedSubscription = Math.max(0, subPrice - subPaid);
         const saleCredit = sumOrZero(totalSaleDept, 'credit');
-        const totalDebts = saleCredit + subPaid;
+        const totalDebts = sumOrZero(clientDepts, 'balance');
         const monthlyStats = await Promise.all(Array.from({ length: 12 }, (_, i) => {
             const mStart = (0, dayjs_1.default)().year(year).month(i).startOf('month').toDate();
             const mEnd = (0, dayjs_1.default)()

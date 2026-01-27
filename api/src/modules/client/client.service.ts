@@ -388,6 +388,14 @@ export class ClientService implements OnModuleInit {
       },
     });
 
+    const clientDepts = await this.prisma.client.aggregate({
+      _sum: { balance: true },
+      where: {
+        balance: { lt: 0 },
+        isDeleted: false,
+      },
+    });
+
     const sumOrZero = (agg: any, field: string) =>
       (agg && agg._sum && (agg._sum[field] ?? 0)) || 0;
 
@@ -396,7 +404,7 @@ export class ClientService implements OnModuleInit {
     const expectedSubscription = Math.max(0, subPrice - subPaid);
     const saleCredit = sumOrZero(totalSaleDept, 'credit');
 
-    const totalDebts = saleCredit + subPaid;
+    const totalDebts = sumOrZero(clientDepts, 'balance');
 
     const totals = {
       subscribe: totalSubPrice._sum.price,
