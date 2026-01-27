@@ -31,6 +31,8 @@ export declare class ClientController {
             service: number;
             price: number;
             credit: any;
+            saleCredit: any;
+            subscribeCredit: any;
         };
         page: number;
         limit: number;

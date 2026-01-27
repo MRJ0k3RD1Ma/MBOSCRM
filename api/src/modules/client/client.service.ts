@@ -412,6 +412,8 @@ export class ClientService implements OnModuleInit {
       service: totalServicePrice._sum.priceCount,
       price: totalClientPaid._sum.price,
       credit: totalDebts,
+      saleCredit,
+      subscribeCredit: subPrice,
     };
 
     return {

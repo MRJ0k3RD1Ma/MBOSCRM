@@ -356,6 +356,8 @@ let ClientService = class ClientService {
             service: totalServicePrice._sum.priceCount,
             price: totalClientPaid._sum.price,
             credit: totalDebts,
+            saleCredit,
+            subscribeCredit: subPrice,
         };
         return {
             total,
