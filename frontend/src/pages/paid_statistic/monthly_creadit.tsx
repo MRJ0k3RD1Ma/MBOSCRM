@@ -1,36 +1,28 @@
-import { useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Button, Card, DatePicker, Space } from "antd";
+import { Card, DatePicker, Tabs, type TabsProps } from "antd";
 import { TrendingDown } from "lucide-react";
 import { formatMoney } from "../../hooks/format/format_money";
-import { useThemeContext } from "../../providers/theme-provider";
 import { useGetAllClients } from "../../config/queries/clients/clients-querys";
 import { StatCard } from "./ui/stat-card";
 import dayjs from "dayjs";
-import { FilterOutlined } from "@ant-design/icons";
 import ClientsCreditTable from "./ui/clients_credit_table";
+import SubscribeCreditTable from "./ui/subscribe_credit_table";
+import SalesCreditTable from "./ui/sales_credit_table";
+import { useUrlState } from "../../hooks/useUrlState";
+import { useState } from "react";
 
 const { RangePicker } = DatePicker;
 
 export default function MonthlyCredit() {
-  const { theme } = useThemeContext();
+  const [activeKey, setActiveKey] = useState("1");
 
-  const isDark = theme === "dark";
-  const titleColor = isDark ? "" : "text-gray-800";
-  const [searchParams] = useSearchParams();
+  const { filters, handleFilterApply } = useUrlState();
 
-  const [page, setPage] = useState<number>(1);
-  const [limit] = useState(10);
-
-  const [dateFrom, setDateFrom] = useState(searchParams.get("dateFrom") || "");
-  const [dateTo, setDateTo] = useState(searchParams.get("dateTo") || "");
-
-  const [filters, setFilters] = useState<any>({});
-  const [filterOpen, setFilterOpen] = useState(false);
+  const dateFrom = filters.dateFrom || "";
+  const dateTo = filters.dateTo || "";
 
   const { data: clients } = useGetAllClients({
-    page,
-    limit,
+    page: 1,
+    limit: 1,
     fromDate: dateFrom || undefined,
     toDate: dateTo || undefined,
     ...filters,
@@ -43,72 +35,86 @@ export default function MonthlyCredit() {
       value: formatMoney(clients?.totals.credit || 0),
       icon: <TrendingDown size={32} color="white" />,
       bgColor: "!bg-[#EF4444]",
-      textColor: titleColor,
-      isDark: isDark,
+      tabKey: "1",
+      cursor: true,
     },
-   
+    {
+      title: "Obuna qarzdorligi",
+      value: formatMoney(clients?.totals.subscribeCredit || 0),
+      icon: <TrendingDown size={32} color="white" />,
+      bgColor: "!bg-[#EF4444]",
+      tabKey: "2",
+      cursor: true,
+    },
+    {
+      title: "Sotuv qarzdorligi",
+      value: formatMoney(clients?.totals.saleCredit || 0),
+      icon: <TrendingDown size={32} color="white" />,
+      bgColor: "!bg-[#EF4444]",
+      tabKey: "3",
+      cursor: true,
+    },
+    {
+      title: "Bu Oy qarzdorligi",
+      value: formatMoney(clients?.totals.monthCredit || 0),
+      icon: <TrendingDown size={32} color="white" />,
+      bgColor: "!bg-[#EF4444]",
+      tabKey: activeKey,
+    },
   ];
 
-  useEffect(() => {
-    setDateFrom(searchParams.get("dateFrom") || "");
-    setDateTo(searchParams.get("dateTo") || "");
-  }, [searchParams]);
+  const tabItems: TabsProps["items"] = [
+    {
+      key: "1",
+      label: "Mijozlar",
+      children: <ClientsCreditTable fromDate={dateFrom} toDate={dateTo} />,
+    },
+    {
+      key: "2",
+      label: "Obuna",
+      children: <SubscribeCreditTable fromDate={dateFrom} toDate={dateTo} />,
+    },
+    {
+      key: "3",
+      label: "Sotuvlar",
+      children: <SalesCreditTable fromDate={dateFrom} toDate={dateTo} />,
+    },
+  ];
 
   return (
     <Card>
-      <Space
-        style={{
-          width: "100%",
-          marginBottom: 16,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Space>
-          <Button
-            icon={<FilterOutlined />}
-            onClick={() => setFilterOpen(!filterOpen)}
-          >
-            Filter
-          </Button>
-        </Space>
+      <div className="flex justify-between items-center mb-4">
         <RangePicker
           style={{ width: "100%" }}
           format="YYYY-MM-DD"
           value={dateFrom && dateTo ? [dayjs(dateFrom), dayjs(dateTo)] : null}
           onChange={(_, [from, to]) => {
-            setDateFrom(from);
-            setDateTo(to);
-            setPage(1);
+            handleFilterApply({ dateFrom: from, dateTo: to });
           }}
         />
-      </Space>
-      <div className="flex justify-between mb-6 gap-4 ">
+      </div>
+      <div className="flex justify-between mb-6 gap-4">
         {statsCards.map((card, index) => (
-          <StatCard
+          <div
             key={index}
-            title={card.title}
-            value={card.value}
-            icon={card.icon}
-            bgColor={card.bgColor}
-          />
+            role="button"
+            tabIndex={0}
+            className="w-full cursor-pointer"
+            onClick={() => setActiveKey(card.tabKey)}
+            onKeyDown={(e) => e.key === "Enter" && setActiveKey(card.tabKey)}
+          >
+            <StatCard
+              title={card.title}
+              value={card.value}
+              icon={card.icon}
+              bgColor={card.bgColor}
+              cursor={card.cursor}
+            />
+          </div>
         ))}
       </div>
-      <ClientsCreditTable
-        clients={clients}
-        fromDate={dateFrom}
-        toDate={dateTo}
-        setDateFrom={setDateFrom}
-        setDateTo={setDateTo}
-        page={page}
-        setPage={setPage}
-        limit={limit}
-        filters={filters}
-        setFilters={setFilters}
-        filterOpen={filterOpen}
-        setFilterOpen={setFilterOpen}
-      />
+
+      <Tabs activeKey={activeKey} onChange={setActiveKey} items={tabItems} />
     </Card>
   );
 }

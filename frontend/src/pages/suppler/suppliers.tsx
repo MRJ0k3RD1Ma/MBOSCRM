@@ -12,7 +12,7 @@ import {
 } from "antd";
 
 import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   useCreateSupplier,
   useDeleteSupplier,
@@ -24,16 +24,27 @@ import {
 import SuppliersFilterModal from "./ui/suppliers-filter-modal";
 import SuppliersFormModal from "./ui/suppliers-form-modal";
 import { indexColumn } from "../../components/tables/indexColumn";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function Suppliers() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Supplier | null>(null);
-  const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState<Record<string, string>>({});
+
+  const {
+    page,
+    search,
+    localSearch,
+    setLocalSearch,
+    filters,
+    setPage,
+    handleSearch,
+    handleFilterApply,
+  } = useUrlState();
+
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
   const { data, isLoading } = useGetAllSuppliers({
@@ -110,7 +121,10 @@ export default function Suppliers() {
           {
             key: "view",
             label: "Tafsilotlar",
-            onClick: () => navigate(`/supplier/${row.id}`),
+            onClick: () =>
+              navigate(`/supplier/${row.id}`, {
+                state: { search: location.search },
+              }),
           },
         ];
 
@@ -144,10 +158,9 @@ export default function Suppliers() {
             placeholder="Yetkazib beruvchi nomi bo‘yicha qidirish"
             allowClear
             enterButton
-            onSearch={(val) => {
-              setSearch(val);
-              setPage(1);
-            }}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onSearch={handleSearch}
             style={{ maxWidth: 300 }}
           />
           <Button
@@ -173,10 +186,7 @@ export default function Suppliers() {
       <SuppliersFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
       />
       <Table
@@ -192,14 +202,16 @@ export default function Suppliers() {
             ) {
               return;
             }
-            navigate(`/supplier/${record.id}`);
+            navigate(`/supplier/${record.id}`, {
+              state: { search: location.search },
+            });
           },
         })}
         pagination={{
           current: page,
           pageSize: limit,
           total: data?.total,
-          onChange: (page) => setPage(page),
+          onChange: setPage,
         }}
       />
 

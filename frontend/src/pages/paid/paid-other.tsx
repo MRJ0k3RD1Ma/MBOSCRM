@@ -11,14 +11,20 @@ import PaidOtherFilterModal from "./ui/paid-other-filter-modal";
 import PaidOtherFormModal from "./ui/paid-other-form-modal";
 import { useGetAllPaidOtherGroups } from "../../config/queries/paid/paid-other-group";
 import PaidOtherTable from "./ui/paid-other-table";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function PaidOtherPage() {
+  const {
+    page,
+    setPage,
+    filters,
+    handleFilterApply,
+  } = useUrlState();
+
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<PaidOther | null>(null);
-  const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
   const { data: groupData } = useGetAllPaidOtherGroups();
   const createPaidOther = useCreatePaidOther();
   const updatePaidOther = useUpdatePaidOther();
@@ -53,8 +59,7 @@ export default function PaidOtherPage() {
             style={{ minWidth: 200 }}
             value={filters.serverId}
             onChange={(value) => {
-              setFilters((prev) => ({ ...prev, serverId: value }));
-              setPage(1);
+              handleFilterApply({ serverId: value });
             }}
           >
             {groupData?.data.map((p: { id: number; name: string }) => (
@@ -86,10 +91,7 @@ export default function PaidOtherPage() {
       <PaidOtherFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
       />
       <PaidOtherTable

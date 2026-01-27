@@ -4,12 +4,21 @@ import ClientsCreditTable from "./tables/clients-credit-table";
 import ClientsFilterModal from "./ui/clients-filter-modal";
 import { FilterOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function ClientsCredit() {
-  const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState<Record<string, string>>({});
+  const {
+    page,
+    setPage,
+    search,
+    handleSearch,
+    localSearch,
+    setLocalSearch,
+    filters,
+    handleFilterApply,
+  } = useUrlState();
+
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
 
   return (
     <Card>
@@ -28,10 +37,9 @@ export default function ClientsCredit() {
             placeholder="Mijoz nomi bo‘yicha qidirish"
             allowClear
             enterButton
-            onSearch={(val) => {
-              setSearch(val);
-              setPage(1);
-            }}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onSearch={handleSearch}
             style={{ maxWidth: 300 }}
           />
           <Button
@@ -45,10 +53,7 @@ export default function ClientsCredit() {
       <ClientsFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
       />
       <ClientsCreditTable

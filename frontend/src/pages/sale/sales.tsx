@@ -10,7 +10,7 @@ import {
   type MenuProps,
 } from "antd";
 import { PlusOutlined, MoreOutlined, FilterOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import dayjs from "dayjs";
 import {
@@ -21,12 +21,23 @@ import {
 import SalesFilterModal from "./ui/sales-filter-modal";
 import { indexColumn } from "../../components/tables/indexColumn";
 import { useGetAllClients } from "../../config/queries/clients/clients-querys";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function Sales() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [filters, setFilters] = useState<Record<string, string>>({});
+  const location = useLocation();
+
+  const {
+    page,
+    search,
+    localSearch,
+    setLocalSearch,
+    filters,
+    setPage,
+    handleSearch,
+    handleFilterApply,
+  } = useUrlState();
+
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const { data: clients } = useGetAllClients({ page: 1, limit: 1000 });
 
@@ -95,7 +106,10 @@ export default function Sales() {
           {
             key: "view",
             label: "Tafsilotlar",
-            onClick: () => navigate(`/sale/${row.id}`),
+            onClick: () =>
+              navigate(`/sale/${row.id}`, {
+                state: { search: location.search },
+              }),
           },
         ];
 
@@ -128,10 +142,9 @@ export default function Sales() {
             placeholder="Kod bo‘yicha qidirish"
             allowClear
             enterButton
-            onSearch={(val) => {
-              setSearch(val);
-              setPage(1);
-            }}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onSearch={handleSearch}
             style={{ maxWidth: 300 }}
           />
           <Button
@@ -156,10 +169,7 @@ export default function Sales() {
       <SalesFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
       />
 
@@ -181,7 +191,9 @@ export default function Sales() {
               (e.target as HTMLElement).closest("svg")
             )
               return;
-            navigate(`/sale/${record.id}`);
+            navigate(`/sale/${record.id}`, {
+              state: { search: location.search },
+            });
           },
         })}
       />

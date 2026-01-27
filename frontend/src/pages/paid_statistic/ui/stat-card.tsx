@@ -8,6 +8,7 @@ type StatCardProps = {
   subtitle?: string | React.ReactNode;
   bgColor: string;
   link?: string;
+  cursor?: boolean;
 };
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -17,6 +18,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   subtitle,
   bgColor,
   link,
+  cursor,
 }) => {
   const { theme } = useThemeContext();
   const isDark = theme === "dark";
@@ -33,7 +35,7 @@ export const StatCard: React.FC<StatCardProps> = ({
     >
       <div
         className="flex items-center justify-between"
-        style={{ cursor: link ? "pointer" : "default" }}
+        style={{ cursor: link ? "pointer" : cursor ? "pointer" : "default" }}
       >
         <div className="flex-1">
           <p

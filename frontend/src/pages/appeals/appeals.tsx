@@ -1,10 +1,10 @@
 import { Card, Space } from "antd";
 
 import AppealsTable from "./ui/appeals-table";
-import { useState } from "react";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function Appeals() {
-  const [page, setPage] = useState(1);
+  const { page, setPage } = useUrlState();
 
   return (
     <Card>

@@ -12,17 +12,22 @@ import SimCardFormModal from "./ui/simcard-from-modal";
 import SimCardTable from "./ui/simcard-table";
 import { useGetAllClients } from "../../config/queries/clients/clients-querys";
 import { useState } from "react";
+import { useUrlState } from "../../hooks/useUrlState";
 
 const { Option } = Select;
 
 export default function SimCards() {
-  const [page, setPage] = useState(1);
+  const {
+    page,
+    setPage,
+    search,
+    handleSearch,
+    filters,
+    handleFilterApply,
+  } = useUrlState();
+
   const [form] = Form.useForm();
-
-  const [search, setSearch] = useState("");
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [filters, setFilters] = useState<Record<string, any>>({});
-
   const [formModalOpen, setFormModalOpen] = useState(false);
   const [editing, setEditing] = useState<SimCard | null>(null);
 
@@ -58,10 +63,7 @@ export default function SimCards() {
             showSearch
             optionFilterProp="label"
             style={{ width: 200 }}
-            onSearch={(val) => {
-              setSearch(val);
-              setPage(1);
-            }}
+            onSearch={handleSearch}
           >
             {clients?.data.map((client: any) => (
               <Option key={client.id} value={client.id} label={client.name}>
@@ -93,10 +95,7 @@ export default function SimCards() {
       <SimCardFilter
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
         clients={clients}
       />

@@ -8,7 +8,7 @@ import {
 import dayjs from "dayjs";
 import { indexColumn } from "../../../components/tables/indexColumn";
 import { MoreOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 export default function ClientsPageTable({
@@ -29,6 +29,7 @@ export default function ClientsPageTable({
   setOpen: (open: boolean) => void;
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [limit] = useState(10);
 
   const { data, isLoading } = useGetAllClients({
@@ -86,7 +87,10 @@ export default function ClientsPageTable({
           {
             key: "view",
             label: "Profilga o‘tish",
-            onClick: () => navigate(`/client/${row.id}`),
+            onClick: () =>
+              navigate(`/client/${row.id}`, {
+                state: { search: location.search },
+              }),
           },
         ];
 
@@ -118,7 +122,9 @@ export default function ClientsPageTable({
             ) {
               return;
             }
-            navigate(`/client/${record.id}`);
+            navigate(`/client/${record.id}`, {
+              state: { search: location.search },
+            });
           },
         })}
         pagination={{

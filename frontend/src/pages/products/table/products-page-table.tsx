@@ -6,7 +6,7 @@ import {
   type Product,
 } from "../../../config/queries/products/products-querys";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MoreOutlined } from "@ant-design/icons";
 import { useGetAllProductUnits } from "../../../config/queries/products/product-unit-querys";
 import { useGetAllProductGroups } from "../../../config/queries/products/product-gorup-querys";
@@ -30,6 +30,7 @@ export default function ProductsPageTable({
   setOpen: (open: boolean) => void;
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [limit] = useState(10);
   const { data: unitsData } = useGetAllProductUnits();
   const { data: groupData } = useGetAllProductGroups();
@@ -116,7 +117,10 @@ export default function ProductsPageTable({
           {
             key: "view",
             label: "Profilga o‘tish",
-            onClick: () => navigate(`/product/${row.id}`),
+            onClick: () =>
+              navigate(`/product/${row.id}`, {
+                state: { search: location.search },
+              }),
           },
         ];
 
@@ -147,7 +151,9 @@ export default function ProductsPageTable({
             ) {
               return;
             }
-            navigate(`/product/${record.id}`);
+            navigate(`/product/${record.id}`, {
+              state: { search: location.search },
+            });
           },
         })}
         pagination={{

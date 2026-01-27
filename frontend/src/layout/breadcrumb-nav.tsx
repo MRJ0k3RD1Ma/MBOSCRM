@@ -73,15 +73,41 @@ export default function BreadcrumbNav() {
       <Link to="/dashboard">Bosh sahifa</Link>
     </Breadcrumb.Item>,
     ...pathSnippets.map((_, index) => {
-      const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
       const segmentKey = pathSnippets[index];
+      let url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
+
+      // Redirect map for singular -> plural routes
+      // This maps segments like "client" to "clients"
+      const redirectMap: Record<string, string> = {
+        client: "clients",
+        sale: "sales",
+        product: "products",
+        supplier: "suppliers",
+        subscribe: "subscribes",
+        arrived: "arriveds",
+      };
+
+      if (redirectMap[segmentKey]) {
+        // Replace the last segment with the plural form
+        const newSnippets = [...pathSnippets.slice(0, index), redirectMap[segmentKey]];
+        url = `/${newSnippets.join("/")}`;
+
+        // Use state if available to persist filters (e.g. ?page=2)
+        // We only append this to the list page link, not deeper segments if any
+        if (location.state && (location.state as any).search) {
+          url += (location.state as any).search;
+        }
+      }
+
       const name =
-        nameMap[url.slice(1)] ||
+        nameMap[url.slice(1)] || // Check renamed URL first
+        nameMap[url.replace(/\?.*/, "").slice(1)] || // Check renamed URL without query params
         nameMap[segmentKey] ||
         (Number(segmentKey) ? "Tafsilot" : segmentKey);
 
       return (
         <Breadcrumb.Item key={url}>
+          {/* If it's the last item, don't link it (optional, but good UX) OR keep link but it's redundant */}
           <Link to={url}>{name}</Link>
         </Breadcrumb.Item>
       );

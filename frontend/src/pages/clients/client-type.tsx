@@ -4,18 +4,21 @@ import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import ClientTypeFormModal from "./ui/client-type-form-modal";
 import ClientTypesTable from "./tables/client-types-table";
 import { useState } from "react";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function ClientType() {
-  const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState({ name: "" });
+  const {
+    search,
+    handleSearch,
+    localSearch,
+    setLocalSearch,
+    filters,
+  } = useUrlState();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [selected, setSelected] = useState<{ id: number; name: string } | null>(
     null
   );
-
-  const handleSearch = () => {
-    setFilters((prev) => ({ ...prev, name: search, page: 1 }));
-  };
 
   return (
     <Card>
@@ -31,15 +34,15 @@ export default function ClientType() {
         <Space.Compact style={{ maxWidth: 400 }}>
           <Input
             placeholder="Tur nomi bo‘yicha qidirish"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onPressEnter={handleSearch}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onPressEnter={() => handleSearch(localSearch)}
             allowClear
           />
           <Button
             type="default"
             icon={<SearchOutlined />}
-            onClick={handleSearch}
+            onClick={() => handleSearch(localSearch)}
           />
         </Space.Compact>
         <Button
@@ -55,7 +58,7 @@ export default function ClientType() {
       </Space>
       <ClientTypesTable
         search={search}
-        filters={filters}
+        filters={{ ...filters, name: search }}
         setSelected={setSelected}
         setModalOpen={setModalOpen}
       />

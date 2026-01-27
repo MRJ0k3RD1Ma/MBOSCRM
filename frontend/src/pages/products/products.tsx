@@ -10,15 +10,25 @@ import {
 import ProductsFilterModal from "./ui/products-filter-modal";
 import ProductsModal from "./ui/products-form-modal";
 import ProductsPageTable from "./table/products-page-table";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function ProductsPage() {
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
-  const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState<Record<string, string>>({});
+
+  const {
+    page,
+    search,
+    localSearch,
+    setLocalSearch,
+    filters,
+    setPage,
+    handleSearch,
+    handleFilterApply,
+  } = useUrlState();
+
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
 
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();
@@ -50,10 +60,9 @@ export default function ProductsPage() {
             placeholder="Mahsulot nomi bo‘yicha qidirish"
             allowClear
             enterButton
-            onSearch={(val) => {
-              setSearch(val);
-              setPage(1);
-            }}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onSearch={handleSearch}
             style={{ maxWidth: 300 }}
           />
           <Button
@@ -79,10 +88,7 @@ export default function ProductsPage() {
       <ProductsFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
         reminder={true}
       />

@@ -2,17 +2,28 @@ import { useState } from "react";
 import { Button, Card, Input, Space, Table } from "antd";
 
 import { FilterOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useGetAllSuppliers } from "../../config/queries/supplier/supplier-querys";
 import SuppliersFilterModal from "./ui/suppliers-filter-modal";
 import { indexColumn } from "../../components/tables/indexColumn";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function SupplierCredit() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState<Record<string, string>>({});
+  const location = useLocation();
+
+  const {
+    page,
+    setPage,
+    search,
+    handleSearch,
+    localSearch,
+    setLocalSearch,
+    filters,
+    handleFilterApply,
+  } = useUrlState();
+
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
   const { data, isLoading } = useGetAllSuppliers({
@@ -54,10 +65,9 @@ export default function SupplierCredit() {
             placeholder="Yetkazib beruvchi nomi bo‘yicha qidirish"
             allowClear
             enterButton
-            onSearch={(val) => {
-              setSearch(val);
-              setPage(1);
-            }}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onSearch={handleSearch}
             style={{ maxWidth: 300 }}
           />
           <Button
@@ -71,10 +81,7 @@ export default function SupplierCredit() {
       <SuppliersFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
       />
       <Table
@@ -90,14 +97,16 @@ export default function SupplierCredit() {
             ) {
               return;
             }
-            navigate(`/supplier/${record.id}`);
+            navigate(`/supplier/${record.id}`, {
+              state: { search: location.search },
+            });
           },
         })}
         pagination={{
           current: page,
           pageSize: limit,
           total: data?.total,
-          onChange: (page) => setPage(page),
+          onChange: setPage,
         }}
       />
     </Card>

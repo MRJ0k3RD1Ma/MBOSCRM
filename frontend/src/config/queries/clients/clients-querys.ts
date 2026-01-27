@@ -15,8 +15,14 @@ export interface Client {
   description?: string;
   districtId?: number | null;
   regionId?: number | null;
-  registerId?: number | null;
-  modifyId?: number | null;
+  register?: {
+    id: number;
+    name: string;
+  };
+  modify?: {
+    id: number;
+    name: string;
+  };
   createdAt: string;
   updatedAt?: string;
   Region: {
@@ -54,6 +60,9 @@ export interface ClientResponse {
     subscribe: number;
     price: number;
     credit: number;
+    saleCredit: number;
+    subscribeCredit: number;
+    monthCredit: number;
   };
   limit: number;
   page: number;

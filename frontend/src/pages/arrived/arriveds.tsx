@@ -5,12 +5,22 @@ import ArrivedsFilterModal from "./ui/arriveds-filter-modal";
 import ArrivedsPageTable from "./ui/arriveds-page-table";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function Arriveds() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [filters, setFilters] = useState<Record<string, string>>({});
+
+  const {
+    page,
+    search,
+    localSearch,
+    setLocalSearch,
+    filters,
+    setPage,
+    handleSearch,
+    handleFilterApply,
+  } = useUrlState();
+
   const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   return (
@@ -29,10 +39,9 @@ export default function Arriveds() {
             placeholder="Kod bo‘yicha qidirish"
             allowClear
             enterButton
-            onSearch={(val) => {
-              setSearch(val);
-              setPage(1);
-            }}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onSearch={handleSearch}
             style={{ maxWidth: 300 }}
           />
           <Button
@@ -56,10 +65,7 @@ export default function Arriveds() {
       <ArrivedsFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
       />
       <ArrivedsPageTable

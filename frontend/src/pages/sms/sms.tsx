@@ -1,11 +1,17 @@
 import { Card, Input, Space } from "antd";
 
 import SmsTable from "./ui/sms-table";
-import { useState } from "react";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function Sms() {
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
+  const {
+    page,
+    setPage,
+    search,
+    handleSearch,
+    localSearch,
+    setLocalSearch,
+  } = useUrlState();
 
   return (
     <Card>
@@ -24,10 +30,9 @@ export default function Sms() {
             placeholder="Xabar bo‘yicha qidirish"
             allowClear
             enterButton
-            onSearch={(val) => {
-              setSearch(val);
-              setPage(1);
-            }}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onSearch={handleSearch}
             style={{ maxWidth: 300 }}
           />
         </Space>

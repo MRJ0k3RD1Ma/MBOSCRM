@@ -105,10 +105,10 @@ export default function ClientInfos({
             : "Noma'lum"}
         </Descriptions.Item>
         <Descriptions.Item label="Kiritdi">
-          {data?.registerId || "—"}
+          {data?.register.name || "—"}
         </Descriptions.Item>
         <Descriptions.Item label="O’zgartirdi">
-          {data?.modifyId || "—"}
+          {data?.modify.name || "—"}
         </Descriptions.Item>
       </Descriptions>
     </Card>

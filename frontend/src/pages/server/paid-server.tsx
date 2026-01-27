@@ -7,11 +7,17 @@ import { indexColumn } from "../../components/tables/indexColumn";
 import { useGetAllPaidServers } from "../../config/queries/server/paid-servers-querys";
 import { useGetAllServers } from "../../config/queries/server/servers-querys";
 import { useState } from "react";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function PaidServer() {
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const {
+    page,
+    setPage,
+    filters,
+    handleFilterApply,
+  } = useUrlState();
+
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const { data: serverData } = useGetAllServers();
 
@@ -66,8 +72,7 @@ export default function PaidServer() {
             style={{ minWidth: 200 }}
             value={filters.serverId}
             onChange={(value) => {
-              setFilters((prev) => ({ ...prev, serverId: value }));
-              setPage(1);
+              handleFilterApply({ serverId: value });
             }}
           >
             {serverData?.data.map((p) => (
@@ -88,10 +93,7 @@ export default function PaidServer() {
       <PaidServersFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
       />
 
@@ -104,7 +106,7 @@ export default function PaidServer() {
           current: page,
           pageSize: limit,
           total: data?.total || 0,
-          onChange: (page) => setPage(page),
+          onChange: setPage,
         }}
       />
     </Card>

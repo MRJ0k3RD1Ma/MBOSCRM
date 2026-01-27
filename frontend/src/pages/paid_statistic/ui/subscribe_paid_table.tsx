@@ -4,13 +4,13 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import { useGetAllSale } from "../../../config/queries/sale/sale-querys";
+import { useGetAllSubscribes } from "../../../config/queries/subscribe/subscribe-querys";
 import { useState } from "react";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export default function SalesPaidTable({
+export default function SubscribePaidTable({
   fromDate,
   toDate,
 }: {
@@ -22,12 +22,13 @@ export default function SalesPaidTable({
   const [limit] = useState(10);
   const [filters] = useState<any>({});
 
-  const { data: sales, isLoading } = useGetAllSale({
+  const { data: subscribes, isLoading } = useGetAllSubscribes({
     page,
     limit,
     fromDate: fromDate || undefined,
     toDate: toDate || undefined,
     ...filters,
+    state: "PAID",
   });
 
   const columns = [
@@ -35,29 +36,26 @@ export default function SalesPaidTable({
     { title: "Mijoz", dataIndex: ["client", "name"] },
     { title: "Telefon raqami", dataIndex: ["client", "phone"] },
     {
-      title: "Savdo narxi",
+      title: "Obuna narxi",
       dataIndex: "price",
       render: (v: number) =>
         v ? v.toLocaleString("uz-UZ") + " so'm" : "0 so'm",
     },
     {
-      title: "Qarzdorlik",
-      dataIndex: "credit",
+      title: "To'langan",
+      dataIndex: "paid",
       render: (v: number) =>
         v ? v.toLocaleString("uz-UZ") + " so'm" : "0 so'm",
     },
     {
-      title: "To'langan",
-      key: "paid",
-      render: (_: any, record: any) => {
-        const paid = (record.price || 0) - (record.credit || 0);
-        return paid ? paid.toLocaleString("uz-UZ") + " so'm" : "0 so'm";
-      },
+      title: "Sana",
+      dataIndex: "paying_date",
+      render: (v: string) => (v ? dayjs(v).format("YYYY-MM-DD") : "-"),
     },
     {
-      title: "Sana",
-      dataIndex: "date",
-      render: (v: string) => (v ? dayjs(v).format("YYYY-MM-DD") : "-"),
+      title: "Holati",
+      dataIndex: "state",
+      render: (v: string) => (v === "PAID" ? "To'langan" : "To'lanmagan"),
     },
   ];
 
@@ -66,12 +64,12 @@ export default function SalesPaidTable({
       <Table
         rowKey="id"
         columns={columns}
-        dataSource={sales?.data || []}
+        dataSource={subscribes?.data || []}
         loading={isLoading}
         pagination={{
           current: page,
           pageSize: limit,
-          total: sales?.total || 0,
+          total: subscribes?.total || 0,
           onChange: setPage,
         }}
         onRow={(record: any) => ({
@@ -81,7 +79,7 @@ export default function SalesPaidTable({
               (e.target as HTMLElement).closest("svg")
             )
               return;
-            navigate(`/client/${record.clientId}`);
+            navigate(`/client/${record.client?.id}`);
           },
         })}
       />

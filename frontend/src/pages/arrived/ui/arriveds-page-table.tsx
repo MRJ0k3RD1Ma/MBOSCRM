@@ -8,7 +8,7 @@ import {
 import { MoreOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { indexColumn } from "../../../components/tables/indexColumn";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function ArrivedsPageTable({
   page,
@@ -22,6 +22,7 @@ export default function ArrivedsPageTable({
   filters: Record<string, any>;
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { data, isLoading } = useGetAllArrived({
     page,
     limit: 10,
@@ -68,7 +69,10 @@ export default function ArrivedsPageTable({
           {
             key: "view",
             label: "Tafsilotlar",
-            onClick: () => navigate(`/arrived/${row.id}`),
+            onClick: () =>
+              navigate(`/arrived/${row.id}`, {
+                state: { search: location.search },
+              }),
           },
         ];
 
@@ -105,7 +109,9 @@ export default function ArrivedsPageTable({
               (e.target as HTMLElement).closest("svg")
             )
               return;
-            navigate(`/arrived/${record.id}`);
+            navigate(`/arrived/${record.id}`, {
+              state: { search: location.search },
+            });
           },
         })}
       />

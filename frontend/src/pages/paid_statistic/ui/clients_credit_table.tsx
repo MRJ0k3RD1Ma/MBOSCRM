@@ -5,21 +5,33 @@ import timezone from "dayjs/plugin/timezone";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import ClientsPaidFilter from "./clients_paid_filter";
+import { useGetAllClients } from "../../../config/queries/clients/clients-querys";
+import { useState } from "react";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export default function ClientsCreditTable({
-  clients,
-  page,
-  setPage,
-  limit,
-  filters,
-  setFilters,
-  filterOpen,
-  setFilterOpen,
-}: any) {
+  fromDate,
+  toDate,
+}: {
+  fromDate: string;
+  toDate: string;
+}) {
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [filters, setFilters] = useState<any>({});
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  const { data: clients, isLoading } = useGetAllClients({
+    page,
+    limit,
+    fromDate: fromDate || undefined,
+    toDate: toDate || undefined,
+    ...filters,
+    isPositiveBalance: false,
+  });
 
   const columns = [
     indexColumn(page, limit),
@@ -74,6 +86,7 @@ export default function ClientsCreditTable({
         rowKey="id"
         columns={columns}
         dataSource={clients?.data || []}
+        loading={isLoading}
         pagination={{
           current: page,
           pageSize: limit,

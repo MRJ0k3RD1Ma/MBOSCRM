@@ -14,6 +14,7 @@ const { RangePicker } = DatePicker;
 
 export default function MonthlyExpenses() {
   const [searchParams] = useSearchParams();
+  const [activeKey, setActiveKey] = useState("1");
 
   const [dateFrom, setDateFrom] = useState(searchParams.get("dateFrom") || "");
   const [dateTo, setDateTo] = useState(searchParams.get("dateTo") || "");
@@ -34,18 +35,24 @@ export default function MonthlyExpenses() {
       value: formatMoney(statsData?.paidSupplier || 0),
       icon: <TrendingDown size={32} color="white" />,
       bgColor: "!bg-[#F59E0B]",
+      tabKey: "1",
+      cursor: true,
     },
     {
       title: "Server chiqimlar",
       value: formatMoney(statsData?.paidServer || 0),
       icon: <TrendingDown size={32} color="white" />,
       bgColor: "!bg-[#F59E0B]",
+      tabKey: "2",
+      cursor: true,
     },
     {
       title: "Boshqa chiqimlar",
       value: formatMoney(statsData?.paidOther || 0),
       icon: <TrendingDown size={32} color="white" />,
       bgColor: "!bg-[#F59E0B]",
+      tabKey: "3",
+      cursor: true,
     },
   ];
 
@@ -89,18 +96,27 @@ export default function MonthlyExpenses() {
           }}
         />
       </div>
-      <div className="flex justify-between mb-6 gap-4 ">
+      <div className="flex justify-between mb-6 gap-4">
         {statsCards.map((card, index) => (
-          <StatCard
+          <div
             key={index}
-            title={card.title}
-            value={card.value}
-            icon={card.icon}
-            bgColor={card.bgColor}
-          />
+            role="button"
+            tabIndex={0}
+            className="w-full cursor-pointer"
+            onClick={() => setActiveKey(card.tabKey)}
+            onKeyDown={(e) => e.key === "Enter" && setActiveKey(card.tabKey)}
+          >
+            <StatCard
+              title={card.title}
+              value={card.value}
+              icon={card.icon}
+              bgColor={card.bgColor}
+              cursor={card.cursor}
+            />
+          </div>
         ))}
       </div>
-      <Tabs defaultActiveKey="1" items={tabItems} />
+      <Tabs activeKey={activeKey} onChange={setActiveKey} items={tabItems} />
     </Card>
   );
 }

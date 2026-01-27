@@ -8,12 +8,20 @@ import {
   type Payment,
 } from "../../config/queries/payment/payment-querys";
 import PaymenTable from "./ui/payment-table";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function Payments() {
-  const [search, setSearch] = useState("");
+  const {
+    page,
+    setPage,
+    search,
+    handleSearch,
+    localSearch,
+    setLocalSearch,
+  } = useUrlState();
+
   const [editing, setEditing] = useState<Payment | null>(null);
   const [open, setOpen] = useState(false);
-  const [page, setPage] = useState(1);
 
   const createPayment = useCreatePayment();
   const updatePayment = useUpdatePayment();
@@ -44,10 +52,9 @@ export default function Payments() {
           placeholder="To‘lov turi nomi bo‘yicha qidirish"
           allowClear
           enterButton
-          onSearch={(val) => {
-            setSearch(val);
-            setPage(1);
-          }}
+          value={localSearch}
+          onChange={(e) => setLocalSearch(e.target.value)}
+          onSearch={handleSearch}
           style={{ maxWidth: 300 }}
         />
 

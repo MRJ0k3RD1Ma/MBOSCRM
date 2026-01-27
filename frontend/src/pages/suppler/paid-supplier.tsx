@@ -25,14 +25,20 @@ import {
 import { useGetAllSuppliers } from "../../config/queries/supplier/supplier-querys";
 import { useGetAllPayments } from "../../config/queries/payment/payment-querys";
 import { indexColumn } from "../../components/tables/indexColumn";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function PaidSuppliers() {
+  const {
+    page,
+    setPage,
+    filters,
+    handleFilterApply,
+  } = useUrlState();
+
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<PaidSupplier | null>(null);
-  const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
   const { data, isLoading } = useGetAllPaidSuppliers({
@@ -148,8 +154,7 @@ export default function PaidSuppliers() {
             style={{ minWidth: 200 }}
             value={filters.paymentId}
             onChange={(value) => {
-              setFilters((prev) => ({ ...prev, paymentId: value }));
-              setPage(1);
+              handleFilterApply({ paymentId: value });
             }}
           >
             {paymentsData?.data.map((p: { id: number; name: string }) => (
@@ -181,10 +186,7 @@ export default function PaidSuppliers() {
       <PaidSupplierFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
         suppliers={suppliersData?.data || []}
         payments={paymentsData?.data || []}
@@ -199,7 +201,7 @@ export default function PaidSuppliers() {
           current: page,
           pageSize: limit,
           total: data?.total,
-          onChange: (page) => setPage(page),
+          onChange: setPage,
         }}
       />
 

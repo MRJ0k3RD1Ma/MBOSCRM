@@ -10,15 +10,24 @@ import {
 import PaidClientFilterModal from "./ui/paid-clients-filter-modal";
 import PaidClientFormModal from "./ui/paid-clients-form-modal";
 import ClientsPaidTable from "./tables/clients-paid-table";
+import { useUrlState } from "../../hooks/useUrlState";
 
 export default function ClientsPaid() {
+  const {
+    page,
+    setPage,
+    search,
+    handleSearch,
+    localSearch,
+    setLocalSearch,
+    filters,
+    handleFilterApply,
+  } = useUrlState();
+
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<PaidClient | null>(null);
-  const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
 
   const createPaidClient = useCreatePaidClient();
   const updatePaidClient = useUpdatePaidClient();
@@ -50,10 +59,9 @@ export default function ClientsPaid() {
             placeholder="Mijoz nomi bo‘yicha qidirish"
             allowClear
             enterButton
-            onSearch={(val) => {
-              setSearch(val);
-              setPage(1);
-            }}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onSearch={handleSearch}
             style={{ maxWidth: 300 }}
           />
           <Button
@@ -79,10 +87,7 @@ export default function ClientsPaid() {
       <PaidClientFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
       />
 

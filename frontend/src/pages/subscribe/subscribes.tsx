@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Card, Select, Space, Table, Tag } from "antd";
 import { FilterOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   useGetAllSubscribes,
   type Subscribe,
@@ -12,14 +12,21 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { indexColumn } from "../../components/tables/indexColumn";
 import { useGetAllClients } from "../../config/queries/clients/clients-querys";
+import { useUrlState } from "../../hooks/useUrlState";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export default function Subscribes() {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
+  const location = useLocation();
+  const {
+    page,
+    filters,
+    setPage,
+    handleFilterApply,
+  } = useUrlState();
+
   const [limit] = useState(10);
-  const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const { data: clients } = useGetAllClients({ page: 1, limit: 100 });
 
@@ -44,7 +51,7 @@ export default function Subscribes() {
         <a
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/sale/${sale.id}`);
+            navigate(`/sale/${sale.id}`, { state: { search: location.search } });
           }}
           style={{ color: "#1677ff", cursor: "pointer" }}
         >
@@ -104,8 +111,7 @@ export default function Subscribes() {
             style={{ minWidth: 200 }}
             value={filters.clientId}
             onChange={(value) => {
-              setFilters((prev) => ({ ...prev, clientId: value }));
-              setPage(1);
+              handleFilterApply({ ...filters, clientId: value });
             }}
           >
             {clients?.data?.map((client) => (
@@ -130,10 +136,7 @@ export default function Subscribes() {
       <SubscribesFilterModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-        onApply={(values) => {
-          setFilters(values);
-          setPage(1);
-        }}
+        onApply={handleFilterApply}
         initialValues={filters}
       />
 
@@ -143,13 +146,13 @@ export default function Subscribes() {
         loading={isLoading}
         rowKey="id"
         onRow={(record: Subscribe) => ({
-          onClick: () => navigate(`/subscribe/${record.id}`),
+          onClick: () => navigate(`/subscribe/${record.id}`, { state: { search: location.search } }),
         })}
         pagination={{
           current: page,
           pageSize: limit,
           total: data?.total,
-          onChange: (page) => setPage(page),
+          onChange: setPage,
         }}
       />
     </Card>
