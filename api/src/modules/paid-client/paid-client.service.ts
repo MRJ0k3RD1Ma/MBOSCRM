@@ -41,7 +41,7 @@ export class PaidClientService {
       where: { id: user.roleId },
     });
 
-    if (!role || role.name == 'superadmin') {
+    if (!role || role.name !== 'superadmin') {
       throw new HttpError({
         message: `Forbidden`,
         statusCode: 403,

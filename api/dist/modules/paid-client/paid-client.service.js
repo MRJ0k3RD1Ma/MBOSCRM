@@ -41,7 +41,7 @@ let PaidClientService = class PaidClientService {
         const role = await this.prisma.userRole.findFirst({
             where: { id: user.roleId },
         });
-        if (!role || role.name == 'superadmin') {
+        if (!role || role.name !== 'superadmin') {
             throw new http_error_1.HttpError({
                 message: `Forbidden`,
                 statusCode: 403,
