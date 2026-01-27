@@ -8,10 +8,10 @@ export declare class ArrivedProductService {
     private readonly eventEmitter;
     constructor(prisma: PrismaService, eventEmitter: EventEmitter2);
     create(createArrivedProductDto: CreateArrivedProductDto, registerId: number): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         count: number;
         price: number | null;
         registerId: number | null;
@@ -32,28 +32,28 @@ export declare class ArrivedProductService {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             Product: {
                 ProductUnit: {
                     name: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                 };
             } & {
                 type: import(".prisma/client").$Enums.ProductType;
                 name: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 price: number;
                 registerId: number | null;
                 modifyId: number | null;
@@ -72,10 +72,10 @@ export declare class ArrivedProductService {
                     description: string | null;
                     name: string;
                     phone: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     balance: number;
                     registerId: number | null;
                     modifyId: number | null;
@@ -83,8 +83,8 @@ export declare class ArrivedProductService {
                 };
             } & {
                 description: string | null;
-                isDeleted: boolean | null;
                 id: number;
+                isDeleted: boolean | null;
                 price: number;
                 registerId: number | null;
                 modifyId: number | null;
@@ -97,10 +97,10 @@ export declare class ArrivedProductService {
                 updated: Date;
             };
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             count: number;
             price: number | null;
             registerId: number | null;
@@ -111,10 +111,10 @@ export declare class ArrivedProductService {
         })[];
     }>;
     findOne(id: number): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         count: number;
         price: number | null;
         registerId: number | null;

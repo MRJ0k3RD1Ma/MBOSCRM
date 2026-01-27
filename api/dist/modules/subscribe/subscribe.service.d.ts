@@ -17,10 +17,10 @@ export declare class SubscribeService implements OnModuleInit {
     }): Promise<void>;
     cron(): Promise<void>;
     create(createSubscribeDto: CreateSubscribeDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         saleId: number | null;
@@ -39,10 +39,10 @@ export declare class SubscribeService implements OnModuleInit {
                 description: string | null;
                 name: string;
                 phone: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 balance: number;
                 inn: string;
                 address: string | null;
@@ -56,19 +56,19 @@ export declare class SubscribeService implements OnModuleInit {
                 PaidClient: ({
                     Payment: {
                         name: string | null;
+                        id: number;
                         isDeleted: boolean | null;
                         createdAt: Date;
                         updatedAt: Date;
-                        id: number;
                         registerId: number | null;
                         modifyId: number | null;
                         icon: string | null;
                     };
                 } & {
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     price: number | null;
                     clientId: number | null;
                     saleId: number | null;
@@ -78,10 +78,10 @@ export declare class SubscribeService implements OnModuleInit {
                     paidDate: Date | null;
                 })[];
             } & {
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 price: number;
                 clientId: number;
                 registerId: number | null;
@@ -97,10 +97,10 @@ export declare class SubscribeService implements OnModuleInit {
                 subscribe_begin_date: Date | null;
             };
         } & {
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             price: number;
             clientId: number;
             saleId: number | null;
@@ -115,10 +115,10 @@ export declare class SubscribeService implements OnModuleInit {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -132,19 +132,19 @@ export declare class SubscribeService implements OnModuleInit {
             PaidClient: ({
                 Payment: {
                     name: string | null;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                     icon: string | null;
                 };
             } & {
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 price: number | null;
                 clientId: number | null;
                 saleId: number | null;
@@ -157,10 +157,10 @@ export declare class SubscribeService implements OnModuleInit {
                 product: {
                     type: import(".prisma/client").$Enums.ProductType;
                     name: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     price: number;
                     registerId: number | null;
                     modifyId: number | null;
@@ -175,10 +175,10 @@ export declare class SubscribeService implements OnModuleInit {
                     countSale: number;
                 };
             } & {
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date | null;
                 updatedAt: Date | null;
-                id: number;
                 count: number | null;
                 price: number | null;
                 saleId: number | null;
@@ -189,10 +189,10 @@ export declare class SubscribeService implements OnModuleInit {
                 is_subscribe: boolean | null;
             })[];
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             price: number;
             clientId: number;
             registerId: number | null;
@@ -208,10 +208,10 @@ export declare class SubscribeService implements OnModuleInit {
             subscribe_begin_date: Date | null;
         };
     } & {
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         saleId: number | null;
@@ -221,10 +221,10 @@ export declare class SubscribeService implements OnModuleInit {
         alerted: boolean;
     }>;
     update(id: number, updateSubscribeDto: UpdateSubscribeDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         saleId: number | null;
@@ -234,10 +234,10 @@ export declare class SubscribeService implements OnModuleInit {
         alerted: boolean;
     }>;
     remove(id: number): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         saleId: number | null;

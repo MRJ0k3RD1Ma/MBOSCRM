@@ -9,10 +9,10 @@ export declare class AppealController {
     create(createAppealDto: CreateAppealDto): Promise<{
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         state: import(".prisma/client").$Enums.AppealState;
         subject: string;
@@ -25,10 +25,10 @@ export declare class AppealController {
         data: {
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             modifyId: number | null;
             state: import(".prisma/client").$Enums.AppealState;
             subject: string;
@@ -38,10 +38,10 @@ export declare class AppealController {
     findOne(id: string): Promise<{
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         state: import(".prisma/client").$Enums.AppealState;
         subject: string;
@@ -50,10 +50,10 @@ export declare class AppealController {
     update(id: string, updateAppealDto: UpdateAppealDto, req: Request): Promise<{
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         state: import(".prisma/client").$Enums.AppealState;
         subject: string;
@@ -62,10 +62,10 @@ export declare class AppealController {
     remove(id: string): Promise<{
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         state: import(".prisma/client").$Enums.AppealState;
         subject: string;

@@ -11,10 +11,10 @@ export declare class AccessController {
         data: {
             description: string;
             name: string;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             price: number;
             key: string;
             updatedTime: Date;
@@ -24,10 +24,10 @@ export declare class AccessController {
     findOne(id: string): Promise<{
         description: string;
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         key: string;
         updatedTime: Date;
@@ -36,10 +36,10 @@ export declare class AccessController {
     update(id: string, updateProductDto: UpdateAccessDto): Promise<{
         description: string;
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         key: string;
         updatedTime: Date;

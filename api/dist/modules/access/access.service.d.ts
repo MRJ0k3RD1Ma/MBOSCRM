@@ -16,10 +16,10 @@ export declare class AccessService {
         data: {
             description: string;
             name: string;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             price: number;
             key: string;
             updatedTime: Date;
@@ -29,10 +29,10 @@ export declare class AccessService {
     findOne(id: number): Promise<{
         description: string;
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         key: string;
         updatedTime: Date;
@@ -41,10 +41,10 @@ export declare class AccessService {
     update(id: number, dto: UpdateAccessDto): Promise<{
         description: string;
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         key: string;
         updatedTime: Date;

@@ -8,10 +8,10 @@ export declare class SaleTodoController {
     constructor(saleTodoService: SaleTodoService);
     create(createSaleTodoDto: CreateSaleTodoDto, req: Request): Promise<{
         name: string | null;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
@@ -21,10 +21,10 @@ export declare class SaleTodoController {
     findAll(dto: FindAllSaleTodoDto): Promise<{
         data: {
             name: string | null;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
@@ -37,10 +37,10 @@ export declare class SaleTodoController {
     }>;
     findOne(id: string): Promise<{
         name: string | null;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
@@ -49,10 +49,10 @@ export declare class SaleTodoController {
     }>;
     update(id: string, updateSaleTodoDto: UpdateSaleTodoDto): Promise<{
         name: string | null;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         saleId: number | null;
         registerId: number | null;
         modifyId: number | null;

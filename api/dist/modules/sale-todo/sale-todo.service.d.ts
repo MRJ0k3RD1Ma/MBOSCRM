@@ -9,10 +9,10 @@ export declare class SaleTodoService {
     constructor(prisma: PrismaService, todo: TodoService);
     create(createSaleTodoDto: CreateSaleTodoDto, user: number): Promise<{
         name: string | null;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
@@ -22,10 +22,10 @@ export declare class SaleTodoService {
     findAll(dto: FindAllSaleTodoDto): Promise<{
         data: {
             name: string | null;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
@@ -38,10 +38,10 @@ export declare class SaleTodoService {
     }>;
     findOne(id: number): Promise<{
         name: string | null;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
@@ -50,10 +50,10 @@ export declare class SaleTodoService {
     }>;
     update(id: number, updateSaleTodoDto: UpdateSaleTodoDto): Promise<{
         name: string | null;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         saleId: number | null;
         registerId: number | null;
         modifyId: number | null;

@@ -6,10 +6,10 @@ export declare class PaidCrmController {
     private readonly paidCrmService;
     constructor(paidCrmService: PaidCrmService);
     create(createPaidCrmDto: CreatePaidCrmDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         paymentId: number;
@@ -20,10 +20,10 @@ export declare class PaidCrmController {
     }>;
     findAll(dto: FindAllQueryPaidCrmDto): Promise<{
         data: {
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             price: number;
             clientId: number;
             paymentId: number;
@@ -38,10 +38,10 @@ export declare class PaidCrmController {
         price: number;
     }>;
     findOne(id: string): Promise<{} & {
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         paymentId: number;
@@ -51,10 +51,10 @@ export declare class PaidCrmController {
         transactionId: string | null;
     }>;
     update(id: string, updatePaidCrmDto: UpdatePaidCrmDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         paymentId: number;
@@ -64,10 +64,10 @@ export declare class PaidCrmController {
         transactionId: string | null;
     }>;
     remove(id: string): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         paymentId: number;

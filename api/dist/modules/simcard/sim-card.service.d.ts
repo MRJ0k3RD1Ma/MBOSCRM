@@ -7,10 +7,10 @@ export declare class SimCardService {
     constructor(prisma: PrismaService);
     create(createSimCardDto: CreateSimCardDto): Promise<{
         description: string | null;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         clientId: number;
         isActive: boolean;
         company: string;
@@ -26,10 +26,10 @@ export declare class SimCardService {
                 description: string | null;
                 name: string;
                 phone: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 balance: number;
                 inn: string;
                 address: string | null;
@@ -41,10 +41,10 @@ export declare class SimCardService {
             };
         } & {
             description: string | null;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             clientId: number;
             isActive: boolean;
             company: string;
@@ -57,10 +57,10 @@ export declare class SimCardService {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -72,10 +72,10 @@ export declare class SimCardService {
         };
     } & {
         description: string | null;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         clientId: number;
         isActive: boolean;
         company: string;
@@ -84,10 +84,10 @@ export declare class SimCardService {
     }>;
     update(id: number, dto: UpdateSimCardDto): Promise<{
         description: string | null;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         clientId: number;
         isActive: boolean;
         company: string;
@@ -96,10 +96,10 @@ export declare class SimCardService {
     }>;
     remove(id: number): Promise<{
         description: string | null;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         clientId: number;
         isActive: boolean;
         company: string;

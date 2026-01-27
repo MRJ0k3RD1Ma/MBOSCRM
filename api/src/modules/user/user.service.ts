@@ -1,293 +1,338 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
-import * as bcrypt from "bcryptjs";
-import { PrismaService } from "../prisma/prisma.service";
-import { HttpError } from "../../common/exception/http.error";
-import { FindAllUserQueryDto } from "./dto/findAll-user.dto";
-import { sign, verify } from "jsonwebtoken";
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
+import { PrismaService } from '../prisma/prisma.service';
+import { HttpError } from '../../common/exception/http.error';
+import { FindAllUserQueryDto } from './dto/findAll-user.dto';
+import { sign, verify } from 'jsonwebtoken';
 import {
-	getTokenVersion,
-	incrementTokenVersion,
-} from "../../common/auth/token-version.store";
+  getTokenVersion,
+  incrementTokenVersion,
+} from '../../common/auth/token-version.store';
 import {
-	getRefreshTokenVersion,
-	incrementRefreshTokenVersion,
-} from "../../common/auth/refresh-token-version.store";
-import { env } from "../../common/config";
-import { LoginUserDto } from "./dto/login-user.dto";
-import { RefreshUserDto } from "./dto/refresh-user.dto";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { Role } from "../../common/auth/roles/role.enum";
-import { Prisma, User, UserRole } from "@prisma/client";
-import { faker } from "@faker-js/faker";
+  getRefreshTokenVersion,
+  incrementRefreshTokenVersion,
+} from '../../common/auth/refresh-token-version.store';
+import { env } from '../../common/config';
+import { LoginUserDto } from './dto/login-user.dto';
+import { RefreshUserDto } from './dto/refresh-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { Role } from '../../common/auth/roles/role.enum';
+import { Prisma, User, UserRole } from '@prisma/client';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class UserService implements OnModuleInit {
-	constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-	async onModuleInit() {
-		if ((await this.prisma.user.count({})) == 0) {
-			await this.create({
-				name: "admin",
-				password: "admin",
-				username: "admin",
-				roleId: 1,
-			});
-		}
+  async onModuleInit() {
+    if ((await this.prisma.user.count({})) == 0) {
+      await this.create({
+        name: 'admin',
+        password: 'admin',
+        username: 'admin',
+        roleId: 1,
+      });
+    }
 
-		if (env.ENV != "prod") {
-			const count = await this.prisma.userRole.count();
-			const requiredCount = 1;
-			if (count < requiredCount) {
-				for (let i = count; i < requiredCount; i++) {
-					await this.create({
-						name: faker.person.fullName(),
-						password: "1234",
-						username: faker.person.firstName(),
-						roleId: 1,
-						phone: faker.phone.number(),
-					});
-				}
-			}
-		}
-	}
-	async create(createUserDto: CreateUserDto) {
-		const existingUser = await this.prisma.user.findFirst({
-			where: { name: createUserDto.name },
-		});
-		if (existingUser) {
-			throw HttpError({ code: "User with this name already exists" });
-		}
-		const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-		createUserDto.password = hashedPassword;
+    if (env.ENV != 'prod') {
+      const count = await this.prisma.userRole.count();
+      const requiredCount = 1;
+      if (count < requiredCount) {
+        for (let i = count; i < requiredCount; i++) {
+          await this.create({
+            name: faker.person.fullName(),
+            password: '1234',
+            username: faker.person.firstName(),
+            roleId: 1,
+            phone: faker.phone.number(),
+          });
+        }
+      }
+    }
+  }
+  async create(createUserDto: CreateUserDto, userid?: number) {
+    const existingUser = await this.prisma.user.findFirst({
+      where: { name: createUserDto.name },
+    });
+    if (existingUser) {
+      throw HttpError({ code: 'User with this name already exists' });
+    }
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    createUserDto.password = hashedPassword;
 
-		//let role: UserRole;
-		//if (createUserDto.roleId) {
-		//  role = await this.prisma.userRole.findUnique({
-		//    where: { id: createUserDto.roleId },
-		//  });
-		//  if (!role) {
-		//    throw HttpError({ code: 'Role Not Found' });
-		//  }
-		//}
+    const creatorUser = await this.prisma.user.findFirst({
+      where: { id: userid, isDeleted: false },
+    });
 
-		const user = await this.prisma.user.create({
-			data: {
-				...createUserDto,
-				//roleId: role.id,
-			},
-		});
-		delete user.password;
-		return user;
-	}
+    if (!creatorUser) {
+      throw new HttpError({
+        message: `user is deleted`,
+      });
+    }
 
-	async login(dto: LoginUserDto) {
-		const { username, password } = dto;
-		const user = await this.prisma.user.findFirst({
-			where: { username: username, isDeleted: false },
-		});
-		if (!user) {
-			throw HttpError({ code: "User not found" });
-		}
-		const match = await bcrypt.compare(password, user.password);
-		if (!match) {
-			throw HttpError({ code: "Invalid credentials" });
-		}
-		incrementTokenVersion(user.id.toString());
-		incrementRefreshTokenVersion(user.id.toString());
+    const role = await this.prisma.userRole.findFirst({
+      where: { id: creatorUser.roleId },
+    });
 
-		const tokenVersion = getTokenVersion(user.id.toString());
-		const refreshTokenVersion = getRefreshTokenVersion(user.id.toString());
+    if (createUserDto.roleId == 1 && (!role || role.name !== 'superadmin')) {
+      throw new HttpError({
+        message: `Forbidden`,
+        statusCode: 403,
+      });
+    }
 
-		const [accessToken, refreshToken] = [
-			sign(
-				{ id: user.id, role: Role.Admin, tokenVersion },
-				env.ACCESS_TOKEN_SECRET,
-				{
-					expiresIn: "2h",
-				},
-			),
-			sign(
-				{ id: user.id, role: Role.Admin, refreshTokenVersion },
-				env.REFRESH_TOKEN_SECRET,
-				{
-					expiresIn: "7d",
-				},
-			),
-		];
+    //let role: UserRole;
+    //if (createUserDto.roleId) {
+    //  role = await this.prisma.userRole.findUnique({
+    //    where: { id: createUserDto.roleId },
+    //  });
+    //  if (!role) {
+    //    throw HttpError({ code: 'Role Not Found' });
+    //  }
+    //}
 
-		delete user.password;
-		return {
-			user,
-			accessToken,
-			refreshToken,
-		};
-	}
+    const user = await this.prisma.user.create({
+      data: {
+        ...createUserDto,
+        //roleId: role.id,
+      },
+    });
+    delete creatorUser.password;
+    return creatorUser;
+  }
 
-	async refresh(dto: RefreshUserDto) {
-		const token = dto.refreshToken;
+  async login(dto: LoginUserDto) {
+    const { username, password } = dto;
+    const user = await this.prisma.user.findFirst({
+      where: { username: username, isDeleted: false },
+    });
+    if (!user) {
+      throw HttpError({ code: 'User not found' });
+    }
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      throw HttpError({ code: 'Invalid credentials' });
+    }
+    incrementTokenVersion(user.id.toString());
+    incrementRefreshTokenVersion(user.id.toString());
 
-		const userData = verify(token, env.REFRESH_TOKEN_SECRET) as {
-			id: number;
-			refreshTokenVersion: string;
-		};
+    const tokenVersion = getTokenVersion(user.id.toString());
+    const refreshTokenVersion = getRefreshTokenVersion(user.id.toString());
 
-		if (!userData) throw HttpError({ code: "LOGIN_FAILED" });
+    const [accessToken, refreshToken] = [
+      sign(
+        { id: user.id, role: Role.Admin, tokenVersion },
+        env.ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: '2h',
+        },
+      ),
+      sign(
+        { id: user.id, role: Role.Admin, refreshTokenVersion },
+        env.REFRESH_TOKEN_SECRET,
+        {
+          expiresIn: '7d',
+        },
+      ),
+    ];
 
-		const user = await this.prisma.user.findUnique({
-			where: { id: userData.id },
-		});
+    delete user.password;
+    return {
+      user,
+      accessToken,
+      refreshToken,
+    };
+  }
 
-		if (!user) {
-			throw HttpError({ code: "User not found" });
-		}
+  async refresh(dto: RefreshUserDto) {
+    const token = dto.refreshToken;
 
-		const currentRefreshVersion = getRefreshTokenVersion(user.id.toString());
-		if (userData.refreshTokenVersion !== currentRefreshVersion) {
-			throw HttpError({ code: "TOKEN_INVALIDATED" });
-		}
+    const userData = verify(token, env.REFRESH_TOKEN_SECRET) as {
+      id: number;
+      refreshTokenVersion: string;
+    };
 
-		incrementTokenVersion(user.id.toString());
-		const currentTokenVersion = getTokenVersion(user.id.toString());
+    if (!userData) throw HttpError({ code: 'LOGIN_FAILED' });
 
-		const accessToken = sign(
-			{
-				id: user.id,
-				tokenVersion: currentTokenVersion,
-				role: Role.Admin,
-			},
-			env.ACCESS_TOKEN_SECRET,
-			{ expiresIn: "2h" },
-		);
+    const user = await this.prisma.user.findUnique({
+      where: { id: userData.id },
+    });
 
-		return { accessToken };
-	}
+    if (!user) {
+      throw HttpError({ code: 'User not found' });
+    }
 
-	async logout(id: number) {
-		const user = await this.prisma.user.findUnique({ where: { id } });
-		if (!user) {
-			throw HttpError({ code: "User not found" });
-		}
-		incrementTokenVersion(user.id.toString());
-		incrementRefreshTokenVersion(user.id.toString());
+    const currentRefreshVersion = getRefreshTokenVersion(user.id.toString());
+    if (userData.refreshTokenVersion !== currentRefreshVersion) {
+      throw HttpError({ code: 'TOKEN_INVALIDATED' });
+    }
 
-		return { message: "Logged out successfully" };
-	}
+    incrementTokenVersion(user.id.toString());
+    const currentTokenVersion = getTokenVersion(user.id.toString());
 
-	async findAll(dto: FindAllUserQueryDto) {
-		const { limit = 10, page = 1, name, roleId, username, chatId, phone } = dto;
+    const accessToken = sign(
+      {
+        id: user.id,
+        tokenVersion: currentTokenVersion,
+        role: Role.Admin,
+      },
+      env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '2h' },
+    );
 
-		const where: Prisma.UserWhereInput = {
-			isDeleted: false,
-		};
+    return { accessToken };
+  }
 
-		if (name) {
-			where.name = {
-				contains: name.trim(),
-				mode: "insensitive",
-			};
-		}
-		if (roleId) {
-			where.roleId = roleId;
-		}
-		if (username) {
-			where.username = {
-				contains: username.trim(),
-				mode: "insensitive",
-			};
-		}
-		if (chatId) {
-			where.chatId = {
-				contains: chatId.trim(),
-				mode: "insensitive",
-			};
-		}
-		if (phone) {
-			where.phone = {
-				contains: phone.trim(),
-				mode: "insensitive",
-			};
-		}
+  async logout(id: number) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      throw HttpError({ code: 'User not found' });
+    }
+    incrementTokenVersion(user.id.toString());
+    incrementRefreshTokenVersion(user.id.toString());
 
-		const [data, total] = await this.prisma.$transaction([
-			this.prisma.user.findMany({
-				where,
-				skip: (page - 1) * limit,
-				take: limit,
-				include: { UserRole: true },
-				orderBy: { id: "desc" },
-			}),
-			this.prisma.user.count({
-				where,
-			}),
-		]);
+    return { message: 'Logged out successfully' };
+  }
 
-		return {
-			total,
-			page,
-			limit,
-			data,
-		};
-	}
+  async findAll(dto: FindAllUserQueryDto) {
+    const { limit = 10, page = 1, name, roleId, username, chatId, phone } = dto;
 
-	async findOne(id: number) {
-		const user = await this.prisma.user.findUnique({
-			where: { id, isDeleted: false },
-			include: { UserRole: true },
-		});
-		if (!user) {
-			throw HttpError({ code: "User not found" });
-		}
-		return user;
-	}
+    const where: Prisma.UserWhereInput = {
+      isDeleted: false,
+    };
 
-	async update(id: number, dto: UpdateUserDto) {
-		const user = await this.prisma.user.findUnique({
-			where: { id, isDeleted: false },
-		});
-		if (!user) throw HttpError({ code: "User not found" });
+    if (name) {
+      where.name = {
+        contains: name.trim(),
+        mode: 'insensitive',
+      };
+    }
+    if (roleId) {
+      where.roleId = roleId;
+    }
+    if (username) {
+      where.username = {
+        contains: username.trim(),
+        mode: 'insensitive',
+      };
+    }
+    if (chatId) {
+      where.chatId = {
+        contains: chatId.trim(),
+        mode: 'insensitive',
+      };
+    }
+    if (phone) {
+      where.phone = {
+        contains: phone.trim(),
+        mode: 'insensitive',
+      };
+    }
 
-		const updateData: Partial<User> = {
-			name: dto.name || user.name,
-			chatId: dto.chatId || user.chatId,
-			phone: dto.phone || user.phone,
-			roleId: dto.roleId || user.roleId,
-			username: dto.username || user.username,
-		};
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        include: { UserRole: true },
+        orderBy: { id: 'desc' },
+      }),
+      this.prisma.user.count({
+        where,
+      }),
+    ]);
 
-		if (dto.password) {
-			updateData.password = await bcrypt.hash(dto.password, 10);
-		}
+    return {
+      total,
+      page,
+      limit,
+      data,
+    };
+  }
 
-		let role: UserRole;
-		if (updateData.roleId) {
-			role = await this.prisma.userRole.findUnique({
-				where: { id: updateData.roleId },
-			});
-			if (!role) {
-				throw HttpError({ code: "Role Not Found" });
-			}
-			updateData.roleId = role.id;
-		}
+  async findOne(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id, isDeleted: false },
+      include: { UserRole: true },
+    });
+    if (!user) {
+      throw HttpError({ code: 'User not found' });
+    }
+    return user;
+  }
 
-		const updatedUser = await this.prisma.user.update({
-			where: { id },
-			data: updateData,
-		});
+  async update(id: number, dto: UpdateUserDto, userid: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id, isDeleted: false },
+    });
+    if (!user) throw HttpError({ code: 'User not found' });
 
-		return updatedUser;
-	}
+    const creatorUser = await this.prisma.user.findFirst({
+      where: { id: userid, isDeleted: false },
+    });
 
-	async remove(id: number) {
-		const user = await this.prisma.user.findUnique({
-			where: { id: id, isDeleted: false },
-		});
-		if (!user) {
-			throw HttpError({ code: "User not found" });
-		}
-		return await this.prisma.user.update({
-			where: { id: id },
-			data: { isDeleted: true },
-		});
-	}
+    if (!creatorUser) {
+      throw new HttpError({
+        message: `user is deleted`,
+      });
+    }
+
+    const creatorRole = await this.prisma.userRole.findFirst({
+      where: { id: creatorUser.roleId },
+    });
+
+    if (
+      dto.roleId == 1 &&
+      (!creatorRole || creatorRole.name !== 'superadmin')
+    ) {
+      throw new HttpError({
+        message: `Forbidden`,
+        statusCode: 403,
+      });
+    }
+
+    const updateData: Partial<User> = {
+      name: dto.name || user.name,
+      chatId: dto.chatId || user.chatId,
+      phone: dto.phone || user.phone,
+      roleId: dto.roleId || user.roleId,
+      username: dto.username || user.username,
+    };
+
+    if (dto.password) {
+      updateData.password = await bcrypt.hash(dto.password, 10);
+    }
+
+    let role: UserRole;
+    if (updateData.roleId) {
+      role = await this.prisma.userRole.findUnique({
+        where: { id: updateData.roleId },
+      });
+      if (!role) {
+        throw HttpError({ code: 'Role Not Found' });
+      }
+      updateData.roleId = role.id;
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: updateData,
+    });
+
+    return updatedUser;
+  }
+
+  async remove(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: id, isDeleted: false },
+    });
+    if (!user) {
+      throw HttpError({ code: 'User not found' });
+    }
+    return await this.prisma.user.update({
+      where: { id: id },
+      data: { isDeleted: true },
+    });
+  }
 }

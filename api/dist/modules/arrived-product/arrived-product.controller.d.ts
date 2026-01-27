@@ -7,10 +7,10 @@ export declare class ArrivedProductController {
     private readonly arrivedproductService;
     constructor(arrivedproductService: ArrivedProductService);
     create(createArrivedProductDto: CreateArrivedProductDto, req: Request): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         count: number;
         price: number | null;
         registerId: number | null;
@@ -31,28 +31,28 @@ export declare class ArrivedProductController {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             Product: {
                 ProductUnit: {
                     name: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     registerId: number | null;
                     modifyId: number | null;
                 };
             } & {
                 type: import(".prisma/client").$Enums.ProductType;
                 name: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 price: number;
                 registerId: number | null;
                 modifyId: number | null;
@@ -71,10 +71,10 @@ export declare class ArrivedProductController {
                     description: string | null;
                     name: string;
                     phone: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     balance: number;
                     registerId: number | null;
                     modifyId: number | null;
@@ -82,8 +82,8 @@ export declare class ArrivedProductController {
                 };
             } & {
                 description: string | null;
-                isDeleted: boolean | null;
                 id: number;
+                isDeleted: boolean | null;
                 price: number;
                 registerId: number | null;
                 modifyId: number | null;
@@ -96,10 +96,10 @@ export declare class ArrivedProductController {
                 updated: Date;
             };
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             count: number;
             price: number | null;
             registerId: number | null;
@@ -110,10 +110,10 @@ export declare class ArrivedProductController {
         })[];
     }>;
     findOne(id: string): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         count: number;
         price: number | null;
         registerId: number | null;

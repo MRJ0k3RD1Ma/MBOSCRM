@@ -8,10 +8,10 @@ export declare class ClientCrmService implements OnModuleInit {
     constructor(prisma: PrismaService);
     onModuleInit(): Promise<void>;
     create(createClientCrmDto: CreateClientCrmDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         clientId: number;
         productId: number;
@@ -29,10 +29,10 @@ export declare class ClientCrmService implements OnModuleInit {
                 description: string | null;
                 name: string;
                 phone: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 balance: number;
                 inn: string;
                 address: string | null;
@@ -43,10 +43,10 @@ export declare class ClientCrmService implements OnModuleInit {
                 modifyId: number | null;
             };
         } & {
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             clientId: number;
             productId: number;
@@ -61,10 +61,10 @@ export declare class ClientCrmService implements OnModuleInit {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -75,10 +75,10 @@ export declare class ClientCrmService implements OnModuleInit {
             modifyId: number | null;
         };
     } & {
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         clientId: number;
         productId: number;
@@ -88,10 +88,10 @@ export declare class ClientCrmService implements OnModuleInit {
         expiredFullAccess: Date | null;
     }>;
     update(id: number, dto: UpdateClientCrmDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         clientId: number;
         productId: number;
@@ -101,10 +101,10 @@ export declare class ClientCrmService implements OnModuleInit {
         expiredFullAccess: Date | null;
     }>;
     remove(id: number): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         clientId: number;
         productId: number;

@@ -5,9 +5,9 @@ export declare class SettingsController {
     constructor(settingsService: SettingsService);
     get(): Promise<{
         name: string;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         creditReminderInterval: number;
         smsExpiredHour: number;
@@ -15,9 +15,9 @@ export declare class SettingsController {
     }>;
     update(data: UpdateSettingsDto): Promise<{
         name: string;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         creditReminderInterval: number;
         smsExpiredHour: number;

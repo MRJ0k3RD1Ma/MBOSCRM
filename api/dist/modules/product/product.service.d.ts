@@ -11,10 +11,10 @@ export declare class ProductService implements OnModuleInit {
     create(createProductDto: CreateProductDto, creatorId: number): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         registerId: number | null;
         modifyId: number | null;
@@ -35,10 +35,10 @@ export declare class ProductService implements OnModuleInit {
         data: {
             type: import(".prisma/client").$Enums.ProductType;
             name: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             price: number;
             registerId: number | null;
             modifyId: number | null;
@@ -56,10 +56,10 @@ export declare class ProductService implements OnModuleInit {
     findOne(id: number): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         registerId: number | null;
         modifyId: number | null;
@@ -76,10 +76,10 @@ export declare class ProductService implements OnModuleInit {
     update(id: number, dto: UpdateProductDto): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         registerId: number | null;
         modifyId: number | null;
@@ -96,10 +96,10 @@ export declare class ProductService implements OnModuleInit {
     remove(id: number): Promise<{
         type: import(".prisma/client").$Enums.ProductType;
         name: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         registerId: number | null;
         modifyId: number | null;

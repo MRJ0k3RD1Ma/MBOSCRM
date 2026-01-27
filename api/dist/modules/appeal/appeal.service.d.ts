@@ -8,10 +8,10 @@ export declare class AppealService {
     create(createAppealDto: CreateAppealDto): Promise<{
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         state: import(".prisma/client").$Enums.AppealState;
         subject: string;
@@ -24,10 +24,10 @@ export declare class AppealService {
         data: {
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             modifyId: number | null;
             state: import(".prisma/client").$Enums.AppealState;
             subject: string;
@@ -37,10 +37,10 @@ export declare class AppealService {
     findOne(id: number): Promise<{
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         state: import(".prisma/client").$Enums.AppealState;
         subject: string;
@@ -49,10 +49,10 @@ export declare class AppealService {
     update(id: number, updateAppealDto: UpdateAppealDto, modifyId: number): Promise<{
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         state: import(".prisma/client").$Enums.AppealState;
         subject: string;
@@ -61,10 +61,10 @@ export declare class AppealService {
     remove(id: number): Promise<{
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         modifyId: number | null;
         state: import(".prisma/client").$Enums.AppealState;
         subject: string;

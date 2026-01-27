@@ -26,8 +26,8 @@ let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
-    create(createUserDto) {
-        return this.userService.create(createUserDto);
+    create(createUserDto, req) {
+        return this.userService.create(createUserDto, req.user.id);
     }
     login(loginUserDto) {
         return this.userService.login(loginUserDto);
@@ -48,8 +48,8 @@ let UserController = class UserController {
     findOne(id) {
         return this.userService.findOne(+id);
     }
-    update(id, updateUserDto) {
-        return this.userService.update(+id, updateUserDto);
+    update(id, updateUserDto, req) {
+        return this.userService.update(+id, updateUserDto, req.user.id);
     }
     remove(id) {
         return this.userService.remove(+id);
@@ -60,8 +60,9 @@ __decorate([
     (0, common_1.Post)(),
     (0, decorator_auth_1.DecoratorWrapper)('Create User', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto, Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "create", null);
 __decorate([
@@ -117,8 +118,9 @@ __decorate([
     (0, decorator_auth_1.DecoratorWrapper)('Update User', true, [role_enum_1.Role.Admin]),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
+    __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto, Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "update", null);
 __decorate([

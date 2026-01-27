@@ -15,10 +15,10 @@ export declare class SaleService implements OnModuleInit {
     onModuleInit(): Promise<void>;
     recalculateSale(saleId: number): Promise<void>;
     create(createSaleDto: CreateSaleDto, creatorId: number): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         registerId: number | null;
@@ -43,10 +43,10 @@ export declare class SaleService implements OnModuleInit {
                 description: string | null;
                 name: string;
                 phone: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 balance: number;
                 inn: string;
                 address: string | null;
@@ -60,10 +60,10 @@ export declare class SaleService implements OnModuleInit {
                 product: {
                     type: import(".prisma/client").$Enums.ProductType;
                     name: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     price: number;
                     registerId: number | null;
                     modifyId: number | null;
@@ -78,10 +78,10 @@ export declare class SaleService implements OnModuleInit {
                     countSale: number;
                 };
             } & {
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date | null;
                 updatedAt: Date | null;
-                id: number;
                 count: number | null;
                 price: number | null;
                 saleId: number | null;
@@ -98,10 +98,10 @@ export declare class SaleService implements OnModuleInit {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             register: {
                 name: string;
@@ -110,16 +110,16 @@ export declare class SaleService implements OnModuleInit {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             price: number;
             clientId: number;
             registerId: number | null;
@@ -150,10 +150,10 @@ export declare class SaleService implements OnModuleInit {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -164,10 +164,10 @@ export declare class SaleService implements OnModuleInit {
             modifyId: number | null;
         };
         SaleProduct: {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date | null;
             updatedAt: Date | null;
-            id: number;
             count: number | null;
             price: number | null;
             saleId: number | null;
@@ -180,11 +180,11 @@ export declare class SaleService implements OnModuleInit {
         SaleFeedback: {
             description: string | null;
             name: string | null;
+            result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
-            result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
             saleId: number;
             state: import(".prisma/client").$Enums.SaleFeedbackState;
             alias: string;
@@ -192,10 +192,10 @@ export declare class SaleService implements OnModuleInit {
         };
         SaleTodo: {
             name: string | null;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
@@ -203,10 +203,10 @@ export declare class SaleService implements OnModuleInit {
             isCompleted: boolean;
         }[];
     } & {
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         registerId: number | null;
@@ -222,10 +222,10 @@ export declare class SaleService implements OnModuleInit {
         subscribe_begin_date: Date | null;
     }>;
     update(id: number, updateSaleDto: UpdateSaleDto): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         registerId: number | null;

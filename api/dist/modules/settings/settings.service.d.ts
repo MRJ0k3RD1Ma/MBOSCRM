@@ -7,9 +7,9 @@ export declare class SettingsService implements OnModuleInit {
     onModuleInit(): Promise<void>;
     get(): import(".prisma/client").Prisma.Prisma__SettingClient<{
         name: string;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         creditReminderInterval: number;
         smsExpiredHour: number;
@@ -17,9 +17,9 @@ export declare class SettingsService implements OnModuleInit {
     }, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(data: UpdateSettingsDto): import(".prisma/client").Prisma.Prisma__SettingClient<{
         name: string;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         creditReminderInterval: number;
         smsExpiredHour: number;

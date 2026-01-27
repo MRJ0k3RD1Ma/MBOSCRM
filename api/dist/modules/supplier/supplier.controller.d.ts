@@ -10,10 +10,10 @@ export declare class SupplierController {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         registerId: number | null;
         modifyId: number | null;
@@ -36,10 +36,10 @@ export declare class SupplierController {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             modify: {
                 name: string;
@@ -48,18 +48,18 @@ export declare class SupplierController {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             registerId: number | null;
             modifyId: number | null;
@@ -74,10 +74,10 @@ export declare class SupplierController {
             roleId: number | null;
             chatId: string | null;
             password: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
         };
         modify: {
             name: string;
@@ -86,19 +86,19 @@ export declare class SupplierController {
             roleId: number | null;
             chatId: string | null;
             password: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
         };
     } & {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         registerId: number | null;
         modifyId: number | null;
@@ -108,10 +108,10 @@ export declare class SupplierController {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         registerId: number | null;
         modifyId: number | null;
@@ -121,10 +121,10 @@ export declare class SupplierController {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         registerId: number | null;
         modifyId: number | null;

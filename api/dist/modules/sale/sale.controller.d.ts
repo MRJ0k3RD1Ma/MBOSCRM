@@ -7,10 +7,10 @@ export declare class SaleController {
     private readonly saleService;
     constructor(saleService: SaleService);
     create(createSaleDto: CreateSaleDto, req: Request): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         registerId: number | null;
@@ -35,10 +35,10 @@ export declare class SaleController {
                 description: string | null;
                 name: string;
                 phone: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
                 balance: number;
                 inn: string;
                 address: string | null;
@@ -52,10 +52,10 @@ export declare class SaleController {
                 product: {
                     type: import(".prisma/client").$Enums.ProductType;
                     name: string;
+                    id: number;
                     isDeleted: boolean | null;
                     createdAt: Date;
                     updatedAt: Date;
-                    id: number;
                     price: number;
                     registerId: number | null;
                     modifyId: number | null;
@@ -70,10 +70,10 @@ export declare class SaleController {
                     countSale: number;
                 };
             } & {
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date | null;
                 updatedAt: Date | null;
-                id: number;
                 count: number | null;
                 price: number | null;
                 saleId: number | null;
@@ -90,10 +90,10 @@ export declare class SaleController {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
             register: {
                 name: string;
@@ -102,16 +102,16 @@ export declare class SaleController {
                 roleId: number | null;
                 chatId: string | null;
                 password: string;
+                id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
                 updatedAt: Date;
-                id: number;
             };
         } & {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             price: number;
             clientId: number;
             registerId: number | null;
@@ -142,10 +142,10 @@ export declare class SaleController {
             description: string | null;
             name: string;
             phone: string;
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             balance: number;
             inn: string;
             address: string | null;
@@ -156,10 +156,10 @@ export declare class SaleController {
             modifyId: number | null;
         };
         SaleProduct: {
+            id: number;
             isDeleted: boolean | null;
             createdAt: Date | null;
             updatedAt: Date | null;
-            id: number;
             count: number | null;
             price: number | null;
             saleId: number | null;
@@ -172,11 +172,11 @@ export declare class SaleController {
         SaleFeedback: {
             description: string | null;
             name: string | null;
+            result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
-            result: import(".prisma/client").$Enums.SaleFeedbackResult | null;
             saleId: number;
             state: import(".prisma/client").$Enums.SaleFeedbackState;
             alias: string;
@@ -184,10 +184,10 @@ export declare class SaleController {
         };
         SaleTodo: {
             name: string | null;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
@@ -195,10 +195,10 @@ export declare class SaleController {
             isCompleted: boolean;
         }[];
     } & {
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         registerId: number | null;
@@ -214,10 +214,10 @@ export declare class SaleController {
         subscribe_begin_date: Date | null;
     }>;
     update(id: string, updateSaleDto: UpdateSaleDto): Promise<{
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         registerId: number | null;

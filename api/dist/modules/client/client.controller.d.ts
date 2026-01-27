@@ -10,10 +10,10 @@ export declare class ClientController {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         inn: string;
         address: string | null;
@@ -51,10 +51,10 @@ export declare class ClientController {
         };
         ClientType: {
             name: string;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             modifyId: number | null;
             creatorId: number | null;
         };
@@ -62,10 +62,10 @@ export declare class ClientController {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         inn: string;
         address: string | null;
@@ -79,10 +79,10 @@ export declare class ClientController {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         inn: string;
         address: string | null;
@@ -96,10 +96,10 @@ export declare class ClientController {
         description: string | null;
         name: string;
         phone: string;
+        id: number;
         isDeleted: boolean | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         balance: number;
         inn: string;
         address: string | null;

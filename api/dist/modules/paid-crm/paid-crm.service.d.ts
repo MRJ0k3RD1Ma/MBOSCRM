@@ -6,10 +6,10 @@ export declare class PaidCrmService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(createPaidCrmDto: CreatePaidCrmDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         paymentId: number;
@@ -20,10 +20,10 @@ export declare class PaidCrmService {
     }>;
     findAll(dto: FindAllQueryPaidCrmDto): Promise<{
         data: {
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             price: number;
             clientId: number;
             paymentId: number;
@@ -38,10 +38,10 @@ export declare class PaidCrmService {
         price: number;
     }>;
     findOne(id: number): Promise<{} & {
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         paymentId: number;
@@ -51,10 +51,10 @@ export declare class PaidCrmService {
         transactionId: string | null;
     }>;
     update(id: number, updatePaidCrmDto: UpdatePaidCrmDto): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         paymentId: number;
@@ -64,10 +64,10 @@ export declare class PaidCrmService {
         transactionId: string | null;
     }>;
     remove(id: number): Promise<{
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         price: number;
         clientId: number;
         paymentId: number;

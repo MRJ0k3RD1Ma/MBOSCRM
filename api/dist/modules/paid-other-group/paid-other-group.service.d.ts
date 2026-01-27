@@ -9,10 +9,10 @@ export declare class PaidOtherGroupService implements OnModuleInit {
     onModuleInit(): Promise<void>;
     create(createPaidOtherGroupDto: CreatePaidOtherGroupDto): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
@@ -24,10 +24,10 @@ export declare class PaidOtherGroupService implements OnModuleInit {
             totalIncome: number;
             totalOutcome: number;
             name: string;
+            id: number;
             isDeleted: boolean;
             createdAt: Date;
             updatedAt: Date;
-            id: number;
             registerId: number | null;
             modifyId: number | null;
         }[];
@@ -38,28 +38,28 @@ export declare class PaidOtherGroupService implements OnModuleInit {
     }>;
     findOne(id: number): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
     update(id: number, dto: UpdatePaidOtherGroupDto): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;
     remove(id: number): Promise<{
         name: string;
+        id: number;
         isDeleted: boolean;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
         registerId: number | null;
         modifyId: number | null;
     }>;

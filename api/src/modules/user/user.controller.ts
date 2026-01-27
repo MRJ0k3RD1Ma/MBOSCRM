@@ -26,8 +26,8 @@ export class UserController {
 
   @Post()
   @DecoratorWrapper('Create User', true, [Role.Admin])
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  create(@Body() createUserDto: CreateUserDto, @Req() req: Request) {
+    return this.userService.create(createUserDto, req.user.id);
   }
 
   @Post('login')
@@ -72,8 +72,9 @@ export class UserController {
   update(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
+    @Req() req: Request,
   ) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(+id, updateUserDto, req.user.id);
   }
 
   @Delete(':id')
