@@ -41,42 +41,7 @@ export declare class ClientService implements OnModuleInit {
         limit: number;
         data: any[];
     }>;
-    findOne(id: number): Promise<{
-        District: {
-            name: string | null;
-            id: number;
-            regionId: number | null;
-        };
-        Region: {
-            name: string | null;
-            id: number;
-        };
-        ClientType: {
-            name: string;
-            id: number;
-            isDeleted: boolean;
-            createdAt: Date;
-            updatedAt: Date;
-            modifyId: number | null;
-            creatorId: number | null;
-        };
-    } & {
-        description: string | null;
-        name: string;
-        phone: string;
-        id: number;
-        isDeleted: boolean | null;
-        createdAt: Date;
-        updatedAt: Date;
-        balance: number;
-        inn: string;
-        address: string | null;
-        regionId: number | null;
-        districtId: number | null;
-        typeId: number | null;
-        registerId: number | null;
-        modifyId: number | null;
-    }>;
+    findOne(id: number): Promise<any>;
     update(id: number, dto: UpdateClientDto, creatorId: number): Promise<{
         description: string | null;
         name: string;

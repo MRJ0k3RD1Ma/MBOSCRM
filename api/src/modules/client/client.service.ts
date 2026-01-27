@@ -427,13 +427,22 @@ export class ClientService implements OnModuleInit {
   }
 
   async findOne(id: number) {
-    const client = await this.prisma.client.findFirst({
+    const client: any = await this.prisma.client.findFirst({
       where: { id, isDeleted: false },
-      include: { ClientType: true, District: true, Region: true },
+      include: {
+        ClientType: true,
+        District: true,
+        Region: true,
+        User_Client_registerId: true,
+        User_Client_modifyId: true,
+      },
     });
     if (!client) {
       throw HttpError({ code: 'Client not found' });
     }
+
+    client.register = client.User_Client_registerId;
+    client.modify = client.User_Client_modifyId;
     return client;
   }
 
