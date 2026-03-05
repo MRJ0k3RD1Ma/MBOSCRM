@@ -23,6 +23,7 @@ export class SubscribeService implements OnModuleInit {
 
   @OnEvent('recalculate.subscribe')
   async handleSaleCreatedEvent(sale: Sale & { SaleProduct: any[] }) {
+    if (sale.state === 'CLOSED') return;
     const saleProduct = await this.prisma.saleProduct.findFirst({
       where: {
         saleId: sale.id,
