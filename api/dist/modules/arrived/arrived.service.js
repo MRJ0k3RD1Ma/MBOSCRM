@@ -8,6 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArrivedService = void 0;
 const common_1 = require("@nestjs/common");
@@ -16,11 +22,17 @@ const http_error_1 = require("../../common/exception/http.error");
 const arrived_product_service_1 = require("../arrived-product/arrived-product.service");
 const config_1 = require("../../common/config");
 const event_emitter_1 = require("@nestjs/event-emitter");
+const nestjs_1 = require("@grammyjs/nestjs");
+const grammy_1 = require("grammy");
+const dayjs_1 = __importDefault(require("dayjs"));
+const timezone_1 = __importDefault(require("dayjs/plugin/timezone"));
+dayjs_1.default.extend(timezone_1.default);
 let ArrivedService = class ArrivedService {
-    constructor(prisma, arrivedProductService, eventEmitter) {
+    constructor(prisma, arrivedProductService, eventEmitter, bot) {
         this.prisma = prisma;
         this.arrivedProductService = arrivedProductService;
         this.eventEmitter = eventEmitter;
+        this.bot = bot;
     }
     async recalculate(arrivedId) {
         const arrivedProductAgg = await this.prisma.arrivedProduct.aggregate({
@@ -32,7 +44,7 @@ let ArrivedService = class ArrivedService {
             where: { id: arrivedId },
             data: { price: arrivedPrice },
         });
-        this.eventEmitter.emit("recalculate.supplier", arrived.supplierId);
+        this.eventEmitter.emit('recalculate.supplier', arrived.supplierId);
     }
     async onModuleInit() {
         (async () => {
@@ -44,7 +56,7 @@ let ArrivedService = class ArrivedService {
                 await this.recalculate(arrived.id);
             }
         })();
-        if (config_1.env.ENV != "prod") {
+        if (config_1.env.ENV != 'prod') {
             const count = await this.prisma.arrived.count();
             const requiredCount = 5;
             if (count < requiredCount) {
@@ -55,10 +67,46 @@ let ArrivedService = class ArrivedService {
                     await this.create({
                         supplierId: supplier.id,
                         date: new Date(),
-                        description: "description asdfghj",
+                        description: 'description asdfghj',
                         products: [{ count: 1, productId: 1 }],
                     }, 1);
                 }
+            }
+        }
+    }
+    async sendNotification(arrivedId) {
+        const arrived = await this.prisma.arrived.findFirst({
+            where: { id: arrivedId, isDeleted: false },
+            include: {
+                supplier: true,
+                ArrivedProduct: { include: { Product: true } },
+                register: true,
+            },
+        });
+        if (!arrived)
+            return;
+        const message = `
+Приход тавара
+
+${arrived.ArrivedProduct.map((v) => `${v.count}x ${v.Product.name}- ${v.priceCount} So'm`).join('\n')}
+
+Yetkazuvchi: ${arrived.supplier.name}
+
+Kiritdi: ${arrived.register.name}
+
+Vaqt: ${(0, dayjs_1.default)(arrived.date).format('DD-MM-YYYY')}
+    `;
+        const users = await this.prisma.user.findMany({
+            where: { UserRole: { name: 'superadmin' } },
+        });
+        for (const user of users) {
+            if (!user.chatId)
+                continue;
+            try {
+                await this.bot.api.sendMessage(user.chatId, message);
+            }
+            catch (e) {
+                console.log(e);
             }
         }
     }
@@ -79,7 +127,7 @@ let ArrivedService = class ArrivedService {
                     gt: new Date(new Date().getFullYear(), 0),
                 },
             },
-            orderBy: { codeId: "desc" },
+            orderBy: { codeId: 'desc' },
         });
         const codeId = (maxCode?.codeId || 0) + 1;
         let arrived = await this.prisma.arrived.create({
@@ -114,6 +162,7 @@ let ArrivedService = class ArrivedService {
             include: { ArrivedProduct: { include: { Product: true } } },
         });
         this.recalculate(arrived.id);
+        this.sendNotification(arrived.id);
         return arrived;
     }
     async findAll(dto) {
@@ -127,7 +176,7 @@ let ArrivedService = class ArrivedService {
         if (code) {
             where.code = {
                 startsWith: code,
-                mode: "insensitive",
+                mode: 'insensitive',
             };
         }
         if (minPrice !== undefined || maxPrice !== undefined) {
@@ -148,7 +197,7 @@ let ArrivedService = class ArrivedService {
                 skip: (page - 1) * limit,
                 take: limit,
                 include: { ArrivedProduct: true, register: true, supplier: true },
-                orderBy: { id: "desc" },
+                orderBy: { id: 'desc' },
             }),
             this.prisma.arrived.count({ where }),
         ]);
@@ -247,21 +296,23 @@ let ArrivedService = class ArrivedService {
             where: { id },
             data: { isDeleted: true },
         });
-        this.eventEmitter.emit("recalculate.supplier", arrived.supplierId);
+        this.eventEmitter.emit('recalculate.supplier', arrived.supplierId);
         return arrived;
     }
 };
 exports.ArrivedService = ArrivedService;
 __decorate([
-    (0, event_emitter_1.OnEvent)("recalculate.arrived"),
+    (0, event_emitter_1.OnEvent)('recalculate.arrived'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], ArrivedService.prototype, "recalculate", null);
 exports.ArrivedService = ArrivedService = __decorate([
     (0, common_1.Injectable)(),
+    __param(3, (0, nestjs_1.InjectBot)()),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         arrived_product_service_1.ArrivedProductService,
-        event_emitter_1.EventEmitter2])
+        event_emitter_1.EventEmitter2,
+        grammy_1.Bot])
 ], ArrivedService);
 //# sourceMappingURL=arrived.service.js.map

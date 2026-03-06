@@ -4,11 +4,17 @@ import { UpdateSaleDto } from './dto/update-sale.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from '../../common/exception/http.error';
 import { FindAllSaleQueryDto } from './dto/findAll-sale-query.dto';
-import { Prisma, ProductType, SaleFeedback, SaleState } from '@prisma/client';
+import { Prisma, ProductType, SaleState } from '@prisma/client';
 import { SaleProductService } from '../sale-product/sale-product.service';
-import { env } from '../../common/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SaleFeedbackService } from '../sale-feedback/sale-feedback.service';
+import { InjectBot } from '@grammyjs/nestjs';
+import { Bot, Context } from 'grammy';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(timezone);
+dayjs.extend(utc);
 
 @Injectable()
 export class SaleService implements OnModuleInit {
@@ -17,6 +23,7 @@ export class SaleService implements OnModuleInit {
     private readonly saleProductService: SaleProductService,
     private readonly saleFeedback: SaleFeedbackService,
     private readonly eventEmitter: EventEmitter2,
+    @InjectBot() private readonly bot: Bot<Context>,
   ) {}
 
   async onModuleInit() {
@@ -55,6 +62,43 @@ export class SaleService implements OnModuleInit {
         credit: newCredit,
       },
     });
+  }
+
+  async sendNotification(saleId: number) {
+    const sale = await this.prisma.sale.findFirst({
+      where: { id: saleId, isDeleted: false },
+      include: {
+        client: true,
+        register: true,
+        SaleProduct: { include: { product: true } },
+      },
+    });
+    if (!sale) return;
+
+    const message = `
+Sotuv
+
+${sale.SaleProduct.map((v) => `${v.count}x ${v.product.name}- ${v.priceCount} So'm`).join('\n')}
+
+Mijoz: ${sale.client.name}
+
+Kiritdi: ${sale.register.name}
+
+Vaqt: ${dayjs(sale.date).format('DD-MM-YYYY')}
+    `;
+
+    const users = await this.prisma.user.findMany({
+      where: { UserRole: { name: 'superadmin' } },
+    });
+
+    for (const user of users) {
+      if (!user.chatId) continue;
+      try {
+        await this.bot.api.sendMessage(user.chatId, message);
+      } catch (e) {
+        console.log(e);
+      }
+    }
   }
 
   async create(createSaleDto: CreateSaleDto, creatorId: number) {
@@ -195,6 +239,9 @@ export class SaleService implements OnModuleInit {
         include: { SaleProduct: true },
       }),
     );
+
+    this.sendNotification(sale.id);
+
     return sale;
   }
 

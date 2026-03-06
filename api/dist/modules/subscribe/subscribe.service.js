@@ -31,6 +31,8 @@ let SubscribeService = class SubscribeService {
         await this.cron();
     }
     async handleSaleCreatedEvent(sale) {
+        if (sale.state === 'CLOSED')
+            return;
         const saleProduct = await this.prisma.saleProduct.findFirst({
             where: {
                 saleId: sale.id,

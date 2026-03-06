@@ -8,6 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SaleService = void 0;
 const common_1 = require("@nestjs/common");
@@ -17,12 +23,20 @@ const client_1 = require("@prisma/client");
 const sale_product_service_1 = require("../sale-product/sale-product.service");
 const event_emitter_1 = require("@nestjs/event-emitter");
 const sale_feedback_service_1 = require("../sale-feedback/sale-feedback.service");
+const nestjs_1 = require("@grammyjs/nestjs");
+const grammy_1 = require("grammy");
+const dayjs_1 = __importDefault(require("dayjs"));
+const timezone_1 = __importDefault(require("dayjs/plugin/timezone"));
+const utc_1 = __importDefault(require("dayjs/plugin/utc"));
+dayjs_1.default.extend(timezone_1.default);
+dayjs_1.default.extend(utc_1.default);
 let SaleService = class SaleService {
-    constructor(prisma, saleProductService, saleFeedback, eventEmitter) {
+    constructor(prisma, saleProductService, saleFeedback, eventEmitter, bot) {
         this.prisma = prisma;
         this.saleProductService = saleProductService;
         this.saleFeedback = saleFeedback;
         this.eventEmitter = eventEmitter;
+        this.bot = bot;
     }
     async onModuleInit() {
         (async () => {
@@ -55,6 +69,42 @@ let SaleService = class SaleService {
                 credit: newCredit,
             },
         });
+    }
+    async sendNotification(saleId) {
+        const sale = await this.prisma.sale.findFirst({
+            where: { id: saleId, isDeleted: false },
+            include: {
+                client: true,
+                register: true,
+                SaleProduct: { include: { product: true } },
+            },
+        });
+        if (!sale)
+            return;
+        const message = `
+Sotuv
+
+${sale.SaleProduct.map((v) => `${v.count}x ${v.product.name}- ${v.priceCount} So'm`).join('\n')}
+
+Mijoz: ${sale.client.name}
+
+Kiritdi: ${sale.register.name}
+
+Vaqt: ${(0, dayjs_1.default)(sale.date).format('DD-MM-YYYY')}
+    `;
+        const users = await this.prisma.user.findMany({
+            where: { UserRole: { name: 'superadmin' } },
+        });
+        for (const user of users) {
+            if (!user.chatId)
+                continue;
+            try {
+                await this.bot.api.sendMessage(user.chatId, message);
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
     }
     async create(createSaleDto, creatorId) {
         const { date, clientId, products, subscribe_begin_date, subscribe_generate_day, } = createSaleDto;
@@ -169,6 +219,7 @@ let SaleService = class SaleService {
             where: { id: sale.id },
             include: { SaleProduct: true },
         }));
+        this.sendNotification(sale.id);
         return sale;
     }
     async findAll(dto) {
@@ -293,9 +344,11 @@ let SaleService = class SaleService {
 exports.SaleService = SaleService;
 exports.SaleService = SaleService = __decorate([
     (0, common_1.Injectable)(),
+    __param(4, (0, nestjs_1.InjectBot)()),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         sale_product_service_1.SaleProductService,
         sale_feedback_service_1.SaleFeedbackService,
-        event_emitter_1.EventEmitter2])
+        event_emitter_1.EventEmitter2,
+        grammy_1.Bot])
 ], SaleService);
 //# sourceMappingURL=sale.service.js.map

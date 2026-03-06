@@ -711,7 +711,7 @@ export class StatisticsService {
         : 0;
 
     if (currentMonthExpectedSubscription === 0) {
-      for (let i = 1; i <= 3; i++) {
+      for (let i = 1; i <= 13; i++) {
         const prevMonthIndex = currentMonthIndex - i;
         if (prevMonthIndex >= 0) {
           const val = monthlyStats[prevMonthIndex]?.expectedSubscription || 0;
