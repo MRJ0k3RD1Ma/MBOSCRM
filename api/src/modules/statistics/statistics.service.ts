@@ -684,7 +684,7 @@ export class StatisticsService {
 
             const subPrice = sumOrZero(subAgg, 'price');
             const subPaid = sumOrZero(subAgg, 'paid');
-            const expectedSubscription = Math.max(0, subPrice - subPaid);
+            const expectedSubscription = Math.max(0, subPrice);
             const saleCredit = sumOrZero(saleDebtMonth, 'credit');
             const subDept = sumOrZero(subDeptAgg, 'paid');
             const monthCredit = saleCredit + subDept;
@@ -763,6 +763,7 @@ export class StatisticsService {
 
       if (
         year > today.year() ||
+        expectedForMonth == 0 ||
         (year === today.year() && index > currentMonthIndex)
       ) {
         expectedForMonth = currentMonthExpectedSubscription;

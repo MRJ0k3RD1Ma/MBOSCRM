@@ -74,11 +74,14 @@ export class SaleService implements OnModuleInit {
       },
     });
     if (!sale) return;
+    if (!sale.SaleProduct.some((v) => v.product.type == 'DEVICE')) return;
 
     const message = `
 Sotuv
 
-${sale.SaleProduct.map((v) => `${v.count}x ${v.product.name}- ${v.priceCount} So'm`).join('\n')}
+${sale.SaleProduct.filter((v) => v.product.type == 'DEVICE')
+  .map((v) => `${v.count}x ${v.product.name}- ${v.priceCount} So'm`)
+  .join('\n')}
 
 Mijoz: ${sale.client.name}
 
