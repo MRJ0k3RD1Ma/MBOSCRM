@@ -96,9 +96,7 @@ Kiritdi: ${arrived.register.name}
 Vaqt: ${dayjs(arrived.date).format('DD-MM-YYYY')}
     `;
 
-    const users = await this.prisma.user.findMany({
-      where: { UserRole: { name: 'superadmin' } },
-    });
+    const users = await this.prisma.user.findMany({});
 
     for (const user of users) {
       if (!user.chatId) continue;

@@ -87,9 +87,7 @@ Kiritdi: ${sale.register.name}
 Vaqt: ${dayjs(sale.date).format('DD-MM-YYYY')}
     `;
 
-    const users = await this.prisma.user.findMany({
-      where: { UserRole: { name: 'superadmin' } },
-    });
+    const users = await this.prisma.user.findMany({});
 
     for (const user of users) {
       if (!user.chatId) continue;
