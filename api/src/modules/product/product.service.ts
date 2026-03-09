@@ -9,7 +9,6 @@ import { faker } from '@faker-js/faker';
 import { Prisma, ProductType } from '@prisma/client';
 import { OnEvent } from '@nestjs/event-emitter';
 
-
 @Injectable()
 export class ProductService implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
@@ -168,53 +167,52 @@ export class ProductService implements OnModuleInit {
   }
 
   async findAll(dto: FindAllProductQueryDto) {
-	const {
-	  limit = 10,
-	  page = 1,
-	  name,
-	  type,
-	  barcode,
-	  groupId,
-	  unitId,
-	  minPrice,
-	  maxPrice,
-	  minCount,
-	  maxCount,
-	} = dto;
-  
-	const where = {
-	  isDeleted: false,
-	  ...(name && {
-		name: {
-			contains: name.trim(),
-			mode: Prisma.QueryMode.insensitive,
-		  }
-	  }),
-	  ...(type && { type }),
-	  ...(barcode && { barcode: { contains: barcode } }),
-	  ...(groupId && { groupId }),
-	  ...(unitId && { unitId }),
-	  ...(minPrice || maxPrice
-		? { priceIncome: { gte: minPrice, lte: maxPrice } }
-		: {}),
-	  ...(minCount || maxCount
-		? { countArrived: { gte: minCount, lte: maxCount } }
-		: {}),
-	};
-  
-	const [data, total] = await this.prisma.$transaction([
-	  this.prisma.product.findMany({
-		where,
-		skip: (page - 1) * limit,
-		take: limit,
-		orderBy: { id: 'desc' },
-	  }),
-	  this.prisma.product.count({ where }),
-	]);
-  
-	return { total, page, limit, data };
+    const {
+      limit = 20,
+      page = 1,
+      name,
+      type,
+      barcode,
+      groupId,
+      unitId,
+      minPrice,
+      maxPrice,
+      minCount,
+      maxCount,
+    } = dto;
+
+    const where = {
+      isDeleted: false,
+      ...(name && {
+        name: {
+          contains: name.trim(),
+          mode: Prisma.QueryMode.insensitive,
+        },
+      }),
+      ...(type && { type }),
+      ...(barcode && { barcode: { contains: barcode } }),
+      ...(groupId && { groupId }),
+      ...(unitId && { unitId }),
+      ...(minPrice || maxPrice
+        ? { priceIncome: { gte: minPrice, lte: maxPrice } }
+        : {}),
+      ...(minCount || maxCount
+        ? { countArrived: { gte: minCount, lte: maxCount } }
+        : {}),
+    };
+
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.product.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { id: 'desc' },
+      }),
+      this.prisma.product.count({ where }),
+    ]);
+
+    return { total, page, limit, data };
   }
-  
 
   async findOne(id: number) {
     let product = await this.prisma.product.findFirst({

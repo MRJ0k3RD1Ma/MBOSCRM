@@ -15,8 +15,8 @@ export declare class SaleTodoController {
         saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        isCompleted: boolean;
         feedbackId: number | null;
+        isCompleted: boolean;
     }>;
     findAll(dto: FindAllSaleTodoDto): Promise<{
         data: {
@@ -28,8 +28,8 @@ export declare class SaleTodoController {
             saleId: number | null;
             registerId: number | null;
             modifyId: number | null;
-            isCompleted: boolean;
             feedbackId: number | null;
+            isCompleted: boolean;
         }[];
         total: number;
         page: number;
@@ -44,8 +44,8 @@ export declare class SaleTodoController {
         saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        isCompleted: boolean;
         feedbackId: number | null;
+        isCompleted: boolean;
     }>;
     update(id: string, updateSaleTodoDto: UpdateSaleTodoDto): Promise<{
         name: string | null;
@@ -56,8 +56,8 @@ export declare class SaleTodoController {
         saleId: number | null;
         registerId: number | null;
         modifyId: number | null;
-        isCompleted: boolean;
         feedbackId: number | null;
+        isCompleted: boolean;
     }>;
     remove(id: string): Promise<{
         message: string;

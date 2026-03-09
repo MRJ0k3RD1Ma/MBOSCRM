@@ -150,14 +150,14 @@ let ProductService = class ProductService {
         return product;
     }
     async findAll(dto) {
-        const { limit = 10, page = 1, name, type, barcode, groupId, unitId, minPrice, maxPrice, minCount, maxCount, } = dto;
+        const { limit = 20, page = 1, name, type, barcode, groupId, unitId, minPrice, maxPrice, minCount, maxCount, } = dto;
         const where = {
             isDeleted: false,
             ...(name && {
                 name: {
                     contains: name.trim(),
                     mode: client_1.Prisma.QueryMode.insensitive,
-                }
+                },
             }),
             ...(type && { type }),
             ...(barcode && { barcode: { contains: barcode } }),
