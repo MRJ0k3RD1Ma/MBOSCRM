@@ -32,7 +32,7 @@ import {
 } from "../../../config/queries/arrived/arrived-product-querys";
 
 const { Title } = Typography;
-
+const limit = 100;
 export default function ArrivedFormPage() {
   const [form] = Form.useForm();
   const [drawerForm] = Form.useForm();
@@ -50,12 +50,14 @@ export default function ArrivedFormPage() {
   const updateArrivedProduct = useUpdateArrivedProduct();
   const deleteArrivedProduct = useDeleteArrivedProduct();
   const { data: arrivedData } = useGetArrivedById(Number(id), isEdit);
-  const { data: suppliers } = useGetAllSuppliers();
+  const { data: suppliers } = useGetAllSuppliers({ limit });
   const { data: productsList } = useGetAllProducts({
     type: "DEVICE",
+    limit,
   });
   const { data: arrivedProductsData } = useGetAllArrivedProduct({
     arrivedId: isEdit ? Number(id) : undefined,
+    limit,
   });
 
   const productDataSource = isEdit ? arrivedProductsData?.data || [] : products;
