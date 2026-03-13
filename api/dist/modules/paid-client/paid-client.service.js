@@ -8,6 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaidClientService = void 0;
 const common_1 = require("@nestjs/common");
@@ -15,10 +21,48 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const http_error_1 = require("../../common/exception/http.error");
 const client_1 = require("@prisma/client");
 const event_emitter_1 = require("@nestjs/event-emitter");
+const nestjs_1 = require("@grammyjs/nestjs");
+const grammy_1 = require("grammy");
+const dayjs_1 = __importDefault(require("dayjs"));
 let PaidClientService = class PaidClientService {
-    constructor(prisma, eventEmitter) {
+    constructor(prisma, eventEmitter, bot) {
         this.prisma = prisma;
         this.eventEmitter = eventEmitter;
+        this.bot = bot;
+    }
+    async sendNotification(paidClientId) {
+        const paidClient = await this.prisma.paidClient.findFirst({
+            where: { id: paidClientId, isDeleted: false },
+            include: {
+                register: true,
+                Client: true,
+                Payment: true,
+            },
+        });
+        if (!paidClient)
+            return;
+        const message = `
+Pul qabul qilish
+
+Tolov summasi: ${paidClient.price} So'm - ${paidClient.Payment.name}
+
+Mijoz: ${paidClient.Client.name}
+
+Kiritdi: ${paidClient.register.name}
+
+Vaqt: ${(0, dayjs_1.default)(paidClient.paidDate).format('DD-MM-YYYY')}
+    `;
+        const users = await this.prisma.user.findMany({});
+        for (const user of users) {
+            if (!user.chatId)
+                continue;
+            try {
+                await this.bot.api.sendMessage(user.chatId, message);
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
     }
     async create(createPaidClientDto, registerId) {
         const { clientId, saleId, paymentId, paidDate, price } = createPaidClientDto;
@@ -77,6 +121,7 @@ let PaidClientService = class PaidClientService {
         });
         await this.processPayment(client.id, price, saleId);
         this.eventEmitter.emit('recalculate.client', clientId);
+        this.sendNotification(paidClient.id);
         return paidClient;
     }
     async processPayment(clientId, paymentAmount, saleId) {
@@ -310,7 +355,9 @@ let PaidClientService = class PaidClientService {
 exports.PaidClientService = PaidClientService;
 exports.PaidClientService = PaidClientService = __decorate([
     (0, common_1.Injectable)(),
+    __param(2, (0, nestjs_1.InjectBot)()),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        event_emitter_1.EventEmitter2])
+        event_emitter_1.EventEmitter2,
+        grammy_1.Bot])
 ], PaidClientService);
 //# sourceMappingURL=paid-client.service.js.map

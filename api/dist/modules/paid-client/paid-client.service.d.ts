@@ -3,10 +3,13 @@ import { UpdatePaidClientDto } from './dto/update-paid-client.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllQueryPaidClientDto } from './dto/findAll-query-paid-client.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Bot, Context } from 'grammy';
 export declare class PaidClientService {
     private readonly prisma;
     private readonly eventEmitter;
-    constructor(prisma: PrismaService, eventEmitter: EventEmitter2);
+    private readonly bot;
+    constructor(prisma: PrismaService, eventEmitter: EventEmitter2, bot: Bot<Context>);
+    sendNotification(paidClientId: number): Promise<void>;
     create(createPaidClientDto: CreatePaidClientDto, registerId: number): Promise<{
         id: number;
         isDeleted: boolean | null;

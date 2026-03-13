@@ -6,13 +6,52 @@ import { HttpError } from '../../common/exception/http.error';
 import { FindAllQueryPaidClientDto } from './dto/findAll-query-paid-client.dto';
 import { Prisma, SubscribeState } from '@prisma/client';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { InjectBot } from '@grammyjs/nestjs';
+import { Bot, Context } from 'grammy';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class PaidClientService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly eventEmitter: EventEmitter2,
+    @InjectBot() private readonly bot: Bot<Context>,
   ) {}
+
+  async sendNotification(paidClientId: number) {
+    const paidClient = await this.prisma.paidClient.findFirst({
+      where: { id: paidClientId, isDeleted: false },
+      include: {
+        register: true,
+        Client: true,
+        Payment: true,
+      },
+    });
+    if (!paidClient) return;
+
+    const message = `
+Pul qabul qilish
+
+Tolov summasi: ${paidClient.price} So'm - ${paidClient.Payment.name}
+
+Mijoz: ${paidClient.Client.name}
+
+Kiritdi: ${paidClient.register.name}
+
+Vaqt: ${dayjs(paidClient.paidDate).format('DD-MM-YYYY')}
+    `;
+
+    const users = await this.prisma.user.findMany({});
+
+    for (const user of users) {
+      if (!user.chatId) continue;
+      try {
+        await this.bot.api.sendMessage(user.chatId, message);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
 
   async create(createPaidClientDto: CreatePaidClientDto, registerId: number) {
     const { clientId, saleId, paymentId, paidDate, price } =
@@ -80,6 +119,7 @@ export class PaidClientService {
     await this.processPayment(client.id, price, saleId);
 
     this.eventEmitter.emit('recalculate.client', clientId);
+    this.sendNotification(paidClient.id);
 
     return paidClient;
   }
