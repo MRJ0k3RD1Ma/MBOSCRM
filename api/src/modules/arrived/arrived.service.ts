@@ -85,7 +85,7 @@ export class ArrivedService {
     if (!arrived) return;
 
     const message = `
-Приход тавара
+Tovar qabul qilish
 
 ${arrived.ArrivedProduct.map((v) => `${v.count}x ${v.Product.name}- ${v.priceCount} So'm`).join('\n')}
 
