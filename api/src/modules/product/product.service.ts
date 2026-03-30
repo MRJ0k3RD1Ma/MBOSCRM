@@ -168,7 +168,7 @@ export class ProductService implements OnModuleInit {
 
   async findAll(dto: FindAllProductQueryDto) {
     const {
-      limit = 20,
+      limit = 50,
       page = 1,
       name,
       type,

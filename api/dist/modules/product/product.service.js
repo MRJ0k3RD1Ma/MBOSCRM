@@ -150,7 +150,7 @@ let ProductService = class ProductService {
         return product;
     }
     async findAll(dto) {
-        const { limit = 20, page = 1, name, type, barcode, groupId, unitId, minPrice, maxPrice, minCount, maxCount, } = dto;
+        const { limit = 50, page = 1, name, type, barcode, groupId, unitId, minPrice, maxPrice, minCount, maxCount, } = dto;
         const where = {
             isDeleted: false,
             ...(name && {
