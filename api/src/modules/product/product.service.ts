@@ -168,7 +168,7 @@ export class ProductService implements OnModuleInit {
 
   async findAll(dto: FindAllProductQueryDto) {
     const {
-      limit = 50,
+      limit,
       page = 1,
       name,
       type,
@@ -211,7 +211,7 @@ export class ProductService implements OnModuleInit {
       this.prisma.product.count({ where }),
     ]);
 
-    return { total, page, limit, data };
+    return { total, page, limit: limit || total, data };
   }
 
   async findOne(id: number) {

@@ -150,7 +150,7 @@ let ProductService = class ProductService {
         return product;
     }
     async findAll(dto) {
-        const { limit = 50, page = 1, name, type, barcode, groupId, unitId, minPrice, maxPrice, minCount, maxCount, } = dto;
+        const { limit, page = 1, name, type, barcode, groupId, unitId, minPrice, maxPrice, minCount, maxCount, } = dto;
         const where = {
             isDeleted: false,
             ...(name && {
@@ -179,7 +179,7 @@ let ProductService = class ProductService {
             }),
             this.prisma.product.count({ where }),
         ]);
-        return { total, page, limit, data };
+        return { total, page, limit: limit || total, data };
     }
     async findOne(id) {
         let product = await this.prisma.product.findFirst({
