@@ -173,7 +173,7 @@ let ProductService = class ProductService {
         const [data, total] = await this.prisma.$transaction([
             this.prisma.product.findMany({
                 where,
-                skip: (page - 1) * limit,
+                skip: (page - 1) * (limit || 0),
                 take: limit,
                 orderBy: { id: 'desc' },
             }),
