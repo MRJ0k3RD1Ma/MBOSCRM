@@ -22,6 +22,7 @@ export declare class PaidClientService {
         registerId: number | null;
         modifyId: number | null;
         paidDate: Date | null;
+        comment: string | null;
     }>;
     processPayment(clientId: number, paymentAmount: number, saleId?: number): Promise<{
         paidAmount: number;
@@ -115,6 +116,7 @@ export declare class PaidClientService {
             registerId: number | null;
             modifyId: number | null;
             paidDate: Date | null;
+            comment: string | null;
         })[];
         page: number;
         limit: number;
@@ -180,6 +182,7 @@ export declare class PaidClientService {
         registerId: number | null;
         modifyId: number | null;
         paidDate: Date | null;
+        comment: string | null;
     }>;
     update(id: number, updatePaidClientDto: UpdatePaidClientDto): Promise<{
         id: number;
@@ -193,6 +196,7 @@ export declare class PaidClientService {
         registerId: number | null;
         modifyId: number | null;
         paidDate: Date | null;
+        comment: string | null;
     }>;
     remove(id: number): Promise<{
         id: number;
@@ -206,5 +210,6 @@ export declare class PaidClientService {
         registerId: number | null;
         modifyId: number | null;
         paidDate: Date | null;
+        comment: string | null;
     }>;
 }

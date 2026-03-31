@@ -76,6 +76,7 @@ export declare class SubscribeService implements OnModuleInit {
                     registerId: number | null;
                     modifyId: number | null;
                     paidDate: Date | null;
+                    comment: string | null;
                 })[];
             } & {
                 id: number;
@@ -152,6 +153,7 @@ export declare class SubscribeService implements OnModuleInit {
                 registerId: number | null;
                 modifyId: number | null;
                 paidDate: Date | null;
+                comment: string | null;
             })[];
             SaleProduct: ({
                 product: {

@@ -65,7 +65,7 @@ Vaqt: ${(0, dayjs_1.default)(paidClient.paidDate).format('DD-MM-YYYY')}
         }
     }
     async create(createPaidClientDto, registerId) {
-        const { clientId, saleId, paymentId, paidDate, price } = createPaidClientDto;
+        const { clientId, saleId, paymentId, paidDate, price, comment } = createPaidClientDto;
         const client = await this.prisma.client.findFirst({
             where: { id: clientId, isDeleted: false },
         });
@@ -104,6 +104,7 @@ Vaqt: ${(0, dayjs_1.default)(paidClient.paidDate).format('DD-MM-YYYY')}
         const paidClient = await this.prisma.paidClient.create({
             data: {
                 clientId,
+                comment,
                 saleId,
                 paymentId,
                 paidDate,
@@ -296,7 +297,7 @@ Vaqt: ${(0, dayjs_1.default)(paidClient.paidDate).format('DD-MM-YYYY')}
         if (!paidClient) {
             throw new http_error_1.HttpError({ message: `PaidClient with ID ${id} not found` });
         }
-        const { clientId, saleId, paymentId } = updatePaidClientDto;
+        const { clientId, saleId, paymentId, comment } = updatePaidClientDto;
         if (clientId) {
             const client = await this.prisma.client.findFirst({
                 where: { id: clientId, isDeleted: false },
@@ -333,6 +334,7 @@ Vaqt: ${(0, dayjs_1.default)(paidClient.paidDate).format('DD-MM-YYYY')}
                 paymentId: updatePaidClientDto.paymentId ?? paidClient.paymentId,
                 paidDate: updatePaidClientDto.paidDate ?? paidClient.paidDate,
                 price: updatePaidClientDto.price ?? paidClient.price,
+                comment: updatePaidClientDto.comment ?? paidClient.comment,
             },
         });
     }

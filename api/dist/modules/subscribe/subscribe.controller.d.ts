@@ -65,6 +65,7 @@ export declare class SubscribeController {
                     registerId: number | null;
                     modifyId: number | null;
                     paidDate: Date | null;
+                    comment: string | null;
                 })[];
             } & {
                 id: number;
@@ -141,6 +142,7 @@ export declare class SubscribeController {
                 registerId: number | null;
                 modifyId: number | null;
                 paidDate: Date | null;
+                comment: string | null;
             })[];
             SaleProduct: ({
                 product: {

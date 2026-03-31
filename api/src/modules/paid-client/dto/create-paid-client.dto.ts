@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsOptional, IsInt, IsNumber, IsDate } from 'class-validator';
+import { IsOptional, IsInt, IsNumber, IsDate, IsString } from 'class-validator';
 
 export class CreatePaidClientDto {
   @ApiProperty({ example: 1, description: 'Client ID' })
@@ -28,4 +28,9 @@ export class CreatePaidClientDto {
   @IsOptional()
   @IsNumber()
   price: number;
+
+  @ApiPropertyOptional({ example: 'hello', description: 'Comment' })
+  @IsOptional()
+  @IsString()
+  comment?: string;
 }

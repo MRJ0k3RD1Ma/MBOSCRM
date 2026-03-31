@@ -18,6 +18,7 @@ export declare class PaidClientController {
         registerId: number | null;
         modifyId: number | null;
         paidDate: Date | null;
+        comment: string | null;
     }>;
     findAll(dto: FindAllQueryPaidClientDto): Promise<{
         data: ({
@@ -103,6 +104,7 @@ export declare class PaidClientController {
             registerId: number | null;
             modifyId: number | null;
             paidDate: Date | null;
+            comment: string | null;
         })[];
         page: number;
         limit: number;
@@ -168,6 +170,7 @@ export declare class PaidClientController {
         registerId: number | null;
         modifyId: number | null;
         paidDate: Date | null;
+        comment: string | null;
     }>;
     update(id: string, updatePaidClientDto: UpdatePaidClientDto): Promise<{
         id: number;
@@ -181,6 +184,7 @@ export declare class PaidClientController {
         registerId: number | null;
         modifyId: number | null;
         paidDate: Date | null;
+        comment: string | null;
     }>;
     remove(id: string): Promise<{
         id: number;
@@ -194,5 +198,6 @@ export declare class PaidClientController {
         registerId: number | null;
         modifyId: number | null;
         paidDate: Date | null;
+        comment: string | null;
     }>;
 }
