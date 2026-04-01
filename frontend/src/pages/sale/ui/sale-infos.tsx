@@ -2,7 +2,7 @@ import { Descriptions } from "antd";
 import dayjs from "dayjs";
 import { useGetAllClientTypes } from "../../../config/queries/clients/client-type-querys";
 
-export default function SaleInfos({ sale }: { sale: any }) {
+export default function SaleInfos({ sale , modify}: { sale: any, modify: any }) {
   const { data: types } = useGetAllClientTypes();
 
   return (
@@ -38,10 +38,11 @@ export default function SaleInfos({ sale }: { sale: any }) {
             ? dayjs(sale.createdAt).tz("Asia/Tashkent").format("YYYY-MM-DD")
             : "Noma'lum"}
         </Descriptions.Item>
-        <Descriptions.Item label="O'zgartirilgan">
+        <Descriptions.Item label="Yangilangan / Kim tomonidan">
           {sale?.updatedAt
             ? dayjs(sale.updatedAt).tz("Asia/Tashkent").format("YYYY-MM-DD")
             : "Noma'lum"}
+            {modify ? ` / ${modify.name}` : ""}
         </Descriptions.Item>
       </Descriptions>
       <Descriptions bordered column={1} size="small" title="Mijoz ma'lumotlari">
@@ -81,7 +82,7 @@ export default function SaleInfos({ sale }: { sale: any }) {
                 .format("YYYY-MM-DD")
             : "Noma'lum"}
         </Descriptions.Item>
-        <Descriptions.Item label="O'zgartirilgan">
+        <Descriptions.Item label="Yangilangan">
           {sale?.client?.updatedAt
             ? dayjs(sale.client.updatedAt)
                 .tz("Asia/Tashkent")
