@@ -21,7 +21,7 @@ export class ArrivedService {
     private readonly arrivedProductService: ArrivedProductService,
     private readonly eventEmitter: EventEmitter2,
     @InjectBot() private readonly bot: Bot<Context>,
-  ) {}
+  ) { }
 
   @OnEvent('recalculate.arrived')
   async recalculate(arrivedId: number) {
@@ -223,7 +223,7 @@ Vaqt: ${dayjs(arrived.date).format('DD-MM-YYYY')}
         where,
         skip: (page - 1) * limit,
         take: limit,
-        include: { ArrivedProduct: true, register: true, supplier: true },
+        include: { ArrivedProduct: { include: { Product: true } }, register: true, supplier: true },
         orderBy: { id: 'desc' },
       }),
       this.prisma.arrived.count({ where }),

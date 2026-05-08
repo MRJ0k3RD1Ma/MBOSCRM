@@ -59,7 +59,28 @@ export declare class ArrivedService {
                 createdAt: Date;
                 updatedAt: Date;
             };
-            ArrivedProduct: {
+            ArrivedProduct: ({
+                Product: {
+                    type: import(".prisma/client").$Enums.ProductType;
+                    name: string;
+                    id: number;
+                    isDeleted: boolean | null;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    price: number;
+                    registerId: number | null;
+                    modifyId: number | null;
+                    barcode: string | null;
+                    barcodeId: number | null;
+                    groupId: number;
+                    unitId: number | null;
+                    priceIncome: number;
+                    reminderFirst: number;
+                    countReminder: number;
+                    countArrived: number;
+                    countSale: number;
+                };
+            } & {
                 id: number;
                 isDeleted: boolean | null;
                 createdAt: Date;
@@ -71,7 +92,7 @@ export declare class ArrivedService {
                 priceCount: number | null;
                 productId: number | null;
                 arrivedId: number | null;
-            }[];
+            })[];
         } & {
             description: string | null;
             id: number;

@@ -194,7 +194,7 @@ Vaqt: ${(0, dayjs_1.default)(arrived.date).format('DD-MM-YYYY')}
                 where,
                 skip: (page - 1) * limit,
                 take: limit,
-                include: { ArrivedProduct: true, register: true, supplier: true },
+                include: { ArrivedProduct: { include: { Product: true } }, register: true, supplier: true },
                 orderBy: { id: 'desc' },
             }),
             this.prisma.arrived.count({ where }),

@@ -7,7 +7,7 @@ export default defineConfig({
     allowedHosts: ["ddefa3e9038f.ngrok-free.app"],
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "https://new.mbosapp.uz/",
         changeOrigin: true,
       },
     },

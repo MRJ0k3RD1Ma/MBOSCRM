@@ -42,7 +42,7 @@ export default function ArrivedsPageTable({
       render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
     },
     { title: "Kod", dataIndex: "code" },
-    { title: "Tovar hujjati", dataIndex: "waybillNumber" },
+    { title: "Mahsulotlar", dataIndex: "ArrivedProduct",render:(products:any)=> products.map((product:any)=>`${product.Product.name} - ${product.count}X`).join(", ")},
     { title: "Izoh", dataIndex: "description" },
     {
       title: "Narxi",
