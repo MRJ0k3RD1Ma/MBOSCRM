@@ -21,6 +21,7 @@ import SaleFeedbackTable from "./ui/sale-feedback-table";
 import SaleInfos from "./ui/sale-infos";
 import SaleFeedbackButtons from "./ui/sale_feedback-buttons";
 import SaleHeaderButtons from "./ui/sale-header-buttons";
+import { useGetUserById } from "../../config/queries/users/users-querys";
 
 const { Title } = Typography;
 
@@ -37,6 +38,8 @@ export default function Sale() {
     saleId: Number(id),
   });
   const { data: sale } = useGetSaleById(currentId ?? undefined);
+    const { data: modify } = useGetUserById(sale?.modifyId);
+  
   const createPaidClient = useCreatePaidClient();
   const updateSale = useUpdateSale();
 
@@ -68,7 +71,7 @@ export default function Sale() {
         />
       </Row>
       <div className="flex gap-6">
-        <SaleInfos sale={sale} />
+        <SaleInfos sale={sale} modify={modify} />
         <div className="w-[70%] flex flex-col gap-6">
           <SaleProductsTable currentId={currentId} />
           <Card

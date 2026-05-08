@@ -62,10 +62,30 @@ export default function ClientSalesTable({ clientId }: { clientId: number }) {
       },
     },
     {
-      title: "Yaratilgan vaqt",
+      title: "Yaratilgan vaqt / Kim tomonidan",
       dataIndex: "createdAt",
-      render: (text: string) =>
-        text ? dayjs(text).tz("Asia/Tashkent").format("YYYY-MM-DD") : "—",
+      render: (_: any, record: any) => {
+        const date = record.createdAt
+          ? dayjs(record.createdAt).tz("Asia/Tashkent").format("YYYY-MM-DD")
+          : "—";
+
+        const register = record.register?.name || "-";
+
+        return `${date} / ${register}`;
+      },
+    },
+    {
+      title: "Yangilangan vaqt / Kim tomonidan",
+      dataIndex: "updatedAt",
+      render: (_: any, record: any) => {
+        const date = record.updatedAt
+          ? dayjs(record.updatedAt).tz("Asia/Tashkent").format("YYYY-MM-DD")
+          : "—";
+
+        const modifierName = record.modifier?.name || "-";
+
+        return `${date} / ${modifierName}`;
+      },
     },
   ];
 
