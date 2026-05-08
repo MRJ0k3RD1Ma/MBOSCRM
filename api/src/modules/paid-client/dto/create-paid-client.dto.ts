@@ -28,9 +28,4 @@ export class CreatePaidClientDto {
   @IsOptional()
   @IsNumber()
   price: number;
-
-  @ApiPropertyOptional({ example: 'hello', description: 'Comment' })
-  @IsOptional()
-  @IsString()
-  comment?: string;
 }

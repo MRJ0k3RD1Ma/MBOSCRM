@@ -4,5 +4,4 @@ export declare class CreatePaidClientDto {
     paymentId: number;
     paidDate?: Date;
     price: number;
-    comment?: string;
 }
